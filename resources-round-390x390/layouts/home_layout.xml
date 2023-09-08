@@ -1,0 +1,67 @@
+<layout id="HomeLayout">
+    <drawable id="Background" class="BackgroundRenderer" />
+    
+    <label id="TimeDate" text="00 00" x="50%" y="18%" justification="Gfx.TEXT_JUSTIFY_CENTER" font="Gfx.FONT_SMALL"></label>
+
+    <drawable id="SpeedDial" class="ArcRenderer">
+        <param name="arcType">:speedArc</param>
+        <!-- Colors -->
+        <param name="mainColor">0x3366CC</param> <!-- This color is for idle state of the dial, basically first 20% of the speed dial-->
+        <param name="secondColor">0xc35017</param> <!-- This color is for "not so safe" speed, 60 to 80 percent of the dial-->
+        <param name="thirdColor">0xd53420</param><!-- This color is for pretty dangeroud speed, from 80% %to 100%-->
+        <!-- Dial size n' position -->
+        <param name="startDegree">210</param>
+        <param name="endDegree">-30</param>
+        <param name="xCenterPosition">:center</param>
+        <param name="yCenterPosition">:center</param>
+        <param name="arcRadius">160</param>
+        <param name="arcSize">30</param>
+        <param name="arcDirection">Gfx.ARC_CLOCKWISE</param>
+    </drawable>
+    <label id="SpeedNumber" text="22" x="50%" y="46%" justification="Gfx.TEXT_JUSTIFY_CENTER | Gfx.TEXT_JUSTIFY_VCENTER" font="@Fonts.GorgaBig" color="Gfx.COLOR_WHITE" ></label>
+
+    <label id="BatteryNumber" text="85" x="30%" y="67%" justification="Gfx.TEXT_JUSTIFY_CENTER" font="@Fonts.Gorga" color="0xEDEDED" />
+    <drawable id="BatteryArc" class="ArcRenderer">
+        <param name="arcType">:batteryArc</param>
+        <!-- Colors -->
+        <param name="mainColor">0x58ba1a</param> <!-- Main color -->
+        <param name="secondColor">0x346f0f</param> <!-- This color is for the yellow part of battery arc-->
+        <!-- Arc size n' position -->
+        <param name="startDegree">210</param>
+        <param name="endDegree">140</param>
+        <param name="xCenterPosition">:center</param>
+        <param name="yCenterPosition">:center</param>
+        <param name="arcRadius">130</param>
+        <param name="arcSize">20</param>
+        <param name="arcDirection">Gfx.ARC_CLOCKWISE</param>
+        <!-- Data -->
+        <param name="arcMaxValue">100</param>
+    </drawable>
+
+    <label id="TemperatureNumber" text="16" x="70%" y="67%" justification="Gfx.TEXT_JUSTIFY_CENTER" font="@Fonts.Gorga" color="0xEDEDED" />
+    <drawable id="TemperatureArc" class="ArcRenderer">
+        <param name="arcType">:temperatureArc</param>
+        <!-- Colors -->
+        <param name="mainColor">0x58ba1a</param>
+        <param name="secondColor">0xc98f1f</param>
+        <param name="thirdColor">0xd21a1a</param>
+        <!-- Arc size n' position -->
+        <param name="startDegree">40</param>
+        <param name="endDegree">-30</param>
+        <param name="xCenterPosition">:center</param>
+        <param name="yCenterPosition">:center</param>
+        <param name="arcRadius">130</param>
+        <param name="arcSize">20</param>
+        <param name="arcDirection">Gfx.ARC_COUNTER_CLOCKWISE</param>
+        <!-- Data -->
+        <param name="arcMaxValue">65</param>
+    </drawable>
+
+    <label id="BottomSubtitle"
+        text=""
+        x="50%"
+        y="80%"
+        justification="Gfx.TEXT_JUSTIFY_CENTER"
+        font="@Fonts.Gorga"
+        color="0xA4A4A4" />
+</layout>

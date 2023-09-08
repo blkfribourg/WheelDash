@@ -1,0 +1,46 @@
+info face="Roboto" size=34 bold=1 italic=0 charset="" unicode=1 stretchH=100 smooth=1 aa=1 padding=0,0,0,0 spacing=1,1 outline=0
+common lineHeight=34 base=27 scaleW=256 scaleH=256 pages=1 packed=0 alphaChnl=1 redChnl=0 greenChnl=0 blueChnl=0
+page id=0 file="Roboto_Regular32_alt_0.png"
+chars count=29
+char id=35   x=144   y=0     width=17    height=20    xoffset=0     yoffset=7     xadvance=17    page=0  chnl=15
+char id=37   x=105   y=0     width=19    height=20    xoffset=1     yoffset=7     xadvance=21    page=0  chnl=15
+char id=39   x=163   y=21    width=5     height=8     xoffset=0     yoffset=6     xadvance=5     page=0  chnl=15
+char id=44   x=156   y=21    width=6     height=9     xoffset=0     yoffset=23    xadvance=7     page=0  chnl=15
+char id=46   x=179   y=21    width=6     height=5     xoffset=1     yoffset=22    xadvance=8     page=0  chnl=15
+char id=47   x=15    y=0     width=12    height=22    xoffset=-1    yoffset=7     xadvance=10    page=0  chnl=15
+char id=48   x=213   y=0     width=15    height=20    xoffset=0     yoffset=7     xadvance=16    page=0  chnl=15
+char id=49   x=245   y=0     width=10    height=20    xoffset=2     yoffset=7     xadvance=16    page=0  chnl=15
+char id=50   x=162   y=0     width=16    height=20    xoffset=0     yoffset=7     xadvance=16    page=0  chnl=15
+char id=51   x=229   y=0     width=15    height=20    xoffset=0     yoffset=7     xadvance=16    page=0  chnl=15
+char id=52   x=179   y=0     width=16    height=20    xoffset=0     yoffset=7     xadvance=16    page=0  chnl=15
+char id=53   x=0     y=23    width=15    height=20    xoffset=1     yoffset=7     xadvance=16    page=0  chnl=15
+char id=54   x=16    y=23    width=15    height=20    xoffset=1     yoffset=7     xadvance=16    page=0  chnl=15
+char id=55   x=196   y=0     width=16    height=20    xoffset=0     yoffset=7     xadvance=16    page=0  chnl=15
+char id=56   x=48    y=22    width=14    height=20    xoffset=1     yoffset=7     xadvance=16    page=0  chnl=15
+char id=57   x=32    y=22    width=15    height=20    xoffset=0     yoffset=7     xadvance=16    page=0  chnl=15
+char id=60   x=101   y=21    width=13    height=13    xoffset=0     yoffset=12    xadvance=14    page=0  chnl=15
+char id=61   x=141   y=21    width=14    height=10    xoffset=1     yoffset=13    xadvance=16    page=0  chnl=15
+char id=62   x=115   y=21    width=13    height=13    xoffset=1     yoffset=12    xadvance=14    page=0  chnl=15
+char id=67   x=125   y=0     width=18    height=20    xoffset=0     yoffset=7     xadvance=18    page=0  chnl=15
+char id=70   x=63    y=21    width=14    height=20    xoffset=1     yoffset=7     xadvance=15    page=0  chnl=15
+char id=86   x=84    y=0     width=20    height=20    xoffset=-1    yoffset=7     xadvance=18    page=0  chnl=15
+char id=87   x=59    y=0     width=24    height=20    xoffset=0     yoffset=7     xadvance=24    page=0  chnl=15
+char id=92   x=0     y=0     width=14    height=22    xoffset=-1    yoffset=7     xadvance=12    page=0  chnl=15
+char id=104  x=44    y=0     width=14    height=21    xoffset=1     yoffset=6     xadvance=16    page=0  chnl=15
+char id=107  x=28    y=0     width=15    height=21    xoffset=1     yoffset=6     xadvance=15    page=0  chnl=15
+char id=109  x=78    y=21    width=22    height=15    xoffset=1     yoffset=12    xadvance=24    page=0  chnl=15
+char id=176  x=169   y=21    width=9     height=7     xoffset=1     yoffset=7     xadvance=11    page=0  chnl=15
+char id=186  x=129   y=21    width=11    height=11    xoffset=1     yoffset=7     xadvance=13    page=0  chnl=15
+kernings count=12
+kerning first=47  second=47  amount=-3  
+kerning first=70  second=44  amount=-4  
+kerning first=70  second=46  amount=-4  
+kerning first=39  second=39  amount=-1  
+kerning first=44  second=39  amount=-4  
+kerning first=46  second=39  amount=-4  
+kerning first=86  second=44  amount=-3  
+kerning first=86  second=46  amount=-3  
+kerning first=87  second=44  amount=-2  
+kerning first=87  second=46  amount=-2  
+kerning first=104 second=39  amount=-1  
+kerning first=109 second=39  amount=-1  
