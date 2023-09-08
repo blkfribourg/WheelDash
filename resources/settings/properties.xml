@@ -1,0 +1,23 @@
+<properties>
+
+    <property id="wheelBrand" type="number">0</property>
+    <property id="actionButton" type="number">0</property>
+    <property id="orangeColoringThreshold" type="number">80</property>
+    <property id="redColoringThreshold" type="number">90</property>
+    <property id="rotationSpeed_PWM" type="float">65.2</property>
+    <property id="rotationVoltage_PWM" type="float">81.5</property>
+    <property id="powerFactor_PWM" type="float">0.9</property>
+    <property id="voltageCorrectionFactor" type="float">1.25</property>
+    <property id="speedCorrectionFactor" type="float">1.0</property>
+    <property id="alarmThreshold_PWM" type="number">80</property>
+    <property id="alarmThreshold_speed" type="number">0</property>
+    <property id="activityRecordingOnStartup" type="boolean">false</property>
+    <property id="activitySavingOnExit" type="boolean">false</property>
+    <property id="averageMovingSpeedStatistic" type="boolean">false</property>
+    <property id="topSpeedStatistic" type="boolean">false</property>
+    <property id="watchBatteryConsumptionStatistic" type="boolean">false</property>
+    <property id="updateDelay" type="number">100</property>
+    
+    
+    
+</properties>

@@ -1,0 +1,38 @@
+info face="Gorga Grotesque" size=38 bold=0 italic=0 charset="" unicode=1 stretchH=100 smooth=1 aa=1 padding=0,0,0,0 spacing=1,1 outline=0
+common lineHeight=38 base=29 scaleW=256 scaleH=256 pages=1 packed=0 alphaChnl=1 redChnl=0 greenChnl=0 blueChnl=0
+page id=0 file="Gorga38B_0.png"
+chars count=25
+char id=34   x=13    y=28    width=8     height=6     xoffset=1     yoffset=7     xadvance=12    page=0  chnl=15
+char id=37   x=23    y=0     width=20    height=24    xoffset=-2    yoffset=8     xadvance=20    page=0  chnl=15
+char id=39   x=9     y=28    width=3     height=7     xoffset=1     yoffset=7     xadvance=5     page=0  chnl=15
+char id=44   x=22    y=28    width=5     height=6     xoffset=1     yoffset=26    xadvance=7     page=0  chnl=15
+char id=45   x=41    y=25    width=11    height=3     xoffset=2     yoffset=19    xadvance=15    page=0  chnl=15
+char id=46   x=35    y=25    width=5     height=4     xoffset=1     yoffset=26    xadvance=7     page=0  chnl=15
+char id=47   x=0     y=0     width=11    height=27    xoffset=1     yoffset=7     xadvance=15    page=0  chnl=15
+char id=48   x=77    y=0     width=16    height=18    xoffset=1     yoffset=11    xadvance=18    page=0  chnl=15
+char id=49   x=219   y=0     width=8     height=18    xoffset=1     yoffset=11    xadvance=12    page=0  chnl=15
+char id=50   x=205   y=0     width=13    height=18    xoffset=1     yoffset=11    xadvance=16    page=0  chnl=15
+char id=51   x=190   y=0     width=14    height=18    xoffset=2     yoffset=11    xadvance=18    page=0  chnl=15
+char id=52   x=94    y=0     width=15    height=18    xoffset=1     yoffset=11    xadvance=18    page=0  chnl=15
+char id=53   x=110   y=0     width=15    height=18    xoffset=1     yoffset=11    xadvance=18    page=0  chnl=15
+char id=54   x=126   y=0     width=15    height=18    xoffset=2     yoffset=11    xadvance=18    page=0  chnl=15
+char id=55   x=142   y=0     width=15    height=18    xoffset=1     yoffset=11    xadvance=17    page=0  chnl=15
+char id=56   x=158   y=0     width=15    height=18    xoffset=1     yoffset=11    xadvance=18    page=0  chnl=15
+char id=57   x=174   y=0     width=15    height=18    xoffset=1     yoffset=11    xadvance=18    page=0  chnl=15
+char id=58   x=250   y=0     width=5     height=13    xoffset=2     yoffset=15    xadvance=8     page=0  chnl=15
+char id=60   x=228   y=0     width=10    height=15    xoffset=2     yoffset=12    xadvance=14    page=0  chnl=15
+char id=62   x=239   y=0     width=10    height=15    xoffset=2     yoffset=12    xadvance=14    page=0  chnl=15
+char id=67   x=44    y=0     width=17    height=21    xoffset=2     yoffset=8     xadvance=20    page=0  chnl=15
+char id=70   x=62    y=0     width=14    height=21    xoffset=2     yoffset=8     xadvance=17    page=0  chnl=15
+char id=92   x=12    y=0     width=10    height=27    xoffset=2     yoffset=7     xadvance=13    page=0  chnl=15
+char id=176  x=0     y=28    width=8     height=9     xoffset=2     yoffset=8     xadvance=12    page=0  chnl=15
+char id=778  x=28    y=25    width=6     height=5     xoffset=-8    yoffset=6     xadvance=0     page=0  chnl=15
+kernings count=8
+kerning first=55  second=52  amount=-2  
+kerning first=67  second=45  amount=-1  
+kerning first=70  second=67  amount=-1  
+kerning first=70  second=44  amount=-2  
+kerning first=70  second=46  amount=-2  
+kerning first=70  second=47  amount=-2  
+kerning first=70  second=58  amount=-1  
+kerning first=47  second=67  amount=-1  

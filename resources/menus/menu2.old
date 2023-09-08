@@ -1,0 +1,8 @@
+<menu2 id="MainMenu" title="@Strings.MainMenuTitle">
+  <menu-item id="lightsModeMenu" label="@Strings.lightsModeMenu" subLabel=""></menu-item>
+  <menu-item id="ledModeMenu" label="@Strings.ledModeMenu" subLabel=""></menu-item>
+  <menu-item id="alarmModeMenu" label="@Strings.alarmModeMenu" subLabel=""></menu-item>
+  <menu-item id="pedalModeMenu" label="@Strings.pedalModeMenu" subLabel=""></menu-item>
+  <menu-item id="cutoffAngleMenu" label="@Strings.cutoffAngleMenu" subLabel=""></menu-item>
+  <menu-item id="volumeMenu" label="@Strings.volumeMenu" subLabel=""></menu-item>
+  </menu2>
