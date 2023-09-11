@@ -388,7 +388,7 @@ class KingsongDecoder {
       } else if ((value[16] & 255) == 0xf5) {
         //cpu load
         eucData.cpuLoad = value[14];
-        eucData.hPWM = value[15] / 1000.0;
+        eucData.hPWM = value[15];
         return false;
       } else if ((value[16] & 255) == 0xf6) {
         //speed limit (PWM?)
