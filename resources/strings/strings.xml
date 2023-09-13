@@ -43,10 +43,28 @@
     <string id="wheelBrand1">Leaperkim</string>
     <string id="wheelBrand2">Kingsong</string>
 
-    <string id="actionButton">Action when OK button pressed</string>
-    <string id="buttonActionNone">None</string>
-    <string id="buttonActionLights">Cycle lights modes</string>
+    <string id="wheelBrand3">Gotway/Begode_v2</string>
     
+
+    <string id="recordActivityButtonMap">Button mapping to activity recording view</string>
+    <string id="cycleLightButtonMap">Button mapping to cycle light mode</string>
+    <string id="beepButtonMap">Button mapping to wheel beep (horn mode)</string>
+    <string id="none">None</string>
+    <string id="startStopButton">Start/Stop button</string>
+    <string id="middleButton">Middle button</string>
+    <string id="downButton">Down button</string>
+    
+    <string id="actionQueueDelay">BLE command queuing delay (low value may cause app crash)</string>
+    <string id="actionQueueDelay_ErrorMessage">Value should be in a range of 10 to 400</string>
+    
+    
+    <string id="currentCorrection">Current correction type</string>
+    <string id="currentCorrection0">None</string>
+    <string id="currentCorrection1">Negative</string>
+    <string id="currentCorrection2">Absolute</string>
+
+    <string id="maxTemperature">Maximum operating temperature (°C)</string>
+    <string id="maxTemperature_ErrorMessage">Value should be in a range of 0 to 120°C</string>
     <string id="updateDelay">UI refresh rate and in msec</string>
     <string id="updateDelay_ErrorMessage">Value should be in a range of 100 msec to 1000 msec</string>
 
@@ -54,11 +72,21 @@
     <string id="coloringThreshold_ErrorMessage">You can't set PWM threshold larger than PWM range itself!</string>
     <string id="redColoringThreshold">percentage threshold to color PWM bar with red</string>
 
-    <string id="voltageCorrectionFactor">Voltage Correction Factor, 1 for 67.2V, 1.25 for 84V ...</string>
+
+    <string id="voltageCorrectionFactor">Voltage Correction Factor (Gotway/Begode only), 1 for 67.2V, 1.25 for 84V ...</string>
     <string id="voltageCorrectionFactor_ErrorMessage">Value out of range</string>
+    <string id="begodeCF">Gotway/Begode with custom firmware (to use hardware PWM)</string>
 
     <string id="speedCorrectionFactor">Speed Correction Factor, to adjust wheel reported speed. PWM will still be calculated using uncorrected speed reported by EUC.</string>
     <string id="speedCorrectionFactor_ErrorMessage">Value out of range</string>
+
+    <string id="mainNumber">Value to display on the main numeric indicator (center of the screen)</string>
+    <string id="topBar">Value to display on the top bar</string>
+        
+    <string id="speed_str">Speed</string>
+    <string id="PWM_str">PWM</string>
+    <string id="maxSpeed">Displayed speed limit : used to scale the top arc if Top bar value set to Speed</string>
+    <string id="maxSpeed_ErrorMessage">Value out of range</string>
     
     <string id="rotationSpeed_PWM">Cut-out speed when performing free spin test</string>
     <string id="rotationSpeed_PWM_ErrorMessage">Value out of range</string>
@@ -74,6 +102,10 @@
 
     <string id="alarmThreshold_speed">Speed that trigger an alarm</string>
     <string id="alarmThreshold_speed_ErrorMessage">Value out of range</string>
+
+     <string id="alarmThreshold_temp">Temperature that trigger an alarm</string>
+    <string id="alarmThreshold_temp_ErrorMessage">Value out of range</string>
+
    
     <string id="UIsettings">App UI settings</string>
     <string id="UIsettingsDescription">UI settings, please be aware that watch battery usage will be impacted by refresh rate (battery usage / accuracy trade-off)</string>
@@ -98,15 +130,24 @@
    <string id="rideStats">Ride info displayed on the bottom</string>
    <string id="rideStatsDescription">Select the ride info to be displayed, if more than one selected, selected info will be diplayed in a loop every 2 sec </string>
 
-   <string id="averageMovingSpeedStatistic">Display average moving speed (when speed >3 km/h)</string>
+
+   <string id="averageMovingSpeedStatistic">Display average moving speed (when speed >3 km/h or 2 mph)</string>
    <string id="topSpeedStatistic">Display top speed</string>
    <string id="watchBatteryConsumptionStatistic">Display watch battery consumption (%/h)</string>
+   <string id="tripDistanceStatistic">Display current trip distance</string>
+   <string id="voltageStatistic">Display voltage</string>
+   <string id="watchBatteryStatistic">Display watch battery</string>
    
+   <string id="debugMode">Enable Debug Mode (view)</string>
+
     <!-- FIT Strings-->
 
     <string id="speed_graph_label">Speed</string>
     <string id="speed_label">Speed</string>
-    <string id="speed_units">km/h</string>
+
+    <string id="speed_units_kmh">km/h</string>
+    <string id="speed_units_mph">mph</string>
+
     <string id="pwm_graph_label">PWM</string>
     <string id="pwm_label">PWM</string>
     <string id="pwm_units"></string>
@@ -123,24 +164,35 @@
     <string id="temperature_label">MB Temperature</string>
     <string id="temperature_units">°C</string>
     <string id="tripDistance_label">Trip distance</string>
-    <string id="tripDistance_units">km</string>
+
+    <string id="distanceUnits_km">km</string>
+    <string id="distanceUnits_miles">miles</string>
     <string id="maxSpeed_label">Session max speed</string>
-    <string id="maxSpeed_units">km/h</string>
+    
     <string id="maxPWM_label">Session max PWM</string>
-    <string id="maxPWM_units">%</string>
+    
+    <string id="percentage_units">%</string>
     <string id="maxCurrent_label">Session max current</string>
-    <string id="maxCurrent_units">A</string>
+  
     <string id="maxPower_label">Session max power</string>
-    <string id="maxPower_units">W</string>
+   
     <string id="maxTemperature_label">Session max temperature</string>
-    <string id="maxTemperature_units">°C</string>
+    <string id="minTemperature_label">Session min temperature</string>
+
     <string id="avgSpeed_label">Session average speed</string>
-    <string id="avgSpeed_units">km/h</string>
+    
+
     <string id="avgCurrent_label">Session average current</string>
     <string id="avgCurrent_units">A</string>
     <string id="avgPower_label">Session average power</string>
     <string id="avgPower_units">W</string>
     <string id="runningTime_label">Session running time (debug)</string>
     <string id="runnintTime_units">s</string>
+
+
+    <string id="minVoltage_label">Session min voltage</string>
+    <string id="maxVoltage_label">Session max voltage</string>
+    <string id="minBattery_label">Session min battery %</string>
+    <string id="maxBattery_label">Session max battery %</string>
 
 </strings>

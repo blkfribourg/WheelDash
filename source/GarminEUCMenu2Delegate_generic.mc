@@ -46,10 +46,12 @@ class GarminEUCMenu2Delegate_generic extends WatchUi.Menu2InputDelegate {
   }
   function onSelect(item) {
     for (var i = 0; i < EUCConfig.size(); i++) {
-      System.println("label :" + item.getLabel().toString());
-      System.println("item " + i + " : " + EUCConfigLabels[i]);
+
+      //System.println("label :" + item.getLabel().toString());
+      // System.println("item " + i + " : " + EUCConfigLabels[i]);
       if (item.getLabel().toString().equals(EUCConfigLabels[i])) {
-        System.println("Enter " + EUCConfigLabels[i]);
+        // System.println("Enter " + EUCConfigLabels[i]);
+
         nestedMenu(EUCConfigLabels[i], EUCConfig[i]);
       }
     }
@@ -81,7 +83,9 @@ class GarminEUCMenu2Delegate_generic extends WatchUi.Menu2InputDelegate {
 
   function updateSublabels() {
     if (EUCStatus == null) {
-      System.println("null status dicts");
+
+      // System.println("null status dicts");
+
       return;
     }
     var menuToUpdate = parent_menu;
@@ -101,8 +105,7 @@ class GarminEUCMenu2Delegate_generic extends WatchUi.Menu2InputDelegate {
                 ]
               );
           }
-          // i+1 -> skipping first item (lights as no feedback on tesla)
-          //System.println(valuesToUpdate[i].toString());
+
         }
       }
     }
@@ -145,10 +148,66 @@ class GarminEUCMenu2Delegate_generic extends WatchUi.Menu2InputDelegate {
     }
   }
   function sendCommand(fromMenu, cmd) {
+
+    // execute command specific to Gotway/begode
+    if (eucData.wheelBrand == 0) {
+      if (
+        EUCSettingsDict.getConfigToLock().indexOf(fromMenu) != -1 &&
+        eucData.correctedSpeed > 2
+      ) {
+        //moving and locked settting
+      } else {
+        gotwayMenuCmd(fromMenu, cmd);
+        /*
+        if (EUCSettingsDict.getConfigToLock().indexOf(fromMenu) != -1) {
+          System.println("executing locked setting because not moving");
+        } else {
+          System.println("executing non-locked setting");
+        }*/
+      }
+    }
+    if (eucData.wheelBrand == 1) {
+      if (
+        EUCSettingsDict.getConfigToLock().indexOf(fromMenu) != -1 &&
+        eucData.correctedSpeed > 2
+      ) {
+        //moving and locked settting
+      } else {
+        eucBleDelegate.sendCmd(cmd);
+        /*
+        if (EUCSettingsDict.getConfigToLock().indexOf(fromMenu) != -1) {
+          System.println("executing locked setting because not moving");
+        } else {
+          System.println("executing non-locked setting");
+        }*/
+      }
+    }
+    // execute command specific to Kingsong
+    if (eucData.wheelBrand == 2) {
+      if (
+        EUCSettingsDict.getConfigToLock().indexOf(fromMenu) != -1 &&
+        eucData.correctedSpeed > 2
+      ) {
+        //moving and locked settting
+      } else {
+        kingsongMenuCmd(fromMenu, cmd);
+        /*
+        if (EUCSettingsDict.getConfigToLock().indexOf(fromMenu) != -1) {
+          System.println("executing locked setting because not moving");
+        } else {
+          System.println("executing non-locked setting");
+        }*/
+      }
+    }
+    queue.delayTimer.start(method(:timerCallback), delay, true);
+    requestSubLabelsUpdate = true;
+  }
+
+  function gotwayMenuCmd(parentMenu, cmd) {
     var command = null;
     var enc_cmd = null;
+    if (parentMenu.equals("Leds Mode")) {
 
-    if (fromMenu.equals("Leds Mode")) {
       command = "W";
       enc_cmd = string_to_byte_array(command as String);
 
@@ -170,7 +229,9 @@ class GarminEUCMenu2Delegate_generic extends WatchUi.Menu2InputDelegate {
         eucBleDelegate.getPMService()
       );
     }
-    if (fromMenu.equals("Beep Volume")) {
+
+    if (parentMenu.equals("Beep Volume")) {
+
       command = "W";
       enc_cmd = string_to_byte_array(command as String);
 
@@ -194,14 +255,48 @@ class GarminEUCMenu2Delegate_generic extends WatchUi.Menu2InputDelegate {
     } else {
       eucBleDelegate.sendCmd(cmd);
     }
-    queue.delayTimer.start(method(:timerCallback), delay, true);
-    requestSubLabelsUpdate = true;
+
+  }
+
+  function kingsongMenuCmd(parentMenu, cmd) {
+    // would be more elegent to reuse fct getEmptyRequest()
+    var cmd_frame = [
+      0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+      0x00, 0x00, 0x00, 0x00, 0x00, 0x14, 0x5a, 0x5a,
+    ]b;
+    System.println("empty_frame: " + cmd_frame.toString());
+    if (parentMenu.equals("Lights")) {
+      cmd_frame[2] = cmd.toNumber() + 0x12;
+      cmd_frame[3] = 1;
+      cmd_frame[16] = 115;
+      System.println("lights_frame: " + cmd_frame.toString());
+    }
+    if (parentMenu.equals("Strobe Mode")) {
+      cmd_frame[2] = cmd.toNumber();
+      cmd_frame[16] = 83;
+      System.println("strobe_frame: " + cmd_frame.toString());
+    }
+    if (parentMenu.equals("Leds Mode")) {
+      cmd_frame[2] = cmd.toNumber();
+      cmd_frame[16] = 108;
+      System.println("leds_frame: " + cmd_frame.toString());
+    }
+    if (parentMenu.equals("Pedal Mode")) {
+      cmd_frame[2] = cmd.toNumber();
+      cmd_frame[3] = 224;
+      cmd_frame[16] = 135;
+      cmd_frame[17] = 21;
+      System.println("pedal_frame: " + cmd_frame.toString());
+    }
+    eucBleDelegate.sendRawCmd(cmd_frame);
+
   }
 
   function timerCallback() {
     queue.run();
   }
 }
+
 /*
 //! Custom menu adapted from garmin sdk samples, I was using an icon to identify currently selected item but not showing on my garmin venu -> switched to checkbox items for menu
 class CustomEucMenu extends WatchUi.CustomMenu {

@@ -1,6 +1,6 @@
 <settings>
-    <group id="wheelSettings" title="@Strings.wheelSettings" description="@Strings.wheelSettingsDescription">
-         <setting
+
+            <setting
                 propertyKey="@Properties.wheelBrand"
                 title="@Strings.wheelBrand">
                 <settingConfig type="list">
@@ -10,14 +10,46 @@
                 </settingConfig>
             </setting>
             <setting
-                propertyKey="@Properties.actionButton"
-                title="@Strings.actionButton">
+                propertyKey="@Properties.recordActivityButtonMap"
+                title="@Strings.recordActivityButtonMap">
                 <settingConfig type="list">
-                    <listEntry value="0">@Strings.buttonActionNone</listEntry>
-                    <listEntry value="1">@Strings.buttonActionLights</listEntry>
+                    <listEntry value="0">@Strings.none</listEntry>
+                    <listEntry value="4">@Strings.startStopButton</listEntry>
+                    <listEntry value="13">@Strings.middleButton</listEntry>
+                    <listEntry value="8">@Strings.downButton</listEntry>
                 </settingConfig>
             </setting>
             <setting
+                propertyKey="@Properties.cycleLightButtonMap"
+                title="@Strings.cycleLightButtonMap">
+                <settingConfig type="list">
+                    <listEntry value="0">@Strings.none</listEntry>
+                    <listEntry value="4">@Strings.startStopButton</listEntry>
+                    <listEntry value="13">@Strings.middleButton</listEntry>
+                    <listEntry value="8">@Strings.downButton</listEntry>
+                </settingConfig>
+            </setting>
+            <setting
+                propertyKey="@Properties.beepButtonMap"
+                title="@Strings.beepButtonMap">
+                <settingConfig type="list">
+                    <listEntry value="0">@Strings.none</listEntry>
+                    <listEntry value="4">@Strings.startStopButton</listEntry>
+                     <listEntry value="13">@Strings.middleButton</listEntry>
+                     <listEntry value="8">@Strings.downButton</listEntry>
+                </settingConfig>
+            </setting>
+            <setting
+                    propertyKey="@Properties.actionQueueDelay"
+                    title="@Strings.actionQueueDelay">
+                    <settingConfig
+                        type="numeric"
+                        min="10"
+                        max="400"
+                        errorMessage="@Strings.actionQueueDelay_ErrorMessage" />
+                </setting>
+                <setting
+
                     propertyKey="@Properties.voltageCorrectionFactor"
                     title="@Strings.voltageCorrectionFactor">
                     <settingConfig
@@ -27,16 +59,67 @@
                         errorMessage="@Strings.voltageCorrectionFactor_ErrorMessage" />
                 </setting>
                 <setting
+                    propertyKey="@Properties.begodeCF"
+                    title="@Strings.begodeCF">
+                    <settingConfig
+                        type="boolean"
+                    />
+                </setting>
+
+                <setting
+                propertyKey="@Properties.currentCorrection"
+                title="@Strings.currentCorrection">
+                <settingConfig type="list">
+                    <listEntry value="0">@Strings.currentCorrection0</listEntry>
+                    <listEntry value="1">@Strings.currentCorrection1</listEntry>
+                    <listEntry value="2">@Strings.currentCorrection2</listEntry>
+                </settingConfig>
+            </setting>
+                <setting
+
                     propertyKey="@Properties.speedCorrectionFactor"
                     title="@Strings.speedCorrectionFactor">
                     <settingConfig
                         type="numeric"
                         min="0"
                         max="2"
-                        errorMessage="@Strings.speedCorrectionFactor_ErrorMessage" />
+                        errorMessage="@Strings.speedCorrectionFactor_ErrorMessage" /> 
             </setting>
-        </group>
-        <group id="UIsettings" title="@Strings.UIsettings" description="@Strings.UIsettingsDescription">
+            <setting
+                    propertyKey="@Properties.mainNumber"
+                    title="@Strings.mainNumber">
+                    <settingConfig type="list">
+                    <listEntry value="0">@Strings.speed_str</listEntry>
+                    <listEntry value="1">@Strings.PWM_str</listEntry>
+                </settingConfig>
+            </setting>
+            <setting
+                    propertyKey="@Properties.topBar"
+                    title="@Strings.topBar">
+                    <settingConfig type="list">
+                    <listEntry value="1">@Strings.speed_str</listEntry>
+                    <listEntry value="0">@Strings.PWM_str</listEntry>
+                </settingConfig>
+            </setting>
+            <setting
+                    propertyKey="@Properties.maxSpeed"
+                    title="@Strings.maxSpeed">
+                    <settingConfig
+                        type="numeric"
+                        min="0"
+                        max="200"
+                        errorMessage="@Strings.maxSpeed_ErrorMessage" />
+           
+            </setting>
+                <setting
+                    propertyKey="@Properties.maxTemperature"
+                    title="@Strings.maxTemperature">
+                    <settingConfig
+                        type="numeric"
+                        min="0"
+                        max="120"
+                        errorMessage="@Strings.maxTemperature_ErrorMessage" />
+            </setting>
             <setting
                 propertyKey="@Properties.updateDelay"
                 title="@Strings.updateDelay">
@@ -64,9 +147,6 @@
                 max="100"
                 errorMessage="@Strings.coloringThreshold_ErrorMessage" />
             </setting>
-        </group>
-        
-    <group id="PWMSettings" title="@Strings.PWMSettings" description="@Strings.PWMSettingsDescription">
         <setting
             propertyKey="@Properties.rotationSpeed_PWM"
             title="@Strings.rotationSpeed_PWM">
@@ -94,8 +174,6 @@
                 max="1"
                 errorMessage="@Strings.powerFactor_PWM_ErrorMessage" />
         </setting>
-    </group>
-    <group id="alarms" title="@Strings.alarms" description="@Strings.alarmsDescription">
         <setting
             propertyKey="@Properties.alarmThreshold_PWM"
             title="@Strings.alarmThreshold_PWM">
@@ -114,8 +192,16 @@
                 max="200"
                 errorMessage="@Strings.alarmThreshold_speed_ErrorMessage" />
         </setting>
-    </group>
-    <group id="activity" title="@Strings.activity" description="@Strings.activityDescription">
+
+        <setting
+            propertyKey="@Properties.alarmThreshold_temp"
+            title="@Strings.alarmThreshold_temp">
+            <settingConfig
+                type="numeric"
+                min="0"
+                max="120"
+                errorMessage="@Strings.alarmThreshold_temp_ErrorMessage" />
+        </setting>
          <setting
             propertyKey="@Properties.activityRecordingOnStartup"
             title="@Strings.activityRecordingOnStartup">
@@ -130,8 +216,6 @@
                 type="boolean"
             />
         </setting>
-    </group>
-    <group id="rideStats" title="@Strings.rideStats" description="@Strings.rideStatsDescription">
          <setting
             propertyKey="@Properties.averageMovingSpeedStatistic"
             title="@Strings.averageMovingSpeedStatistic">
@@ -153,5 +237,33 @@
                 type="boolean"
             />
         </setting>
-    </group>
+        <setting
+            propertyKey="@Properties.watchBatteryStatistic"
+            title="@Strings.watchBatteryStatistic">
+            <settingConfig
+                type="boolean"
+            />
+        </setting>
+        <setting
+            propertyKey="@Properties.tripDistanceStatistic"
+            title="@Strings.tripDistanceStatistic">
+            <settingConfig
+                type="boolean"
+            />
+        </setting>
+        <setting
+            propertyKey="@Properties.voltageStatistic"
+            title="@Strings.voltageStatistic">
+            <settingConfig
+                type="boolean"
+            />
+        </setting>
+        
+        <setting
+            propertyKey="@Properties.debugMode"
+            title="@Strings.debugMode">
+            <settingConfig
+                type="boolean"
+            />
+        </setting>
 </settings>
