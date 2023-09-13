@@ -1,4 +1,5 @@
 <settings>
+
             <setting
                 propertyKey="@Properties.wheelBrand"
                 title="@Strings.wheelBrand">
@@ -48,6 +49,7 @@
                         errorMessage="@Strings.actionQueueDelay_ErrorMessage" />
                 </setting>
                 <setting
+
                     propertyKey="@Properties.voltageCorrectionFactor"
                     title="@Strings.voltageCorrectionFactor">
                     <settingConfig
@@ -74,14 +76,14 @@
                 </settingConfig>
             </setting>
                 <setting
+
                     propertyKey="@Properties.speedCorrectionFactor"
                     title="@Strings.speedCorrectionFactor">
                     <settingConfig
                         type="numeric"
                         min="0"
                         max="2"
-                        errorMessage="@Strings.speedCorrectionFactor_ErrorMessage" />
-           
+                        errorMessage="@Strings.speedCorrectionFactor_ErrorMessage" /> 
             </setting>
             <setting
                     propertyKey="@Properties.mainNumber"
@@ -145,7 +147,6 @@
                 max="100"
                 errorMessage="@Strings.coloringThreshold_ErrorMessage" />
             </setting>
-       
         <setting
             propertyKey="@Properties.rotationSpeed_PWM"
             title="@Strings.rotationSpeed_PWM">
@@ -173,7 +174,6 @@
                 max="1"
                 errorMessage="@Strings.powerFactor_PWM_ErrorMessage" />
         </setting>
-  
         <setting
             propertyKey="@Properties.alarmThreshold_PWM"
             title="@Strings.alarmThreshold_PWM">
@@ -192,6 +192,7 @@
                 max="200"
                 errorMessage="@Strings.alarmThreshold_speed_ErrorMessage" />
         </setting>
+
         <setting
             propertyKey="@Properties.alarmThreshold_temp"
             title="@Strings.alarmThreshold_temp">
@@ -201,7 +202,6 @@
                 max="120"
                 errorMessage="@Strings.alarmThreshold_temp_ErrorMessage" />
         </setting>
-   
          <setting
             propertyKey="@Properties.activityRecordingOnStartup"
             title="@Strings.activityRecordingOnStartup">
@@ -216,7 +216,6 @@
                 type="boolean"
             />
         </setting>
-    
          <setting
             propertyKey="@Properties.averageMovingSpeedStatistic"
             title="@Strings.averageMovingSpeedStatistic">
@@ -267,5 +266,4 @@
                 type="boolean"
             />
         </setting>
-   
 </settings>

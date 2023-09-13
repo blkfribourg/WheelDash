@@ -1,5 +1,4 @@
 <properties>
-
     <property id="wheelBrand" type="number">0</property>
     <property id="recordActivityButtonMap" type="number">0</property>
     <property id="cycleLightButtonMap" type="number">0</property>
@@ -30,10 +29,5 @@
     <property id="currentCorrection" type="number">0</property>
     <property id="maxTemperature" type="float">65</property>
     <property id="begodeCF" type="boolean">false</property>
-    
     <property id="debugMode" type="boolean">false</property>
-    
-    
-    
-    
 </properties>

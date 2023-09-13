@@ -4,6 +4,7 @@ class gotwayConfig {
       eucData.ledMode.toString(),
       eucData.speedAlertMode.toString(),
       eucData.pedalMode.toString(),
+
       eucData.useMiles.toString(),
     ];
   }
@@ -12,6 +13,7 @@ class gotwayConfig {
   }
   function getConfigWithStatusLabels() {
     return ["Leds Mode", "Speed Alarm", "Pedal Mode", "Distance unit"];
+
   }
   function getConfig() {
     return [
@@ -21,7 +23,9 @@ class gotwayConfig {
       dictPedalMode,
       dictCutoffAngleMode,
       dictVolume,
+
       dictDstUnit,
+
     ];
   }
   function getConfigLabels() {
@@ -32,12 +36,14 @@ class gotwayConfig {
       "Pedal Mode",
       "Cutoff Angle",
       "Beep Volume",
+
       "Distance unit",
     ];
   }
   function getConfigToLock() {
     return ["Speed Alarm", "Pedal Mode", "Cutoff Angle", "Distance unit"];
   }
+
 
   //dict for communication
   var dictLightsMode = {
@@ -79,6 +85,7 @@ class gotwayConfig {
     "9" => "9",
   };
 
+
   var dictDstUnit = {
     "km" => "g",
     "miles" => "m",
@@ -87,6 +94,7 @@ class gotwayConfig {
     "km" => "0",
     "miles" => "1",
   };
+
   // dict for status report
   // no lights & volume "feedback" on tesla v2
   /*
@@ -104,6 +112,7 @@ class gotwayConfig {
             "Low" => "0"
         };
 */
+
   var dictPedalStatus = {
     "Hard" => "2",
     "Medium" => "1",
@@ -115,6 +124,7 @@ class gotwayConfig {
     "30Kmh + PWM" => "0",
   };
 }
+
 
 class veteranConfig {
   function getWheelSettingsStatus() {
@@ -220,3 +230,4 @@ class dummyConfig {
     return [];
   }
 }
+

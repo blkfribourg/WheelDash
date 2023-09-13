@@ -101,9 +101,6 @@
         dataLabel="@Strings.runningTime_label"
         unitLabel="@Strings.runnintTime_units"/>
 
-       
-
-
     </fitContributions>
 
 </resources>

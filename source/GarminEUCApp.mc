@@ -4,6 +4,7 @@ import Toybox.WatchUi;
 import Toybox.System;
 using Toybox.Timer;
 using Toybox.StringUtil;
+
 class GarminEUCApp extends Application.AppBase {
   private var view;
   private var delegate;
@@ -28,11 +29,13 @@ class GarminEUCApp extends Application.AppBase {
 
   // onStart() is called on application start up
   function onStart(state as Dictionary?) as Void {
+
     // Sandbox zone
     //profileMenu= createMenu(["Profile1","Profile2","Profile3"],"Profile Selection");
     // end of sandbox
     setSettings();
     rideStatsInit();
+
     alarmsTimer.start(method(:onUpdateTimer), eucData.updateDelay, true);
   }
 
@@ -46,6 +49,7 @@ class GarminEUCApp extends Application.AppBase {
         if (activityrecordview.isSessionRecording()) {
           activityrecordview.stopRecording();
           //System.println("Activity saved");
+
         }
       }
     }
@@ -57,6 +61,7 @@ class GarminEUCApp extends Application.AppBase {
     var profileManager = new eucPM();
 
     if (Toybox has :BluetoothLowEnergy) {
+
       profileManager.setManager();
       eucBleDelegate = new eucBLEDelegate(
         profileManager,
@@ -66,6 +71,7 @@ class GarminEUCApp extends Application.AppBase {
       BluetoothLowEnergy.setDelegate(eucBleDelegate);
       profileManager.registerProfiles();
     }
+
     if (debug == true) {
       view = new GarminEUCDebugView();
       view.setBleDelegate(eucBleDelegate);
@@ -76,6 +82,7 @@ class GarminEUCApp extends Application.AppBase {
     EUCSettingsDict = getEUCSettingsDict(); // in helper function
     actionButtonTrigger.setEUCDict();
     menu = createMenu(EUCSettingsDict.getConfigLabels(), "Settings");
+
     menu2Delegate = new GarminEUCMenu2Delegate_generic(
       menu,
       eucBleDelegate,
@@ -91,6 +98,7 @@ class GarminEUCApp extends Application.AppBase {
       eucBleDelegate,
       queue,
       actionButtonTrigger
+
     );
 
     return [view, delegate] as Array<Views or InputDelegates>;
@@ -106,11 +114,13 @@ class GarminEUCApp extends Application.AppBase {
       }
       if (
         activityrecordview != null &&
+
         eucData.paired == true &&
         !activityrecordview.isSessionRecording()
       ) {
         //enable sensor first ?
         activityrecordview.enableGPS();
+
         activityrecordview.startRecording();
         //System.println("autorecord started");
       }
@@ -118,7 +128,9 @@ class GarminEUCApp extends Application.AppBase {
     // -------------------------
 
     eucData.correctedSpeed = eucData.getCorrectedSpeed();
+
     eucData.PWM = eucData.getPWM();
+
     EUCAlarms.speedAlarmCheck();
     if (menu2Delegate.requestSubLabelsUpdate == true) {
       menu2Delegate.updateSublabels();
@@ -134,18 +146,23 @@ class GarminEUCApp extends Application.AppBase {
     if (rideStats.showTopSpeedStatistic) {
       rideStats.topSpeed();
       rideStats.statsArray[statsIndex] =
+
         "Top Spd: " + valueRound(eucData.topSpeed, "%.1f").toString();
+
       //System.println(rideStats.statsArray[statsIndex]);
       statsIndex++;
     }
     if (rideStats.showWatchBatteryConsumptionStatistic) {
       rideStats.watchBatteryUsage();
       rideStats.statsArray[statsIndex] =
+
         "Wtch btry/h: " +
+
         valueRound(eucData.watchBatteryUsage, "%.1f").toString();
       //System.println(rideStats.statsArray[statsIndex]);
       statsIndex++;
     }
+
     if (rideStats.showTripDistance) {
       rideStats.statsArray[statsIndex] =
         "Trip dist: " + valueRound(eucData.tripDistance, "%.1f").toString();
@@ -167,6 +184,7 @@ class GarminEUCApp extends Application.AppBase {
       statsIndex++;
     }
 
+
     WatchUi.requestUpdate();
   }
 
@@ -184,6 +202,7 @@ class GarminEUCApp extends Application.AppBase {
     if (rideStats.showWatchBatteryConsumptionStatistic) {
       rideStats.statsNumberToDiplay++;
     }
+
     if (rideStats.showTripDistance) {
       rideStats.statsNumberToDiplay++;
     }

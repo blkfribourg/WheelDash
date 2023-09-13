@@ -8,14 +8,18 @@ class GarminEUCDelegate extends WatchUi.BehaviorDelegate {
   var mainView = null;
   var activityView = null;
   var menu2Delegate = null;
+
   var actionButtonTrigger = null;
+
   function initialize(
     main_view,
     _menu2,
     _menu2Delegate,
     current_eucBleDelegate,
+
     q,
     _actionButtonTrigger
+
   ) {
     eucBleDelegate = current_eucBleDelegate;
     queue = q;
@@ -24,13 +28,16 @@ class GarminEUCDelegate extends WatchUi.BehaviorDelegate {
     BehaviorDelegate.initialize();
     mainView = main_view;
     activityView = new ActivityRecordView();
+
     actionButtonTrigger = _actionButtonTrigger;
+
   }
 
   function onMenu() as Boolean {
     WatchUi.pushView(menu, menu2Delegate, WatchUi.SLIDE_UP);
     return true;
   }
+
   function onSwipe(swipeEvent as WatchUi.SwipeEvent) {
     if (swipeEvent.getDirection() == WatchUi.SWIPE_UP) {
       goToActivityView();
@@ -54,6 +61,7 @@ class GarminEUCDelegate extends WatchUi.BehaviorDelegate {
       var dialog = new WatchUi.Confirmation(message);
       var confirmDelegate = new MyConfirmationDelegate();
       WatchUi.pushView(dialog, confirmDelegate, WatchUi.SLIDE_IMMEDIATE);
+
     }
 
     return true;
@@ -62,6 +70,7 @@ class GarminEUCDelegate extends WatchUi.BehaviorDelegate {
   function getActivityView() {
     return activityView;
   }
+
 
   function goToActivityView() {
     System.println("bringing activity view");
@@ -84,4 +93,5 @@ class MyConfirmationDelegate extends WatchUi.ConfirmationDelegate {
     }
     return true;
   }
+
 }
