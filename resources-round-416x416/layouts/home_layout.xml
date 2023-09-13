@@ -12,10 +12,10 @@
         <!-- Dial size n' position -->
         <param name="startDegree">210</param>
         <param name="endDegree">-30</param>
-        <param name="xCenterPosition">195</param>
-        <param name="yCenterPosition">195</param>
-        <param name="arcRadius">160</param>
-        <param name="arcSize">30</param>
+        <param name="xCenterPosition">:center</param>
+        <param name="yCenterPosition">:center</param>
+        <param name="arcRadius">171</param>
+        <param name="arcSize">32</param>
         <param name="arcDirection">Gfx.ARC_CLOCKWISE</param>
     </drawable>
     <label id="SpeedNumber" text="22" x="50%" y="46%" justification="Gfx.TEXT_JUSTIFY_CENTER | Gfx.TEXT_JUSTIFY_VCENTER" font="@Fonts.GorgaBig" color="Gfx.COLOR_WHITE" ></label>
@@ -31,8 +31,8 @@
         <param name="endDegree">140</param>
         <param name="xCenterPosition">:center</param>
         <param name="yCenterPosition">:center</param>
-        <param name="arcRadius">130</param>
-        <param name="arcSize">20</param>
+        <param name="arcRadius">139</param>
+        <param name="arcSize">21</param>
         <param name="arcDirection">Gfx.ARC_CLOCKWISE</param>
         <!-- Data -->
         <param name="arcMaxValue">100</param>
@@ -50,14 +50,14 @@
         <param name="endDegree">-30</param>
         <param name="xCenterPosition">:center</param>
         <param name="yCenterPosition">:center</param>
-        <param name="arcRadius">130</param>
-        <param name="arcSize">20</param>
+        <param name="arcRadius">139</param>
+        <param name="arcSize">21</param>
         <param name="arcDirection">Gfx.ARC_COUNTER_CLOCKWISE</param>
         <!-- Data -->
         <param name="arcMaxValue">65</param>
     </drawable>
 
-   <label id="BottomSubtitle"
+    <label id="BottomSubtitle"
         text=""
         x="50%"
         y="80%"

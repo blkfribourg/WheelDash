@@ -101,6 +101,13 @@
         dataLabel="@Strings.runningTime_label"
         unitLabel="@Strings.runnintTime_units"/>
 
+         <fitField id="21" displayInChart="false" displayInActivitySummary="true" sortOrder = "21"
+        dataLabel="@Strings.wheelName_label"
+        unitLabel="@Strings.empty"/>
+
+       
+
+
     </fitContributions>
 
 </resources>

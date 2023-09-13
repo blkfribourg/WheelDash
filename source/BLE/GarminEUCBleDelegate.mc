@@ -103,8 +103,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
           }
         }
         if (wheelFound == true) {
-          Ble.setScanState(Ble.SCAN_STATE_OFF);
-          device = Ble.pairDevice(result);
+          bestRssi(result);
         }
       }
     }
@@ -181,6 +180,62 @@ class eucBLEDelegate extends Ble.BleDelegate {
     return result;
 }
 */
+
+  var shouldAdd;
+  var srList as Array?;
+  var rssiList as Array?;
+  var RssiIteration = eucData.RssiIteration;
+
+  function addSr(sr as Ble.ScanResult) {
+    if (srList == null || rssiList == null) {
+      srList = [sr];
+      rssiList = [sr.getRssi()];
+    } else {
+      shouldAdd = true;
+      for (var i = 0; i < srList.size(); i++) {
+        var currentSr = srList[i] as Ble.ScanResult;
+        if (sr.isSameDevice(currentSr) == true) {
+          shouldAdd = false;
+          rssiList[i] = (rssiList[i] + sr.getRssi()) / 2; // averaging Rssi
+          RssiIteration = RssiIteration - 1;
+        }
+      }
+      if (shouldAdd == true) {
+        srList.add(sr);
+        rssiList.add(sr.getRssi());
+      }
+    }
+  }
+  function getBestSr() {
+    var strgstRssi = -255;
+    var srIdx = -1;
+    //if (srList.size() != rssiList.size()) {
+    // eucData.wheelName = "RSSI ERROR";
+    //}
+    for (var i = 0; i < rssiList.size(); i++) {
+      if (strgstRssi < rssiList[i]) {
+        strgstRssi = rssiList[i];
+        srIdx = i;
+      }
+    }
+    if (srIdx != -1 && srIdx < srList.size()) {
+      return srList[srIdx];
+    } else {
+      return null;
+    }
+  }
+
+  function bestRssi(sr as Ble.ScanResult) {
+    addSr(sr);
+    if (RssiIteration <= 0) {
+      // eucData.wheelName = "BESTRSSI";
+      var SRToConnect = getBestSr();
+      if (SRToConnect != null) {
+        Ble.setScanState(Ble.SCAN_STATE_OFF);
+        device = Ble.pairDevice(SRToConnect as Ble.ScanResult);
+      }
+    }
+  }
 
   function getChar() {
     return char;
