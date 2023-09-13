@@ -52,7 +52,7 @@
     <string id="wheelBrand0">Gotway/Begode</string>
     <string id="wheelBrand1">Leaperkim</string>
     <string id="wheelBrand2">Kingsong</string>
-    <string id="wheelBrand3">Gotway/Begode_v2</string>
+    <string id="wheelBrand3">Kingsong (old)</string>
     
 
     <string id="recordActivityButtonMap_p1">Button mapping to activity recording view (Profile 1)</string>
@@ -198,7 +198,6 @@
    <string id="voltageStatistic">Display voltage</string>
    <string id="watchBatteryStatistic">Display watch battery</string>
    <string id="profileName">Display profile name</string>
-   
    <string id="debugMode">Enable Debug Mode (view)</string>
     <!-- FIT Strings-->
 

@@ -85,7 +85,11 @@ class eucBLEDelegate extends Ble.BleDelegate {
       result = scanResults.next()
     ) {
       if (result instanceof Ble.ScanResult) {
-        if (eucData.wheelBrand == 0 || eucData.wheelBrand == 1) {
+        if (
+          eucData.wheelBrand == 0 ||
+          eucData.wheelBrand == 1 ||
+          eucData.wheelBrand == 3
+        ) {
           wheelFound = contains(
             result.getServiceUuids(),
             profileManager.EUC_SERVICE,
@@ -112,7 +116,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
   function onDescriptorWrite(desc, status) {
     message7 = "descWrite";
     // send getName request for KS using ble queue
-    if (eucData.wheelBrand == 2 && char != null) {
+    if ((eucData.wheelBrand == 2 || eucData.wheelBrand == 3) && char != null) {
       //decoder.requestName();
       char.requestWrite(
         [

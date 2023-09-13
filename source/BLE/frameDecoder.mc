@@ -9,7 +9,7 @@ module frameDecoder {
     if (eucData.wheelBrand == 1) {
       return new VeteranDecoder();
     }
-    if (eucData.wheelBrand == 2) {
+    if (eucData.wheelBrand == 2 || eucData.wheelBrand == 3) {
       return new KingsongDecoder();
     } else {
       return null;

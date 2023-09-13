@@ -64,7 +64,7 @@ class eucPM {
       // System.println("GW PM");
       setGotwayOrVeteran();
     }
-    if (eucData.wheelBrand == 2) {
+    if (eucData.wheelBrand == 2 || eucData.wheelBrand == 3) {
       setKingsong();
     } else {
     }

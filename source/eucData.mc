@@ -161,8 +161,15 @@ module eucData {
           battery = 0.0;
         }
       } else {
-        // unknown model
-        battery = 0.0;
+        if (voltage > 66.8) {
+          battery = 100.0;
+        } else if (voltage > 54.4) {
+          battery = (voltage - 53.2) / 0.136;
+        } else if (voltage > 51.2) {
+          battery = (voltage - 51.2) / 0.36;
+        } else {
+          battery = 0.0;
+        }
       }
     }
 
