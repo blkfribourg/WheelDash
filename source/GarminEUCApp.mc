@@ -234,7 +234,7 @@ class GarminEUCApp extends Application.AppBase {
   function setGlobalSettings() {
     eucData.RssiIteration = AppStorage.getSetting("RssiIteration");
     eucData.updateDelay = AppStorage.getSetting("updateDelay");
-
+    eucData.debug = AppStorage.getSetting("debugMode");
     eucData.activityAutorecording = AppStorage.getSetting(
       "activityRecordingOnStartup"
     );

@@ -6,9 +6,9 @@
     <drawable id="SpeedDial" class="ArcRenderer">
         <param name="arcType">:speedArc</param>
         <!-- Colors -->
-        <param name="mainColor">0x3366CC</param> <!-- This color is for idle state of the dial, basically first 20% of the speed dial-->
-        <param name="secondColor">0xc35017</param> <!-- This color is for "not so safe" speed, 60 to 80 percent of the dial-->
-        <param name="thirdColor">0xd53420</param><!-- This color is for pretty dangeroud speed, from 80% %to 100%-->
+        <param name="mainColor">0x0055ff</param> <!-- This color is for idle state of the dial, basically first 20% of the speed dial-->
+        <param name="secondColor">0xff5500</param> <!-- This color is for "not so safe" speed, 60 to 80 percent of the dial-->
+        <param name="thirdColor">0xff0000</param><!-- This color is for pretty dangeroud speed, from 80% %to 100%-->
         <!-- Dial size n' position -->
         <param name="startDegree">210</param>
         <param name="endDegree">-30</param>
@@ -24,8 +24,8 @@
     <drawable id="BatteryArc" class="ArcRenderer">
         <param name="arcType">:batteryArc</param>
         <!-- Colors -->
-        <param name="mainColor">0x58ba1a</param> <!-- Main color -->
-        <param name="secondColor">0x346f0f</param> <!-- This color is for the yellow part of battery arc-->
+        <param name="mainColor">0x55ff00</param> <!-- Main color -->
+        <param name="secondColor">0x55aa00</param> <!-- This color is for the yellow part of battery arc-->
         <!-- Arc size n' position -->
         <param name="startDegree">210</param>
         <param name="endDegree">140</param>
@@ -42,9 +42,9 @@
     <drawable id="TemperatureArc" class="ArcRenderer">
         <param name="arcType">:temperatureArc</param>
         <!-- Colors -->
-        <param name="mainColor">0x58ba1a</param>
-        <param name="secondColor">0xc98f1f</param>
-        <param name="thirdColor">0xd21a1a</param>
+        <param name="mainColor">0x55ff00</param>
+        <param name="secondColor">0xff5500</param>
+        <param name="thirdColor">0xff0000</param>
         <!-- Arc size n' position -->
         <param name="startDegree">40</param>
         <param name="endDegree">-30</param>

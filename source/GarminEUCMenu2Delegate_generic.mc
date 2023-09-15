@@ -177,7 +177,7 @@ class GarminEUCMenu2Delegate_generic extends WatchUi.Menu2InputDelegate {
       }
     }
     // execute command specific to Kingsong
-    if (eucData.wheelBrand == 2) {
+    if (eucData.wheelBrand == 2 || eucData.wheelBrand == 3) {
       if (
         EUCSettingsDict.getConfigToLock().indexOf(fromMenu) != -1 &&
         eucData.correctedSpeed > 2

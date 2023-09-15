@@ -29,7 +29,7 @@ function getEUCSettingsDict() {
   if (eucData.wheelBrand == 1) {
     return new veteranConfig();
   }
-  if (eucData.wheelBrand == 2) {
+  if (eucData.wheelBrand == 2 || eucData.wheelBrand == 3) {
     return new kingsongConfig();
   } else {
     return new dummyConfig();

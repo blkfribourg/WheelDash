@@ -14,7 +14,7 @@
     <property id="profileName" type="boolean">false</property>
     <property id="defaultProfile" type="number">1</property>
     <property id="useProfileSelector" type="boolean">true</property>
-
+    <property id="debugMode" type="boolean">false</property>
 <!--Profile 1-->
     <property id="wheelName_p1" type="string">Profile 1</property>
     <property id="wheelBrand_p1" type="number">0</property>
@@ -38,7 +38,7 @@
     <property id="currentCorrection_p1" type="number">0</property>
     <property id="maxTemperature_p1" type="float">65</property>
     <property id="begodeCF_p1" type="boolean">false</property>
-    <property id="debugMode_p1" type="boolean">false</property>
+    
 
 <!--Profile 2-->
     <property id="wheelName_p2" type="string">Profile 2</property>
@@ -63,7 +63,7 @@
     <property id="currentCorrection_p2" type="number">0</property>
     <property id="maxTemperature_p2" type="float">65</property>
     <property id="begodeCF_p2" type="boolean">false</property>
-    <property id="debugMode_p2" type="boolean">false</property>
+    
 
 <!--Profile 3-->
     <property id="wheelName_p3" type="string">Profile 3</property>
@@ -88,7 +88,7 @@
     <property id="currentCorrection_p3" type="number">0</property>
     <property id="maxTemperature_p3" type="float">65</property>
     <property id="begodeCF_p3" type="boolean">false</property>
-    <property id="debugMode_p3" type="boolean">false</property>
+    
     
     
     

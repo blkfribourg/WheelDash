@@ -154,8 +154,6 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       );
       eucData.wheelBrand = AppStorage.getSetting("wheelBrand_p1");
 
-      eucData.debug = AppStorage.getSetting("debugMode_p1");
-
       actionButtonTrigger.recordActivityButton = AppStorage.getSetting(
         "recordActivityButtonMap_p1"
       );
@@ -203,8 +201,6 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
         "alarmThreshold_temp_p2"
       );
       eucData.wheelBrand = AppStorage.getSetting("wheelBrand_p2");
-
-      eucData.debug = AppStorage.getSetting("debugMode_p2");
 
       actionButtonTrigger.recordActivityButton = AppStorage.getSetting(
         "recordActivityButtonMap_p2"
@@ -254,8 +250,6 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
         "alarmThreshold_temp_p3"
       );
       eucData.wheelBrand = AppStorage.getSetting("wheelBrand_p3");
-
-      eucData.debug = AppStorage.getSetting("debugMode_p3");
 
       actionButtonTrigger.recordActivityButton = AppStorage.getSetting(
         "recordActivityButtonMap_p3"

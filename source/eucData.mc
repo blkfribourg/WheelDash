@@ -29,7 +29,7 @@ module eucData {
   var speedCorrectionFactor = 1; // correct distance aswell ...
   var useMiles = 0;
   var deviceName = null;
-  var voltage_scaling;
+  var voltage_scaling = 1;
   var speed = 0.0;
   var correctedSpeed = 0.0;
   var voltage = 0.0;
@@ -37,10 +37,10 @@ module eucData {
   var tripDistance = 0.0;
   var Phcurrent = 0.0;
   var current = 0.0;
-  var temperature = 0;
+  var temperature = 0.0;
   var maxTemperature = 65;
   var totalDistance = 0.0;
-  var PWM = 0;
+  var PWM = 0.0;
   var pedalMode = "0";
   var speedAlertMode = "0";
   var rollAngleMode = "0";
@@ -117,7 +117,7 @@ module eucData {
     //-----------------------------------------------------------
     //Kingsong --------------------------------------------------
 
-    if (wheelBrand == 2) {
+    if (wheelBrand == 2 || wheelBrand == 3) {
       var KSwheels84v = [
         "KS-18L",
         "KS-16X",
@@ -180,7 +180,12 @@ module eucData {
   function getPWM() {
     if (eucData.voltage != 0) {
       //Quick&dirty fix for now, need to rewrite this:
-      if (wheelBrand == 1 || wheelBrand == 2 || gothPWN == true) {
+      if (
+        wheelBrand == 1 ||
+        wheelBrand == 2 ||
+        wheelBrand == 3 ||
+        gothPWN == true
+      ) {
         return hPWM;
       } else {
         var CalculatedPWM =

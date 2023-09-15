@@ -5,7 +5,7 @@ class eucPM {
   var EUC_SERVICE;
   var EUC_CHAR;
   var EUC_CHAR2;
-
+  var OLD_KS_ADV_SERVICE;
   private var eucProfileDef;
 
   function init() {
@@ -59,13 +59,26 @@ class eucPM {
     EUC_CHAR2 = Ble.longToUuid(0x0000ffe200001000l, 0x800000805f9b34fbl);
     self.initKS();
   }
+
+  function setOldKingsong() {
+    EUC_SERVICE = Ble.longToUuid(0x0000ffe000001000l, 0x800000805f9b34fbl);
+    EUC_CHAR = Ble.longToUuid(0x0000ffe100001000l, 0x800000805f9b34fbl);
+    OLD_KS_ADV_SERVICE = Ble.longToUuid(
+      0x0000fff000001000l,
+      0x800000805f9b34fbl
+    );
+    self.init();
+  }
   function setManager() {
     if (eucData.wheelBrand == 0 || eucData.wheelBrand == 1) {
       // System.println("GW PM");
       setGotwayOrVeteran();
     }
-    if (eucData.wheelBrand == 2 || eucData.wheelBrand == 3) {
+    if (eucData.wheelBrand == 2) {
       setKingsong();
+    }
+    if (eucData.wheelBrand == 3) {
+      setOldKingsong();
     } else {
     }
   }

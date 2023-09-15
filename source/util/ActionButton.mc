@@ -24,7 +24,7 @@ class ActionButton {
     if (cycleLightButton == keyNumber) {
       queueRequired = true;
       // Action = cycle light modes
-      if (eucData.wheelBrand == 0 ) {
+      if (eucData.wheelBrand == 0) {
         // gotway/begode
         queue.add(
           [
@@ -59,7 +59,7 @@ class ActionButton {
           lightToggleIndex = 0;
         }
       }
-      if (eucData.wheelBrand == 2) {
+      if (eucData.wheelBrand == 2 || eucData.wheelBrand == 3) {
         var data = [
           0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
           0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x14, 0x5a, 0x5a,
@@ -81,11 +81,7 @@ class ActionButton {
     if (beepButton == keyNumber) {
       queueRequired = true;
       // Action = beep beep
-      if (
-        eucData.wheelBrand == 0 ||
-        eucData.wheelBrand == 1 
-        
-      ) {
+      if (eucData.wheelBrand == 0 || eucData.wheelBrand == 1) {
         queue.add(
           [
             bleDelegate.getChar(),
@@ -95,7 +91,7 @@ class ActionButton {
           bleDelegate.getPMService()
         );
       }
-      if (eucData.wheelBrand == 2) {
+      if (eucData.wheelBrand == 2 || eucData.wheelBrand == 3) {
         var data = [
           0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
           0x00, 0x00, 0x00, 0x00, 0x00, 0x88, 0x14, 0x5a, 0x5a,

@@ -99,6 +99,13 @@
                 type="boolean"
             />
         </setting>
+         <setting
+            propertyKey="@Properties.debugMode"
+            title="@Strings.debugMode">
+            <settingConfig
+                type="boolean"
+            />
+        </setting>
 
        <!--Profile 1-->
 
@@ -302,13 +309,7 @@
                 max="120"
                 errorMessage="@Strings.alarmThreshold_temp_ErrorMessage" />
         </setting>
-        <setting
-            propertyKey="@Properties.debugMode_p1"
-            title="@Strings.debugMode">
-            <settingConfig
-                type="boolean"
-            />
-        </setting>
+       
         
 
 <!--Profile 2-->
@@ -513,13 +514,7 @@
                 max="120"
                 errorMessage="@Strings.alarmThreshold_temp_ErrorMessage" />
         </setting>
-        <setting
-            propertyKey="@Properties.debugMode_p2"
-            title="@Strings.debugMode">
-            <settingConfig
-                type="boolean"
-            />
-        </setting>
+        
 
 
 <!--Profile 3-->
@@ -724,12 +719,6 @@
                 max="120"
                 errorMessage="@Strings.alarmThreshold_temp_ErrorMessage" />
         </setting>
-        <setting
-            propertyKey="@Properties.debugMode_p3"
-            title="@Strings.debugMode">
-            <settingConfig
-                type="boolean"
-            />
-        </setting>
+        
    
 </settings>

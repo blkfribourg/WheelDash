@@ -101,7 +101,7 @@ class GarminEUCDebugView extends WatchUi.View {
       );
       //  valueRound(batteryPercentage, "%.1f");
     }
-    if (eucData.wheelBrand == 2) {
+    if (eucData.wheelBrand == 2 || eucData.wheelBrand == 3) {
       var alignAxe = dc.getWidth() / 5;
       var space = dc.getHeight() / 10;
       var yGap = dc.getHeight() / 8;
@@ -181,7 +181,9 @@ class GarminEUCDebugView extends WatchUi.View {
         "n:" + eucData.model,
         Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
       );
-    } /*{
+    }
+    /*
+    if (eucData.wheelBrand == 3) {
       if (BleDelegate != null) {
         var alignAxe = dc.getWidth() / 5;
         var space = dc.getHeight() / 10;

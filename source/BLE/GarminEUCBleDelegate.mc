@@ -85,14 +85,20 @@ class eucBLEDelegate extends Ble.BleDelegate {
       result = scanResults.next()
     ) {
       if (result instanceof Ble.ScanResult) {
-        if (
-          eucData.wheelBrand == 0 ||
-          eucData.wheelBrand == 1 ||
-          eucData.wheelBrand == 3
-        ) {
+        if (eucData.wheelBrand == 0 || eucData.wheelBrand == 1) {
           wheelFound = contains(
             result.getServiceUuids(),
             profileManager.EUC_SERVICE,
+            result
+          );
+        }
+        if (
+          eucData.wheelBrand == 3 &&
+          profileManager.OLD_KS_ADV_SERVICE != null
+        ) {
+          wheelFound = contains(
+            result.getServiceUuids(),
+            profileManager.OLD_KS_ADV_SERVICE,
             result
           );
         }
@@ -138,7 +144,10 @@ class eucBLEDelegate extends Ble.BleDelegate {
     ) {
       decoder.frameBuffer(value);
     }
-    if (decoder != null && eucData.wheelBrand == 2) {
+    if (
+      decoder != null &&
+      (eucData.wheelBrand == 2 || eucData.wheelBrand == 3)
+    ) {
       message8 = "decoding";
       decoder.processFrame(value);
     }
