@@ -7,20 +7,22 @@ using Toybox.BluetoothLowEnergy as Ble;
 using Toybox.Timer;
 using Toybox.Application.Storage;
 
-var queue;
-var eucBleDelegate;
-
-var view;
-var EUCSettingsDict;
-var actionButtonTrigger;
-var menu;
-var menu2Delegate;
-var delegate;
-
 class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
+  private var queue;
+  private var eucBleDelegate;
+  private var mainView;
+  private var EUCSettingsDict;
+  private var actionButtonTrigger;
+  private var menu;
+  private var menu2Delegate;
+  private var mainViewdelegate;
+
+  private var activityRecordView;
   function initialize() {
+    actionButtonTrigger = new ActionButton();
     Menu2InputDelegate.initialize();
     queue = new BleQueue();
+    //activityRecordDelegate = new ActivityRecordDelegate();
   }
 
   function onSelect(item) {
@@ -45,10 +47,10 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
     }
 
     if (eucData.debug == true) {
-      view = new GarminEUCDebugView();
-      view.setBleDelegate(eucBleDelegate);
+      mainView = new GarminEUCDebugView();
+      mainView.setBleDelegate(eucBleDelegate);
     } else {
-      view = new GarminEUCView();
+      mainView = new GarminEUCView();
     }
 
     EUCSettingsDict = getEUCSettingsDict(); // in helper function
@@ -58,31 +60,37 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       menu,
       eucBleDelegate,
       queue,
-      view,
+      mainView,
       EUCSettingsDict
     );
-
-    delegate = new GarminEUCDelegate(
-      view,
+    activityRecordView = new ActivityRecordView();
+    //    activityRecordDelegate.setView(activityRecordView);
+    mainViewdelegate = new GarminEUCDelegate(
+      mainView,
       menu,
       menu2Delegate,
       eucBleDelegate,
       queue,
+      activityRecordView,
       actionButtonTrigger
     );
-    WatchUi.pushView(view, delegate, WatchUi.SLIDE_IMMEDIATE);
+
+    WatchUi.pushView(mainView, mainViewdelegate, WatchUi.SLIDE_IMMEDIATE);
+  }
+  function unpair() {
+    eucBleDelegate.manualUnpair();
   }
   function getView() {
-    return view;
+    return mainView;
   }
   function getDelegate() {
-    return delegate;
+    return mainViewdelegate;
   }
   function getMenu2Delegate() {
     return menu2Delegate;
   }
   function getActivityView() {
-    return delegate.getActivityView(); // to recode ? Dirty
+    return mainViewdelegate.getActivityView();
   }
 
   function setSettings(profileName) {

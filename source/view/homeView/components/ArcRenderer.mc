@@ -3,6 +3,35 @@ import Toybox.Application.Properties;
 import Toybox.Application.Storage;
 import Toybox.System;
 
+class RecordIndicatorRenderer extends WatchUi.Drawable {
+  private var mMainColor;
+  private var screenWidth = System.getDeviceSettings().screenWidth;
+  private var pause = 1000;
+  function initialize(params) {
+    Drawable.initialize(params);
+    mMainColor = params.get(:mainColor);
+  }
+  function draw(dc) {
+    if (eucData.activityRecording == true) {
+      //System.println(pause);
+      var foregroundColor;
+      if (pause < 0) {
+        foregroundColor = 0x000000;
+      } else {
+        foregroundColor = mMainColor;
+      }
+      dc.setPenWidth(2);
+      dc.setColor(foregroundColor, 0x000000);
+      dc.fillCircle(screenWidth / 2, screenWidth * 0.715, screenWidth / 70);
+      dc.drawCircle(screenWidth / 2, screenWidth * 0.715, screenWidth / 40);
+      pause = pause - eucData.updateDelay;
+      if (pause < -1000) {
+        pause = 1000;
+      }
+    }
+  }
+}
+
 class ArcRenderer extends WatchUi.Drawable {
   private var mMainColor,
     mSecondColor,

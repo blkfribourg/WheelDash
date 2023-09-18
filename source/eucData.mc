@@ -2,7 +2,7 @@ using Toybox.System;
 
 module eucData {
   var wheelBrand;
-  var wheelName = "";
+  var wheelName;
   var paired = false;
   var RssiIteration = 10;
 
@@ -20,8 +20,10 @@ module eucData {
   var alarmThreshold_temp;
   var activityAutorecording;
   var activityAutosave;
+  var activityRecording = false;
   var debug;
-
+  var BLEReadRate = 0;
+  var timeWhenConnected;
   //UI
   var orangeColoringThreshold;
   var redColoringThreshold;

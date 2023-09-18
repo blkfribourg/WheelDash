@@ -99,6 +99,13 @@ class GarminEUCDebugView extends WatchUi.View {
         "bat%: " + valueRound(eucData.getBatteryPercentage(), "%.1f"),
         Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
       );
+      dc.drawText(
+        dc.getWidth() - 2.7 * alignAxe,
+        3 * space + yGap,
+        Graphics.FONT_TINY,
+        "data/s: " + valueRound(eucData.BLEReadRate, "%.1f"),
+        Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+      );
       //  valueRound(batteryPercentage, "%.1f");
     }
     if (eucData.wheelBrand == 2 || eucData.wheelBrand == 3) {
@@ -179,6 +186,13 @@ class GarminEUCDebugView extends WatchUi.View {
         6 * space + yGap,
         Graphics.FONT_TINY,
         "n:" + eucData.model,
+        Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+      );
+      dc.drawText(
+        dc.getWidth() - 2.7 * alignAxe,
+        3 * space + yGap,
+        Graphics.FONT_TINY,
+        "data/s: " + valueRound(eucData.BLEReadRate, "%.1f"),
         Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
       );
     }

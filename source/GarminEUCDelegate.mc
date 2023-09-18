@@ -9,12 +9,14 @@ class GarminEUCDelegate extends WatchUi.BehaviorDelegate {
   var activityView = null;
   var menu2Delegate = null;
   var actionButtonTrigger = null;
+
   function initialize(
     main_view,
     _menu2,
     _menu2Delegate,
     current_eucBleDelegate,
     q,
+    _activityView,
     _actionButtonTrigger
   ) {
     eucBleDelegate = current_eucBleDelegate;
@@ -23,7 +25,7 @@ class GarminEUCDelegate extends WatchUi.BehaviorDelegate {
     menu2Delegate = _menu2Delegate;
     BehaviorDelegate.initialize();
     mainView = main_view;
-    activityView = new ActivityRecordView();
+    activityView = _activityView;
     actionButtonTrigger = _actionButtonTrigger;
   }
 
@@ -62,7 +64,9 @@ class GarminEUCDelegate extends WatchUi.BehaviorDelegate {
   function getActivityView() {
     return activityView;
   }
-
+  function unpair() {
+    eucBleDelegate.manualUnpair();
+  }
   function goToActivityView() {
     System.println("bringing activity view");
     WatchUi.pushView(

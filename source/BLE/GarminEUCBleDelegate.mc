@@ -1,4 +1,4 @@
-using Toybox.System as Sys;
+using Toybox.System;
 using Toybox.BluetoothLowEnergy as Ble;
 using Toybox.WatchUi as Ui;
 import Toybox.Lang;
@@ -19,6 +19,8 @@ class eucBLEDelegate extends Ble.BleDelegate {
   var message7 = "";
   var message8 = "";
   var message9 = "";
+  var bleCharReadNb = 0;
+  var timeWhenConnected;
   /*
   var frame1 = [
     170, 85, 75, 83, 45, 83, 50, 50, 45, 48, 50, 51, 49, 0, 0, 0, 187, 20, 138,
@@ -53,11 +55,41 @@ class eucBLEDelegate extends Ble.BleDelegate {
           ? service.getCharacteristic(profileManager.EUC_CHAR)
           : null;
       if (service != null && char != null) {
+        // If KS -> add init seq to ble queue -------- Addition
+        if (eucData.wheelBrand == 2 || eucData.wheelBrand == 3) {
+          var reqModel = [
+            0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x9b, 0x14, 0x5a, 0x5a,
+          ]b;
+          var reqSerial = [
+            0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x14, 0x5a, 0x5a,
+          ]b;
+          var reqAlarms = [
+            0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x98, 0x14, 0x5a, 0x5a,
+          ]b;
+          queue.add(
+            [char, queue.C_WRITENR, reqModel],
+            profileManager.EUC_SERVICE
+          );
+          queue.add(
+            [char, queue.C_WRITENR, reqSerial],
+            profileManager.EUC_SERVICE
+          );
+          queue.add(
+            [char, queue.C_WRITENR, reqAlarms],
+            profileManager.EUC_SERVICE
+          );
+        }
+        // End of addition -------------------------------
         cccd = char.getDescriptor(Ble.cccdUuid());
         cccd.requestWrite([0x01, 0x00]b);
         message4 = "characteristic notify enabled";
         eucData.paired = true;
         message5 = "BLE paired";
+        eucData.timeWhenConnected = new Time.Moment(Time.now().value());
+
         /* NOT WORKING
         if (device.getName() != null || device.getName().length != 0) {
           eucData.name = device.getName();
@@ -118,12 +150,17 @@ class eucBLEDelegate extends Ble.BleDelegate {
       }
     }
   }
-
+  function timerCallback() {
+    queue.run();
+  }
   function onDescriptorWrite(desc, status) {
     message7 = "descWrite";
+    // If KS fire queue
     // send getName request for KS using ble queue
     if ((eucData.wheelBrand == 2 || eucData.wheelBrand == 3) && char != null) {
+      queue.delayTimer.start(method(:timerCallback), 200, true);
       //decoder.requestName();
+      /*
       char.requestWrite(
         [
           0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -131,6 +168,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
         ]b,
         { :writeType => Ble.WRITE_TYPE_DEFAULT }
       );
+      */
     }
   }
 
@@ -256,5 +294,11 @@ class eucBLEDelegate extends Ble.BleDelegate {
 
   function getPMService() {
     return profileManager.EUC_SERVICE;
+  }
+
+  function manualUnpair() {
+    if (device != null) {
+      Ble.unpairDevice(device);
+    }
   }
 }

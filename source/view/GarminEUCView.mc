@@ -3,6 +3,7 @@ import Toybox.WatchUi;
 using Toybox.Timer;
 
 using Toybox.System;
+
 class GarminEUCView extends WatchUi.View {
   private var cDrawables = {};
   function initialize() {
@@ -22,6 +23,8 @@ class GarminEUCView extends WatchUi.View {
     cDrawables[:SpeedArc] = View.findDrawableById("SpeedDial"); // used for PMW
     cDrawables[:BatteryArc] = View.findDrawableById("BatteryArc");
     cDrawables[:TemperatureArc] = View.findDrawableById("TemperatureArc");
+    cDrawables[:RecordingIndicator] =
+      View.findDrawableById("RecordingIndicator");
   }
 
   // Called when this View is brought to the foreground. Restore

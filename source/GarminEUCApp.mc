@@ -13,16 +13,13 @@ class GarminEUCApp extends Application.AppBase {
   // private var updateDelay = 100;
   private var alarmsTimer;
 
-  private var activityRecodingRequired = true;
-  private var activityAutosave;
-  private var activityAutorecording;
-  private var activityrecordview;
+  private var activityRecordingRequired = true;
+  private var activityRecordView;
 
   function initialize() {
     AppBase.initialize();
     usePS = AppStorage.getSetting("useProfileSelector");
     alarmsTimer = new Timer.Timer();
-    actionButtonTrigger = new ActionButton();
   }
 
   // onStart() is called on application start up
@@ -37,17 +34,20 @@ class GarminEUCApp extends Application.AppBase {
 
   // onStop() is called when your application is exiting
   function onStop(state as Dictionary?) as Void {
-    if (activityAutorecording == true || activityAutosave == true) {
-      if (delegate != null && activityrecordview == null) {
-        activityrecordview = delegate.getActivityView();
-      }
-      if (activityrecordview != null) {
-        if (activityrecordview.isSessionRecording()) {
-          activityrecordview.stopRecording();
-          //System.println("Activity saved");
+    if (eucData.activityAutorecording == true) {
+      if (delegate != null && activityRecordView != null) {
+        if (activityRecordView.isSessionRecording()) {
+          activityRecordView.stopRecording();
         }
       }
     }
+    if (eucData.activityAutosave == true && delegate != null) {
+      activityRecordView = delegate.getActivityView();
+      if (activityRecordView.isSessionRecording()) {
+        activityRecordView.stopRecording();
+      }
+    }
+    delegate.unpair();
   }
 
   // Return the initial view of your application here
@@ -62,46 +62,6 @@ class GarminEUCApp extends Application.AppBase {
       delegate = delegate.getDelegate();
     }
 
-    /*
-    if (Toybox has :BluetoothLowEnergy) {
-      profileManager.setManager();
-      eucBleDelegate = new eucBLEDelegate(
-        profileManager,
-        queue,
-        frameDecoder.init()
-      );
-      BluetoothLowEnergy.setDelegate(eucBleDelegate);
-      profileManager.registerProfiles();
-    }
-   
-    if (debug == true) {
-      view = new GarminEUCDebugView();
-      view.setBleDelegate(eucBleDelegate);
-    } else {
-      //view = new GarminEUCView();
-      view = profileMenu;
-    }
-
-    EUCSettingsDict = getEUCSettingsDict(); // in helper function
-    actionButtonTrigger.setEUCDict();
-    menu = createMenu(EUCSettingsDict.getConfigLabels(), "Settings");
-    menu2Delegate = new GarminEUCMenu2Delegate_generic(
-      menu,
-      eucBleDelegate,
-      queue,
-      view,
-      EUCSettingsDict
-    );
-
-    delegate = new GarminEUCDelegate(
-      view,
-      menu,
-      menu2Delegate,
-      eucBleDelegate,
-      queue,
-      actionButtonTrigger
-    );
-*/
     return [view, delegate] as Array<Views or InputDelegates>;
   }
   // Timer callback for various alarms & update UI
@@ -111,7 +71,6 @@ class GarminEUCApp extends Application.AppBase {
       timeOut = timeOut - eucData.updateDelay;
       if (timeOut <= 0) {
         var profile = AppStorage.getSetting("defaultProfile");
-        //System.println(profile);
         delegate.setSettings(profile);
       }
     }
@@ -120,23 +79,24 @@ class GarminEUCApp extends Application.AppBase {
       // automatic recording ------------------
       // a bit hacky maybe ...
       if (eucData.activityAutorecording == true) {
-        if (delegate != null && activityrecordview == null) {
-          //System.println("initialize autorecording");
-          activityrecordview = delegate.getActivityView();
+        if (delegate != null && activityRecordView == null) {
+          // System.println("initialize autorecording");
+          activityRecordView = delegate.getActivityView();
         }
         if (
-          activityrecordview != null &&
-          eucData.paired == true &&
-          !activityrecordview.isSessionRecording() &&
-          activityRecodingRequired == true
+          activityRecordView != null &&
+          !activityRecordView.isSessionRecording() &&
+          activityRecordingRequired == true
         ) {
           //enable sensor first ?
-          activityrecordview.enableGPS();
+          activityRecordView.enableGPS();
           activityRecordingDelay = activityRecordingDelay - eucData.updateDelay;
+          //force initialization
+          activityRecordView.initialize();
           if (activityRecordingDelay <= 0) {
             //System.println("record");
-            activityrecordview.startRecording();
-            activityRecodingRequired = false;
+            activityRecordView.startRecording();
+            activityRecordingRequired = false;
           }
 
           //System.println("autorecord started");

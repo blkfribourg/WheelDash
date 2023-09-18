@@ -10,15 +10,15 @@ using Toybox.Time;
 using Toybox.Math;
 
 class ActivityRecordDelegate extends WatchUi.BehaviorDelegate {
-  private var _view as ActivityRecordView;
+  private var _view as ActivityRecordView?;
 
   //! Constructor
   //! @param view The app view
-  public function initialize(view as ActivityRecordView) {
+  public function initialize(view) {
     BehaviorDelegate.initialize();
     _view = view;
   }
-
+  public function setView(view as ActivityRecordView) {}
   //! On menu event, start/stop recording
   //! @return true if handled, false otherwise
   public function onMenu() as Boolean {
@@ -57,7 +57,7 @@ class ActivityRecordView extends WatchUi.View {
     "Good GPS fix",
   ];
   private var accuracy_msg = "";
-  private var running = false;
+
   private var fitTimer;
   private var _session as Session?;
   private var startingMoment as Time.Moment?;
@@ -66,6 +66,7 @@ class ActivityRecordView extends WatchUi.View {
   //! Constructor
   public function initialize() {
     View.initialize();
+
     if (fitTimer == null) {
       fitTimer = new Timer.Timer();
     }
@@ -74,15 +75,15 @@ class ActivityRecordView extends WatchUi.View {
 
   //! Stop the recording if necessary
   public function stopRecording() as Void {
-    running = false;
-    var session = _session;
+    eucData.activityRecording = false;
+
     if (
       Toybox has :ActivityRecording &&
       isSessionRecording() &&
-      session != null
+      _session != null
     ) {
-      session.stop();
-      session.save();
+      _session.stop();
+      _session.save();
       _session = null;
       WatchUi.requestUpdate();
     }
@@ -93,19 +94,21 @@ class ActivityRecordView extends WatchUi.View {
 
   //! Start recording a session
   public function startRecording() as Void {
-    running = true;
+    eucData.activityRecording = true;
+
     _session = ActivityRecording.createSession({
       :name => "EUC riding",
       :sport => ActivityRecording.SPORT_GENERIC,
     });
+    setupFields();
     _session.start();
-    setupField(_session);
     resetVariables();
+    initSessionVar();
     if (fitTimer != null) {
+      //System.println("FITtimerStarted");
       fitTimer.start(method(:updateFitData), 1000, true);
     }
     WatchUi.requestUpdate();
-    initSessionVar();
   }
   function initSessionVar() {
     startingMoment = new Time.Moment(Time.now().value());
@@ -123,7 +126,7 @@ class ActivityRecordView extends WatchUi.View {
   //! state of this View here. This includes freeing resources from
   //! memory.
   public function onHide() as Void {
-    if (running == false) {
+    if (eucData.activityRecording == false) {
       //System.println("Stopping sensors");
       Position.enableLocationEvents(
         Position.LOCATION_DISABLE,
@@ -271,7 +274,7 @@ class ActivityRecordView extends WatchUi.View {
   hidden var mWheelName;
 
   // Initializes the new fields in the activity file
-  function setupField(session as Session) {
+  function setupFields() {
     /*
     if (eucData.useMiles == 1) {
       mSpeedField = session.createField(
@@ -300,25 +303,25 @@ class ActivityRecordView extends WatchUi.View {
       );
     } else {
       */
-    mSpeedField = session.createField(
+    mSpeedField = _session.createField(
       "current_speed",
       SPEED_FIELD_ID,
       FitContributor.DATA_TYPE_FLOAT,
       { :mesgType => FitContributor.MESG_TYPE_RECORD, :units => "km/h" }
     );
-    mTripDistField = session.createField(
+    mTripDistField = _session.createField(
       "current_TripDistance",
       TRIPDISTANCE_FIELD_ID,
       FitContributor.DATA_TYPE_FLOAT,
       { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "km" }
     );
-    mMaxSpeedField = session.createField(
+    mMaxSpeedField = _session.createField(
       "session_Max_speed",
       MAXSPEED_FIELD_ID,
       FitContributor.DATA_TYPE_FLOAT,
       { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "km/h" }
     );
-    mAvgSpeedField = session.createField(
+    mAvgSpeedField = _session.createField(
       "session_Avg_Speed",
       AVGSPEED_FIELD_ID,
       FitContributor.DATA_TYPE_FLOAT,
@@ -326,118 +329,143 @@ class ActivityRecordView extends WatchUi.View {
     );
     // }
 
-    mPWMField = session.createField(
+    mPWMField = _session.createField(
       "current_PWM",
       PWM_FIELD_ID,
       FitContributor.DATA_TYPE_FLOAT,
       { :mesgType => FitContributor.MESG_TYPE_RECORD, :units => "%" }
     );
-    mVoltageField = session.createField(
+    mVoltageField = _session.createField(
       "current_Voltage",
       VOLTAGE_FIELD_ID,
       FitContributor.DATA_TYPE_FLOAT,
       { :mesgType => FitContributor.MESG_TYPE_RECORD, :units => "V" }
     );
-    mCurrentField = session.createField(
+    mCurrentField = _session.createField(
       "current_Current",
       CURRENT_FIELD_ID,
       FitContributor.DATA_TYPE_FLOAT,
       { :mesgType => FitContributor.MESG_TYPE_RECORD, :units => "A" }
     );
-    mPowerField = session.createField(
+    mPowerField = _session.createField(
       "current_Power",
       POWER_FIELD_ID,
       FitContributor.DATA_TYPE_FLOAT,
       { :mesgType => FitContributor.MESG_TYPE_RECORD, :units => "W" }
     );
-    mTempField = session.createField(
+    mTempField = _session.createField(
       "current_Temperature",
       TEMP_FIELD_ID,
       FitContributor.DATA_TYPE_FLOAT,
       { :mesgType => FitContributor.MESG_TYPE_RECORD, :units => "°C" }
     );
 
-    mMaxPWMField = session.createField(
+    mMaxPWMField = _session.createField(
       "session_Max_PWM",
       MAXPWM_FIELD_ID,
       FitContributor.DATA_TYPE_FLOAT,
       { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "%" }
     );
-    mMaxCurrentField = session.createField(
+    mMaxCurrentField = _session.createField(
       "session_Max_Current",
       MAXCURRENT_FIELD_ID,
       FitContributor.DATA_TYPE_FLOAT,
       { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "A" }
     );
-    mMaxPowerField = session.createField(
+    mMaxPowerField = _session.createField(
       "session_Max_Current",
       MAXPOWER_FIELD_ID,
       FitContributor.DATA_TYPE_FLOAT,
       { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "W" }
     );
-    mMaxTempField = session.createField(
+    mMaxTempField = _session.createField(
       "session_Max_Temperature",
       MAXTEMP_FIELD_ID,
       FitContributor.DATA_TYPE_FLOAT,
       { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "°C" }
     );
 
-    mMinTempField = session.createField(
+    mMinTempField = _session.createField(
       "session_Min_Temperature",
       MINTEMP_FIELD_ID,
       FitContributor.DATA_TYPE_FLOAT,
       { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "°C" }
     );
 
-    mAvgCurrentField = session.createField(
+    mAvgCurrentField = _session.createField(
       "session_Avg_Current",
       AVGCURRENT_FIELD_ID,
       FitContributor.DATA_TYPE_FLOAT,
       { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "A" }
     );
-    mAvgPowerField = session.createField(
+    mAvgPowerField = _session.createField(
       "session_Avg_Power",
       AVGPOWER_FIELD_ID,
       FitContributor.DATA_TYPE_FLOAT,
       { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "W" }
     );
-    mRunningTimeDebugField = session.createField(
+    mRunningTimeDebugField = _session.createField(
       "session_Running_Time",
       RUNNINGTIME_FIELD_ID,
       FitContributor.DATA_TYPE_FLOAT,
       { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "s" }
     );
 
-    mMinVoltageField = session.createField(
+    mMinVoltageField = _session.createField(
       "session_Min_Voltage",
       MINVOLTAGE_FIELD_ID,
       FitContributor.DATA_TYPE_FLOAT,
       { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "V" }
     );
-    mMaxVoltageField = session.createField(
+    mMaxVoltageField = _session.createField(
       "session_Max_Voltage",
       MAXVOLTAGE_FIELD_ID,
       FitContributor.DATA_TYPE_FLOAT,
       { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "V" }
     );
-    mMinBatteryField = session.createField(
+    mMinBatteryField = _session.createField(
       "session_Min_Battery",
       MINBATTERY_FIELD_ID,
       FitContributor.DATA_TYPE_FLOAT,
       { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "%" }
     );
-    mMaxBatteryField = session.createField(
+    mMaxBatteryField = _session.createField(
       "session_Max_Battery",
       MAXBATTERY_FIELD_ID,
       FitContributor.DATA_TYPE_FLOAT,
       { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "%" }
     );
-    mWheelName = session.createField(
+    mWheelName = _session.createField(
       "wheel_Name",
       WHEELNAME_FIELD_ID,
       FitContributor.DATA_TYPE_STRING,
       { :mesgType => FitContributor.MESG_TYPE_SESSION, :count => 32 }
     );
+
+    mSpeedField.setData(0.0);
+    mTripDistField.setData(0.0);
+    mMaxSpeedField.setData(0.0);
+    mAvgSpeedField.setData(0.0);
+    mPWMField.setData(0.0);
+    mVoltageField.setData(0.0);
+    mCurrentField.setData(0.0);
+    mPowerField.setData(0.0);
+    mTempField.setData(0.0);
+    mMaxPWMField.setData(0.0);
+    mMaxCurrentField.setData(0.0);
+    mMaxPowerField.setData(0.0);
+    mMaxTempField.setData(0.0);
+    mMinTempField.setData(0.0);
+    mAvgCurrentField.setData(0.0);
+    mAvgSpeedField.setData(0.0);
+    mAvgPowerField.setData(0.0);
+    mRunningTimeDebugField.setData(0.0);
+    mMinVoltageField.setData(0.0);
+    mMaxVoltageField.setData(0.0);
+    mMaxBatteryField.setData(0.0);
+    mMinBatteryField.setData(0.0);
+    mWheelName.setData("unknown");
+    //mMinTempField.setData(0.0);
   }
   var maxSpeed = 0.0;
   var maxPWM = 0.0;
@@ -464,6 +492,7 @@ class ActivityRecordView extends WatchUi.View {
   var avgPower = 0.0;
 
   function updateFitData() {
+    System.println("updateFit");
     callNb++;
     currentVoltage = eucData.getVoltage();
     currentBatteryPerc = eucData.getBatteryPercentage();
