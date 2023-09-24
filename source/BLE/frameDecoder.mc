@@ -1,5 +1,6 @@
 import Toybox.Lang;
 using Toybox.BluetoothLowEnergy as Ble;
+using Toybox.Time;
 
 module frameDecoder {
   function init() {
@@ -9,7 +10,7 @@ module frameDecoder {
     if (eucData.wheelBrand == 1) {
       return new VeteranDecoder();
     }
-    if (eucData.wheelBrand == 2) {
+    if (eucData.wheelBrand == 2 || eucData.wheelBrand == 3) {
       return new KingsongDecoder();
     } else {
       return null;
@@ -18,6 +19,7 @@ module frameDecoder {
 }
 
 class GwDecoder {
+  var frameANb = 0;
   function signedShortFromBytesBE(bytes, starting) {
     if (bytes.size() >= starting + 2) {
       return (
@@ -119,6 +121,15 @@ class GwDecoder {
     //System.println("light mode (frameA ):"+eucData.lightMode);
   }
   function processFrameA(value) {
+    frameANb++;
+    if (eucData.timeWhenConnected != null) {
+      var elaspedTime = eucData.timeWhenConnected
+        .subtract(new Time.Moment(Time.now().value()))
+        .value();
+      if (elaspedTime != 0) {
+        eucData.BLEReadRate = frameANb / elaspedTime;
+      }
+    }
     eucData.voltage = shortFromBytesBE(value, 2) / 100.0;
     eucData.speed = (signedShortFromBytesBE(value, 4).abs() * 3.6) / 100.0;
     eucData.tripDistance = shortFromBytesBE(value, 8) / 1000.0; //in km
@@ -129,6 +140,7 @@ class GwDecoder {
 }
 
 class VeteranDecoder {
+  var frameNb = 0;
   function frameBuffer(transmittedFrame) {
     for (var i = 0; i < transmittedFrame.size(); i++) {
       if (checkChar(transmittedFrame[i]) == true) {
@@ -198,6 +210,16 @@ class VeteranDecoder {
   }
 
   function processFrame(value) {
+    frameNb++;
+    if (eucData.timeWhenConnected != null) {
+      var elaspedTime = eucData.timeWhenConnected
+        .subtract(new Time.Moment(Time.now().value()))
+        .value();
+      if (elaspedTime != 0) {
+        eucData.BLEReadRate = frameNb / elaspedTime;
+      }
+    }
+
     eucData.voltage =
       value.decodeNumber(Lang.NUMBER_FORMAT_SINT16, {
         :offset => 4,
@@ -250,40 +272,7 @@ class VeteranDecoder {
 }
 
 class KingsongDecoder {
-  var char;
-  var bleDelegate;
-  var queue;
-
-  function setBleDelegate(_bleDelegate) {
-    bleDelegate = _bleDelegate;
-  }
-
-  function setQueue(_queue) {
-    queue = _queue;
-  }
-  function timerCallback() {
-    queue.run();
-  }
-
-  function requestName() {
-    var data = getEmptyRequest();
-    data[16] = 155;
-    queue.add([bleDelegate, queue.C_WRITENR, data], bleDelegate.getPMService());
-    queue.delayTimer.start(method(:timerCallback), 200, true);
-  }
-  // Not using requestSerial for now
-  /*
-  function requestSerial(char) {
-    var data = getEmptyRequest();
-    data[16] = 99;
-    char.requestWrite(data, { :writeType => Ble.WRITE_TYPE_DEFAULT });
-  }*/
-  function getEmptyRequest() {
-    return [
-      0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-      0x00, 0x00, 0x00, 0x00, 0x00, 0x14, 0x5a, 0x5a,
-    ]b;
-  }
+  var frameNb = 0;
 
   function processFrame(value) {
     //System.println("Processing KS frame");
@@ -301,7 +290,15 @@ class KingsongDecoder {
         return false;
       }
       if ((value[16] & 255) == 0xa9) {
-        //System.println("live data processing");
+        frameNb++;
+        if (eucData.timeWhenConnected != null) {
+          var elaspedTime = eucData.timeWhenConnected
+            .subtract(new Time.Moment(Time.now().value()))
+            .value();
+          if (elaspedTime != 0) {
+            eucData.BLEReadRate = frameNb / elaspedTime;
+          }
+        }
         // Live data
         var voltage = decode2bytes(value[2], value[3]) / 100.0;
         eucData.voltage = voltage; //wd.setVoltage(voltage);

@@ -3,6 +3,7 @@ import Toybox.WatchUi;
 using Toybox.Timer;
 
 using Toybox.System;
+
 class GarminEUCView extends WatchUi.View {
   private var cDrawables = {};
   function initialize() {
@@ -22,6 +23,8 @@ class GarminEUCView extends WatchUi.View {
     cDrawables[:SpeedArc] = View.findDrawableById("SpeedDial"); // used for PMW
     cDrawables[:BatteryArc] = View.findDrawableById("BatteryArc");
     cDrawables[:TemperatureArc] = View.findDrawableById("TemperatureArc");
+    cDrawables[:RecordingIndicator] =
+      View.findDrawableById("RecordingIndicator");
   }
 
   // Called when this View is brought to the foreground. Restore
@@ -64,7 +67,7 @@ class GarminEUCView extends WatchUi.View {
             }
         */
 
-    var speedNumberStr;
+    var speedNumberStr = "";
 
     if (eucData.mainNumber == 0) {
       var speedNumberVal = "";
@@ -74,13 +77,23 @@ class GarminEUCView extends WatchUi.View {
       } else {
         speedNumberStr = valueRound(eucData.correctedSpeed, "%.1f").toString();
       }
-    } else {
+    }
+    if (eucData.mainNumber == 1) {
       var speedNumberVal;
       speedNumberVal = eucData.PWM;
       if (speedNumberVal > 100) {
         speedNumberStr = valueRound(eucData.PWM, "%d").toString();
       } else {
         speedNumberStr = valueRound(eucData.PWM, "%.1f").toString();
+      }
+    }
+    if (eucData.mainNumber == 2) {
+      var speedNumberVal;
+      speedNumberVal = eucData.getBatteryPercentage();
+      if (speedNumberVal > 100) {
+        speedNumberStr = valueRound(speedNumberVal, "%d").toString();
+      } else {
+        speedNumberStr = valueRound(speedNumberVal, "%.1f").toString();
       }
     }
     cDrawables[:SpeedNumber].setText(speedNumberStr);

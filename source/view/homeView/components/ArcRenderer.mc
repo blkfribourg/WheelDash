@@ -3,6 +3,35 @@ import Toybox.Application.Properties;
 import Toybox.Application.Storage;
 import Toybox.System;
 
+class RecordIndicatorRenderer extends WatchUi.Drawable {
+  private var mMainColor;
+  private var screenWidth = System.getDeviceSettings().screenWidth;
+  private var pause = 1000;
+  function initialize(params) {
+    Drawable.initialize(params);
+    mMainColor = params.get(:mainColor);
+  }
+  function draw(dc) {
+    if (eucData.activityRecording == true) {
+      //System.println(pause);
+      var foregroundColor;
+      if (pause < 0) {
+        foregroundColor = 0x000000;
+      } else {
+        foregroundColor = mMainColor;
+      }
+      dc.setPenWidth(2);
+      dc.setColor(foregroundColor, 0x000000);
+      dc.fillCircle(screenWidth / 2, screenWidth * 0.715, screenWidth / 70);
+      dc.drawCircle(screenWidth / 2, screenWidth * 0.715, screenWidth / 40);
+      pause = pause - eucData.updateDelay;
+      if (pause < -1000) {
+        pause = 1000;
+      }
+    }
+  }
+}
+
 class ArcRenderer extends WatchUi.Drawable {
   private var mMainColor,
     mSecondColor,
@@ -87,13 +116,11 @@ class ArcRenderer extends WatchUi.Drawable {
         if (currentValue != 0.0) {
           if (
             //should move appstorage values elsewhere
-            currentValue >= AppStorage.getSetting("orangeColoringThreshold") &&
-            currentValue < AppStorage.getSetting("redColoringThreshold")
+            currentValue >= eucData.orangeColoringThreshold &&
+            currentValue < eucData.redColoringThreshold
           ) {
             foregroundColor = mSecondColor;
-          } else if (
-            currentValue >= AppStorage.getSetting("redColoringThreshold")
-          ) {
+          } else if (currentValue >= eucData.redColoringThreshold) {
             foregroundColor = mThirdColor;
           } else {
             foregroundColor = mMainColor;
@@ -101,11 +128,9 @@ class ArcRenderer extends WatchUi.Drawable {
         } else {
           foregroundColor = mMainColor;
         }
-
         if (eucData.paired == false) {
           foregroundColor = 0x545454;
         }
-
         dc.setColor(foregroundColor, 0x000000);
         if (currentValue >= maxValue) {
           dc.drawArc(
@@ -160,7 +185,6 @@ class ArcRenderer extends WatchUi.Drawable {
         }
 
         if (currentValue >= maxValue) {
-
           if (eucData.paired == false) {
             foregroundColor = 0x545454;
           } else {
@@ -168,7 +192,6 @@ class ArcRenderer extends WatchUi.Drawable {
           }
 
           dc.setColor(foregroundColor, 0x000000);
-
           dc.drawArc(
             mXCenterPosition,
             mYCenterPosition,
@@ -180,14 +203,12 @@ class ArcRenderer extends WatchUi.Drawable {
         } else {
           //System.println(computedPercentageLoadDrop);
 
-
           if (eucData.paired == false) {
             foregroundColor = 0x545454;
           } else {
             foregroundColor = mMainColor;
           }
           dc.setColor(foregroundColor, 0x000000);
-
           // Render green arc
           var degreeRange = mStartDegree - mEndDegree;
           var secondPercentage = currentValue.toFloat() / maxValue.toFloat();
@@ -204,7 +225,6 @@ class ArcRenderer extends WatchUi.Drawable {
             );
           }
 
-
           if (eucData.paired == false) {
             foregroundColor = 0x545454;
           } else {
@@ -212,7 +232,6 @@ class ArcRenderer extends WatchUi.Drawable {
           }
 
           dc.setColor(foregroundColor, 0x000000);
-
           // Render yellow arc
 
           var percentage =
@@ -235,7 +254,6 @@ class ArcRenderer extends WatchUi.Drawable {
         if (currentValue != 0.0) {
           //System.println(WheelData.temperature.toNumber());
           //System.println(currentValue);
-
           if (
             currentValue >= 0.75 * eucData.maxTemperature &&
             currentValue < 0.8 * eucData.maxTemperature
@@ -243,7 +261,6 @@ class ArcRenderer extends WatchUi.Drawable {
             foregroundColor = mSecondColor;
             //System.println("secondColor");
           } else if (currentValue > 0.8 * eucData.maxTemperature) {
-
             foregroundColor = mThirdColor;
             //System.println("thirdColor");
           } else {
@@ -254,11 +271,9 @@ class ArcRenderer extends WatchUi.Drawable {
           foregroundColor = mMainColor;
           //System.println("mainColor");
         }
-
         if (eucData.paired == false) {
           foregroundColor = 0x545454;
         }
-
         dc.setColor(foregroundColor, 0x000000);
 
         if (currentValue >= maxValue) {

@@ -1,22 +1,8 @@
 <properties>
-    <property id="wheelBrand" type="number">0</property>
-    <property id="recordActivityButtonMap" type="number">0</property>
-    <property id="cycleLightButtonMap" type="number">0</property>
-    <property id="beepButtonMap" type="number">0</property>
-    <property id="actionQueueDelay" type="number">200</property>
-    <property id="mainNumber" type="number">0</property>
-    <property id="topBar" type="number">0</property>     
-    <property id="maxSpeed" type="number">0</property>     
-    <property id="orangeColoringThreshold" type="number">80</property>
-    <property id="redColoringThreshold" type="number">90</property>
-    <property id="rotationSpeed_PWM" type="float">65.2</property>
-    <property id="rotationVoltage_PWM" type="float">81.5</property>
-    <property id="powerFactor_PWM" type="float">0.9</property>
-    <property id="voltageCorrectionFactor" type="float">1.25</property>
-    <property id="speedCorrectionFactor" type="float">1.0</property>
-    <property id="alarmThreshold_PWM" type="number">80</property>
-    <property id="alarmThreshold_speed" type="number">0</property>
-    <property id="alarmThreshold_temp" type="number">0</property>
+<!-- Global settings-->
+    <property id="updateDelay" type="number">100</property>
+    <property id="RssiIteration" type="number">10</property>
+    
     <property id="activityRecordingOnStartup" type="boolean">false</property>
     <property id="activitySavingOnExit" type="boolean">false</property>
     <property id="averageMovingSpeedStatistic" type="boolean">false</property>
@@ -25,9 +11,86 @@
     <property id="tripDistanceStatistic" type="boolean">false</property>
     <property id="voltageStatistic" type="boolean">false</property>
     <property id="watchBatteryStatistic" type="boolean">false</property>
-    <property id="updateDelay" type="number">100</property>
-    <property id="currentCorrection" type="number">0</property>
-    <property id="maxTemperature" type="float">65</property>
-    <property id="begodeCF" type="boolean">false</property>
+    <property id="profileName" type="boolean">false</property>
+    <property id="defaultProfile" type="number">1</property>
+    <property id="useProfileSelector" type="boolean">true</property>
     <property id="debugMode" type="boolean">false</property>
+<!--Profile 1-->
+    <property id="wheelName_p1" type="string">Profile 1</property>
+    <property id="wheelBrand_p1" type="number">0</property>
+    <property id="recordActivityButtonMap_p1" type="number">0</property>
+    <property id="cycleLightButtonMap_p1" type="number">0</property>
+    <property id="beepButtonMap_p1" type="number">0</property>
+    <property id="actionQueueDelay_p1" type="number">200</property>
+    <property id="mainNumber_p1" type="number">0</property>
+    <property id="topBar_p1" type="number">0</property>     
+    <property id="maxSpeed_p1" type="number">0</property>     
+    <property id="orangeColoringThreshold_p1" type="number">80</property>
+    <property id="redColoringThreshold_p1" type="number">90</property>
+    <property id="rotationSpeed_PWM_p1" type="float">65.2</property>
+    <property id="rotationVoltage_PWM_p1" type="float">81.5</property>
+    <property id="powerFactor_PWM_p1" type="float">0.9</property>
+    <property id="voltageCorrectionFactor_p1" type="float">1.25</property>
+    <property id="speedCorrectionFactor_p1" type="float">1.0</property>
+    <property id="alarmThreshold_PWM_p1" type="number">80</property>
+    <property id="alarmThreshold_speed_p1" type="number">0</property>
+    <property id="alarmThreshold_temp_p1" type="number">0</property>
+    <property id="currentCorrection_p1" type="number">0</property>
+    <property id="maxTemperature_p1" type="float">65</property>
+    <property id="begodeCF_p1" type="boolean">false</property>
+    
+
+<!--Profile 2-->
+    <property id="wheelName_p2" type="string">Profile 2</property>
+    <property id="wheelBrand_p2" type="number">0</property>
+    <property id="recordActivityButtonMap_p2" type="number">0</property>
+    <property id="cycleLightButtonMap_p2" type="number">0</property>
+    <property id="beepButtonMap_p2" type="number">0</property>
+    <property id="actionQueueDelay_p2" type="number">200</property>
+    <property id="mainNumber_p2" type="number">0</property>
+    <property id="topBar_p2" type="number">0</property>     
+    <property id="maxSpeed_p2" type="number">0</property>     
+    <property id="orangeColoringThreshold_p2" type="number">80</property>
+    <property id="redColoringThreshold_p2" type="number">90</property>
+    <property id="rotationSpeed_PWM_p2" type="float">65.2</property>
+    <property id="rotationVoltage_PWM_p2" type="float">81.5</property>
+    <property id="powerFactor_PWM_p2" type="float">0.9</property>
+    <property id="voltageCorrectionFactor_p2" type="float">1.25</property>
+    <property id="speedCorrectionFactor_p2" type="float">1.0</property>
+    <property id="alarmThreshold_PWM_p2" type="number">80</property>
+    <property id="alarmThreshold_speed_p2" type="number">0</property>
+    <property id="alarmThreshold_temp_p2" type="number">0</property>
+    <property id="currentCorrection_p2" type="number">0</property>
+    <property id="maxTemperature_p2" type="float">65</property>
+    <property id="begodeCF_p2" type="boolean">false</property>
+    
+
+<!--Profile 3-->
+    <property id="wheelName_p3" type="string">Profile 3</property>
+    <property id="wheelBrand_p3" type="number">0</property>
+    <property id="recordActivityButtonMap_p3" type="number">0</property>
+    <property id="cycleLightButtonMap_p3" type="number">0</property>
+    <property id="beepButtonMap_p3" type="number">0</property>
+    <property id="actionQueueDelay_p3" type="number">200</property>
+    <property id="mainNumber_p3" type="number">0</property>
+    <property id="topBar_p3" type="number">0</property>     
+    <property id="maxSpeed_p3" type="number">0</property>     
+    <property id="orangeColoringThreshold_p3" type="number">80</property>
+    <property id="redColoringThreshold_p3" type="number">90</property>
+    <property id="rotationSpeed_PWM_p3" type="float">65.2</property>
+    <property id="rotationVoltage_PWM_p3" type="float">81.5</property>
+    <property id="powerFactor_PWM_p3" type="float">0.9</property>
+    <property id="voltageCorrectionFactor_p3" type="float">1.25</property>
+    <property id="speedCorrectionFactor_p3" type="float">1.0</property>
+    <property id="alarmThreshold_PWM_p3" type="number">80</property>
+    <property id="alarmThreshold_speed_p3" type="number">0</property>
+    <property id="alarmThreshold_temp_p3" type="number">0</property>
+    <property id="currentCorrection_p3" type="number">0</property>
+    <property id="maxTemperature_p3" type="float">65</property>
+    <property id="begodeCF_p3" type="boolean">false</property>
+    
+    
+    
+    
+    
 </properties>

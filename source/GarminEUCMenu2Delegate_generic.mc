@@ -46,12 +46,10 @@ class GarminEUCMenu2Delegate_generic extends WatchUi.Menu2InputDelegate {
   }
   function onSelect(item) {
     for (var i = 0; i < EUCConfig.size(); i++) {
-
       //System.println("label :" + item.getLabel().toString());
       // System.println("item " + i + " : " + EUCConfigLabels[i]);
       if (item.getLabel().toString().equals(EUCConfigLabels[i])) {
         // System.println("Enter " + EUCConfigLabels[i]);
-
         nestedMenu(EUCConfigLabels[i], EUCConfig[i]);
       }
     }
@@ -83,9 +81,7 @@ class GarminEUCMenu2Delegate_generic extends WatchUi.Menu2InputDelegate {
 
   function updateSublabels() {
     if (EUCStatus == null) {
-
       // System.println("null status dicts");
-
       return;
     }
     var menuToUpdate = parent_menu;
@@ -105,7 +101,6 @@ class GarminEUCMenu2Delegate_generic extends WatchUi.Menu2InputDelegate {
                 ]
               );
           }
-
         }
       }
     }
@@ -148,7 +143,6 @@ class GarminEUCMenu2Delegate_generic extends WatchUi.Menu2InputDelegate {
     }
   }
   function sendCommand(fromMenu, cmd) {
-
     // execute command specific to Gotway/begode
     if (eucData.wheelBrand == 0) {
       if (
@@ -183,7 +177,7 @@ class GarminEUCMenu2Delegate_generic extends WatchUi.Menu2InputDelegate {
       }
     }
     // execute command specific to Kingsong
-    if (eucData.wheelBrand == 2) {
+    if (eucData.wheelBrand == 2 || eucData.wheelBrand == 3) {
       if (
         EUCSettingsDict.getConfigToLock().indexOf(fromMenu) != -1 &&
         eucData.correctedSpeed > 2
@@ -207,7 +201,6 @@ class GarminEUCMenu2Delegate_generic extends WatchUi.Menu2InputDelegate {
     var command = null;
     var enc_cmd = null;
     if (parentMenu.equals("Leds Mode")) {
-
       command = "W";
       enc_cmd = string_to_byte_array(command as String);
 
@@ -229,9 +222,7 @@ class GarminEUCMenu2Delegate_generic extends WatchUi.Menu2InputDelegate {
         eucBleDelegate.getPMService()
       );
     }
-
     if (parentMenu.equals("Beep Volume")) {
-
       command = "W";
       enc_cmd = string_to_byte_array(command as String);
 
@@ -255,7 +246,6 @@ class GarminEUCMenu2Delegate_generic extends WatchUi.Menu2InputDelegate {
     } else {
       eucBleDelegate.sendCmd(cmd);
     }
-
   }
 
   function kingsongMenuCmd(parentMenu, cmd) {
@@ -289,7 +279,6 @@ class GarminEUCMenu2Delegate_generic extends WatchUi.Menu2InputDelegate {
       System.println("pedal_frame: " + cmd_frame.toString());
     }
     eucBleDelegate.sendRawCmd(cmd_frame);
-
   }
 
   function timerCallback() {

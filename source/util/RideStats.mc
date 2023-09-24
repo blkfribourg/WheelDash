@@ -18,6 +18,7 @@ module rideStats {
   var statsTimer;
   var consummedWatchBattery = 0.0;
   var startupWatchBattery;
+  var showProfileName;
 
   function avgSpeed() {
     if (eucData.useMiles == 0) {
