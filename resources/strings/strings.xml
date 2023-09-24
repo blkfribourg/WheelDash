@@ -1,39 +1,7 @@
 <strings>
-    <string id="AppName">WheelDash</string>
-    
-    <string id="MainMenuTitle">Settings</string>
-    <string id="lightsModeMenu">Lights</string>
-    <string id="pedalModeMenu">Pedals mode</string>
-    <string id="alarmModeMenu">Speed alarms</string>
-    <string id="ledModeMenu">Leds mode</string>
-    <string id="cutoffAngleMenu">Cutoff Angle</string>
-    <string id="volumeMenu">Beep volume</string>
-
-    <string id="prompt">Speed</string>
-    <string id="speed_lbl">Speed:</string>
-    <string id="voltage_lbl">Volt:</string>
-    <string id="distance_lbl">Dist:</string>
-    <string id="current_lbl">Curr:</string>
-    <string id="temperature_lbl">Temp:</string>
-    <string id="totalDistance_lbl">TDist:</string>
-    <string id="pedalMode_lbl">PedalMode:</string>
-    <string id="speedAlert_lbl">AlertMode:</string>
-    <string id="ledMode_lbl">LedMode:</string>
-
-    <string id="DetailView_AverageSpeed">Average Speed</string>
-    <string id="DetailView_TopSpeed">Top Speed</string>
-    <string id="DetailView_Voltage">Voltage</string>
-    <string id="DetailView_BatteryPercentage">Battery Percentage</string>
-    <string id="DetailView_RideTime">Ride Time</string>
-    <string id="DetailView_Distance">Distance</string>
-
-    <string id="DetailView_SpeedData">$1$ km/h</string>
-    <string id="DetailView_BatteryVoltageData">$1$ V</string>
-    <string id="DetailView_BatteryPercentageData">$1$ %</string>
-    <string id="DetailView_RideDistanceData">$1$ m</string>
-
-    <string id="Message_WheelDisconnected">Wheel discon.</string>
-
+    <string id="AppName">WheelDash (dev)</string>
+    <string id="firstConnStr">Profile $1$ 1st connection\nPlease turn on your wheel\n and wait for connection\n\nensure only one wheel is ON!\n\nIf you enjoy this app :\n ko-fi.com/wheeldash</string>
+    <string id="connectedStr">Profile $1$ connected !\n\nSaving wheel unique identifier</string>
     <!-- Strings, that are used in Connect IQ Settings menu, like 
         one you see in Garmin Express or Garmin Connect Mobile -->
     <string id="defaultProfile">Profile to use by default</string>

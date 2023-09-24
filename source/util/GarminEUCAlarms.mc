@@ -50,9 +50,9 @@ module EUCAlarms {
         alarmDelay = 0;
 
         PWMAlarm = false;
-      } else {
-        alarmDelay--;
       }
+      alarmDelay--;
+
       setAlarmType();
     }
 

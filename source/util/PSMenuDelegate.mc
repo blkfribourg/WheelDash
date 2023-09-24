@@ -16,6 +16,8 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
   private var menu;
   private var menu2Delegate;
   private var mainViewdelegate;
+  private var profileNb;
+  private var connView;
 
   private var activityRecordView;
   function initialize() {
@@ -27,18 +29,19 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
 
   function onSelect(item) {
     setSettings(item.getId());
-    appInit();
+    connInit();
   }
   function onDone() {
     WatchUi.popView(WatchUi.SLIDE_DOWN);
   }
-  function appInit() {
+  function connInit() {
     var profileManager = new eucPM();
 
     if (Toybox has :BluetoothLowEnergy) {
       profileManager.setManager();
       eucBleDelegate = new eucBLEDelegate(
         profileManager,
+        profileNb,
         queue,
         frameDecoder.init()
       );
@@ -46,13 +49,15 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       profileManager.registerProfiles();
     }
 
+    viewInit();
+  }
+  function viewInit() {
     if (eucData.debug == true) {
       mainView = new GarminEUCDebugView();
       mainView.setBleDelegate(eucBleDelegate);
     } else {
       mainView = new GarminEUCView();
     }
-
     EUCSettingsDict = getEUCSettingsDict(); // in helper function
     actionButtonTrigger.setEUCDict();
     menu = createMenu(EUCSettingsDict.getConfigLabels(), "Settings");
@@ -75,7 +80,15 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       actionButtonTrigger
     );
 
-    WatchUi.pushView(mainView, mainViewdelegate, WatchUi.SLIDE_IMMEDIATE);
+    if (eucBleDelegate.isFirst == false) {
+      //System.println("not first");
+
+      WatchUi.pushView(mainView, mainViewdelegate, WatchUi.SLIDE_IMMEDIATE);
+    } else {
+    //  System.println("first");
+      connView = new connectionView(eucBleDelegate, profileNb, self);
+      WatchUi.pushView(connView, null, WatchUi.SLIDE_IMMEDIATE);
+    }
   }
   function unpair() {
     eucBleDelegate.manualUnpair();
@@ -104,12 +117,12 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
           // to avoid infinite loop if user change lastprofile profile name charge profile 1.
           pickProfile(getProfileList()[0]);
         }
-        appInit();
+        connInit();
       } else {
         pickProfile(
           getProfileList()[AppStorage.getSetting("defaultProfile") - 1]
         );
-        appInit();
+        connInit();
       }
     }
   }
@@ -123,7 +136,7 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
   function pickProfile(profileName) {
     var profiles = getProfileList();
 
-    var profileNb = profiles.indexOf(profileName) + 1;
+    profileNb = profiles.indexOf(profileName) + 1;
 
     if (profileNb == 1) {
       eucData.maxDisplayedSpeed = AppStorage.getSetting("maxSpeed_p1");
