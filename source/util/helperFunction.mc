@@ -74,3 +74,42 @@ function splitstr(str as Lang.String, char) {
   }
   return stringArray;
 }
+
+function signedShortFromBytesBE(bytes, starting) {
+  if (bytes.size() >= starting + 2) {
+    return (
+      ((((bytes[starting] & 0xff) << 8) | bytes[starting + 1]) << 16) >> 16
+    );
+  }
+  return 0;
+}
+
+function shortFromBytesBE(bytes, starting) {
+  if (bytes.size() >= starting + 2) {
+    return (
+      ((((bytes[starting] & 0xff) << 8) | (bytes[starting + 1] & 0xff)) <<
+        16) >>
+      16
+    );
+  }
+  return 0;
+}
+
+function UInt32FromBytesBE(bytes, starting) {
+  if (bytes.size() >= starting + 4) {
+    return (
+      ((bytes[starting] & 0xff) << 24) |
+      ((bytes[starting + 1] & 0xff) << 16) |
+      ((bytes[starting + 2] & 0xff) << 8) |
+      (bytes[starting + 3] & 0xff)
+    );
+  }
+  return 0;
+}
+
+function decode2bytes(byte1, byte2) {
+  return (byte1 & 0xff) + (byte2 << 8);
+}
+function decode4bytes(byte1, byte2, byte3, byte4) {
+  return (byte1 << 16) + (byte2 << 24) + byte3 + (byte4 << 8);
+}
