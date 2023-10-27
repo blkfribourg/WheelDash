@@ -10,15 +10,6 @@
                 errorMessage="@Strings.updateDelay_ErrorMessage" />
         </setting>
         <setting
-            propertyKey="@Properties.RssiIteration"
-            title="@Strings.RssiIteration">
-            <settingConfig
-                type="numeric"
-                min="1"
-                max="100"
-                errorMessage="@Strings.RssiIteration_ErrorMessage" />
-        </setting>
-        <setting
             propertyKey="@Properties.activityRecordingOnStartup"
             title="@Strings.activityRecordingOnStartup">
             <settingConfig

@@ -140,10 +140,6 @@
     <string id="PWMSettings">Calculated PWM variables</string>
     <string id="PWMSettingsDescription">Be fully aware of what you are doing here as it will impact displayed PWM value and associated alarm. Use uncorrected speed for cut-out speed variable</string>
 
-    
-    <string id="RssiIteration">RSSI Iteration</string>
-     <string id="RssiIteration_ErrorMessage">Value shoulb be in a range of 1 to 100</string>
-
    <string id="alarms">Alarms settings</string>
    <string id="alarmsDescription">set the alarm threshold to 0 to disable alarms</string>
 

@@ -254,29 +254,29 @@ class GarminEUCMenu2Delegate_generic extends WatchUi.Menu2InputDelegate {
       0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
       0x00, 0x00, 0x00, 0x00, 0x00, 0x14, 0x5a, 0x5a,
     ]b;
-    System.println("empty_frame: " + cmd_frame.toString());
+    //System.println("empty_frame: " + cmd_frame.toString());
     if (parentMenu.equals("Lights")) {
       cmd_frame[2] = cmd.toNumber() + 0x12;
       cmd_frame[3] = 1;
       cmd_frame[16] = 115;
-      System.println("lights_frame: " + cmd_frame.toString());
+      //System.println("lights_frame: " + cmd_frame.toString());
     }
     if (parentMenu.equals("Strobe Mode")) {
       cmd_frame[2] = cmd.toNumber();
       cmd_frame[16] = 83;
-      System.println("strobe_frame: " + cmd_frame.toString());
+      //System.println("strobe_frame: " + cmd_frame.toString());
     }
     if (parentMenu.equals("Leds Mode")) {
       cmd_frame[2] = cmd.toNumber();
       cmd_frame[16] = 108;
-      System.println("leds_frame: " + cmd_frame.toString());
+      //System.println("leds_frame: " + cmd_frame.toString());
     }
     if (parentMenu.equals("Pedal Mode")) {
       cmd_frame[2] = cmd.toNumber();
       cmd_frame[3] = 224;
       cmd_frame[16] = 135;
       cmd_frame[17] = 21;
-      System.println("pedal_frame: " + cmd_frame.toString());
+      //System.println("pedal_frame: " + cmd_frame.toString());
     }
     eucBleDelegate.sendRawCmd(cmd_frame);
   }

@@ -17,6 +17,7 @@ class GarminEUCApp extends Application.AppBase {
   private var activityRecordView;
 
   function initialize() {
+    eucData.limitedMemory = System.getSystemStats().totalMemory < 128000;
     AppBase.initialize();
     usePS = AppStorage.getSetting("useProfileSelector");
     alarmsTimer = new Timer.Timer();
@@ -192,7 +193,6 @@ class GarminEUCApp extends Application.AppBase {
     //System.println("array size:" + rideStats.statsArray.size());
   }
   function setGlobalSettings() {
-    eucData.RssiIteration = AppStorage.getSetting("RssiIteration");
     eucData.updateDelay = AppStorage.getSetting("updateDelay");
     eucData.debug = AppStorage.getSetting("debugMode");
     eucData.activityAutorecording = AppStorage.getSetting(

@@ -1,8 +1,6 @@
 <properties>
 <!-- Global settings-->
     <property id="updateDelay" type="number">100</property>
-    <property id="RssiIteration" type="number">10</property>
-    
     <property id="activityRecordingOnStartup" type="boolean">false</property>
     <property id="activitySavingOnExit" type="boolean">false</property>
     <property id="averageMovingSpeedStatistic" type="boolean">false</property>

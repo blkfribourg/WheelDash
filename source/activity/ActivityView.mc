@@ -492,7 +492,7 @@ class ActivityRecordView extends WatchUi.View {
   var avgPower = 0.0;
 
   function updateFitData() {
-    System.println("updateFit");
+    //System.println("updateFit");
     callNb++;
     currentVoltage = eucData.getVoltage();
     currentBatteryPerc = eucData.getBatteryPercentage();
