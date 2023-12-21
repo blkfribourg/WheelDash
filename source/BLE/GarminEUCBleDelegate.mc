@@ -2,6 +2,7 @@ using Toybox.System;
 using Toybox.BluetoothLowEnergy as Ble;
 using Toybox.WatchUi as Ui;
 import Toybox.Lang;
+using Toybox.Application.Storage;
 
 class eucBLEDelegate extends Ble.BleDelegate {
   var profileManager = null;
@@ -10,6 +11,8 @@ class eucBLEDelegate extends Ble.BleDelegate {
   var char = null;
   var queue;
   var decoder = null;
+  var isFirst = false;
+  private var profileNb;
   var message1 = "";
   var message2 = "";
   var message3 = "";
@@ -27,10 +30,11 @@ class eucBLEDelegate extends Ble.BleDelegate {
     90, 90,
   ];
 */
-  function initialize(pm, q, _decoder) {
+  function initialize(pm, _profileNb, q, _decoder) {
     message1 = "initializeBle";
     BleDelegate.initialize();
     profileManager = pm;
+    profileNb = _profileNb;
     char = profileManager.EUC_CHAR;
     queue = q;
     decoder = _decoder;
@@ -42,6 +46,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
     }
     */
     Ble.setScanState(Ble.SCAN_STATE_SCANNING);
+    isFirst = isFirstConnection();
   }
 
   function onConnectedStateChanged(device, state) {
@@ -107,49 +112,117 @@ class eucBLEDelegate extends Ble.BleDelegate {
       eucData.paired = false;
     }
   }
+  function isFirstConnection() {
+    // resetting profileScanResult if wheelName changed :
+    if (
+      !AppStorage.getSetting("wheelName_p1").equals(
+        Storage.getValue("profile1Name")
+      )
+    ) {
+      Storage.deleteValue("profile1Sr");
+    }
+    if (
+      !AppStorage.getSetting("wheelName_p2").equals(
+        Storage.getValue("profile2Name")
+      )
+    ) {
+      Storage.deleteValue("profile2Sr");
+    }
+    if (
+      !AppStorage.getSetting("wheelName_p3").equals(
+        Storage.getValue("profile3Name")
+      )
+    ) {
+      Storage.deleteValue("profile3Sr");
+    }
 
+    if (profileNb == 1 && Storage.getValue("profile1Sr") == null) {
+      return true;
+    } else if (profileNb == 2 && Storage.getValue("profile2Sr") == null) {
+      return true;
+    } else if (profileNb == 3 && Storage.getValue("profile3Sr") == null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  function storeSR(sr) {
+    if (profileNb == 1) {
+      Storage.setValue("profile1Sr", sr);
+      Storage.setValue("profile1Name", AppStorage.getSetting("wheelName_p1"));
+    } else if (profileNb == 2) {
+      Storage.setValue("profile2Sr", sr);
+      Storage.setValue("profile2Name", AppStorage.getSetting("wheelName_p2"));
+    } else if (profileNb == 3) {
+      Storage.setValue("profile3Sr", sr);
+      Storage.setValue("profile3Name", AppStorage.getSetting("wheelName_p3"));
+    }
+  }
+  function loadSR() {
+    if (profileNb == 1) {
+      return Storage.getValue("profile1Sr");
+    } else if (profileNb == 2) {
+      return Storage.getValue("profile2Sr");
+    } else if (profileNb == 3) {
+      return Storage.getValue("profile3Sr");
+    } else {
+      return false;
+    }
+  }
   //! @param scanResults An iterator of new scan results
   function onScanResults(scanResults as Ble.Iterator) {
-    var wheelFound = false;
-    for (
-      var result = scanResults.next();
-      result != null;
-      result = scanResults.next()
-    ) {
-      if (result instanceof Ble.ScanResult) {
-        if (eucData.wheelBrand == 0 || eucData.wheelBrand == 1) {
-          wheelFound = contains(
-            result.getServiceUuids(),
-            profileManager.EUC_SERVICE,
-            result
-          );
-        }
-        if (
-          eucData.wheelBrand == 3 &&
-          profileManager.OLD_KS_ADV_SERVICE != null
-        ) {
-          wheelFound = contains(
-            result.getServiceUuids(),
-            profileManager.OLD_KS_ADV_SERVICE,
-            result
-          );
-        }
-        if (eucData.wheelBrand == 2) {
-          var advName = result.getDeviceName();
-          if (advName != null) {
-            if (advName.substring(0, 3).equals("KSN")) {
-              wheelFound = true;
-              //decoder.setBleDelegate(self);
-              //decoder.setQueue(queue);
+    if (isFirst) {
+      var wheelFound = false;
+      for (
+        var result = scanResults.next();
+        result != null;
+        result = scanResults.next()
+      ) {
+        if (result instanceof Ble.ScanResult) {
+          if (eucData.wheelBrand == 0 || eucData.wheelBrand == 1) {
+            wheelFound = contains(
+              result.getServiceUuids(),
+              profileManager.EUC_SERVICE,
+              result
+            );
+          }
+          if (
+            eucData.wheelBrand == 3 &&
+            profileManager.OLD_KS_ADV_SERVICE != null
+          ) {
+            wheelFound = contains(
+              result.getServiceUuids(),
+              profileManager.OLD_KS_ADV_SERVICE,
+              result
+            );
+          }
+          if (eucData.wheelBrand == 2) {
+            var advName = result.getDeviceName();
+            if (advName != null) {
+              if (advName.substring(0, 3).equals("KSN")) {
+                wheelFound = true;
+                //decoder.setBleDelegate(self);
+                //decoder.setQueue(queue);
+              }
             }
           }
+          if (wheelFound == true) {
+            storeSR(result);
+            Ble.setScanState(Ble.SCAN_STATE_OFF);
+            device = Ble.pairDevice(result as Ble.ScanResult);
+          }
         }
-        if (wheelFound == true) {
-          bestRssi(result);
-        }
+      }
+    } else {
+      Ble.setScanState(Ble.SCAN_STATE_OFF);
+      var result = loadSR();
+      if (result != false) {
+        device = Ble.pairDevice(result as Ble.ScanResult);
       }
     }
   }
+
   function timerCallback() {
     queue.run();
   }
@@ -231,62 +304,6 @@ class eucBLEDelegate extends Ble.BleDelegate {
     return result;
 }
 */
-
-  var shouldAdd;
-  var srList as Array?;
-  var rssiList as Array?;
-  var RssiIteration = eucData.RssiIteration;
-
-  function addSr(sr as Ble.ScanResult) {
-    if (srList == null || rssiList == null) {
-      srList = [sr];
-      rssiList = [sr.getRssi()];
-    } else {
-      shouldAdd = true;
-      for (var i = 0; i < srList.size(); i++) {
-        var currentSr = srList[i] as Ble.ScanResult;
-        if (sr.isSameDevice(currentSr) == true) {
-          shouldAdd = false;
-          rssiList[i] = (rssiList[i] + sr.getRssi()) / 2; // averaging Rssi
-          RssiIteration = RssiIteration - 1;
-        }
-      }
-      if (shouldAdd == true) {
-        srList.add(sr);
-        rssiList.add(sr.getRssi());
-      }
-    }
-  }
-  function getBestSr() {
-    var strgstRssi = -255;
-    var srIdx = -1;
-    //if (srList.size() != rssiList.size()) {
-    // eucData.wheelName = "RSSI ERROR";
-    //}
-    for (var i = 0; i < rssiList.size(); i++) {
-      if (strgstRssi < rssiList[i]) {
-        strgstRssi = rssiList[i];
-        srIdx = i;
-      }
-    }
-    if (srIdx != -1 && srIdx < srList.size()) {
-      return srList[srIdx];
-    } else {
-      return null;
-    }
-  }
-
-  function bestRssi(sr as Ble.ScanResult) {
-    addSr(sr);
-    if (RssiIteration <= 0) {
-      // eucData.wheelName = "BESTRSSI";
-      var SRToConnect = getBestSr();
-      if (SRToConnect != null) {
-        Ble.setScanState(Ble.SCAN_STATE_OFF);
-        device = Ble.pairDevice(SRToConnect as Ble.ScanResult);
-      }
-    }
-  }
 
   function getChar() {
     return char;

@@ -39,11 +39,11 @@ class eucPM {
   }
 
   function registerProfiles() {
-    System.println(eucProfileDef.toString());
+    //System.println(eucProfileDef.toString());
     try {
       Ble.registerProfile(eucProfileDef);
     } catch (e) {
-      System.println("e=" + e.getErrorMessage());
+      //System.println("e=" + e.getErrorMessage());
     }
   }
 

@@ -4,8 +4,7 @@ module eucData {
   var wheelBrand;
   var wheelName;
   var paired = false;
-  var RssiIteration = 10;
-
+  var limitedMemory = false;
   // Calculated PWM variables :
   // PLEASE UPDATE WITH YOU OWN VALUES BEFORE USE !
   var rotationSpeed; // cutoff speed when freespin test performed

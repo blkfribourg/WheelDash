@@ -68,7 +68,7 @@ class GarminEUCDelegate extends WatchUi.BehaviorDelegate {
     eucBleDelegate.manualUnpair();
   }
   function goToActivityView() {
-    System.println("bringing activity view");
+    //System.println("bringing activity view");
     WatchUi.pushView(
       activityView,
       new ActivityRecordDelegate(activityView),
