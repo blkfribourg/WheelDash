@@ -12,6 +12,12 @@ module frameDecoder {
     }
     if (eucData.wheelBrand == 2 || eucData.wheelBrand == 3) {
       return new KingsongDecoder();
+    }
+    if (eucData.wheelBrand == 4) {
+      return new IMV2Decoder();
+    }
+    if (eucData.wheelBrand == 5) {
+      return new VESCDecoder();
     } else {
       return null;
     }

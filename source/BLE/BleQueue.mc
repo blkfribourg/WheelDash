@@ -17,6 +17,7 @@ class BleQueue {
 
   var queue = [];
   var isRunning = false;
+  var loop = false;
 
   function initialize() {
     delayTimer = new Timer.Timer();
@@ -59,7 +60,7 @@ class BleQueue {
     }
     var autorun = false;
 
-    if (queue.size() > 0) {
+    if ((queue.size() > 0) & (loop == false)) {
       queue = queue.slice(1, queue.size());
     }
   }

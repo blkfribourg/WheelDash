@@ -67,6 +67,7 @@ class GarminEUCApp extends Application.AppBase {
   }
   // Timer callback for various alarms & update UI
   function onUpdateTimer() {
+    //dummyGen();
     //Only starts if no profile selected
     if (eucData.wheelName == null && delegate != null && usePS) {
       timeOut = timeOut - eucData.updateDelay;

@@ -1,6 +1,6 @@
 <properties>
 <!-- Global settings-->
-    <property id="updateDelay" type="number">100</property>
+    <property id="updateDelay" type="number">200</property>
     <property id="activityRecordingOnStartup" type="boolean">false</property>
     <property id="activitySavingOnExit" type="boolean">false</property>
     <property id="averageMovingSpeedStatistic" type="boolean">false</property>
@@ -15,7 +15,7 @@
     <property id="debugMode" type="boolean">false</property>
 <!--Profile 1-->
     <property id="wheelName_p1" type="string">Profile 1</property>
-    <property id="wheelBrand_p1" type="number">0</property>
+    <property id="wheelBrand_p1" type="number">5</property>
     <property id="recordActivityButtonMap_p1" type="number">0</property>
     <property id="cycleLightButtonMap_p1" type="number">0</property>
     <property id="beepButtonMap_p1" type="number">0</property>
@@ -29,6 +29,7 @@
     <property id="rotationVoltage_PWM_p1" type="float">81.5</property>
     <property id="powerFactor_PWM_p1" type="float">0.9</property>
     <property id="voltageCorrectionFactor_p1" type="float">1.25</property>
+    <property id="voltageSagIndicatorThresh_p1" type="float">0.3</property>
     <property id="speedCorrectionFactor_p1" type="float">1.0</property>
     <property id="alarmThreshold_PWM_p1" type="number">80</property>
     <property id="alarmThreshold_speed_p1" type="number">0</property>
@@ -54,6 +55,7 @@
     <property id="rotationVoltage_PWM_p2" type="float">81.5</property>
     <property id="powerFactor_PWM_p2" type="float">0.9</property>
     <property id="voltageCorrectionFactor_p2" type="float">1.25</property>
+    <property id="voltageSagIndicatorThresh_p2" type="float">0.3</property>
     <property id="speedCorrectionFactor_p2" type="float">1.0</property>
     <property id="alarmThreshold_PWM_p2" type="number">80</property>
     <property id="alarmThreshold_speed_p2" type="number">0</property>
@@ -79,6 +81,7 @@
     <property id="rotationVoltage_PWM_p3" type="float">81.5</property>
     <property id="powerFactor_PWM_p3" type="float">0.9</property>
     <property id="voltageCorrectionFactor_p3" type="float">1.25</property>
+    <property id="voltageSagIndicatorThresh_p3" type="float">0.3</property>
     <property id="speedCorrectionFactor_p3" type="float">1.0</property>
     <property id="alarmThreshold_PWM_p3" type="number">80</property>
     <property id="alarmThreshold_speed_p3" type="number">0</property>

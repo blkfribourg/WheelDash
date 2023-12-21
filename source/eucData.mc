@@ -24,6 +24,7 @@ module eucData {
   var BLEReadRate = 0;
   var timeWhenConnected;
   //UI
+  var sagThreshold = 0.3;
   var orangeColoringThreshold;
   var redColoringThreshold;
 
@@ -53,7 +54,7 @@ module eucData {
   var hPWM = 0.0;
   var currentCorrection;
   var gothPWN = false;
-
+  var battery = 0.0;
   // Veteran specific
   var version = 0;
 
@@ -76,7 +77,7 @@ module eucData {
 
   function getBatteryPercentage() {
     // using better battery formula from wheellog
-    var battery = 0;
+
     // GOTWAY ---------------------------------------------------
     if (wheelBrand == 0) {
       if (voltage > 66.8) {
@@ -175,18 +176,26 @@ module eucData {
     }
 
     // ----------------------------------------------------------
+    // INMOTION V11 :
+    if (wheelBrand == 4) {
+      if (voltage > 83.5) {
+        battery = 100.0;
+      } else if (voltage > 68.0) {
+        battery = (voltage - 66.5) / 0.17;
+      } else if (voltage > 64.0) {
+        battery = (voltage - 64.0) / 0.45;
+      } else {
+        battery = 0.0;
+      }
+    }
     return battery;
   }
 
   function getPWM() {
     if (eucData.voltage != 0) {
       //Quick&dirty fix for now, need to rewrite this:
-      if (
-        wheelBrand == 1 ||
-        wheelBrand == 2 ||
-        wheelBrand == 3 ||
-        gothPWN == true
-      ) {
+      if (wheelBrand != 0 || gothPWN == true) {
+        // 0 is begode/gotway, all other brands returns hPWM (Leaperkim / KS / OLD KS / IM / VESC)
         return hPWM;
       } else {
         var CalculatedPWM =

@@ -27,7 +27,7 @@
         <param name="arcType">:batteryArc</param>
         <!-- Colors -->
         <param name="mainColor">0x58ba1a</param> <!-- Main color -->
-        <param name="secondColor">0x346f0f</param> <!-- This color is for the yellow part of battery arc-->
+        <param name="secondColor">0xc35017</param> <!-- This color is for the yellow part of battery arc-->
         <!-- Arc size n' position -->
         <param name="startDegree">210</param>
         <param name="endDegree">140</param>

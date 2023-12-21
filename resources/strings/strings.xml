@@ -1,5 +1,5 @@
 <strings>
-    <string id="AppName">WheelDash</string>
+    <string id="AppName">WheelDash (dev)</string>
     <string id="firstConnStr">Profile $1$ 1st connection\nPlease turn on your wheel\n and wait for connection\n\nensure only one wheel is ON!\n\nIf you enjoy this app :\n ko-fi.com/wheeldash</string>
     <string id="connectedStr">Profile $1$ connected !\n\nSaving wheel unique identifier</string>
     <!-- Strings, that are used in Connect IQ Settings menu, like 
@@ -21,6 +21,8 @@
     <string id="wheelBrand1">Leaperkim</string>
     <string id="wheelBrand2">Kingsong</string>
     <string id="wheelBrand3">Kingsong (old)</string>
+    <string id="wheelBrand4">InMotion V11 fw1.4 (experimental)</string>
+    <string id="wheelBrand5">VESC (experimental)</string>
     
 
     <string id="recordActivityButtonMap_p1">Button mapping to activity recording view (Profile 1)</string>
@@ -74,6 +76,11 @@
     <string id="voltageCorrectionFactor_p2">Voltage Correction Factor (Gotway/Begode only), 1 for 67.2V, 1.25 for 84V ... (Profile 2)</string>
     <string id="voltageCorrectionFactor_p3">Voltage Correction Factor (Gotway/Begode only), 1 for 67.2V, 1.25 for 84V ... (Profile 3)</string>
     <string id="voltageCorrectionFactor_ErrorMessage">Value out of range</string>
+
+    <string id="voltageSagIndicatorThresh_p1">Voltage Sag Threshold for Sag Indicator (Profile 1)</string>
+    <string id="voltageSagIndicatorThresh_p2">Voltage Sag Threshold for Sag Indicator (Profile 2)</string>
+    <string id="voltageSagIndicatorThresh_p3">Voltage Sag Threshold for Sag Indicator (Profile 3)</string>
+    <string id="voltageSagIndicatorThresh_ErrorMessage">Value out of range</string>
 
     <string id="begodeCF_p1">Gotway/Begode with custom firmware (to use hardware PWM) (Profile 1)</string>
     <string id="begodeCF_p2">Gotway/Begode with custom firmware (to use hardware PWM) (Profile 2)</string>

@@ -85,7 +85,7 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
 
       WatchUi.pushView(mainView, mainViewdelegate, WatchUi.SLIDE_IMMEDIATE);
     } else {
-    //  System.println("first");
+      //  System.println("first");
       connView = new connectionView(eucBleDelegate, profileNb, self);
       WatchUi.pushView(connView, null, WatchUi.SLIDE_IMMEDIATE);
     }
@@ -160,6 +160,9 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       eucData.voltage_scaling = AppStorage.getSetting(
         "voltageCorrectionFactor_p1"
       );
+      eucData.sagThreshold = AppStorage.getSetting(
+        "voltageSagIndicatorThresh_p1"
+      );
       eucData.speedCorrectionFactor = AppStorage.getSetting(
         "speedCorrectionFactor_p1"
       );
@@ -207,6 +210,9 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       eucData.powerFactor = AppStorage.getSetting("powerFactor_PWM_p2");
       eucData.voltage_scaling = AppStorage.getSetting(
         "voltageCorrectionFactor_p2"
+      );
+      eucData.sagThreshold = AppStorage.getSetting(
+        "voltageSagIndicatorThresh_p2"
       );
       eucData.speedCorrectionFactor = AppStorage.getSetting(
         "speedCorrectionFactor_p2"
@@ -256,6 +262,9 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       eucData.powerFactor = AppStorage.getSetting("powerFactor_PWM_p3");
       eucData.voltage_scaling = AppStorage.getSetting(
         "voltageCorrectionFactor_p3"
+      );
+      eucData.sagThreshold = AppStorage.getSetting(
+        "voltageSagIndicatorThresh_p3"
       );
       eucData.speedCorrectionFactor = AppStorage.getSetting(
         "speedCorrectionFactor_p3"
