@@ -441,7 +441,7 @@ class ActivityRecordView extends WatchUi.View {
       FitContributor.DATA_TYPE_STRING,
       { :mesgType => FitContributor.MESG_TYPE_SESSION, :count => 32 }
     );
-
+    /*
     mSpeedField.setData(0.0);
     mTripDistField.setData(0.0);
     mMaxSpeedField.setData(0.0);
@@ -455,7 +455,7 @@ class ActivityRecordView extends WatchUi.View {
     mMaxCurrentField.setData(0.0);
     mMaxPowerField.setData(0.0);
     mMaxTempField.setData(0.0);
-    mMinTempField.setData(0.0);
+    //mMinTempField.setData(0.0);
     mAvgCurrentField.setData(0.0);
     mAvgSpeedField.setData(0.0);
     mAvgPowerField.setData(0.0);
@@ -465,7 +465,7 @@ class ActivityRecordView extends WatchUi.View {
     mMaxBatteryField.setData(0.0);
     mMinBatteryField.setData(0.0);
     mWheelName.setData("unknown");
-    //mMinTempField.setData(0.0);
+    */
   }
   var maxSpeed = 0.0;
   var maxPWM = 0.0;
@@ -528,9 +528,9 @@ class ActivityRecordView extends WatchUi.View {
       maxTemp = eucData.temperature;
       mMaxTempField.setData(maxTemp); // id 11
     }
-    if (eucData.temperature < minTemp) {
+    if (eucData.temperature < minTemp && eucData.temperature != 0.0) {
       minTemp = eucData.temperature;
-      mMaxTempField.setData(minTemp); // id 11
+      mMinTempField.setData(minTemp); // id 11
     }
     if (currentVoltage < minVoltage) {
       minVoltage = currentVoltage;
