@@ -1,3 +1,8 @@
+I created this fork to play around and experiment with WheelDash for my new EUC addiction as well as learn more about writing watch faces and apps for Garmin watches. Feel free to fork and modify for your own purposes. And a giant thank you to https://github.com/blkfribourg for creating this application!
+
+Any comments above this line are mine. Anything below is preserved from the source. 
+-------------------------------------------------------------------------------------------------------------------
+
 Important : if you intend to use this app, please first modify app settings in Garmin Connect depending on your euc.
 
 This is a standalone application that currently only works with Begode wheels and is designed to run on a Garmin Venu.
