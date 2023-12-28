@@ -78,6 +78,26 @@ class ActionButton {
             lightToggleIndex = 0;
           }
         }
+        //Inmotion
+        if (eucData.wheelBrand == 4) {
+          var data = [0xaa, 0xaa, 0x14, 0x03, 0x60, 0x40, 0x00, 0x37]b;
+          lightToggleIndex = lightToggleIndex + 1;
+          if (lightToggleIndex > 1) {
+            lightToggleIndex = 0;
+          }
+          data[6] = lightToggleIndex;
+          data[7] = data[7] - lightToggleIndex;
+          queue.add(
+            [bleDelegate.getChar(), queue.C_WRITENR, data],
+            bleDelegate.getPMService()
+          );
+
+          data = [0xaa, 0xaa, 0x14, 0x01, 0x04, 0x11]b;
+          queue.add(
+            [bleDelegate.getChar(), queue.C_WRITENR, data],
+            bleDelegate.getPMService()
+          );
+        }
       }
       if (beepButton == keyNumber) {
         queueRequired = true;
@@ -97,6 +117,20 @@ class ActionButton {
             0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x88, 0x14, 0x5a, 0x5a,
           ]b;
+          queue.add(
+            [bleDelegate.getChar(), queue.C_WRITENR, data],
+            bleDelegate.getPMService()
+          );
+        }
+        if (eucData.wheelBrand == 4) {
+          var data = [0xaa, 0xaa, 0x14, 0x04, 0x60, 0x41, 0x18, 0x01, 0x28]b;
+
+          queue.add(
+            [bleDelegate.getChar(), queue.C_WRITENR, data],
+            bleDelegate.getPMService()
+          );
+
+          data = [0xaa, 0xaa, 0x14, 0x01, 0x04, 0x11]b;
           queue.add(
             [bleDelegate.getChar(), queue.C_WRITENR, data],
             bleDelegate.getPMService()

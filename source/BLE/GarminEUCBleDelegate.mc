@@ -238,7 +238,11 @@ class eucBLEDelegate extends Ble.BleDelegate {
             // V11 only for now
             var advName = result.getDeviceName();
             if (advName != null) {
-              if (advName.substring(0, 3).equals("V11")) {
+              if (
+                advName.substring(0, 3).equals("V11") ||
+                advName.substring(0, 3).equals("V12")
+              ) {
+                eucData.model = advName.substring(0, 3);
                 wheelFound = true;
               }
             }
@@ -279,7 +283,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
       queue.delayTimer.start(method(:timerCallback), 200, true);
     } // If Inmotion, trigger only once as it will be triggered at each charchanged
     if (eucData.wheelBrand == 4 && char != null) {
-      queue.delayTimer.start(method(:timerCallback), 200, false);
+      queue.delayTimer.start(method(:timerCallback), 200, true);
     }
     if (eucData.wheelBrand == 5 && char != null) {
       queue.delayTimer.start(method(:timerCallback), 200, false);
@@ -306,7 +310,22 @@ class eucBLEDelegate extends Ble.BleDelegate {
     }
     if (eucData.wheelBrand == 4) {
       decoder.frameBuffer(self, value);
-      queue.delayTimer.start(method(:timerCallback), 200, false);
+      // log to txt //
+      /*
+      var frameToStr = "";
+      if (value != null && value.size() > 0) {
+        for (var i = 0; i < value.size(); i++) {
+          if (i == value.size() - 1) {
+            frameToStr = frameToStr + value[i].format("%02X");
+          } else {
+            frameToStr = frameToStr + value[i].format("%02X") + ";";
+          }
+        }
+      }
+      System.println(frameToStr);
+*/
+      //
+      // queue.delayTimer.start(method(:timerCallback), 200, false);
     }
     if (eucData.wheelBrand == 5) {
       if (value[value.size() - 1] == 0x03) {

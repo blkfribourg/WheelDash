@@ -61,7 +61,7 @@ function splitstr(str as Lang.String, char) {
         stringArray.add(substr);
         var startidx = endidx + 1;
         str = str.substring(startidx, strlength - substr.length());
-        System.println("str = " + str);
+        //System.println("str = " + str);
       }
     } else {
       if (str.length() > 0) {

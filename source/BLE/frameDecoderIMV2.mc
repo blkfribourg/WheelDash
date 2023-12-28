@@ -23,11 +23,33 @@ class IMV2Decoder {
   }
 
   function frameBuffer(bleDelegate, transmittedFrame) {
-    eucData.voltage = shortFromBytesLE(transmittedFrame, 5) / 100.0;
-    eucData.speed = signedShortFromBytesLE(transmittedFrame, 9) / 100.0;
-    eucData.hPWM = signedShortFromBytesLE(transmittedFrame, 13) / 100.0;
-    eucData.current = signedShortFromBytesLE(transmittedFrame, 7) / 100.0;
-/*
+    eucData.voltage =
+      transmittedFrame
+        .decodeNumber(Lang.NUMBER_FORMAT_UINT16, {
+          :offset => 5,
+          :endianness => Lang.ENDIAN_LITTLE,
+        })
+        .abs() / 100.0;
+    eucData.speed =
+      transmittedFrame
+        .decodeNumber(Lang.NUMBER_FORMAT_SINT16, {
+          :offset => 9,
+          :endianness => Lang.ENDIAN_LITTLE,
+        })
+        .abs() / 100.0;
+    eucData.hPWM =
+      transmittedFrame
+        .decodeNumber(Lang.NUMBER_FORMAT_SINT16, {
+          :offset => 13,
+          :endianness => Lang.ENDIAN_LITTLE,
+        })
+        .abs() / 100.0;
+    eucData.current =
+      transmittedFrame.decodeNumber(Lang.NUMBER_FORMAT_SINT16, {
+        :offset => 7,
+        :endianness => Lang.ENDIAN_LITTLE,
+      }) / 100.0;
+    /*
     var trFrameSize = transmittedFrame.size();
     bleDelegate.message2 =
       "frm size: " +

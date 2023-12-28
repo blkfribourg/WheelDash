@@ -55,12 +55,16 @@ class BleQueue {
       });
     } else if (queue[0][1] == C_WRITENR) {
       //Sys.println("start running queue");
-      //Sys.println("queue content "+queue[0][2]);
+      //Sys.println("queue content " + queue[0][2]);
       char.requestWrite(queue[0][2], { :writeType => Ble.WRITE_TYPE_DEFAULT });
     }
     var autorun = false;
 
     if ((queue.size() > 0) & (loop == false)) {
+      queue = queue.slice(1, queue.size());
+    }
+    if ((queue.size() > 1) & (loop == true)) {
+      // if more than 1 execute the queue and keep the last one looping
       queue = queue.slice(1, queue.size());
     }
   }

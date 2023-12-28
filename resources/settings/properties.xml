@@ -15,7 +15,7 @@
     <property id="debugMode" type="boolean">false</property>
 <!--Profile 1-->
     <property id="wheelName_p1" type="string">Profile 1</property>
-    <property id="wheelBrand_p1" type="number">5</property>
+    <property id="wheelBrand_p1" type="number">0</property>
     <property id="recordActivityButtonMap_p1" type="number">0</property>
     <property id="cycleLightButtonMap_p1" type="number">0</property>
     <property id="beepButtonMap_p1" type="number">0</property>
