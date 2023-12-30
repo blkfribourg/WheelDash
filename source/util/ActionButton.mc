@@ -80,7 +80,7 @@ class ActionButton {
         }
         //Inmotion
         if (eucData.wheelBrand == 4) {
-          var data = [0xaa, 0xaa, 0x14, 0x03, 0x60, 0x40, 0x00, 0x37]b;
+          var data = [0xaa, 0xaa, 0x14, 0x03, 0x60, 0x50, 0x00, 0x27]b;
           lightToggleIndex = lightToggleIndex + 1;
           if (lightToggleIndex > 1) {
             lightToggleIndex = 0;
@@ -123,7 +123,7 @@ class ActionButton {
           );
         }
         if (eucData.wheelBrand == 4) {
-          var data = [0xaa, 0xaa, 0x14, 0x04, 0x60, 0x41, 0x18, 0x01, 0x28]b;
+          var data = [0xaa, 0xaa, 0x14, 0x03, 0xe0, 0x51, 0x00, 0xa6]b;
 
           queue.add(
             [bleDelegate.getChar(), queue.C_WRITENR, data],
