@@ -87,12 +87,7 @@ class ActionButton {
           }
           data[6] = lightToggleIndex;
           data[7] = data[7] - lightToggleIndex;
-          queue.add(
-            [bleDelegate.getChar(), queue.C_WRITENR, data],
-            bleDelegate.getPMService()
-          );
-
-          data = [0xaa, 0xaa, 0x14, 0x01, 0x04, 0x11]b;
+          queue.flush();
           queue.add(
             [bleDelegate.getChar(), queue.C_WRITENR, data],
             bleDelegate.getPMService()
@@ -129,17 +124,14 @@ class ActionButton {
             [bleDelegate.getChar(), queue.C_WRITENR, data],
             bleDelegate.getPMService()
           );
-
-          data = [0xaa, 0xaa, 0x14, 0x01, 0x04, 0x11]b;
-          queue.add(
-            [bleDelegate.getChar(), queue.C_WRITENR, data],
-            bleDelegate.getPMService()
-          );
         }
       }
       //}
       if (queueRequired == true) {
-        queue.delayTimer.start(method(:timerCallback), delay, true);
+        queue.delayTimer.start(method(:timerCallback), delay, false);
+        if (eucData.wheelBrand == 4) {
+          queue.delayTimer.start(method(:timerCallback), delay, true); //dirty workaround
+        }
       }
     }
   }

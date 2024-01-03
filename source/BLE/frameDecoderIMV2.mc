@@ -1,4 +1,5 @@
 class IMV2Decoder {
+  var frameNb = 0;
   function signedShortFromBytesBE(bytes, starting) {
     if (bytes.size() >= starting + 2) {
       return (
@@ -23,33 +24,43 @@ class IMV2Decoder {
   }
 
   function frameBuffer(bleDelegate, transmittedFrame) {
-    eucData.voltage =
-      transmittedFrame
-        .decodeNumber(Lang.NUMBER_FORMAT_UINT16, {
-          :offset => 5,
+    if (transmittedFrame.size() == 20) {
+      frameNb++;
+      if (eucData.timeWhenConnected != null) {
+        var elaspedTime = eucData.timeWhenConnected
+          .subtract(new Time.Moment(Time.now().value()))
+          .value();
+        if (elaspedTime != 0) {
+          eucData.BLEReadRate = frameNb / elaspedTime;
+        }
+      }
+      eucData.voltage =
+        transmittedFrame
+          .decodeNumber(Lang.NUMBER_FORMAT_UINT16, {
+            :offset => 5,
+            :endianness => Lang.ENDIAN_LITTLE,
+          })
+          .abs() / 100.0;
+      eucData.speed =
+        transmittedFrame
+          .decodeNumber(Lang.NUMBER_FORMAT_SINT16, {
+            :offset => 9,
+            :endianness => Lang.ENDIAN_LITTLE,
+          })
+          .abs() / 100.0;
+      eucData.hPWM =
+        transmittedFrame
+          .decodeNumber(Lang.NUMBER_FORMAT_SINT16, {
+            :offset => 13,
+            :endianness => Lang.ENDIAN_LITTLE,
+          })
+          .abs() / 100.0;
+      eucData.current =
+        transmittedFrame.decodeNumber(Lang.NUMBER_FORMAT_SINT16, {
+          :offset => 7,
           :endianness => Lang.ENDIAN_LITTLE,
-        })
-        .abs() / 100.0;
-    eucData.speed =
-      transmittedFrame
-        .decodeNumber(Lang.NUMBER_FORMAT_SINT16, {
-          :offset => 9,
-          :endianness => Lang.ENDIAN_LITTLE,
-        })
-        .abs() / 100.0;
-    eucData.hPWM =
-      transmittedFrame
-        .decodeNumber(Lang.NUMBER_FORMAT_SINT16, {
-          :offset => 13,
-          :endianness => Lang.ENDIAN_LITTLE,
-        })
-        .abs() / 100.0;
-    eucData.current =
-      transmittedFrame.decodeNumber(Lang.NUMBER_FORMAT_SINT16, {
-        :offset => 7,
-        :endianness => Lang.ENDIAN_LITTLE,
-      }) / 100.0;
-    /*
+        }) / 100.0;
+      /*
     var trFrameSize = transmittedFrame.size();
     bleDelegate.message2 =
       "frm size: " +
@@ -89,6 +100,7 @@ class IMV2Decoder {
     }
     
     */
+    }
   }
 }
 /*

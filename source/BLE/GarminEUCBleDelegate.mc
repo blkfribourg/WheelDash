@@ -92,29 +92,27 @@ class eucBLEDelegate extends Ble.BleDelegate {
         // End of KS addition -------------------------------
         // Inmotion V2 or VESC ---------------------------
         if (eucData.wheelBrand == 4) {
-          queue.loop = true;
           char_w = service.getCharacteristic(profileManager.EUC_CHAR_W);
 
           // addition for inmotion v2 request live:
-          var live = [0xaa, 0xaa, 0x14, 0x01, 0x04, 0x11]b;
-
-          queue.add(
-            [char_w, queue.C_WRITENR, live],
-            profileManager.EUC_SERVICE
-          );
+          queue.reqLiveData = [
+            char_w,
+            queue.C_WRITENR,
+            [0xaa, 0xaa, 0x14, 0x01, 0x04, 0x11]b,
+          ];
+          queue.UUID = profileManager.EUC_SERVICE;
         }
 
         if (eucData.wheelBrand == 5) {
-          queue.loop = true;
           char_w = service.getCharacteristic(profileManager.EUC_CHAR_W);
 
           // VESC COMM VAL SETUP:
-          var live = [0x02, 0x01, 0x2f, 0xd5, 0x8d, 0x03]b;
-
-          queue.add(
-            [char_w, queue.C_WRITENR, live],
-            profileManager.EUC_SERVICE
-          );
+          queue.reqLiveData = [
+            char_w,
+            queue.C_WRITENR,
+            [0x02, 0x01, 0x2f, 0xd5, 0x8d, 0x03]b,
+          ];
+          queue.UUID = profileManager.EUC_SERVICE;
         }
         // End of inmotion V2 or VESC
         cccd = char.getDescriptor(Ble.cccdUuid());
