@@ -19,7 +19,11 @@ class BleQueue {
   var isRunning = false;
 
   var reqLiveData;
+  var reqStats;
+  var lastPacketType;
   var UUID;
+  var reqStatTiming = 0;
+
   function initialize() {
     delayTimer = new Timer.Timer();
   }
@@ -36,8 +40,16 @@ class BleQueue {
   function run() {
     if (queue.size() == 0) {
       if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
-        if (reqLiveData != null && UUID != null) {
-          add(reqLiveData, UUID);
+        if (reqLiveData != null && UUID != null && reqStats != null) {
+          reqStatTiming = reqStatTiming - 1;
+          if (reqStatTiming < 0) {
+            lastPacketType = "stats";
+            add(reqStats, UUID);
+            reqStatTiming = 48;
+          } else {
+            lastPacketType = "live";
+            add(reqLiveData, UUID);
+          }
           autoRestart();
         }
       } else {

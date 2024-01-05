@@ -26,7 +26,7 @@ class GarminEUCApp extends Application.AppBase {
   // onStart() is called on application start up
   function onStart(state as Dictionary?) as Void {
     // Sandbox zone
-    
+
     // end of sandbox
     setGlobalSettings();
     rideStatsInit();

@@ -1,30 +1,12 @@
 class IMV2Decoder {
   var frameNb = 0;
-  function signedShortFromBytesBE(bytes, starting) {
-    if (bytes.size() >= starting + 2) {
-      return (
-        ((((bytes[starting] & 0xff) << 8) | bytes[starting + 1]) << 16) >> 16
-      );
-    }
-    return 0;
-  }
-
-  function shortFromBytesLE(bytes, starting) {
-    if (bytes.size() >= starting + 2) {
-      return ((bytes[starting + 1] & 0xff) << 8) | (bytes[starting] & 0xff);
-    }
-    return 0;
-  }
-
-  function signedShortFromBytesLE(bytes, starting) {
-    if (bytes.size() >= starting + 2) {
-      return (bytes[starting + 1] << 8) | (bytes[starting] & 0xff);
-    }
-    return 0;
-  }
+  var start_dist;
 
   function frameBuffer(bleDelegate, transmittedFrame) {
-    if (transmittedFrame.size() == 20) {
+    if (
+      bleDelegate.queue.lastPacketType.equals("live") &&
+      transmittedFrame.size() == 20
+    ) {
       frameNb++;
       if (eucData.timeWhenConnected != null) {
         var elaspedTime = eucData.timeWhenConnected
@@ -60,46 +42,21 @@ class IMV2Decoder {
           :offset => 7,
           :endianness => Lang.ENDIAN_LITTLE,
         }) / 100.0;
-      /*
-    var trFrameSize = transmittedFrame.size();
-    bleDelegate.message2 =
-      "frm size: " +
-      trFrameSize +
-      "start w/ " +
-      transmittedFrame[0] +
-      " " +
-      transmittedFrame[1];
+    }
+    if (
+      bleDelegate.queue.lastPacketType.equals("stats") &&
+      transmittedFrame.size() == 20
+    ) {
+      eucData.totalDistance =
+        transmittedFrame.decodeNumber(Lang.NUMBER_FORMAT_UINT32, {
+          :offset => 5,
+          :endianness => Lang.ENDIAN_LITTLE,
+        }) / 10.0;
 
-    if (trFrameSize > 5) {
-      bleDelegate.message3 =
-        "vlt: " + shortFromBytesLE(transmittedFrame, 5) / 100.0;
-    }
-    if (trFrameSize > 9) {
-      bleDelegate.message4 =
-        "spd: " + signedShortFromBytesLE(transmittedFrame, 9) / 100.0;
-    }
-    if (trFrameSize > 7) {
-      bleDelegate.message5 =
-        "cur: " + signedShortFromBytesLE(transmittedFrame, 7);
-    }
-    if (trFrameSize > 11) {
-      bleDelegate.message6 =
-        "torq: " + signedShortFromBytesLE(transmittedFrame, 11);
-    }
-    if (trFrameSize > 13) {
-      bleDelegate.message7 =
-        "PWM: " + signedShortFromBytesLE(transmittedFrame, 13);
-    }
-    if (trFrameSize > 15) {
-      bleDelegate.message8 =
-        "BatPwr: " + signedShortFromBytesLE(transmittedFrame, 15);
-    }
-    if (trFrameSize > 17) {
-      bleDelegate.message9 =
-        "MotPwr: " + signedShortFromBytesLE(transmittedFrame, 17);
-    }
-    
-    */
+      if (start_dist == null) {
+        start_dist = eucData.totalDistance;
+      }
+      eucData.tripDistance = eucData.totalDistance - start_dist;
     }
   }
 }

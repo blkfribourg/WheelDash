@@ -87,9 +87,10 @@ class ActionButton {
           }
           data[6] = lightToggleIndex;
           data[7] = data[7] - lightToggleIndex;
+
           queue.flush();
           queue.add(
-            [bleDelegate.getChar(), queue.C_WRITENR, data],
+            [bleDelegate.getCharW(), queue.C_WRITENR, data],
             bleDelegate.getPMService()
           );
         }
@@ -121,7 +122,7 @@ class ActionButton {
           var data = [0xaa, 0xaa, 0x14, 0x03, 0xe0, 0x51, 0x00, 0xa6]b;
 
           queue.add(
-            [bleDelegate.getChar(), queue.C_WRITENR, data],
+            [bleDelegate.getCharW(), queue.C_WRITENR, data],
             bleDelegate.getPMService()
           );
         }

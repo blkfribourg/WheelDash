@@ -41,12 +41,6 @@ class eucBLEDelegate extends Ble.BleDelegate {
     queue = q;
     decoder = _decoder;
 
-    //System.println(profileManager.EUC_SERVICE);
-    //System.println(profileManager.EUC_CHAR);
-    /*if (eucData.wheelBrand == 2) {
-      decoder.processFrame(frame1);
-    }
-    */
     Ble.setScanState(Ble.SCAN_STATE_SCANNING);
     isFirst = isFirstConnection();
   }
@@ -99,6 +93,13 @@ class eucBLEDelegate extends Ble.BleDelegate {
             char_w,
             queue.C_WRITENR,
             [0xaa, 0xaa, 0x14, 0x01, 0x04, 0x11]b,
+          ];
+          queue.UUID = profileManager.EUC_SERVICE;
+          // inmotion v2 request stats :
+          queue.reqStats = [
+            char_w,
+            queue.C_WRITENR,
+            [0xaa, 0xaa, 0x14, 0x01, 0x11, 0x04]b,
           ];
           queue.UUID = profileManager.EUC_SERVICE;
         }
@@ -233,14 +234,13 @@ class eucBLEDelegate extends Ble.BleDelegate {
             }
           }
           if (eucData.wheelBrand == 4) {
-            // V11 only for now
+            // V11 or V12 only for now
+
             var advName = result.getDeviceName();
             if (advName != null) {
-              if (
-                advName.substring(0, 3).equals("V11") ||
-                advName.substring(0, 3).equals("V12")
-              ) {
-                eucData.model = advName.substring(0, 3);
+              var advModel = advName.substring(0, 3);
+              if (advModel.equals("V11") || advModel.equals("V12")) {
+                eucData.model = advModel;
                 wheelFound = true;
               }
             }
@@ -263,9 +263,19 @@ class eucBLEDelegate extends Ble.BleDelegate {
       }
     } else {
       Ble.setScanState(Ble.SCAN_STATE_OFF);
-      var result = loadSR();
+      var result = loadSR() as Ble.ScanResult;
       if (result != false) {
-        device = Ble.pairDevice(result as Ble.ScanResult);
+        if (eucData.wheelBrand == 4) {
+          // V11 or V12 only for now
+          var advName = result.getDeviceName();
+          if (advName != null) {
+            var advModel = advName.substring(0, 3);
+            if (advModel.equals("V11") || advModel.equals("V12")) {
+              eucData.model = advModel;
+            }
+          }
+        }
+        device = Ble.pairDevice(result);
       }
     }
   }
@@ -376,6 +386,9 @@ class eucBLEDelegate extends Ble.BleDelegate {
 
   function getChar() {
     return char;
+  }
+  function getCharW() {
+    return char_w;
   }
 
   function getPMService() {
