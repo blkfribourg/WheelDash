@@ -77,6 +77,11 @@ module eucData {
   // Kingsong & inmotion :
   var model = "none";
 
+  //inmotion specific
+  var imHornSound = 0x18;
+  var batteryTemp1 = 0.0;
+  var batteryTemp2 = 0.0;
+
   function getBatteryPercentage() {
     // using better battery formula from wheellog
 

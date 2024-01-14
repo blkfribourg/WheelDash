@@ -6,6 +6,7 @@
     <property id="averageMovingSpeedStatistic" type="boolean">false</property>
     <property id="topSpeedStatistic" type="boolean">false</property>
     <property id="watchBatteryConsumptionStatistic" type="boolean">false</property>
+    <property id="totalDistanceStatistic" type="boolean">false</property>
     <property id="tripDistanceStatistic" type="boolean">false</property>
     <property id="voltageStatistic" type="boolean">false</property>
     <property id="watchBatteryStatistic" type="boolean">false</property>
@@ -13,12 +14,14 @@
     <property id="defaultProfile" type="number">1</property>
     <property id="useProfileSelector" type="boolean">true</property>
     <property id="debugMode" type="boolean">false</property>
+    <property id ="imHornSound" type="number">0</property>
 <!--Profile 1-->
     <property id="wheelName_p1" type="string">Profile 1</property>
     <property id="wheelBrand_p1" type="number">0</property>
     <property id="recordActivityButtonMap_p1" type="number">0</property>
     <property id="cycleLightButtonMap_p1" type="number">0</property>
     <property id="beepButtonMap_p1" type="number">0</property>
+    <property id="lockButtonMap_p1" type="number">0</property>
     <property id="actionQueueDelay_p1" type="number">200</property>
     <property id="mainNumber_p1" type="number">0</property>
     <property id="topBar_p1" type="number">0</property>     

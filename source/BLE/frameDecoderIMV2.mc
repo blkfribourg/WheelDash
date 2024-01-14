@@ -23,20 +23,29 @@ class IMV2Decoder {
             :endianness => Lang.ENDIAN_LITTLE,
           })
           .abs() / 100.0;
-      eucData.speed =
+      var speed =
         transmittedFrame
           .decodeNumber(Lang.NUMBER_FORMAT_SINT16, {
             :offset => 9,
             :endianness => Lang.ENDIAN_LITTLE,
           })
           .abs() / 100.0;
-      eucData.hPWM =
+      if (speed <= 100) {
+        //Should investigate if wrong packet or decoding error
+        eucData.speed = speed;
+      }
+      var pwm =
         transmittedFrame
           .decodeNumber(Lang.NUMBER_FORMAT_SINT16, {
             :offset => 13,
             :endianness => Lang.ENDIAN_LITTLE,
           })
           .abs() / 100.0;
+      if (pwm < 100.0) {
+        //Should investigate if wrong packet or decoding error
+        eucData.hPWM = pwm;
+      }
+
       eucData.current =
         transmittedFrame.decodeNumber(Lang.NUMBER_FORMAT_SINT16, {
           :offset => 7,
@@ -51,12 +60,24 @@ class IMV2Decoder {
         transmittedFrame.decodeNumber(Lang.NUMBER_FORMAT_UINT32, {
           :offset => 5,
           :endianness => Lang.ENDIAN_LITTLE,
-        }) / 10.0;
+        }) / 100.0;
 
       if (start_dist == null) {
         start_dist = eucData.totalDistance;
       }
       eucData.tripDistance = eucData.totalDistance - start_dist;
+    }
+    if (bleDelegate.queue.lastPacketType.equals("batStats")) {
+      eucData.batteryTemp1 =
+        transmittedFrame.decodeNumber(Lang.NUMBER_FORMAT_SINT8, {
+          :offset => 9,
+          :endianness => Lang.ENDIAN_LITTLE,
+        }) + 80; //data[4]
+      eucData.batteryTemp2 =
+        transmittedFrame.decodeNumber(Lang.NUMBER_FORMAT_SINT8, {
+          :offset => 17,
+          :endianness => Lang.ENDIAN_LITTLE,
+        }) + 80; //data[12]
     }
   }
 }

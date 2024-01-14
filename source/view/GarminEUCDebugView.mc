@@ -268,6 +268,20 @@ class GarminEUCDebugView extends WatchUi.View {
           "q_trg: " + BleDelegate.queue.run_id,
           Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
         );
+        dc.drawText(
+          dc.getWidth() - 2.5 * alignAxe,
+          4 * space + yGap,
+          Graphics.FONT_TINY,
+          "batT1: " + valueRound(eucData.batteryTemp1, "%.1f"),
+          Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+        );
+        dc.drawText(
+          dc.getWidth() - 2.5 * alignAxe,
+          5 * space + yGap,
+          Graphics.FONT_TINY,
+          "batT2: " + valueRound(eucData.batteryTemp2, "%.1f"),
+          Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+        );
       }
     }
     /*

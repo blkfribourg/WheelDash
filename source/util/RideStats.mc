@@ -5,6 +5,7 @@ module rideStats {
   var showTopSpeedStatistic;
   var showWatchBatteryConsumptionStatistic;
   var showTripDistance;
+  var showTotalDistance;
   var showVoltage;
   var showWatchBatteryStatistic;
   var statsNumberToDiplay = 0;

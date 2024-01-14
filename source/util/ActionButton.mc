@@ -4,10 +4,11 @@ import Toybox.Lang;
 class ActionButton {
   var eucDict;
   var lightToggleIndex = 0;
-
+  //var lockStatus = 0;
   var recordActivityButton;
   var cycleLightButton;
   var beepButton;
+  //var lockButton;
   var queue;
   var delay;
   var queueRequired;
@@ -18,6 +19,29 @@ class ActionButton {
     if (eucData.paired == true) {
       queueRequired = false;
       queue = _queue;
+      /*
+      if (lockButton == keyNumber) {
+        //inmotion
+        if (eucData.wheelBrand == 4) {
+          var data = [0xaa, 0xaa, 0x14, 0x04, 0x60, 0x31, 0x00, 0x00]b; // Thanks Seba ;)
+
+          lockStatus = lockStatus + 1;
+          if (lockStatus > 1) {
+            lockStatus = 0;
+          }
+
+          data[6] = lockStatus;
+          data[7] = xorChkSum(data.slice(0, data.size() - 1));
+         
+          queue.flush();
+          queue.add(
+            [bleDelegate.getCharW(), queue.C_WRITENR, data],
+            bleDelegate.getPMService()
+          );
+        
+        }
+      }
+      */
       if (recordActivityButton == keyNumber) {
         _mainDelegate.goToActivityView();
       }
@@ -80,19 +104,56 @@ class ActionButton {
         }
         //Inmotion
         if (eucData.wheelBrand == 4) {
-          var data = [0xaa, 0xaa, 0x14, 0x03, 0x60, 0x50, 0x00, 0x27]b;
-          lightToggleIndex = lightToggleIndex + 1;
-          if (lightToggleIndex > 1) {
-            lightToggleIndex = 0;
-          }
-          data[6] = lightToggleIndex;
-          data[7] = data[7] - lightToggleIndex;
+          if (eucData.model.equals("V11")) {
+            var data = [0xaa, 0xaa, 0x14, 0x03, 0x60, 0x50, 0x00, 0x27]b;
+            lightToggleIndex = lightToggleIndex + 1;
+            if (lightToggleIndex > 1) {
+              lightToggleIndex = 0;
+            }
+            data[6] = lightToggleIndex;
+            data[7] = data[7] - lightToggleIndex;
 
-          queue.flush();
-          queue.add(
-            [bleDelegate.getCharW(), queue.C_WRITENR, data],
-            bleDelegate.getPMService()
-          );
+            queue.flush();
+            queue.add(
+              [bleDelegate.getCharW(), queue.C_WRITENR, data],
+              bleDelegate.getPMService()
+            );
+          }
+          if (eucData.model.equals("V12")) {
+            var data = [0xaa, 0xaa, 0x14, 0x04, 0x60, 0x50, 0x00, 0x00, 0x00]b; // Thanks Seba ;)
+
+            lightToggleIndex = lightToggleIndex + 1;
+            if (lightToggleIndex > 1) {
+              lightToggleIndex = 0;
+            }
+            /*
+            if (lightToggleIndex > 3) {
+              lightToggleIndex = 0;
+            }
+            if (lightToggleIndex == 1) {
+              data[6] = 0x01;
+              data[7] = 0x00;
+            }
+            if (lightToggleIndex == 2) {
+              data[6] = 0x00;
+              data[7] = 0x01;
+            }
+            if (lightToggleIndex == 3) {
+              data[6] = 0x01;
+              data[7] = 0x01;
+            }
+            */
+            // For now only high+low beam (Elric request ;))
+            data[6] = lightToggleIndex;
+            data[7] = lightToggleIndex;
+            data[8] = xorChkSum(data.slice(0, data.size() - 1));
+
+            queue.flush();
+            queue.add(
+              [bleDelegate.getCharW(), queue.C_WRITENR, data],
+              bleDelegate.getPMService()
+            );
+          }
         }
       }
       if (beepButton == keyNumber) {
@@ -119,8 +180,13 @@ class ActionButton {
           );
         }
         if (eucData.wheelBrand == 4) {
-          var data = [0xaa, 0xaa, 0x14, 0x03, 0xe0, 0x51, 0x00, 0xa6]b;
+          var data = [0xaa, 0xaa, 0x14, 0x04, 0x60, 0x51, 0x18, 0x01, 0x00]b; // Thanks Seba ;)
+          if (eucData.imHornSound != 0) {
+            data[6] = eucData.imHornSound.format("%02d").toNumberWithBase(16);
+          }
 
+          data[8] = xorChkSum(data.slice(0, data.size() - 1));
+          queue.flush();
           queue.add(
             [bleDelegate.getCharW(), queue.C_WRITENR, data],
             bleDelegate.getPMService()

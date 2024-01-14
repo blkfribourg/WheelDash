@@ -37,6 +37,8 @@
     <string id="beepButtonMap_p2">Button mapping to wheel beep (horn mode) (Profile 2)</string>
     <string id="beepButtonMap_p3">Button mapping to wheel beep (horn mode) (Profile 3)</string>
 
+    <string id="lockButtonMap_p1">DONOTUSE Button mapping to wheel lock/unlock (Profile 1)</string>
+
     <string id="none">None</string>
     <string id="startStopButton">Start/Stop button</string>
     <string id="middleButton">Middle button</string>
@@ -62,6 +64,7 @@
 
     <string id="updateDelay">UI refresh rate and in msec</string>
     <string id="updateDelay_ErrorMessage">Value should be in a range of 100 msec to 1000 msec</string>
+    <string id="imHornSound">Inmotion horn (untested betatesters only)</string>
 
     <string id="orangeColoringThreshold_p1">percentage threshold to color "top bar" with orange (Profile 1)</string>
     <string id="orangeColoringThreshold_p2">percentage threshold to color "top bar" with orange (Profile 2)</string>
@@ -165,6 +168,8 @@
    <string id="averageMovingSpeedStatistic">Display average moving speed (when speed >3 km/h or 2 mph)</string>
    <string id="topSpeedStatistic">Display top speed</string>
    <string id="watchBatteryConsumptionStatistic">Display watch battery consumption (%/h)</string>
+   
+   <string id="totalDistanceStatistic">Display total distance</string>
    <string id="tripDistanceStatistic">Display current trip distance</string>
    <string id="voltageStatistic">Display voltage</string>
    <string id="watchBatteryStatistic">Display watch battery</string>

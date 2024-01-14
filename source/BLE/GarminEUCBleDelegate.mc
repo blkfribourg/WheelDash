@@ -41,6 +41,33 @@ class eucBLEDelegate extends Ble.BleDelegate {
     queue = q;
     decoder = _decoder;
 
+    /*
+
+    char_w = profileManager.EUC_CHAR_W;
+    queue.reqLiveData = [
+      char_w,
+      queue.C_WRITENR,
+      [0xaa, 0xaa, 0x14, 0x01, 0x04, 0x11]b,
+    ];
+
+    // inmotion v2 request stats :
+    queue.reqStats = [
+      char_w,
+      queue.C_WRITENR,
+      [0xaa, 0xaa, 0x14, 0x01, 0x11, 0x04]b,
+    ];
+
+    // inmotion v2 request batteryStats:
+    queue.reqBatStats = [
+      char_w,
+      queue.C_WRITENR,
+      [0xaa, 0xaa, 0x14, 0x01, 0x05, 0x10]b,
+    ];
+
+    queue.UUID = profileManager.EUC_SERVICE;
+    queue.delayTimer.start(method(:timerCallback), 200, true);
+    //
+*/
     Ble.setScanState(Ble.SCAN_STATE_SCANNING);
     isFirst = isFirstConnection();
   }
@@ -94,13 +121,22 @@ class eucBLEDelegate extends Ble.BleDelegate {
             queue.C_WRITENR,
             [0xaa, 0xaa, 0x14, 0x01, 0x04, 0x11]b,
           ];
-          queue.UUID = profileManager.EUC_SERVICE;
+
           // inmotion v2 request stats :
           queue.reqStats = [
             char_w,
             queue.C_WRITENR,
             [0xaa, 0xaa, 0x14, 0x01, 0x11, 0x04]b,
           ];
+          if (eucData.model.equals("V12")) {
+            // V12 V13 V14 I guess
+            // inmotion v2 request batteryStats:
+            queue.reqBatStats = [
+              char_w,
+              queue.C_WRITENR,
+              [0xaa, 0xaa, 0x14, 0x01, 0x05, 0x10]b,
+            ];
+          }
           queue.UUID = profileManager.EUC_SERVICE;
         }
 
@@ -289,7 +325,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
     // send getName request for KS using ble queue
     if ((eucData.wheelBrand == 2 || eucData.wheelBrand == 3) && char != null) {
       queue.delayTimer.start(method(:timerCallback), 200, true);
-    } // If Inmotion, trigger only once as it will be triggered at each charchanged
+    } // If Inmotion, trigger only once as it will be triggered at each charchanged -> didn't work so let's loop
     if (eucData.wheelBrand == 4 && char != null) {
       queue.delayTimer.start(method(:timerCallback), 200, true);
     }
