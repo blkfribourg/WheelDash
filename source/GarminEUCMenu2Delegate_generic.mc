@@ -193,6 +193,22 @@ class GarminEUCMenu2Delegate_generic extends WatchUi.Menu2InputDelegate {
         }*/
       }
     }
+    if (eucData.wheelBrand == 4) {
+      if (
+        EUCSettingsDict.getConfigToLock().indexOf(fromMenu) != -1 &&
+        eucData.correctedSpeed > 2
+      ) {
+        //moving and locked settting
+      } else {
+        inmotionMenuCmd(fromMenu, cmd);
+        /*
+        if (EUCSettingsDict.getConfigToLock().indexOf(fromMenu) != -1) {
+          System.println("executing locked setting because not moving");
+        } else {
+          System.println("executing non-locked setting");
+        }*/
+      }
+    }
     queue.delayTimer.start(method(:timerCallback), delay, true);
     requestSubLabelsUpdate = true;
   }
@@ -279,6 +295,85 @@ class GarminEUCMenu2Delegate_generic extends WatchUi.Menu2InputDelegate {
       //System.println("pedal_frame: " + cmd_frame.toString());
     }
     eucBleDelegate.sendRawCmd(cmd_frame);
+  }
+
+  function inmotionMenuCmd(parentMenu, cmd) {
+    //Set light mode
+    //System.println("empty_frame: " + cmd_frame.toString());
+    if (parentMenu.equals("Lights")) {
+      if (eucData.model.equals("V11")) {
+        var data = [0xaa, 0xaa, 0x14, 0x03, 0x60, 0x50, 0x00, 0x00]b;
+        data[6] = cmd.toNumber();
+        data[7] = xorChkSum(data.slice(0, data.size() - 1));
+        queue.flush();
+        queue.add(
+          [eucBleDelegate.getCharW(), queue.C_WRITENR, data],
+          eucBleDelegate.getPMService()
+        );
+      }
+      if (eucData.model.equals("V12")) {
+        var data = [0xaa, 0xaa, 0x14, 0x04, 0x60, 0x50, 0x00, 0x00, 0x00]b; // Thanks Seba ;)
+        if (cmd.toNumber() == 0) {
+          data[6] = 0x00;
+          data[7] = 0x00;
+        }
+        if (cmd.toNumber() == 1) {
+          data[6] = 0x01;
+          data[7] = 0x00;
+        }
+        if (cmd.toNumber() == 2) {
+          data[6] = 0x00;
+          data[7] = 0x01;
+        }
+        if (cmd.toNumber() == 3) {
+          data[6] = 0x01;
+          data[7] = 0x01;
+        }
+        data[8] = xorChkSum(data.slice(0, data.size() - 1));
+        queue.flush();
+        queue.add(
+          [eucBleDelegate.getCharW(), queue.C_WRITENR, data],
+          eucBleDelegate.getPMService()
+        );
+        // todo : store light preference for V12 in watch storage.
+      }
+      //System.println("lights_frame: " + cmd_frame.toString());
+    }
+    if (parentMenu.equals("DRL")) {
+      var data = [0xaa, 0xaa, 0x14, 0x03, 0x60, 0x2d, 0x00, 0x00]b;
+      data[6] = cmd.toNumber();
+      data[7] = xorChkSum(data.slice(0, data.size() - 1));
+      queue.flush();
+      queue.add(
+        [eucBleDelegate.getCharW(), queue.C_WRITENR, data],
+        eucBleDelegate.getPMService()
+      );
+      //System.println("strobe_frame: " + cmd_frame.toString());
+    }
+    if (parentMenu.equals("Ride Mode")) {
+      var data = [0xaa, 0xaa, 0x14, 0x03, 0x60, 0x23, 0x00, 0x00]b;
+      data[6] = cmd.toNumber();
+      data[7] = xorChkSum(data.slice(0, data.size() - 1));
+      queue.flush();
+      queue.add(
+        [eucBleDelegate.getCharW(), queue.C_WRITENR, data],
+        eucBleDelegate.getPMService()
+      );
+
+      //System.println("leds_frame: " + cmd_frame.toString());
+    }
+    if (parentMenu.equals("Performance Mode")) {
+      var data = [0xaa, 0xaa, 0x14, 0x03, 0x60, 0x24, 0x00, 0x00]b;
+      data[6] = cmd.toNumber();
+      data[7] = xorChkSum(data.slice(0, data.size() - 1));
+      queue.flush();
+      queue.add(
+        [eucBleDelegate.getCharW(), queue.C_WRITENR, data],
+        eucBleDelegate.getPMService()
+      );
+
+      //System.println("pedal_frame: " + cmd_frame.toString());
+    }
   }
 
   function timerCallback() {

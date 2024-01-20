@@ -24,7 +24,7 @@ class BleQueue {
   var UUID;
   var reqStatsTiming = 0;
   var reqBatStatsTiming = 3;
-
+  var batStatsCounter = 0;
   function initialize() {
     delayTimer = new Timer.Timer();
   }
@@ -47,6 +47,10 @@ class BleQueue {
             if (reqBatStats != null) {
               reqBatStatsTiming = reqBatStatsTiming - 1;
             }
+            if (reqStatsTiming <= 0 && reqBatStatsTiming <= 0) {
+              //Skipping reqBatStatsTiming;
+              reqBatStatsTiming = 256;
+            }
 
             if (reqStatsTiming < 0) {
               lastPacketType = "stats";
@@ -57,12 +61,14 @@ class BleQueue {
               lastPacketType = "batStats";
               add(reqBatStats, UUID);
               reqBatStatsTiming = 256;
+              batStatsCounter = batStatsCounter + 1;
             }
             if (queue.size() == 0) {
               lastPacketType = "live";
               add(reqLiveData, UUID);
             }
           }
+          //System.println(lastPacketType);
           autoRestart();
         }
         if (eucData.wheelBrand == 5) {
@@ -77,6 +83,8 @@ class BleQueue {
       } else {
         isRunning = false;
         //stopping timer
+        System.println("Stopping timer, queue size: " + queue.size());
+
         delayTimer.stop();
 
         return;
@@ -98,8 +106,8 @@ class BleQueue {
         :writeType => Ble.WRITE_TYPE_WITH_RESPONSE,
       });
     } else if (queue[0][1] == C_WRITENR) {
-     // System.println(queue[0][2]);
-      char.requestWrite(queue[0][2], { :writeType => Ble.WRITE_TYPE_DEFAULT });
+      //System.println(queue[0][2]);
+        char.requestWrite(queue[0][2], { :writeType => Ble.WRITE_TYPE_DEFAULT });
       run_id = run_id + 1;
     }
 

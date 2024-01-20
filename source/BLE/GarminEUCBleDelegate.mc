@@ -40,9 +40,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
     char = profileManager.EUC_CHAR;
     queue = q;
     decoder = _decoder;
-
     /*
-
     char_w = profileManager.EUC_CHAR_W;
     queue.reqLiveData = [
       char_w,
@@ -128,6 +126,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
             queue.C_WRITENR,
             [0xaa, 0xaa, 0x14, 0x01, 0x11, 0x04]b,
           ];
+          /*
           if (eucData.model.equals("V12")) {
             // V12 V13 V14 I guess
             // inmotion v2 request batteryStats:
@@ -137,6 +136,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
               [0xaa, 0xaa, 0x14, 0x01, 0x05, 0x10]b,
             ];
           }
+          */
           queue.UUID = profileManager.EUC_SERVICE;
         }
 
