@@ -42,6 +42,28 @@ class eucBLEDelegate extends Ble.BleDelegate {
     decoder = _decoder;
     /*
     char_w = profileManager.EUC_CHAR_W;
+    if (eucData.wheelBrand == 2 || eucData.wheelBrand == 3) {
+      var reqModel = [
+        0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x9b, 0x14, 0x5a, 0x5a,
+      ]b;
+      var reqSerial = [
+        0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x63, 0x14, 0x5a, 0x5a,
+      ]b;
+      var reqAlarms = [
+        0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x98, 0x14, 0x5a, 0x5a,
+      ]b;
+      queue.add([char, queue.C_WRITENR, reqModel], profileManager.EUC_SERVICE);
+      queue.add([char, queue.C_WRITENR, reqSerial], profileManager.EUC_SERVICE);
+      queue.add([char, queue.C_WRITENR, reqAlarms], profileManager.EUC_SERVICE);
+      queue.delayTimer.start(method(:timerCallback), 200, false);
+    }
+    
+
+
+
     queue.reqLiveData = [
       char_w,
       queue.C_WRITENR,
@@ -87,6 +109,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
             0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x9b, 0x14, 0x5a, 0x5a,
           ]b;
+          /*
           var reqSerial = [
             0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x14, 0x5a, 0x5a,
@@ -95,10 +118,12 @@ class eucBLEDelegate extends Ble.BleDelegate {
             0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x98, 0x14, 0x5a, 0x5a,
           ]b;
+*/
           queue.add(
             [char, queue.C_WRITENR, reqModel],
             profileManager.EUC_SERVICE
           );
+          /*
           queue.add(
             [char, queue.C_WRITENR, reqSerial],
             profileManager.EUC_SERVICE
@@ -107,6 +132,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
             [char, queue.C_WRITENR, reqAlarms],
             profileManager.EUC_SERVICE
           );
+          */
         }
         // End of KS addition -------------------------------
         // Inmotion V2 or VESC ---------------------------
@@ -299,7 +325,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
       }
     } else {
       Ble.setScanState(Ble.SCAN_STATE_OFF);
-      var result = loadSR() as Ble.ScanResult;
+      var result = loadSR(); // as Ble.ScanResult;
       if (result != false) {
         if (eucData.wheelBrand == 4) {
           // V11 or V12 only for now
@@ -322,10 +348,11 @@ class eucBLEDelegate extends Ble.BleDelegate {
   function onDescriptorWrite(desc, status) {
     message7 = "descWrite";
     // If KS fire queue
-    // send getName request for KS using ble queue
+
     if ((eucData.wheelBrand == 2 || eucData.wheelBrand == 3) && char != null) {
       queue.delayTimer.start(method(:timerCallback), 200, true);
-    } // If Inmotion, trigger only once as it will be triggered at each charchanged -> didn't work so let's loop
+    }
+    // If Inmotion, trigger only once as it will be triggered at each charchanged -> didn't work so let's loop
     if (eucData.wheelBrand == 4 && char != null) {
       queue.delayTimer.start(method(:timerCallback), 200, true);
     }

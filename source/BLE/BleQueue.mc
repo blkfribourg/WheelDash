@@ -83,7 +83,7 @@ class BleQueue {
       } else {
         isRunning = false;
         //stopping timer
-        System.println("Stopping timer, queue size: " + queue.size());
+        // System.println("Stopping timer, queue size: " + queue.size());
 
         delayTimer.stop();
 
@@ -106,8 +106,7 @@ class BleQueue {
         :writeType => Ble.WRITE_TYPE_WITH_RESPONSE,
       });
     } else if (queue[0][1] == C_WRITENR) {
-      //System.println(queue[0][2]);
-        char.requestWrite(queue[0][2], { :writeType => Ble.WRITE_TYPE_DEFAULT });
+      char.requestWrite(queue[0][2], { :writeType => Ble.WRITE_TYPE_DEFAULT });
       run_id = run_id + 1;
     }
 

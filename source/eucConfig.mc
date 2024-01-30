@@ -215,8 +215,7 @@ class inmotionConfig {
     }
     if (eucData.model.equals("V12")) {
       return [dictLightModeV12, dictDRL, dictRideMode, dictPerformanceMode];
-    }
-    if (eucData.model.equals("none")) {
+    } else {
       return [];
     }
   }

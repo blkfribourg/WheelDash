@@ -117,6 +117,7 @@ class GarminEUCDebugView extends WatchUi.View {
       dc.fillRectangle(0, 0, dc.getWidth(), dc.getHeight());
       dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
       dc.drawRectangle(0, 0, dc.getWidth(), dc.getHeight());
+
       dc.drawText(
         alignAxe,
         yGap,
@@ -195,6 +196,43 @@ class GarminEUCDebugView extends WatchUi.View {
         "data/s: " + valueRound(eucData.BLEReadRate, "%.1f"),
         Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
       );
+      /*
+      //S22 DEBUG
+      var wtype = eucData.wtype;
+      var charValue = eucData.charValue;
+      var queueValue = eucData.queueValue;
+
+      if (wtype == null) {
+        wtype = "null";
+      }
+      if (charValue == null) {
+        charValue = "null";
+      }
+      if (queueValue == null) {
+        queueValue = "null";
+      }
+      dc.drawText(
+        alignAxe - 2 * xGap,
+        4 * space + yGap,
+        Graphics.FONT_TINY,
+        "char: " + charValue,
+        Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+      );
+      dc.drawText(
+        alignAxe - 2 * xGap,
+        5 * space + yGap,
+        Graphics.FONT_TINY,
+        "Qval: " + queueValue,
+        Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+      );
+      dc.drawText(
+        alignAxe - xGap,
+        6 * space + yGap,
+        Graphics.FONT_TINY,
+        "WType: " + wtype,
+        Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+      );
+      */
     }
     if (eucData.wheelBrand == 4) {
       if (BleDelegate != null) {

@@ -82,6 +82,11 @@ module eucData {
   var batteryTemp1 = 0.0;
   var batteryTemp2 = 0.0;
 
+  //S22 DEBUG
+  //var charValue = "";
+  //var queueValue = "";
+  //var wtype = "";
+
   function getBatteryPercentage() {
     // using better battery formula from wheellog
 
