@@ -1,5 +1,5 @@
 <strings>
-    <string id="AppName">WheelDash (dev)</string>
+    <string id="AppName">WheelDash</string>
     <string id="firstConnStr">Profile $1$ 1st connection\nPlease turn on your wheel\n and wait for connection\n\nensure only one wheel is ON!\n\nIf you enjoy this app :\n ko-fi.com/wheeldash</string>
     <string id="connectedStr">Profile $1$ connected !\n\nSaving wheel unique identifier</string>
     <!-- Strings, that are used in Connect IQ Settings menu, like 
