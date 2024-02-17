@@ -186,7 +186,8 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       );
       actionButtonTrigger.beepButton =
         AppStorage.getSetting("beepButtonMap_p1");
-      actionButtonTrigger.delay = AppStorage.getSetting("actionQueueDelay_p1");
+      eucData.BLECmdDelay = AppStorage.getSetting("cmdQueueDelay_p1");
+      eucData.VESCCanId = AppStorage.getSetting("VESCCanId_p1");
       eucData.wheelName = AppStorage.getSetting("wheelName_p1");
       Storage.setValue("lastProfile", profileName);
       return true;
@@ -237,7 +238,8 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       );
       actionButtonTrigger.beepButton =
         AppStorage.getSetting("beepButtonMap_p2");
-      actionButtonTrigger.delay = AppStorage.getSetting("actionQueueDelay_p2");
+      eucData.BLECmdDelay = AppStorage.getSetting("cmdQueueDelay_p2");
+      eucData.VESCCanId = AppStorage.getSetting("VESCCanId_p2");
       eucData.wheelName = AppStorage.getSetting("wheelName_p2");
       Storage.setValue("lastProfile", profileName);
       return true;
@@ -289,7 +291,8 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       );
       actionButtonTrigger.beepButton =
         AppStorage.getSetting("beepButtonMap_p3");
-      actionButtonTrigger.delay = AppStorage.getSetting("actionQueueDelay_p3");
+      eucData.BLECmdDelay = AppStorage.getSetting("cmdQueueDelay_p3");
+      eucData.VESCCanId = AppStorage.getSetting("VESCCanId_p3");
       eucData.wheelName = AppStorage.getSetting("wheelName_p3");
       Storage.setValue("lastProfile", profileName);
       return true;

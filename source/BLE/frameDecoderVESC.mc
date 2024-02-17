@@ -12,9 +12,12 @@ class VESCDecoder {
   var frame = [0]b;
   var status = "unknown";
   var startDistance = null;
-
+  var PtypeIdx = 0;
   function frameBuilder(bleDelegate, value) {
-    if (value[0] == packetID) {
+    if (eucData.VESCCanId != 0) {
+      PtypeIdx = 2;
+    }
+    if (value[PtypeIdx] == packetID) {
       status = "append";
       frame = value;
     } else {
@@ -23,11 +26,13 @@ class VESCDecoder {
       }
     }
 
-    if (value[value.size() - 1] == 0x03) {
+    if (value[value.size() - 1] == 0x03 && value.size() < 20) {
       status = "complete";
       var transmittedFrame = frame;
-      System.println(transmittedFrame);
-      if (transmittedFrame.size() >= 66) { // ensure that packet is complete
+      // System.println(transmittedFrame);
+      if (transmittedFrame.size() >= 66) {
+        // should use packet lenght instead in index 1 // todo : check if transmitted by ubox100
+        // ensure that packet is complete
         frameBuffer(bleDelegate, transmittedFrame);
       }
       frame = [0]b;
@@ -40,49 +45,60 @@ class VESCDecoder {
 
     eucData.temperature =
       transmittedFrame.decodeNumber(Lang.NUMBER_FORMAT_SINT16, {
-        :offset => 1,
+        :offset => 1 + PtypeIdx,
         :endianness => Lang.ENDIAN_BIG,
       }) / 10.0;
 
     eucData.current =
       transmittedFrame.decodeNumber(Lang.NUMBER_FORMAT_SINT32, {
-        :offset => 9,
+        :offset => 9 + PtypeIdx,
         :endianness => Lang.ENDIAN_BIG,
       }) / 100.0;
 
     eucData.hPWM =
       transmittedFrame
         .decodeNumber(Lang.NUMBER_FORMAT_SINT16, {
-          :offset => 13,
+          :offset => 13 + PtypeIdx,
           :endianness => Lang.ENDIAN_BIG,
         })
         .abs() / 10.0;
 
-    eucData.speed =
+    var speed =
       transmittedFrame
         .decodeNumber(Lang.NUMBER_FORMAT_SINT32, {
-          :offset => 19,
+          :offset => 19 + PtypeIdx,
           :endianness => Lang.ENDIAN_BIG,
         })
         .abs() / 1000.0;
+    if (eucData.useMiles == 1) {
+      eucData.speed = speed * 3.6 * 0.621371192;
+    } else {
+      eucData.speed = speed * 3.6;
+    }
 
     eucData.voltage =
       transmittedFrame.decodeNumber(Lang.NUMBER_FORMAT_SINT16, {
-        :offset => 23,
+        :offset => 23 + PtypeIdx,
         :endianness => Lang.ENDIAN_BIG,
       }) / 10.0;
 
     eucData.battery =
       transmittedFrame.decodeNumber(Lang.NUMBER_FORMAT_SINT16, {
-        :offset => 25,
+        :offset => 25 + PtypeIdx,
         :endianness => Lang.ENDIAN_BIG,
       }) / 10.0;
 
-    eucData.totalDistance =
+    var totalDistance =
       transmittedFrame.decodeNumber(Lang.NUMBER_FORMAT_UINT32, {
-        :offset => 62,
+        :offset => 62 + PtypeIdx,
         :endianness => Lang.ENDIAN_BIG,
       }) / 1000.0; // in km
+    if (eucData.useMiles == 1) {
+      eucData.totalDistance = totalDistance * 0.621371192;
+    } else {
+      eucData.totalDistance = totalDistance;
+    }
+
     if (startDistance == null) {
       startDistance = eucData.totalDistance;
     }

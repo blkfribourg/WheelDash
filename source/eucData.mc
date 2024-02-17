@@ -10,7 +10,8 @@ module eucData {
   var rotationSpeed; // cutoff speed when freespin test performed
   var powerFactor; // 0.9 for better safety
   var rotationVoltage; // voltage when freespin test performed
-  var updateDelay; // UI refresh every updateDelay
+  var updateDelay = 200; // UI refresh every updateDelay
+  var BLECmdDelay = 200;
   var topBar; // String : Speed or PWM
   var mainNumber; // String : Speed or PWM
   var maxDisplayedSpeed; // number, used if topBar equals Speed : read from settings
@@ -29,7 +30,7 @@ module eucData {
   var redColoringThreshold;
 
   var speedCorrectionFactor = 1; // correct distance aswell ...
-  var useMiles = 0;
+  var useMiles = 1;
   var deviceName = null;
   var voltage_scaling = 1;
   var speed = 0.0;
@@ -87,6 +88,8 @@ module eucData {
   //var queueValue = "";
   //var wtype = "";
 
+  //VESC :
+  var VESCCanId = 0;
   function getBatteryPercentage() {
     // using better battery formula from wheellog
 

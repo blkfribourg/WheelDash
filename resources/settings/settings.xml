@@ -165,13 +165,22 @@
                 </settingConfig>
             </setting>
             <setting
-                    propertyKey="@Properties.actionQueueDelay_p1"
-                    title="@Strings.actionQueueDelay_p1">
+                    propertyKey="@Properties.cmdQueueDelay_p1"
+                    title="@Strings.cmdQueueDelay_p1">
                     <settingConfig
                         type="numeric"
                         min="10"
                         max="400"
-                        errorMessage="@Strings.actionQueueDelay_ErrorMessage" />
+                        errorMessage="@Strings.cmdQueueDelay_ErrorMessage" />
+                </setting>
+                <setting
+                    propertyKey="@Properties.VESCCanId_p1"
+                    title="@Strings.VESCCanId_p1">
+                    <settingConfig
+                        type="numeric"
+                        min="0"
+                        max="100"
+                     />
                 </setting>
                 <setting
                     propertyKey="@Properties.voltageCorrectionFactor_p1"
@@ -381,13 +390,22 @@
                 </settingConfig>
             </setting>
             <setting
-                    propertyKey="@Properties.actionQueueDelay_p2"
-                    title="@Strings.actionQueueDelay_p2">
+                    propertyKey="@Properties.cmdQueueDelay_p2"
+                    title="@Strings.cmdQueueDelay_p2">
                     <settingConfig
                         type="numeric"
                         min="10"
                         max="400"
-                        errorMessage="@Strings.actionQueueDelay_ErrorMessage" />
+                        errorMessage="@Strings.cmdQueueDelay_ErrorMessage" />
+                </setting>
+                <setting
+                    propertyKey="@Properties.VESCCanId_p2"
+                    title="@Strings.VESCCanId_p2">
+                    <settingConfig
+                        type="numeric"
+                        min="0"
+                        max="100"
+                     />
                 </setting>
                 <setting
                     propertyKey="@Properties.voltageCorrectionFactor_p2"
@@ -597,13 +615,22 @@
                 </settingConfig>
             </setting>
             <setting
-                    propertyKey="@Properties.actionQueueDelay_p3"
-                    title="@Strings.actionQueueDelay_p3">
+                    propertyKey="@Properties.cmdQueueDelay_p3"
+                    title="@Strings.cmdQueueDelay_p3">
                     <settingConfig
                         type="numeric"
                         min="10"
                         max="400"
-                        errorMessage="@Strings.actionQueueDelay_ErrorMessage" />
+                        errorMessage="@Strings.cmdQueueDelay_ErrorMessage" />
+                </setting>
+                <setting
+                    propertyKey="@Properties.VESCCanId_p3"
+                    title="@Strings.VESCCanId_p3">
+                    <settingConfig
+                        type="numeric"
+                        min="0"
+                        max="100"
+                     />
                 </setting>
                 <setting
                     propertyKey="@Properties.voltageCorrectionFactor_p3"
