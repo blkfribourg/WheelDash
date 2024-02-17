@@ -21,6 +21,8 @@
     <string id="wheelBrand1">Leaperkim</string>
     <string id="wheelBrand2">Kingsong</string>
     <string id="wheelBrand3">Kingsong (old)</string>
+    <string id="wheelBrand4">InMotion V11 (fw1.4)/V12 (experimental)</string>
+    <string id="wheelBrand5">VESC (experimental)</string>
     
 
     <string id="recordActivityButtonMap_p1">Button mapping to activity recording view (Profile 1)</string>
@@ -34,6 +36,8 @@
     <string id="beepButtonMap_p1">Button mapping to wheel beep (horn mode) (Profile 1)</string>
     <string id="beepButtonMap_p2">Button mapping to wheel beep (horn mode) (Profile 2)</string>
     <string id="beepButtonMap_p3">Button mapping to wheel beep (horn mode) (Profile 3)</string>
+
+    <string id="lockButtonMap_p1">DONOTUSE Button mapping to wheel lock/unlock (Profile 1)</string>
 
     <string id="none">None</string>
     <string id="startStopButton">Start/Stop button</string>
@@ -60,6 +64,7 @@
 
     <string id="updateDelay">UI refresh rate and in msec</string>
     <string id="updateDelay_ErrorMessage">Value should be in a range of 100 msec to 1000 msec</string>
+    <string id="imHornSound">Inmotion horn (untested betatesters only)</string>
 
     <string id="orangeColoringThreshold_p1">percentage threshold to color "top bar" with orange (Profile 1)</string>
     <string id="orangeColoringThreshold_p2">percentage threshold to color "top bar" with orange (Profile 2)</string>
@@ -74,6 +79,11 @@
     <string id="voltageCorrectionFactor_p2">Voltage Correction Factor (Gotway/Begode only), 1 for 67.2V, 1.25 for 84V ... (Profile 2)</string>
     <string id="voltageCorrectionFactor_p3">Voltage Correction Factor (Gotway/Begode only), 1 for 67.2V, 1.25 for 84V ... (Profile 3)</string>
     <string id="voltageCorrectionFactor_ErrorMessage">Value out of range</string>
+
+    <string id="voltageSagIndicatorThresh_p1">Voltage Sag Threshold for Sag Indicator (Profile 1)</string>
+    <string id="voltageSagIndicatorThresh_p2">Voltage Sag Threshold for Sag Indicator (Profile 2)</string>
+    <string id="voltageSagIndicatorThresh_p3">Voltage Sag Threshold for Sag Indicator (Profile 3)</string>
+    <string id="voltageSagIndicatorThresh_ErrorMessage">Value out of range</string>
 
     <string id="begodeCF_p1">Gotway/Begode with custom firmware (to use hardware PWM) (Profile 1)</string>
     <string id="begodeCF_p2">Gotway/Begode with custom firmware (to use hardware PWM) (Profile 2)</string>
@@ -158,6 +168,8 @@
    <string id="averageMovingSpeedStatistic">Display average moving speed (when speed >3 km/h or 2 mph)</string>
    <string id="topSpeedStatistic">Display top speed</string>
    <string id="watchBatteryConsumptionStatistic">Display watch battery consumption (%/h)</string>
+   
+   <string id="totalDistanceStatistic">Display total distance</string>
    <string id="tripDistanceStatistic">Display current trip distance</string>
    <string id="voltageStatistic">Display voltage</string>
    <string id="watchBatteryStatistic">Display watch battery</string>

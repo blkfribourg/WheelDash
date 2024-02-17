@@ -31,6 +31,9 @@ function getEUCSettingsDict() {
   }
   if (eucData.wheelBrand == 2 || eucData.wheelBrand == 3) {
     return new kingsongConfig();
+  }
+  if (eucData.wheelBrand == 4) {
+    return new inmotionConfig();
   } else {
     return new dummyConfig();
   }
@@ -61,7 +64,7 @@ function splitstr(str as Lang.String, char) {
         stringArray.add(substr);
         var startidx = endidx + 1;
         str = str.substring(startidx, strlength - substr.length());
-        System.println("str = " + str);
+        //System.println("str = " + str);
       }
     } else {
       if (str.length() > 0) {
@@ -112,4 +115,12 @@ function decode2bytes(byte1, byte2) {
 }
 function decode4bytes(byte1, byte2, byte3, byte4) {
   return (byte1 << 16) + (byte2 << 24) + byte3 + (byte4 << 8);
+}
+
+function xorChkSum(bytes) {
+  var chksum = 0;
+  for (var i = 0; i < bytes.size(); i++) {
+    chksum = chksum ^ bytes[i];
+  }
+  return chksum;
 }

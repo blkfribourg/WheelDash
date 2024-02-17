@@ -199,6 +199,62 @@ class kingsongConfig {
   };
 }
 
+class inmotionConfig {
+  function getWheelSettingsStatus() {
+    return [];
+  }
+  function getConfigWithStatusDict() {
+    return [];
+  }
+  function getConfigWithStatusLabels() {
+    return [];
+  }
+  function getConfig() {
+    if (eucData.model.equals("V11")) {
+      return [dictLightModeV11, dictDRL, dictRideMode, dictPerformanceMode];
+    }
+    if (eucData.model.equals("V12")) {
+      return [dictLightModeV12, dictDRL, dictRideMode, dictPerformanceMode];
+    } else {
+      return [];
+    }
+  }
+  function getConfigLabels() {
+    if (eucData.model.equals("V11") || eucData.model.equals("V12")) {
+      return ["Lights", "DRL", "Ride Mode", "Performance Mode"];
+    } else {
+      return [];
+    }
+  }
+  function getConfigToLock() {
+    return [];
+  }
+
+  var dictRideMode = {
+    "Comfort" => 0,
+    "OffRoad" => 1,
+  };
+  var dictPerformanceMode = {
+    "On" => 1,
+    "Off" => 0,
+  };
+  var dictLightModeV11 = {
+    "On" => 1,
+    "Off" => 0,
+  };
+  var dictLightModeV12 = {
+    "High" => 2,
+    "Low" => 1,
+    "Low+High" => 3,
+    "Off" => 0,
+  };
+  var dictDRL = {
+    "On" => 1,
+    "Off" => 0,
+  };
+  // volume, pedal tilt and pedal sensitivity to implement later (need a custom number picker, I don't like garmin picker implementation)
+}
+
 class dummyConfig {
   function getWheelSettingsStatus() {
     return [];
@@ -215,7 +271,6 @@ class dummyConfig {
   function getConfigLabels() {
     return [];
   }
-
   function getConfigToLock() {
     return [];
   }

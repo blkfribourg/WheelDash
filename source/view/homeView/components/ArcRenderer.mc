@@ -225,27 +225,35 @@ class ArcRenderer extends WatchUi.Drawable {
             );
           }
 
-          if (eucData.paired == false) {
-            foregroundColor = 0x545454;
-          } else {
-            foregroundColor = mSecondColor;
-          }
+          if (
+            currentValue * eucData.sagThreshold >
+            eucData.lowestBatteryPercentage
+          ) {
+            if (eucData.paired == false) {
+              foregroundColor = 0x545454;
+            } else {
+              foregroundColor = mSecondColor;
+            }
 
-          dc.setColor(foregroundColor, 0x000000);
-          // Render yellow arc
+            dc.setColor(foregroundColor, 0x000000);
+            // Render yellow arc
 
-          var percentage =
-            eucData.lowestBatteryPercentage.toFloat() / maxValue.toFloat();
-          var result = degreeRange - degreeRange * percentage + mEndDegree;
-          if (result != mStartDegree) {
-            dc.drawArc(
-              mXCenterPosition,
-              mYCenterPosition,
-              mArcRadius,
-              mArcDirection,
-              mStartDegree,
-              result
-            );
+            var percentage =
+              eucData.lowestBatteryPercentage.toFloat() / maxValue.toFloat();
+            var result = degreeRange - degreeRange * percentage + mEndDegree;
+            if (result != mStartDegree) {
+              //draw a line instead of an arc fill :
+              dc.setColor(mSecondColor, 0x000000);
+              dc.drawArc(
+                mXCenterPosition,
+                mYCenterPosition,
+                mArcRadius,
+                mArcDirection,
+                mStartDegree,
+                result
+                //result - 1
+              );
+            }
           }
         }
         break;

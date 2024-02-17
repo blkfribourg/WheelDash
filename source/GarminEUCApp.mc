@@ -67,6 +67,7 @@ class GarminEUCApp extends Application.AppBase {
   }
   // Timer callback for various alarms & update UI
   function onUpdateTimer() {
+    //dummyGen();
     //Only starts if no profile selected
     if (eucData.wheelName == null && delegate != null && usePS) {
       timeOut = timeOut - eucData.updateDelay;
@@ -134,6 +135,12 @@ class GarminEUCApp extends Application.AppBase {
         //System.println(rideStats.statsArray[statsIndex]);
         statsIndex++;
       }
+      if (rideStats.showTotalDistance) {
+        rideStats.statsArray[statsIndex] =
+          "Tot dist: " + valueRound(eucData.totalDistance, "%.1f").toString();
+        //System.println(rideStats.statsArray[statsIndex]);
+        statsIndex++;
+      }
       if (rideStats.showTripDistance) {
         rideStats.statsArray[statsIndex] =
           "Trip dist: " + valueRound(eucData.tripDistance, "%.1f").toString();
@@ -177,6 +184,9 @@ class GarminEUCApp extends Application.AppBase {
     if (rideStats.showWatchBatteryConsumptionStatistic) {
       rideStats.statsNumberToDiplay++;
     }
+    if (rideStats.showTotalDistance) {
+      rideStats.statsNumberToDiplay++;
+    }
     if (rideStats.showTripDistance) {
       rideStats.statsNumberToDiplay++;
     }
@@ -193,6 +203,8 @@ class GarminEUCApp extends Application.AppBase {
     //System.println("array size:" + rideStats.statsArray.size());
   }
   function setGlobalSettings() {
+    //Im Horn experimental
+    eucData.imHornSound = AppStorage.getSetting("imHornSound");
     eucData.updateDelay = AppStorage.getSetting("updateDelay");
     eucData.debug = AppStorage.getSetting("debugMode");
     eucData.activityAutorecording = AppStorage.getSetting(
@@ -210,6 +222,9 @@ class GarminEUCApp extends Application.AppBase {
       "watchBatteryConsumptionStatistic"
     );
     rideStats.showTripDistance = AppStorage.getSetting("tripDistanceStatistic");
+    rideStats.showTotalDistance = AppStorage.getSetting(
+      "totalDistanceStatistic"
+    );
 
     rideStats.showVoltage = AppStorage.getSetting("voltageStatistic");
     rideStats.showWatchBatteryStatistic = AppStorage.getSetting(

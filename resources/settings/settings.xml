@@ -52,6 +52,13 @@
                 type="boolean"
             />
         </setting>
+         <setting
+            propertyKey="@Properties.totalDistanceStatistic"
+            title="@Strings.totalDistanceStatistic">
+            <settingConfig
+                type="boolean"
+            />
+        </setting>
         <setting
             propertyKey="@Properties.tripDistanceStatistic"
             title="@Strings.tripDistanceStatistic">
@@ -97,6 +104,16 @@
                 type="boolean"
             />
         </setting>
+         <setting
+            propertyKey="@Properties.imHornSound"
+            title="@Strings.imHornSound">
+            <settingConfig
+                type="numeric"
+                min="0"
+                max="99"
+            />
+        </setting>
+        
 
        <!--Profile 1-->
 
@@ -113,6 +130,8 @@
                     <listEntry value="1">@Strings.wheelBrand1</listEntry>
                     <listEntry value="2">@Strings.wheelBrand2</listEntry>
                     <listEntry value="3">@Strings.wheelBrand3</listEntry>
+                    <listEntry value="4">@Strings.wheelBrand4</listEntry>
+                    <listEntry value="5">@Strings.wheelBrand5</listEntry>
                 </settingConfig>
             </setting>
             <setting
@@ -162,6 +181,15 @@
                         min="0"
                         max="2"
                         errorMessage="@Strings.voltageCorrectionFactor_ErrorMessage" />
+                </setting>
+                <setting
+                    propertyKey="@Properties.voltageSagIndicatorThresh_p1"
+                    title="@Strings.voltageSagIndicatorThresh_p1">
+                    <settingConfig
+                        type="numeric"
+                        min="0"
+                        max="1"
+                        errorMessage="@Strings.voltageSagIndicatorThresh_ErrorMessage" />
                 </setting>
                 <setting
                     propertyKey="@Properties.begodeCF_p1"
@@ -318,6 +346,8 @@
                     <listEntry value="1">@Strings.wheelBrand1</listEntry>
                     <listEntry value="2">@Strings.wheelBrand2</listEntry>
                     <listEntry value="3">@Strings.wheelBrand3</listEntry>
+                    <listEntry value="4">@Strings.wheelBrand4</listEntry>
+                    <listEntry value="5">@Strings.wheelBrand5</listEntry>
                 </settingConfig>
             </setting>
             <setting
@@ -367,6 +397,15 @@
                         min="0"
                         max="2"
                         errorMessage="@Strings.voltageCorrectionFactor_ErrorMessage" />
+                </setting>
+                <setting
+                    propertyKey="@Properties.voltageSagIndicatorThresh_p2"
+                    title="@Strings.voltageSagIndicatorThresh_p2">
+                    <settingConfig
+                        type="numeric"
+                        min="0"
+                        max="1"
+                        errorMessage="@Strings.voltageSagIndicatorThresh_ErrorMessage" />
                 </setting>
                 <setting
                     propertyKey="@Properties.begodeCF_p2"
@@ -518,11 +557,13 @@
             <setting
                 propertyKey="@Properties.wheelBrand_p3"
                 title="@Strings.wheelBrand_p3">
-                <settingConfig type="list">
+                 <settingConfig type="list">
                     <listEntry value="0">@Strings.wheelBrand0</listEntry>
                     <listEntry value="1">@Strings.wheelBrand1</listEntry>
                     <listEntry value="2">@Strings.wheelBrand2</listEntry>
                     <listEntry value="3">@Strings.wheelBrand3</listEntry>
+                    <listEntry value="4">@Strings.wheelBrand4</listEntry>
+                    <listEntry value="5">@Strings.wheelBrand5</listEntry>
                 </settingConfig>
             </setting>
             <setting
@@ -572,6 +613,15 @@
                         min="0"
                         max="2"
                         errorMessage="@Strings.voltageCorrectionFactor_ErrorMessage" />
+                </setting>
+                <setting
+                    propertyKey="@Properties.voltageSagIndicatorThresh_p3"
+                    title="@Strings.voltageSagIndicatorThresh_p3">
+                    <settingConfig
+                        type="numeric"
+                        min="0"
+                        max="1"
+                        errorMessage="@Strings.voltageSagIndicatorThresh_ErrorMessage" />
                 </setting>
                 <setting
                     propertyKey="@Properties.begodeCF_p3"

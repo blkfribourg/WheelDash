@@ -5,6 +5,8 @@ class eucPM {
   var EUC_SERVICE;
   var EUC_CHAR;
   var EUC_CHAR2;
+  var EUC_SERVICE_W;
+  var EUC_CHAR_W;
   var OLD_KS_ADV_SERVICE;
   private var eucProfileDef;
 
@@ -37,7 +39,24 @@ class eucPM {
       ],
     };
   }
-
+  function initInmotionV2orVESC() {
+    eucProfileDef = {
+      // Set the Profile
+      :uuid => EUC_SERVICE,
+      :characteristics => [
+        {
+          // Define the characteristics
+          :uuid => EUC_CHAR_W, // UUID of the first characteristic
+          :descriptors => [Ble.cccdUuid()],
+        },
+        {
+          // Define the characteristics
+          :uuid => EUC_CHAR, // UUID of the first characteristic
+          :descriptors => [Ble.cccdUuid()],
+        },
+      ],
+    };
+  }
   function registerProfiles() {
     //System.println(eucProfileDef.toString());
     try {
@@ -69,6 +88,13 @@ class eucPM {
     );
     self.init();
   }
+  function setInmotionV2orVESC() {
+    EUC_SERVICE = Ble.longToUuid(0x6e400001b5a3f393l, 0xe0a9e50e24dcca9el);
+    EUC_CHAR = Ble.longToUuid(0x6e400003b5a3f393l, 0xe0a9e50e24dcca9el);
+    EUC_CHAR_W = Ble.longToUuid(0x6e400002b5a3f393l, 0xe0a9e50e24dcca9el);
+
+    self.initInmotionV2orVESC();
+  }
   function setManager() {
     if (eucData.wheelBrand == 0 || eucData.wheelBrand == 1) {
       // System.println("GW PM");
@@ -79,6 +105,9 @@ class eucPM {
     }
     if (eucData.wheelBrand == 3) {
       setOldKingsong();
+    }
+    if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
+      setInmotionV2orVESC();
     } else {
     }
   }

@@ -117,6 +117,7 @@ class GarminEUCDebugView extends WatchUi.View {
       dc.fillRectangle(0, 0, dc.getWidth(), dc.getHeight());
       dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
       dc.drawRectangle(0, 0, dc.getWidth(), dc.getHeight());
+
       dc.drawText(
         alignAxe,
         yGap,
@@ -195,6 +196,138 @@ class GarminEUCDebugView extends WatchUi.View {
         "data/s: " + valueRound(eucData.BLEReadRate, "%.1f"),
         Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
       );
+      /*
+      //S22 DEBUG
+      var wtype = eucData.wtype;
+      var charValue = eucData.charValue;
+      var queueValue = eucData.queueValue;
+
+      if (wtype == null) {
+        wtype = "null";
+      }
+      if (charValue == null) {
+        charValue = "null";
+      }
+      if (queueValue == null) {
+        queueValue = "null";
+      }
+      dc.drawText(
+        alignAxe - 2 * xGap,
+        4 * space + yGap,
+        Graphics.FONT_TINY,
+        "char: " + charValue,
+        Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+      );
+      dc.drawText(
+        alignAxe - 2 * xGap,
+        5 * space + yGap,
+        Graphics.FONT_TINY,
+        "Qval: " + queueValue,
+        Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+      );
+      dc.drawText(
+        alignAxe - xGap,
+        6 * space + yGap,
+        Graphics.FONT_TINY,
+        "WType: " + wtype,
+        Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+      );
+      */
+    }
+    if (eucData.wheelBrand == 4) {
+      if (BleDelegate != null) {
+        var alignAxe = dc.getWidth() / 5;
+        var space = dc.getHeight() / 10;
+        var yGap = dc.getHeight() / 8;
+        var xGap = dc.getWidth() / 12;
+
+        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
+        dc.clear();
+        dc.drawText(
+          alignAxe,
+          yGap,
+          Graphics.FONT_TINY,
+          "Spd: " + valueRound(eucData.speed, "%.1f"),
+          Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+        );
+        dc.drawText(
+          alignAxe - xGap,
+          space + yGap,
+          Graphics.FONT_TINY,
+          "Vlt: " + valueRound(eucData.voltage, "%.1f"),
+          Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+        );
+        dc.drawText(
+          alignAxe - 2 * xGap,
+          2 * space + yGap,
+          Graphics.FONT_TINY,
+          "Cur: " + valueRound(eucData.current, "%.1f"),
+          Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+        );
+        dc.drawText(
+          alignAxe - 2 * xGap,
+          3 * space + yGap,
+          Graphics.FONT_TINY,
+          "bat%: " + valueRound(eucData.getBatteryPercentage(), "%.1f"),
+          Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+        );
+        dc.drawText(
+          alignAxe - 2 * xGap,
+          4 * space + yGap,
+          Graphics.FONT_TINY,
+          "model: " + eucData.model,
+          Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+        );
+        dc.drawText(
+          alignAxe - 2 * xGap,
+          5 * space + yGap,
+          Graphics.FONT_TINY,
+          "PWM: " + valueRound(eucData.hPWM, "%.1f"),
+          Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+        );
+        dc.drawText(
+          alignAxe - xGap,
+          6 * space + yGap,
+          Graphics.FONT_TINY,
+          "data/s: " + valueRound(eucData.BLEReadRate, "%.1f"),
+          Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+        );
+        dc.drawText(
+          alignAxe,
+          7 * space + yGap,
+          Graphics.FONT_TINY,
+          "q_size: " + BleDelegate.queue.queue.size(),
+          Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+        );
+        dc.drawText(
+          dc.getWidth() - 2.6 * alignAxe,
+          3 * space + yGap,
+          Graphics.FONT_TINY,
+          "q_trg: " + BleDelegate.queue.run_id,
+          Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+        );
+        dc.drawText(
+          dc.getWidth() - 2.5 * alignAxe,
+          4 * space + yGap,
+          Graphics.FONT_TINY,
+          "batT1: " + valueRound(eucData.batteryTemp1, "%.1f"),
+          Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+        );
+        dc.drawText(
+          dc.getWidth() - 2.5 * alignAxe,
+          5 * space + yGap,
+          Graphics.FONT_TINY,
+          "batT2: " + valueRound(eucData.batteryTemp2, "%.1f"),
+          Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+        );
+        dc.drawText(
+          dc.getWidth() - 2.9 * alignAxe,
+          2 * space + yGap,
+          Graphics.FONT_TINY,
+          "batTRq: " + BleDelegate.queue.batStatsCounter,
+          Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+        );
+      }
     }
     /*
     if (eucData.wheelBrand == 3) {

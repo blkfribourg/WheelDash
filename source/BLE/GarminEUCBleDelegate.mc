@@ -9,6 +9,8 @@ class eucBLEDelegate extends Ble.BleDelegate {
   var device = null;
   var service = null;
   var char = null;
+  var service_w = null;
+  var char_w = null;
   var queue;
   var decoder = null;
   var isFirst = false;
@@ -38,13 +40,54 @@ class eucBLEDelegate extends Ble.BleDelegate {
     char = profileManager.EUC_CHAR;
     queue = q;
     decoder = _decoder;
-
-    //System.println(profileManager.EUC_SERVICE);
-    //System.println(profileManager.EUC_CHAR);
-    /*if (eucData.wheelBrand == 2) {
-      decoder.processFrame(frame1);
+    /*
+    char_w = profileManager.EUC_CHAR_W;
+    if (eucData.wheelBrand == 2 || eucData.wheelBrand == 3) {
+      var reqModel = [
+        0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x9b, 0x14, 0x5a, 0x5a,
+      ]b;
+      var reqSerial = [
+        0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x63, 0x14, 0x5a, 0x5a,
+      ]b;
+      var reqAlarms = [
+        0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x98, 0x14, 0x5a, 0x5a,
+      ]b;
+      queue.add([char, queue.C_WRITENR, reqModel], profileManager.EUC_SERVICE);
+      queue.add([char, queue.C_WRITENR, reqSerial], profileManager.EUC_SERVICE);
+      queue.add([char, queue.C_WRITENR, reqAlarms], profileManager.EUC_SERVICE);
+      queue.delayTimer.start(method(:timerCallback), 200, false);
     }
-    */
+    
+
+
+
+    queue.reqLiveData = [
+      char_w,
+      queue.C_WRITENR,
+      [0xaa, 0xaa, 0x14, 0x01, 0x04, 0x11]b,
+    ];
+
+    // inmotion v2 request stats :
+    queue.reqStats = [
+      char_w,
+      queue.C_WRITENR,
+      [0xaa, 0xaa, 0x14, 0x01, 0x11, 0x04]b,
+    ];
+
+    // inmotion v2 request batteryStats:
+    queue.reqBatStats = [
+      char_w,
+      queue.C_WRITENR,
+      [0xaa, 0xaa, 0x14, 0x01, 0x05, 0x10]b,
+    ];
+
+    queue.UUID = profileManager.EUC_SERVICE;
+    queue.delayTimer.start(method(:timerCallback), 200, true);
+    //
+*/
     Ble.setScanState(Ble.SCAN_STATE_SCANNING);
     isFirst = isFirstConnection();
   }
@@ -66,6 +109,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
             0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x9b, 0x14, 0x5a, 0x5a,
           ]b;
+          /*
           var reqSerial = [
             0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x14, 0x5a, 0x5a,
@@ -74,10 +118,12 @@ class eucBLEDelegate extends Ble.BleDelegate {
             0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x98, 0x14, 0x5a, 0x5a,
           ]b;
+*/
           queue.add(
             [char, queue.C_WRITENR, reqModel],
             profileManager.EUC_SERVICE
           );
+          /*
           queue.add(
             [char, queue.C_WRITENR, reqSerial],
             profileManager.EUC_SERVICE
@@ -86,8 +132,52 @@ class eucBLEDelegate extends Ble.BleDelegate {
             [char, queue.C_WRITENR, reqAlarms],
             profileManager.EUC_SERVICE
           );
+          */
         }
-        // End of addition -------------------------------
+        // End of KS addition -------------------------------
+        // Inmotion V2 or VESC ---------------------------
+        if (eucData.wheelBrand == 4) {
+          char_w = service.getCharacteristic(profileManager.EUC_CHAR_W);
+
+          // addition for inmotion v2 request live:
+          queue.reqLiveData = [
+            char_w,
+            queue.C_WRITENR,
+            [0xaa, 0xaa, 0x14, 0x01, 0x04, 0x11]b,
+          ];
+
+          // inmotion v2 request stats :
+          queue.reqStats = [
+            char_w,
+            queue.C_WRITENR,
+            [0xaa, 0xaa, 0x14, 0x01, 0x11, 0x04]b,
+          ];
+          /*
+          if (eucData.model.equals("V12")) {
+            // V12 V13 V14 I guess
+            // inmotion v2 request batteryStats:
+            queue.reqBatStats = [
+              char_w,
+              queue.C_WRITENR,
+              [0xaa, 0xaa, 0x14, 0x01, 0x05, 0x10]b,
+            ];
+          }
+          */
+          queue.UUID = profileManager.EUC_SERVICE;
+        }
+
+        if (eucData.wheelBrand == 5) {
+          char_w = service.getCharacteristic(profileManager.EUC_CHAR_W);
+
+          // VESC COMM VAL SETUP:
+          queue.reqLiveData = [
+            char_w,
+            queue.C_WRITENR,
+            [0x02, 0x01, 0x2f, 0xd5, 0x8d, 0x03]b,
+          ];
+          queue.UUID = profileManager.EUC_SERVICE;
+        }
+        // End of inmotion V2 or VESC
         cccd = char.getDescriptor(Ble.cccdUuid());
         cccd.requestWrite([0x01, 0x00]b);
         message4 = "characteristic notify enabled";
@@ -202,8 +292,27 @@ class eucBLEDelegate extends Ble.BleDelegate {
             if (advName != null) {
               if (advName.substring(0, 3).equals("KSN")) {
                 wheelFound = true;
-                //decoder.setBleDelegate(self);
-                //decoder.setQueue(queue);
+              }
+            }
+          }
+          if (eucData.wheelBrand == 4) {
+            // V11 or V12 only for now
+
+            var advName = result.getDeviceName();
+            if (advName != null) {
+              var advModel = advName.substring(0, 3);
+              if (advModel.equals("V11") || advModel.equals("V12")) {
+                eucData.model = advModel;
+                wheelFound = true;
+              }
+            }
+          }
+          if (eucData.wheelBrand == 5) {
+            // V11 only for now
+            var advName = result.getDeviceName();
+            if (advName != null) {
+              if (advName.substring(0, 4).equals("VESC")) {
+                wheelFound = true;
               }
             }
           }
@@ -216,9 +325,19 @@ class eucBLEDelegate extends Ble.BleDelegate {
       }
     } else {
       Ble.setScanState(Ble.SCAN_STATE_OFF);
-      var result = loadSR();
+      var result = loadSR(); // as Ble.ScanResult;
       if (result != false) {
-        device = Ble.pairDevice(result as Ble.ScanResult);
+        if (eucData.wheelBrand == 4) {
+          // V11 or V12 only for now
+          var advName = result.getDeviceName();
+          if (advName != null) {
+            var advModel = advName.substring(0, 3);
+            if (advModel.equals("V11") || advModel.equals("V12")) {
+              eucData.model = advModel;
+            }
+          }
+        }
+        device = Ble.pairDevice(result);
       }
     }
   }
@@ -229,19 +348,17 @@ class eucBLEDelegate extends Ble.BleDelegate {
   function onDescriptorWrite(desc, status) {
     message7 = "descWrite";
     // If KS fire queue
-    // send getName request for KS using ble queue
+
     if ((eucData.wheelBrand == 2 || eucData.wheelBrand == 3) && char != null) {
       queue.delayTimer.start(method(:timerCallback), 200, true);
-      //decoder.requestName();
-      /*
-      char.requestWrite(
-        [
-          0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-          0x00, 0x00, 0x00, 0x00, 0x00, 0x9b, 0x14, 0x5a, 0x5a,
-        ]b,
-        { :writeType => Ble.WRITE_TYPE_DEFAULT }
-      );
-      */
+    }
+    // If Inmotion, trigger only once as it will be triggered at each charchanged -> didn't work so let's loop
+    if (eucData.wheelBrand == 4 && char != null) {
+      queue.delayTimer.start(method(:timerCallback), 200, true);
+    }
+    if (eucData.wheelBrand == 5 && char != null) {
+      queue.delayTimer.start(method(:timerCallback), 200, false);
+      queue.delayTimer.start(method(:timerCallback), 200, false); // extremely dirty xD
     }
   }
 
@@ -261,6 +378,31 @@ class eucBLEDelegate extends Ble.BleDelegate {
     ) {
       message8 = "decoding";
       decoder.processFrame(value);
+    }
+    if (eucData.wheelBrand == 4) {
+      decoder.frameBuffer(self, value);
+      // log to txt //
+      /*
+      var frameToStr = "";
+      if (value != null && value.size() > 0) {
+        for (var i = 0; i < value.size(); i++) {
+          if (i == value.size() - 1) {
+            frameToStr = frameToStr + value[i].format("%02X");
+          } else {
+            frameToStr = frameToStr + value[i].format("%02X") + ";";
+          }
+        }
+      }
+      System.println(frameToStr);
+*/
+      //
+      // queue.delayTimer.start(method(:timerCallback), 200, false);
+    }
+    if (eucData.wheelBrand == 5) {
+      if (value[value.size() - 1] == 0x03) {
+        queue.delayTimer.start(method(:timerCallback), 200, false);
+      }
+      decoder.frameBuilder(self, value);
     }
   }
 
@@ -307,6 +449,9 @@ class eucBLEDelegate extends Ble.BleDelegate {
 
   function getChar() {
     return char;
+  }
+  function getCharW() {
+    return char_w;
   }
 
   function getPMService() {
