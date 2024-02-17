@@ -10,7 +10,6 @@ class ActionButton {
   var beepButton;
   //var lockButton;
   var queue;
-  var delay;
   var queueRequired;
   function setEUCDict() {
     eucDict = getEUCSettingsDict();
@@ -195,9 +194,17 @@ class ActionButton {
       }
       //}
       if (queueRequired == true) {
-        queue.delayTimer.start(method(:timerCallback), delay, false);
+        queue.delayTimer.start(
+          method(:timerCallback),
+          eucData.BLECmdDelay,
+          false
+        );
         if (eucData.wheelBrand == 4) {
-          queue.delayTimer.start(method(:timerCallback), delay, true); //dirty workaround
+          queue.delayTimer.start(
+            method(:timerCallback),
+            eucData.BLECmdDelay,
+            true
+          ); //dirty workaround
         }
       }
     }

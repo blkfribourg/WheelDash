@@ -22,7 +22,8 @@
     <property id="cycleLightButtonMap_p1" type="number">0</property>
     <property id="beepButtonMap_p1" type="number">0</property>
     <property id="lockButtonMap_p1" type="number">0</property>
-    <property id="actionQueueDelay_p1" type="number">200</property>
+    <property id="cmdQueueDelay_p1" type="number">200</property>
+    <property id="VESCCanId_p1" type="number">0</property>
     <property id="mainNumber_p1" type="number">0</property>
     <property id="topBar_p1" type="number">0</property>     
     <property id="maxSpeed_p1" type="number">0</property>     
@@ -48,7 +49,8 @@
     <property id="recordActivityButtonMap_p2" type="number">0</property>
     <property id="cycleLightButtonMap_p2" type="number">0</property>
     <property id="beepButtonMap_p2" type="number">0</property>
-    <property id="actionQueueDelay_p2" type="number">200</property>
+    <property id="cmdQueueDelay_p2" type="number">200</property>
+    <property id="VESCCanId_p2" type="number">0</property>
     <property id="mainNumber_p2" type="number">0</property>
     <property id="topBar_p2" type="number">0</property>     
     <property id="maxSpeed_p2" type="number">0</property>     
@@ -74,7 +76,8 @@
     <property id="recordActivityButtonMap_p3" type="number">0</property>
     <property id="cycleLightButtonMap_p3" type="number">0</property>
     <property id="beepButtonMap_p3" type="number">0</property>
-    <property id="actionQueueDelay_p3" type="number">200</property>
+    <property id="cmdQueueDelay_p3" type="number">200</property>
+    <property id="VESCCanId_p3" type="number">0</property>
     <property id="mainNumber_p3" type="number">0</property>
     <property id="topBar_p3" type="number">0</property>     
     <property id="maxSpeed_p3" type="number">0</property>     

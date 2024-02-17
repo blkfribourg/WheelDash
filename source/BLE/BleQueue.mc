@@ -3,7 +3,6 @@ using Toybox.BluetoothLowEnergy as Ble;
 using Toybox.WatchUi as Ui;
 
 class BleQueue {
-  var commDelay = 200;
   var delayTimer = null;
   var run_id = 0;
   enum {
@@ -18,6 +17,7 @@ class BleQueue {
   var queue = [];
   var isRunning = false;
   var reqLiveData;
+  var sendAlive;
   var reqStats;
   var reqBatStats;
   var lastPacketType;
@@ -73,12 +73,19 @@ class BleQueue {
         }
         if (eucData.wheelBrand == 5) {
           if (reqLiveData != null && UUID != null) {
+            /*
+            if (sendAlive != null) {
+              if (run_id >= 8) {
+                add(sendAlive, UUID);
+                run_id = 0;
+              }
+            }*/
             if (queue.size() == 0) {
               lastPacketType = "live";
               add(reqLiveData, UUID);
             }
           }
-          autoRestart();
+          // autoRestart();
         }
       } else {
         isRunning = false;
@@ -106,8 +113,17 @@ class BleQueue {
         :writeType => Ble.WRITE_TYPE_WITH_RESPONSE,
       });
     } else if (queue[0][1] == C_WRITENR) {
-      char.requestWrite(queue[0][2], { :writeType => Ble.WRITE_TYPE_DEFAULT });
-      run_id = run_id + 1;
+      //System.println(queue[0][2]);
+
+      try {
+        char.requestWrite(queue[0][2], {
+          :writeType => Ble.WRITE_TYPE_DEFAULT,
+        });
+
+        run_id = run_id + 1;
+      } catch (e instanceof Toybox.Lang.Exception) {
+        System.println(e.getErrorMessage());
+      }
     }
 
     if (queue.size() > 0) {
@@ -115,7 +131,7 @@ class BleQueue {
     }
   }
   function autoRestart() {
-    delayTimer.start(method(:run), commDelay, false);
+    delayTimer.start(method(:run), eucData.BLECmdDelay, false);
   }
   function flush() {
     if (queue.size() != 0) {

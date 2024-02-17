@@ -44,12 +44,15 @@
     <string id="middleButton">Middle button</string>
     <string id="downButton">Down button</string>
     
-    <string id="actionQueueDelay_p1">BLE command queuing delay (low value may cause app crash) (Profile 1)</string>
-    <string id="actionQueueDelay_p2">BLE command queuing delay (low value may cause app crash) (Profile 2)</string>
-    <string id="actionQueueDelay_p3">BLE command queuing delay (low value may cause app crash) (Profile 3)</string>
-    <string id="actionQueueDelay_ErrorMessage">Value should be in a range of 10 to 400</string>
+    <string id="cmdQueueDelay_p1">BLE command queuing delay (low value may cause app crash) (Profile 1)</string>
+    <string id="cmdQueueDelay_p2">BLE command queuing delay (low value may cause app crash) (Profile 2)</string>
+    <string id="cmdQueueDelay_p3">BLE command queuing delay (low value may cause app crash) (Profile 3)</string>
+    <string id="cmdQueueDelay_ErrorMessage">Value should be in a range of 10 to 400</string>
     
-    
+    <string id="VESCCanId_p1">Can id of VESC if using a VESC Express module (Profile 1)</string>
+    <string id="VESCCanId_p2">Can id of VESC if using a VESC Express module (Profile 2)</string>
+    <string id="VESCCanId_p3">Can id of VESC if using a VESC Express module (Profile 3)</string>
+        
     <string id="currentCorrection_p1">Current correction type (Profile 1)</string>
     <string id="currentCorrection_p2">Current correction type (Profile 2)</string>
     <string id="currentCorrection_p3">Current correction type (Profile 3)</string>
