@@ -78,7 +78,7 @@
 
         <fitField id="28" displayInChart="false" displayInActivitySummary="true" sortOrder = "19" precision="2"
         dataLabel="@Strings.maxTemperature_label"
-        unitLabel="@Strings.temperature_unit_K"/>
+        unitLabel="@Strings.temperature_unit_F"/>
 
         <fitField id="12" displayInChart="false" displayInActivitySummary="true" sortOrder = "20" precision="2"
         dataLabel="@Strings.avgSpeed_label"

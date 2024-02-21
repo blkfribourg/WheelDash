@@ -33,7 +33,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
   ];
 */
   function initialize(pm, _profileNb, q, _decoder) {
-    System.println("init");
+    //System.println("init");
     message1 = "initializeBle";
     BleDelegate.initialize();
     profileManager = pm;
@@ -81,6 +81,35 @@ class eucBLEDelegate extends Ble.BleDelegate {
             0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x9b, 0x14, 0x5a, 0x5a,
           ]b;
+          var voiceVal;
+          if (eucData.KSVoiceMode == true) {
+            voiceVal = 1;
+          } else {
+            voiceVal = 0;
+          }
+          var reqVoice = [
+            0xaa,
+            0x55,
+            voiceVal,
+            0x00,
+            0x00,
+            0x00,
+            0x00,
+            0x00,
+            0x00,
+            0x00,
+            0x00,
+            0x00,
+            0x00,
+            0x00,
+            0x00,
+            0x00,
+            0x73,
+            0x14,
+            0x5a,
+            0x5a,
+          ]b;
+
           /*
           var reqSerial = [
             0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -95,11 +124,12 @@ class eucBLEDelegate extends Ble.BleDelegate {
             [char, queue.C_WRITENR, reqModel],
             profileManager.EUC_SERVICE
           );
-          /*
+
           queue.add(
-            [char, queue.C_WRITENR, reqSerial],
+            [char, queue.C_WRITENR, reqVoice],
             profileManager.EUC_SERVICE
           );
+          /*
           queue.add(
             [char, queue.C_WRITENR, reqAlarms],
             profileManager.EUC_SERVICE

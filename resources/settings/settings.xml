@@ -113,6 +113,13 @@
                 max="99"
             />
         </setting>
+        <setting
+            propertyKey="@Properties.KSVoiceMode"
+            title="@Strings.KSVoiceMode">
+            <settingConfig
+                type="boolean"
+            />
+        </setting>
          <setting
             propertyKey="@Properties.useMiles"
             title="@Strings.useMiles">
@@ -121,8 +128,8 @@
             />
         </setting>
          <setting
-            propertyKey="@Properties.useKelvin"
-            title="@Strings.useKelvin">
+            propertyKey="@Properties.useFahrenheit"
+            title="@Strings.useFahrenheit">
             <settingConfig
                 type="boolean"
             />

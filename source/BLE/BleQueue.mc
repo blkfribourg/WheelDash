@@ -113,7 +113,7 @@ class BleQueue {
         :writeType => Ble.WRITE_TYPE_WITH_RESPONSE,
       });
     } else if (queue[0][1] == C_WRITENR) {
-      //System.println(queue[0][2]);
+      // System.println(queue[0][2]);
 
       try {
         char.requestWrite(queue[0][2], {
@@ -122,7 +122,7 @@ class BleQueue {
 
         run_id = run_id + 1;
       } catch (e instanceof Toybox.Lang.Exception) {
-        //() System.println(e.getErrorMessage());
+        // System.println(e.getErrorMessage());
       }
     }
 

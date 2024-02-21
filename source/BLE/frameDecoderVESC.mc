@@ -42,14 +42,15 @@ class VESCDecoder {
 
   function frameBuffer(bleDelegate, transmittedFrame) {
     var size = transmittedFrame.size();
-    if (eucData.useKelvin == 1) {
+    if (eucData.useFahrenheit == 1) {
       eucData.temperature =
-        transmittedFrame.decodeNumber(Lang.NUMBER_FORMAT_SINT16, {
+        (transmittedFrame.decodeNumber(Lang.NUMBER_FORMAT_SINT16, {
           :offset => 1 + PtypeIdx,
           :endianness => Lang.ENDIAN_BIG,
         }) /
-          10.0 +
-        273.15;
+          10.0) *
+          1.8 +
+        32.0;
     } else {
       eucData.temperature =
         transmittedFrame.decodeNumber(Lang.NUMBER_FORMAT_SINT16, {

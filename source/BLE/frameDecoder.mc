@@ -109,9 +109,9 @@ class GwDecoder {
     eucData.speed = (signedShortFromBytesBE(value, 4).abs() * 3.6) / 100.0;
     eucData.tripDistance = shortFromBytesBE(value, 8) / 1000.0; //in km
     eucData.Phcurrent = signedShortFromBytesBE(value, 10) / 100.0;
-    if (eucData.useKelvin == 1) {
+    if (eucData.useFahrenheit == 1) {
       eucData.temperature =
-        signedShortFromBytesBE(value, 12) / 340.0 + 36.53 + 273.15;
+        (signedShortFromBytesBE(value, 12) / 340.0 + 36.53) * 1.8 + 32.0;
     } else {
       eucData.temperature = signedShortFromBytesBE(value, 12) / 340.0 + 36.53;
     }
@@ -307,8 +307,8 @@ class VeteranDecoder {
       }) / 100.0;
       */
     //from eucWatch :
-    if (eucData.useKelvin == 1) {
-      eucData.temperature = ((value[18] << 8) | value[19]) / 100 + 273.15;
+    if (eucData.useFahrenheit == 1) {
+      eucData.temperature = (((value[18] << 8) | value[19]) / 100) * 1.8 + 32.0;
     } else {
       eucData.temperature = ((value[18] << 8) | value[19]) / 100;
     }
@@ -379,9 +379,9 @@ class KingsongDecoder {
         }
         eucData.current = KScurrent / 100.0;
 
-        if (eucData.useKelvin == 1) {
+        if (eucData.useFahrenheit == 1) {
           eucData.temperature =
-            decode2bytes(value[12], value[13]) / 100.0 + 273.15;
+            (decode2bytes(value[12], value[13]) / 100.0) * 1.8 + 32.0;
         } else {
           eucData.temperature = decode2bytes(value[12], value[13]) / 100.0;
         }

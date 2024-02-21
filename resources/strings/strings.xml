@@ -1,5 +1,5 @@
 <strings>
-    <string id="AppName">WheelDash (beta)</string>
+    <string id="AppName">WheelDash (dev)</string>
     <string id="firstConnStr">Profile $1$ 1st connection\nPlease turn on your wheel\n and wait for connection\n\nensure only one wheel is ON!\n\nIf you enjoy this app :\n ko-fi.com/wheeldash</string>
     <string id="connectedStr">Profile $1$ connected !\n\nSaving wheel unique identifier</string>
     <!-- Strings, that are used in Connect IQ Settings menu, like 
@@ -68,8 +68,10 @@
     <string id="updateDelay">UI refresh rate and in msec</string>
     <string id="updateDelay_ErrorMessage">Value should be in a range of 100 msec to 1000 msec</string>
     <string id="imHornSound">Inmotion horn (untested betatesters only)</string>
-    <string id="useMiles">Use imperial unit</string>
-    <string id="useKelvin">Use Kelvin</string>
+    <string id="KSVoiceMode">Enable Kingsong voice mode</string>
+    
+    <string id="useMiles">Use Miles</string>
+    <string id="useFahrenheit">Use Fahrenheit</string>
 
     <string id="orangeColoringThreshold_p1">percentage threshold to color "top bar" with orange (Profile 1)</string>
     <string id="orangeColoringThreshold_p2">percentage threshold to color "top bar" with orange (Profile 2)</string>
@@ -201,7 +203,7 @@
     <string id="temperature_graph_label">MB Temperature</string>
     <string id="temperature_label">MB Temperature</string>
     <string id="temperature_unit">°C</string>
-    <string id="temperature_unit_K">K</string>
+    <string id="temperature_unit_F">°F</string>
     <string id="tripDistance_label">Trip distance</string>
     <string id="distance_unit_km">km</string>
     <string id="distance_unit_miles">miles</string>

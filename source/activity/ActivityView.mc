@@ -373,25 +373,25 @@ class ActivityRecordView extends WatchUi.View {
       FitContributor.DATA_TYPE_FLOAT,
       { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "W" }
     );
-    if (eucData.useKelvin == 1) {
+    if (eucData.useFahrenheit == 1) {
       mTempField = _session.createField(
         "current_Temperature",
         TEMP_FIELD_ID_K,
         FitContributor.DATA_TYPE_FLOAT,
-        { :mesgType => FitContributor.MESG_TYPE_RECORD, :units => "K" }
+        { :mesgType => FitContributor.MESG_TYPE_RECORD, :units => "°F" }
       );
       mMaxTempField = _session.createField(
         "session_Max_Temperature",
         MAXTEMP_FIELD_ID_K,
         FitContributor.DATA_TYPE_FLOAT,
-        { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "K" }
+        { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "°F" }
       );
 
       mMinTempField = _session.createField(
         "session_Min_Temperature",
         MINTEMP_FIELD_ID_K,
         FitContributor.DATA_TYPE_FLOAT,
-        { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "K" }
+        { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "°F" }
       );
     } else {
       mTempField = _session.createField(

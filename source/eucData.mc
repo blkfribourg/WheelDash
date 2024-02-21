@@ -31,7 +31,7 @@ module eucData {
 
   var speedCorrectionFactor = 1; // correct distance aswell ...
   var useMiles = false;
-  var useKelvin = false;
+  var useFahrenheit = false;
   var deviceName = null;
   var voltage_scaling = 1;
   var speed = 0.0;
@@ -69,6 +69,7 @@ module eucData {
   var chargingStatus;
   var temperature2 = 0;
   var cpuLoad = 0;
+  var KSVoiceMode = false;
   // var output;
   var speedLimit = 0;
   var KSMaxSpeed;
