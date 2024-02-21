@@ -30,7 +30,8 @@ module eucData {
   var redColoringThreshold;
 
   var speedCorrectionFactor = 1; // correct distance aswell ...
-  var useMiles = 1;
+  var useMiles = false;
+  var useKelvin = false;
   var deviceName = null;
   var voltage_scaling = 1;
   var speed = 0.0;

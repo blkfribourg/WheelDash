@@ -109,7 +109,12 @@ class GwDecoder {
     eucData.speed = (signedShortFromBytesBE(value, 4).abs() * 3.6) / 100.0;
     eucData.tripDistance = shortFromBytesBE(value, 8) / 1000.0; //in km
     eucData.Phcurrent = signedShortFromBytesBE(value, 10) / 100.0;
-    eucData.temperature = signedShortFromBytesBE(value, 12) / 340.0 + 36.53;
+    if (eucData.useKelvin == 1) {
+      eucData.temperature =
+        signedShortFromBytesBE(value, 12) / 340.0 + 36.53 + 273.15;
+    } else {
+      eucData.temperature = signedShortFromBytesBE(value, 12) / 340.0 + 36.53;
+    }
     eucData.hPWM = signedShortFromBytesBE(value, 14).abs() / 100.0;
   }
 }
@@ -302,7 +307,12 @@ class VeteranDecoder {
       }) / 100.0;
       */
     //from eucWatch :
-    eucData.temperature = ((value[18] << 8) | value[19]) / 100;
+    if (eucData.useKelvin == 1) {
+      eucData.temperature = ((value[18] << 8) | value[19]) / 100 + 273.15;
+    } else {
+      eucData.temperature = ((value[18] << 8) | value[19]) / 100;
+    }
+
     // implement chargeMode/speedAlert/speedTiltback later
     eucData.version =
       value.decodeNumber(Lang.NUMBER_FORMAT_SINT16, {
@@ -368,7 +378,13 @@ class KingsongDecoder {
           KScurrent = KScurrent - 65536;
         }
         eucData.current = KScurrent / 100.0;
-        eucData.temperature = decode2bytes(value[12], value[13]) / 100.0;
+
+        if (eucData.useKelvin == 1) {
+          eucData.temperature =
+            decode2bytes(value[12], value[13]) / 100.0 + 273.15;
+        } else {
+          eucData.temperature = decode2bytes(value[12], value[13]) / 100.0;
+        }
 
         if ((value[15] & 255) == 224) {
           var mMode = value[14]; // don't know what it is

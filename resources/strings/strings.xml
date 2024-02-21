@@ -1,5 +1,5 @@
 <strings>
-    <string id="AppName">WheelDash</string>
+    <string id="AppName">WheelDash (beta)</string>
     <string id="firstConnStr">Profile $1$ 1st connection\nPlease turn on your wheel\n and wait for connection\n\nensure only one wheel is ON!\n\nIf you enjoy this app :\n ko-fi.com/wheeldash</string>
     <string id="connectedStr">Profile $1$ connected !\n\nSaving wheel unique identifier</string>
     <!-- Strings, that are used in Connect IQ Settings menu, like 
@@ -68,6 +68,8 @@
     <string id="updateDelay">UI refresh rate and in msec</string>
     <string id="updateDelay_ErrorMessage">Value should be in a range of 100 msec to 1000 msec</string>
     <string id="imHornSound">Inmotion horn (untested betatesters only)</string>
+    <string id="useMiles">Use imperial unit</string>
+    <string id="useKelvin">Use Kelvin</string>
 
     <string id="orangeColoringThreshold_p1">percentage threshold to color "top bar" with orange (Profile 1)</string>
     <string id="orangeColoringThreshold_p2">percentage threshold to color "top bar" with orange (Profile 2)</string>
@@ -182,31 +184,32 @@
 
     <string id="speed_graph_label">Speed</string>
     <string id="speed_label">Speed</string>
-    <string id="speed_units_kmh">km/h</string>
-    <string id="speed_units_mph">mph</string>
+    <string id="speed_unit_kmh">km/h</string>
+    <string id="speed_unit_mph">mph</string>
     <string id="pwm_graph_label">PWM</string>
     <string id="pwm_label">PWM</string>
-    <string id="pwm_units"></string>
+    <string id="pwm_unit"></string>
     <string id="voltage_graph_label">Voltage</string>
     <string id="voltage_label">Voltage</string>
-    <string id="voltage_units">V</string>
+    <string id="voltage_unit">V</string>
     <string id="current_graph_label">Current</string>
     <string id="current_label">Current</string>
-    <string id="current_units">A</string>
+    <string id="current_unit">A</string>
     <string id="power_graph_label">Motor power</string>
     <string id="power_label">Motor power</string>
-    <string id="power_units">W</string>
+    <string id="power_unit">W</string>
     <string id="temperature_graph_label">MB Temperature</string>
     <string id="temperature_label">MB Temperature</string>
-    <string id="temperature_units">°C</string>
+    <string id="temperature_unit">°C</string>
+    <string id="temperature_unit_K">K</string>
     <string id="tripDistance_label">Trip distance</string>
-    <string id="distanceUnits_km">km</string>
-    <string id="distanceUnits_miles">miles</string>
+    <string id="distance_unit_km">km</string>
+    <string id="distance_unit_miles">miles</string>
     <string id="maxSpeed_label">Session max speed</string>
     
     <string id="maxPWM_label">Session max PWM</string>
     
-    <string id="percentage_units">%</string>
+    <string id="percentage_unit">%</string>
     <string id="maxCurrent_label">Session max current</string>
   
     <string id="maxPower_label">Session max power</string>
@@ -217,11 +220,11 @@
     <string id="avgSpeed_label">Session average speed</string>
     
     <string id="avgCurrent_label">Session average current</string>
-    <string id="avgCurrent_units">A</string>
+    <string id="avgCurrent_unit">A</string>
     <string id="avgPower_label">Session average power</string>
-    <string id="avgPower_units">W</string>
+    <string id="avgPower_unit">W</string>
     <string id="runningTime_label">Session running time (debug)</string>
-    <string id="runnintTime_units">s</string>
+    <string id="runnintTime_unit">s</string>
 
     <string id="minVoltage_label">Session min voltage</string>
     <string id="maxVoltage_label">Session max voltage</string>

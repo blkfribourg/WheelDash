@@ -237,18 +237,22 @@ class ActivityRecordView extends WatchUi.View {
   const AVGCURRENT_FIELD_ID = 13;
   const AVGPOWER_FIELD_ID = 14;
   const RUNNINGTIME_FIELD_ID = 15;
-  /*
-  const SPEED_FIELD_ID_MILES = 16;
-  const TRIPDISTANCE_FIELD_ID_MILES = 17;
-  const MAXSPEED_FIELD_ID_MILES = 18;
-  const AVGSPEED_FIELD_ID_MILES = 19;
-  */
+
   const MINVOLTAGE_FIELD_ID = 16;
   const MAXVOLTAGE_FIELD_ID = 17;
   const MINBATTERY_FIELD_ID = 18;
   const MAXBATTERY_FIELD_ID = 19;
   const MINTEMP_FIELD_ID = 20;
   const WHEELNAME_FIELD_ID = 21;
+
+  const SPEED_FIELD_ID_MILES = 22;
+  const TRIPDISTANCE_FIELD_ID_MILES = 23;
+  const MAXSPEED_FIELD_ID_MILES = 24;
+  const AVGSPEED_FIELD_ID_MILES = 25;
+
+  const TEMP_FIELD_ID_K = 26;
+  const MINTEMP_FIELD_ID_K = 27;
+  const MAXTEMP_FIELD_ID_K = 28;
 
   hidden var mSpeedField;
   hidden var mPWMField;
@@ -275,59 +279,57 @@ class ActivityRecordView extends WatchUi.View {
 
   // Initializes the new fields in the activity file
   function setupFields() {
-    /*
-    if (eucData.useMiles == 1) {
-      mSpeedField = session.createField(
+    if (eucData.useMiles == true) {
+      mSpeedField = _session.createField(
         "current_speed",
         SPEED_FIELD_ID_MILES,
         FitContributor.DATA_TYPE_FLOAT,
         { :mesgType => FitContributor.MESG_TYPE_RECORD, :units => "mph" }
       );
-      mTripDistField = session.createField(
+      mTripDistField = _session.createField(
         "current_TripDistance",
         TRIPDISTANCE_FIELD_ID_MILES,
         FitContributor.DATA_TYPE_FLOAT,
         { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "miles" }
       );
-      mMaxSpeedField = session.createField(
+      mMaxSpeedField = _session.createField(
         "session_Max_speed",
         MAXSPEED_FIELD_ID_MILES,
         FitContributor.DATA_TYPE_FLOAT,
         { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "mph" }
       );
-      mAvgSpeedField = session.createField(
+      mAvgSpeedField = _session.createField(
         "session_Avg_Speed",
         AVGSPEED_FIELD_ID_MILES,
         FitContributor.DATA_TYPE_FLOAT,
         { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "mph" }
       );
     } else {
-      */
-    mSpeedField = _session.createField(
-      "current_speed",
-      SPEED_FIELD_ID,
-      FitContributor.DATA_TYPE_FLOAT,
-      { :mesgType => FitContributor.MESG_TYPE_RECORD, :units => "km/h" }
-    );
-    mTripDistField = _session.createField(
-      "current_TripDistance",
-      TRIPDISTANCE_FIELD_ID,
-      FitContributor.DATA_TYPE_FLOAT,
-      { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "km" }
-    );
-    mMaxSpeedField = _session.createField(
-      "session_Max_speed",
-      MAXSPEED_FIELD_ID,
-      FitContributor.DATA_TYPE_FLOAT,
-      { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "km/h" }
-    );
-    mAvgSpeedField = _session.createField(
-      "session_Avg_Speed",
-      AVGSPEED_FIELD_ID,
-      FitContributor.DATA_TYPE_FLOAT,
-      { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "km/h" }
-    );
-    // }
+      mSpeedField = _session.createField(
+        "current_speed",
+        SPEED_FIELD_ID,
+        FitContributor.DATA_TYPE_FLOAT,
+        { :mesgType => FitContributor.MESG_TYPE_RECORD, :units => "km/h" }
+      );
+      mTripDistField = _session.createField(
+        "current_TripDistance",
+        TRIPDISTANCE_FIELD_ID,
+        FitContributor.DATA_TYPE_FLOAT,
+        { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "km" }
+      );
+      mMaxSpeedField = _session.createField(
+        "session_Max_speed",
+        MAXSPEED_FIELD_ID,
+        FitContributor.DATA_TYPE_FLOAT,
+        { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "km/h" }
+      );
+      mAvgSpeedField = _session.createField(
+        "session_Avg_Speed",
+        AVGSPEED_FIELD_ID,
+        FitContributor.DATA_TYPE_FLOAT,
+        { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "km/h" }
+      );
+    }
 
     mPWMField = _session.createField(
       "current_PWM",
@@ -353,13 +355,6 @@ class ActivityRecordView extends WatchUi.View {
       FitContributor.DATA_TYPE_FLOAT,
       { :mesgType => FitContributor.MESG_TYPE_RECORD, :units => "W" }
     );
-    mTempField = _session.createField(
-      "current_Temperature",
-      TEMP_FIELD_ID,
-      FitContributor.DATA_TYPE_FLOAT,
-      { :mesgType => FitContributor.MESG_TYPE_RECORD, :units => "°C" }
-    );
-
     mMaxPWMField = _session.createField(
       "session_Max_PWM",
       MAXPWM_FIELD_ID,
@@ -378,20 +373,47 @@ class ActivityRecordView extends WatchUi.View {
       FitContributor.DATA_TYPE_FLOAT,
       { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "W" }
     );
-    mMaxTempField = _session.createField(
-      "session_Max_Temperature",
-      MAXTEMP_FIELD_ID,
-      FitContributor.DATA_TYPE_FLOAT,
-      { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "°C" }
-    );
+    if (eucData.useKelvin == 1) {
+      mTempField = _session.createField(
+        "current_Temperature",
+        TEMP_FIELD_ID_K,
+        FitContributor.DATA_TYPE_FLOAT,
+        { :mesgType => FitContributor.MESG_TYPE_RECORD, :units => "K" }
+      );
+      mMaxTempField = _session.createField(
+        "session_Max_Temperature",
+        MAXTEMP_FIELD_ID_K,
+        FitContributor.DATA_TYPE_FLOAT,
+        { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "K" }
+      );
 
-    mMinTempField = _session.createField(
-      "session_Min_Temperature",
-      MINTEMP_FIELD_ID,
-      FitContributor.DATA_TYPE_FLOAT,
-      { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "°C" }
-    );
+      mMinTempField = _session.createField(
+        "session_Min_Temperature",
+        MINTEMP_FIELD_ID_K,
+        FitContributor.DATA_TYPE_FLOAT,
+        { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "K" }
+      );
+    } else {
+      mTempField = _session.createField(
+        "current_Temperature",
+        TEMP_FIELD_ID,
+        FitContributor.DATA_TYPE_FLOAT,
+        { :mesgType => FitContributor.MESG_TYPE_RECORD, :units => "°C" }
+      );
+      mMaxTempField = _session.createField(
+        "session_Max_Temperature",
+        MAXTEMP_FIELD_ID,
+        FitContributor.DATA_TYPE_FLOAT,
+        { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "°C" }
+      );
 
+      mMinTempField = _session.createField(
+        "session_Min_Temperature",
+        MINTEMP_FIELD_ID,
+        FitContributor.DATA_TYPE_FLOAT,
+        { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "°C" }
+      );
+    }
     mAvgCurrentField = _session.createField(
       "session_Avg_Current",
       AVGCURRENT_FIELD_ID,

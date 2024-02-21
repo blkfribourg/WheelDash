@@ -203,6 +203,8 @@ class GarminEUCApp extends Application.AppBase {
     //System.println("array size:" + rideStats.statsArray.size());
   }
   function setGlobalSettings() {
+    eucData.useMiles = AppStorage.getSetting("useMiles");
+    eucData.useKelvin = AppStorage.getSetting("useKelvin");
     //Im Horn experimental
     eucData.imHornSound = AppStorage.getSetting("imHornSound");
     eucData.updateDelay = AppStorage.getSetting("updateDelay");

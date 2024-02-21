@@ -15,6 +15,9 @@
     <property id="useProfileSelector" type="boolean">true</property>
     <property id="debugMode" type="boolean">false</property>
     <property id ="imHornSound" type="number">0</property>
+    <property id ="useMiles" type="boolean">false</property>
+    <property id ="useKelvin" type="boolean">false</property>
+    
 <!--Profile 1-->
     <property id="wheelName_p1" type="string">Profile 1</property>
     <property id="wheelBrand_p1" type="number">0</property>

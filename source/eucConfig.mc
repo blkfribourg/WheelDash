@@ -4,14 +4,16 @@ class gotwayConfig {
       eucData.ledMode.toString(),
       eucData.speedAlertMode.toString(),
       eucData.pedalMode.toString(),
-      eucData.useMiles.toString(),
+      //eucData.useMiles.toString(),
     ];
   }
   function getConfigWithStatusDict() {
-    return [dictLedMode, dictAlarmStatus, dictPedalStatus, dictDstUnitStatus];
+    return [dictLedMode, dictAlarmStatus, dictPedalStatus];
+    //, dictDstUnitStatus];
   }
   function getConfigWithStatusLabels() {
-    return ["Leds Mode", "Speed Alarm", "Pedal Mode", "Distance unit"];
+    return ["Leds Mode", "Speed Alarm", "Pedal Mode"];
+    //, "Distance unit"];
   }
   function getConfig() {
     return [
@@ -21,7 +23,7 @@ class gotwayConfig {
       dictPedalMode,
       dictCutoffAngleMode,
       dictVolume,
-      dictDstUnit,
+      // dictDstUnit,
     ];
   }
   function getConfigLabels() {
@@ -32,11 +34,12 @@ class gotwayConfig {
       "Pedal Mode",
       "Cutoff Angle",
       "Beep Volume",
-      "Distance unit",
+      // "Distance unit",
     ];
   }
   function getConfigToLock() {
-    return ["Speed Alarm", "Pedal Mode", "Cutoff Angle", "Distance unit"];
+    return ["Speed Alarm", "Pedal Mode", "Cutoff Angle"];
+    //, "Distance unit"];
   }
 
   //dict for communication

@@ -22,10 +22,10 @@ module rideStats {
   var showProfileName;
 
   function avgSpeed() {
-    if (eucData.useMiles == 0) {
-      minimalMovingSpeed = 3; // 3 km/h
-    } else {
+    if (eucData.useMiles == false) {
       minimalMovingSpeed = 2; // 2 mph
+    } else {
+      minimalMovingSpeed = 3; // 3 km/h
     }
     if (eucData.correctedSpeed > minimalMovingSpeed) {
       if (startupDistance == null) {

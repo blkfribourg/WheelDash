@@ -113,6 +113,20 @@
                 max="99"
             />
         </setting>
+         <setting
+            propertyKey="@Properties.useMiles"
+            title="@Strings.useMiles">
+            <settingConfig
+                type="boolean"
+            />
+        </setting>
+         <setting
+            propertyKey="@Properties.useKelvin"
+            title="@Strings.useKelvin">
+            <settingConfig
+                type="boolean"
+            />
+        </setting>
         
 
        <!--Profile 1-->
@@ -170,7 +184,7 @@
                     <settingConfig
                         type="numeric"
                         min="10"
-                        max="400"
+                        max="2000"
                         errorMessage="@Strings.cmdQueueDelay_ErrorMessage" />
                 </setting>
                 <setting
@@ -395,7 +409,7 @@
                     <settingConfig
                         type="numeric"
                         min="10"
-                        max="400"
+                        max="2000"
                         errorMessage="@Strings.cmdQueueDelay_ErrorMessage" />
                 </setting>
                 <setting
@@ -620,7 +634,7 @@
                     <settingConfig
                         type="numeric"
                         min="10"
-                        max="400"
+                        max="2000"
                         errorMessage="@Strings.cmdQueueDelay_ErrorMessage" />
                 </setting>
                 <setting
