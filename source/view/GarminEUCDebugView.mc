@@ -234,7 +234,7 @@ class GarminEUCDebugView extends WatchUi.View {
       );
       */
     }
-    if (eucData.wheelBrand == 4) {
+    if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
       if (BleDelegate != null) {
         var alignAxe = dc.getWidth() / 5;
         var space = dc.getHeight() / 10;
@@ -329,7 +329,7 @@ class GarminEUCDebugView extends WatchUi.View {
         );
       }
     }
-    if (eucData.wheelBrand == 5) {
+    if (eucData.wheelBrand == 6) {
       if (BleDelegate != null) {
         var alignAxe = dc.getWidth() / 5;
         var space = dc.getHeight() / 10;

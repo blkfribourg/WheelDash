@@ -218,6 +218,41 @@ module eucData {
         }
       }
     }
+    if (wheelBrand == 5) {
+      if (model.equals("V11")) {
+        if (voltage > 83.5) {
+          battery = 100.0;
+        } else if (voltage > 68.0) {
+          battery = (voltage - 66.5) / 0.17;
+        } else if (voltage > 64.0) {
+          battery = (voltage - 64.0) / 0.45;
+        } else {
+          battery = 0.0;
+        }
+      }
+      if (model.equals("V13")) {
+        if (voltage > 100.2) {
+          battery = 100.0;
+        } else if (voltage > 81.6) {
+          battery = (voltage - 79.8) / 0.204;
+        } else if (voltage > 76.8) {
+          battery = (voltage - 76.8) / 0.54;
+        } else {
+          battery = 0.0;
+        }
+      }
+      if (model.equals("V14")) {
+        if (voltage > 133.6) {
+          battery = 100.0;
+        } else if (voltage > 108.8) {
+          battery = (voltage - 106.4) / 0.272;
+        } else if (voltage > 102.4) {
+          battery = (voltage - 102.4) / 0.72;
+        } else {
+          battery = 0.0;
+        }
+      }
+    }
     return battery;
   }
 

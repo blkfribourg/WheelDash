@@ -40,8 +40,12 @@ class BleQueue {
 
   function run() {
     if (queue.size() == 0) {
-      if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
-        if (eucData.wheelBrand == 4) {
+      if (
+        eucData.wheelBrand == 4 ||
+        eucData.wheelBrand == 5 ||
+        eucData.wheelBrand == 6
+      ) {
+        if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
           if (reqLiveData != null && UUID != null && reqStats != null) {
             reqStatsTiming = reqStatsTiming - 1;
             if (reqBatStats != null) {
@@ -71,7 +75,7 @@ class BleQueue {
           //System.println(lastPacketType);
           autoRestart();
         }
-        if (eucData.wheelBrand == 5) {
+        if (eucData.wheelBrand == 6) {
           if (reqLiveData != null && UUID != null) {
             /*
             if (sendAlive != null) {

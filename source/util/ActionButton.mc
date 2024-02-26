@@ -102,7 +102,7 @@ class ActionButton {
           }
         }
         //Inmotion
-        if (eucData.wheelBrand == 4) {
+        if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
           if (eucData.model.equals("V11")) {
             var data = [0xaa, 0xaa, 0x14, 0x03, 0x60, 0x50, 0x00, 0x27]b;
             lightToggleIndex = lightToggleIndex + 1;
@@ -173,12 +173,39 @@ class ActionButton {
             0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x88, 0x14, 0x5a, 0x5a,
           ]b;
+
+          if (eucData.KSVoiceMode == true) {
+            queue.add(
+              [
+                bleDelegate.getChar(),
+                queue.C_WRITENR,
+                [
+                  0xaa, 0x55, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x73, 0x14, 0x5a, 0x5a,
+                ]b,
+              ],
+              bleDelegate.getPMService()
+            );
+          }
           queue.add(
             [bleDelegate.getChar(), queue.C_WRITENR, data],
             bleDelegate.getPMService()
           );
+          if (eucData.KSVoiceMode == true) {
+            queue.add(
+              [
+                bleDelegate.getChar(),
+                queue.C_WRITENR,
+                [
+                  0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x73, 0x14, 0x5a, 0x5a,
+                ]b,
+              ],
+              bleDelegate.getPMService()
+            );
+          }
         }
-        if (eucData.wheelBrand == 4) {
+        if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
           var data = [0xaa, 0xaa, 0x14, 0x04, 0x60, 0x51, 0x18, 0x01, 0x00]b; // Thanks Seba ;)
           if (eucData.imHornSound != 0) {
             data[6] = eucData.imHornSound.format("%02d").toNumberWithBase(16);
@@ -197,15 +224,8 @@ class ActionButton {
         queue.delayTimer.start(
           method(:timerCallback),
           eucData.BLECmdDelay,
-          false
+          true
         );
-        if (eucData.wheelBrand == 4) {
-          queue.delayTimer.start(
-            method(:timerCallback),
-            eucData.BLECmdDelay,
-            true
-          ); //dirty workaround
-        }
       }
     }
   }

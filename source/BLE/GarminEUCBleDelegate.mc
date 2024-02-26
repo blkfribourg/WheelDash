@@ -81,6 +81,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
             0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x9b, 0x14, 0x5a, 0x5a,
           ]b;
+          /*
           var voiceVal;
           if (eucData.KSVoiceMode == true) {
             voiceVal = 1;
@@ -109,7 +110,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
             0x5a,
             0x5a,
           ]b;
-
+*/
           /*
           var reqSerial = [
             0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -124,11 +125,12 @@ class eucBLEDelegate extends Ble.BleDelegate {
             [char, queue.C_WRITENR, reqModel],
             profileManager.EUC_SERVICE
           );
-
+          /*
           queue.add(
             [char, queue.C_WRITENR, reqVoice],
             profileManager.EUC_SERVICE
           );
+          */
           /*
           queue.add(
             [char, queue.C_WRITENR, reqAlarms],
@@ -138,7 +140,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
         }
         // End of KS addition -------------------------------
         // Inmotion V2 or VESC ---------------------------
-        if (eucData.wheelBrand == 4) {
+        if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
           char_w = service.getCharacteristic(profileManager.EUC_CHAR_W);
 
           // addition for inmotion v2 request live:
@@ -168,7 +170,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
           queue.UUID = profileManager.EUC_SERVICE;
         }
 
-        if (eucData.wheelBrand == 5) {
+        if (eucData.wheelBrand == 6) {
           char_w = service.getCharacteristic(profileManager.EUC_CHAR_W);
           // VESC COMM VAL SETUP:
           if (eucData.VESCCanId != 0) {
@@ -307,19 +309,24 @@ class eucBLEDelegate extends Ble.BleDelegate {
               }
             }
           }
-          if (eucData.wheelBrand == 4) {
+          if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
             // V11 or V12 only for now
 
             var advName = result.getDeviceName();
             if (advName != null) {
               var advModel = advName.substring(0, 3);
-              if (advModel.equals("V11") || advModel.equals("V12")) {
+              if (
+                advModel.equals("V11") ||
+                advModel.equals("V12") ||
+                advModel.equals("V13") ||
+                advModel.equals("V14")
+              ) {
                 eucData.model = advModel;
                 wheelFound = true;
               }
             }
           }
-          if (eucData.wheelBrand == 5) {
+          if (eucData.wheelBrand == 6) {
             var advName = result.getDeviceName();
             if (advName != null) {
               var advModel = advName.substring(0, 4);
@@ -354,12 +361,17 @@ class eucBLEDelegate extends Ble.BleDelegate {
       Ble.setScanState(Ble.SCAN_STATE_OFF);
       var result = loadSR(); // as Ble.ScanResult;
       if (result != false) {
-        if (eucData.wheelBrand == 4) {
+        if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
           // V11 or V12 only for now
           var advName = result.getDeviceName();
           if (advName != null) {
             var advModel = advName.substring(0, 3);
-            if (advModel.equals("V11") || advModel.equals("V12")) {
+            if (
+              advModel.equals("V11") ||
+              advModel.equals("V12") ||
+              advModel.equals("V13") ||
+              advModel.equals("V14")
+            ) {
               eucData.model = advModel;
             }
           }
@@ -380,10 +392,10 @@ class eucBLEDelegate extends Ble.BleDelegate {
       queue.delayTimer.start(method(:timerCallback), eucData.BLECmdDelay, true);
     }
     // If Inmotion, trigger only once as it will be triggered at each charchanged -> didn't work so let's loop
-    if (eucData.wheelBrand == 4 && char != null) {
+    if ((eucData.wheelBrand == 4 || eucData.wheelBrand == 5) && char != null) {
       queue.delayTimer.start(method(:timerCallback), eucData.BLECmdDelay, true);
     }
-    if (eucData.wheelBrand == 5 && char != null) {
+    if (eucData.wheelBrand == 6 && char != null) {
       // if (eucData.isExpress==true){
       // pingVESC();
       // }
@@ -410,7 +422,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
       message8 = "decoding";
       decoder.processFrame(value);
     }
-    if (eucData.wheelBrand == 4) {
+    if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
       decoder.frameBuffer(self, value);
       // log to txt //
       /*
@@ -429,7 +441,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
       //
       // queue.delayTimer.start(method(:timerCallback), 200, false);
     }
-    if (eucData.wheelBrand == 5) {
+    if (eucData.wheelBrand == 6) {
       /*
       var frameToStr = "";
       if (value != null && value.size() > 0) {

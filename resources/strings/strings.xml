@@ -22,7 +22,8 @@
     <string id="wheelBrand2">Kingsong</string>
     <string id="wheelBrand3">Kingsong (old)</string>
     <string id="wheelBrand4">InMotion V11 (fw1.4)/V12 (experimental)</string>
-    <string id="wheelBrand5">VESC (experimental)</string>
+    <string id="wheelBrand5">InMotion V11Y/V13/V14 (experimental)</string>
+    <string id="wheelBrand6">VESC (experimental)</string>
     
 
     <string id="recordActivityButtonMap_p1">Button mapping to activity recording view (Profile 1)</string>
@@ -68,7 +69,7 @@
     <string id="updateDelay">UI refresh rate and in msec</string>
     <string id="updateDelay_ErrorMessage">Value should be in a range of 100 msec to 1000 msec</string>
     <string id="imHornSound">Inmotion horn (untested betatesters only)</string>
-    <string id="KSVoiceMode">Enable Kingsong voice mode</string>
+    <string id="KSVoiceMode">Enable Kingsong horn sound (transient voice mode)</string>
     
     <string id="useMiles">Use Miles</string>
     <string id="useFahrenheit">Use Fahrenheit</string>

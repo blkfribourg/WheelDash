@@ -153,6 +153,7 @@
                     <listEntry value="3">@Strings.wheelBrand3</listEntry>
                     <listEntry value="4">@Strings.wheelBrand4</listEntry>
                     <listEntry value="5">@Strings.wheelBrand5</listEntry>
+                    <listEntry value="6">@Strings.wheelBrand6</listEntry>
                 </settingConfig>
             </setting>
             <setting
@@ -378,6 +379,7 @@
                     <listEntry value="3">@Strings.wheelBrand3</listEntry>
                     <listEntry value="4">@Strings.wheelBrand4</listEntry>
                     <listEntry value="5">@Strings.wheelBrand5</listEntry>
+                    <listEntry value="6">@Strings.wheelBrand6</listEntry>
                 </settingConfig>
             </setting>
             <setting
@@ -603,6 +605,7 @@
                     <listEntry value="3">@Strings.wheelBrand3</listEntry>
                     <listEntry value="4">@Strings.wheelBrand4</listEntry>
                     <listEntry value="5">@Strings.wheelBrand5</listEntry>
+                    <listEntry value="6">@Strings.wheelBrand6</listEntry>
                 </settingConfig>
             </setting>
             <setting

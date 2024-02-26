@@ -193,7 +193,7 @@ class GarminEUCMenu2Delegate_generic extends WatchUi.Menu2InputDelegate {
         }*/
       }
     }
-    if (eucData.wheelBrand == 4) {
+    if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
       if (
         EUCSettingsDict.getConfigToLock().indexOf(fromMenu) != -1 &&
         eucData.correctedSpeed > 2
