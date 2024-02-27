@@ -282,7 +282,7 @@
                     <settingConfig
                         type="numeric"
                         min="0"
-                        max="120"
+                        max="250"
                         errorMessage="@Strings.maxTemperature_ErrorMessage" />
             </setting>
             <setting
@@ -356,7 +356,7 @@
             <settingConfig
                 type="numeric"
                 min="0"
-                max="120"
+                max="250"
                 errorMessage="@Strings.alarmThreshold_temp_ErrorMessage" />
         </setting>
        
@@ -508,7 +508,7 @@
                     <settingConfig
                         type="numeric"
                         min="0"
-                        max="120"
+                        max="250"
                         errorMessage="@Strings.maxTemperature_ErrorMessage" />
             </setting>
             <setting
@@ -582,7 +582,7 @@
             <settingConfig
                 type="numeric"
                 min="0"
-                max="120"
+                max="250"
                 errorMessage="@Strings.alarmThreshold_temp_ErrorMessage" />
         </setting>
         
@@ -734,7 +734,7 @@
                     <settingConfig
                         type="numeric"
                         min="0"
-                        max="120"
+                        max="250"
                         errorMessage="@Strings.maxTemperature_ErrorMessage" />
             </setting>
             <setting
@@ -808,7 +808,7 @@
             <settingConfig
                 type="numeric"
                 min="0"
-                max="120"
+                max="250"
                 errorMessage="@Strings.alarmThreshold_temp_ErrorMessage" />
         </setting>
         

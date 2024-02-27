@@ -61,10 +61,10 @@
     <string id="currentCorrection1">Negative</string>
     <string id="currentCorrection2">Absolute</string>
 
-    <string id="maxTemperature_p1">Maximum operating temperature (°C) (Profile 1)</string>
-    <string id="maxTemperature_p2">Maximum operating temperature (°C) (Profile 2)</string>
-    <string id="maxTemperature_p3">Maximum operating temperature (°C) (Profile 3)</string>
-    <string id="maxTemperature_ErrorMessage">Value should be in a range of 0 to 120°C</string>
+    <string id="maxTemperature_p1">Maximum operating temperature (°C or °F) (Profile 1)</string>
+    <string id="maxTemperature_p2">Maximum operating temperature (°C or °F) (Profile 2)</string>
+    <string id="maxTemperature_p3">Maximum operating temperature (°C or °F) (Profile 3)</string>
+    <string id="maxTemperature_ErrorMessage">Value should be in a range of 0 to 250</string>
 
     <string id="updateDelay">UI refresh rate and in msec</string>
     <string id="updateDelay_ErrorMessage">Value should be in a range of 100 msec to 1000 msec</string>

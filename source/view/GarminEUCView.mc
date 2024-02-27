@@ -53,8 +53,14 @@ class GarminEUCView extends WatchUi.View {
     cDrawables[:BatteryNumber].setText(
       valueRound(batteryPercentage, "%.1f") + "%"
     );
+    var tempUnit;
+    if (eucData.useFahrenheit == true) {
+      tempUnit = "°F";
+    } else {
+      tempUnit = "°C";
+    }
     cDrawables[:TemperatureNumber].setText(
-      valueRound(eucData.temperature, "%.1f").toString() + "°C"
+      valueRound(eucData.temperature, "%.1f").toString() + tempUnit
     );
     cDrawables[:BottomSubtitle].setText(diplayStats());
     /* To implement later
