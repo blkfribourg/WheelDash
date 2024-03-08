@@ -20,6 +20,7 @@ class GarminEUCApp extends Application.AppBase {
     eucData.limitedMemory = System.getSystemStats().totalMemory < 128000;
     AppBase.initialize();
     usePS = AppStorage.getSetting("useProfileSelector");
+
     alarmsTimer = new Timer.Timer();
   }
 
@@ -67,7 +68,7 @@ class GarminEUCApp extends Application.AppBase {
   }
   // Timer callback for various alarms & update UI
   function onUpdateTimer() {
-    //dummyGen();
+    // dummyGen();
     //Only starts if no profile selected
     if (eucData.wheelName == null && delegate != null && usePS) {
       timeOut = timeOut - eucData.updateDelay;
@@ -107,6 +108,9 @@ class GarminEUCApp extends Application.AppBase {
       // -------------------------
       //attributing here to avoid multiple calls
       eucData.correctedSpeed = eucData.getCorrectedSpeed();
+      eucData.correctedTotalDistance = eucData.getCorrectedTotalDistance();
+      eucData.correctedTripDistance = eucData.getCorrectedTripDistance();
+      eucData.DisplayedTemperature = eucData.getTemperature();
       eucData.PWM = eucData.getPWM();
       EUCAlarms.speedAlarmCheck();
       if (delegate.getMenu2Delegate().requestSubLabelsUpdate == true) {
@@ -137,13 +141,15 @@ class GarminEUCApp extends Application.AppBase {
       }
       if (rideStats.showTotalDistance) {
         rideStats.statsArray[statsIndex] =
-          "Tot dist: " + valueRound(eucData.totalDistance, "%.1f").toString();
+          "Tot dist: " +
+          valueRound(eucData.correctedTotalDistance, "%.1f").toString();
         //System.println(rideStats.statsArray[statsIndex]);
         statsIndex++;
       }
       if (rideStats.showTripDistance) {
         rideStats.statsArray[statsIndex] =
-          "Trip dist: " + valueRound(eucData.tripDistance, "%.1f").toString();
+          "Trip dist: " +
+          valueRound(eucData.correctedTripDistance, "%.1f").toString();
         //System.println(rideStats.statsArray[statsIndex]);
         statsIndex++;
       }

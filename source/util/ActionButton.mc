@@ -18,29 +18,7 @@ class ActionButton {
     if (eucData.paired == true) {
       queueRequired = false;
       queue = _queue;
-      /*
-      if (lockButton == keyNumber) {
-        //inmotion
-        if (eucData.wheelBrand == 4) {
-          var data = [0xaa, 0xaa, 0x14, 0x04, 0x60, 0x31, 0x00, 0x00]b; // Thanks Seba ;)
 
-          lockStatus = lockStatus + 1;
-          if (lockStatus > 1) {
-            lockStatus = 0;
-          }
-
-          data[6] = lockStatus;
-          data[7] = xorChkSum(data.slice(0, data.size() - 1));
-         
-          queue.flush();
-          queue.add(
-            [bleDelegate.getCharW(), queue.C_WRITENR, data],
-            bleDelegate.getPMService()
-          );
-        
-        }
-      }
-      */
       if (recordActivityButton == keyNumber) {
         _mainDelegate.goToActivityView();
       }
@@ -192,12 +170,13 @@ class ActionButton {
             bleDelegate.getPMService()
           );
           if (eucData.KSVoiceMode == true) {
+            //deactivate KSVoiceMode let's try 0x02 val
             queue.add(
               [
                 bleDelegate.getChar(),
                 queue.C_WRITENR,
                 [
-                  0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                  0xaa, 0x55, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x73, 0x14, 0x5a, 0x5a,
                 ]b,
               ],

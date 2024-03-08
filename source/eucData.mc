@@ -39,11 +39,14 @@ module eucData {
   var voltage = 0.0;
   var lowestBatteryPercentage = 101;
   var tripDistance = 0.0;
+  var correctedTripDistance = 0.0;
   var Phcurrent = 0.0;
   var current = 0.0;
   var temperature = 0.0;
+  var DisplayedTemperature = 0.0;
   var maxTemperature = 65;
   var totalDistance = 0.0;
+  var correctedTotalDistance = 0.0;
   var PWM = 0.0;
   var pedalMode = "0";
   var speedAlertMode = "0";
@@ -84,11 +87,6 @@ module eucData {
   var imHornSound = 0x18;
   var batteryTemp1 = 0.0;
   var batteryTemp2 = 0.0;
-
-  //S22 DEBUG
-  //var charValue = "";
-  //var queueValue = "";
-  //var wtype = "";
 
   //VESC :
   var VESCCanId = 0;
@@ -294,7 +292,32 @@ module eucData {
     return currentCurrent;
   }
   function getCorrectedSpeed() {
-    return speed * speedCorrectionFactor.toFloat();
+    if (useMiles == true) {
+      return speed * speedCorrectionFactor.toFloat() * 0.621371192;
+    } else {
+      return speed * speedCorrectionFactor.toFloat();
+    }
+  }
+  function getCorrectedTripDistance() {
+    if (useMiles == true) {
+      return tripDistance * speedCorrectionFactor.toFloat() * 0.621371192;
+    } else {
+      return tripDistance * speedCorrectionFactor.toFloat();
+    }
+  }
+  function getCorrectedTotalDistance() {
+    if (useMiles == true) {
+      return totalDistance * speedCorrectionFactor.toFloat() * 0.621371192;
+    } else {
+      return totalDistance * speedCorrectionFactor.toFloat();
+    }
+  }
+  function getTemperature() {
+    if (useFahrenheit == true) {
+      return temperature * 1.8 + 32.0;
+    } else {
+      return temperature;
+    }
   }
 
   function getVoltage() {

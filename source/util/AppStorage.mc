@@ -14,7 +14,7 @@ module AppStorage {
     }
   }
 
-  function getSetting(key as String) as Application.PropertyValueType {
+  function getSetting(key as String) {
     if (Toybox.Application has :Properties) {
       return Properties.getValue(key);
     } else {

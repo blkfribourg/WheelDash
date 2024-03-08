@@ -42,22 +42,12 @@ class VESCDecoder {
 
   function frameBuffer(bleDelegate, transmittedFrame) {
     var size = transmittedFrame.size();
-    if (eucData.useFahrenheit == 1) {
-      eucData.temperature =
-        (transmittedFrame.decodeNumber(Lang.NUMBER_FORMAT_SINT16, {
-          :offset => 1 + PtypeIdx,
-          :endianness => Lang.ENDIAN_BIG,
-        }) /
-          10.0) *
-          1.8 +
-        32.0;
-    } else {
-      eucData.temperature =
-        transmittedFrame.decodeNumber(Lang.NUMBER_FORMAT_SINT16, {
-          :offset => 1 + PtypeIdx,
-          :endianness => Lang.ENDIAN_BIG,
-        }) / 10.0;
-    }
+
+    eucData.temperature =
+      transmittedFrame.decodeNumber(Lang.NUMBER_FORMAT_SINT16, {
+        :offset => 1 + PtypeIdx,
+        :endianness => Lang.ENDIAN_BIG,
+      }) / 10.0;
 
     eucData.current =
       transmittedFrame.decodeNumber(Lang.NUMBER_FORMAT_SINT32, {
@@ -80,11 +70,8 @@ class VESCDecoder {
           :endianness => Lang.ENDIAN_BIG,
         })
         .abs() / 1000.0;
-    if (eucData.useMiles == true) {
-      eucData.speed = speed * 3.6 * 0.621371192;
-    } else {
-      eucData.speed = speed * 3.6;
-    }
+
+    eucData.speed = speed * 3.6;
 
     eucData.voltage =
       transmittedFrame.decodeNumber(Lang.NUMBER_FORMAT_SINT16, {
@@ -103,11 +90,9 @@ class VESCDecoder {
         :offset => 62 + PtypeIdx,
         :endianness => Lang.ENDIAN_BIG,
       }) / 1000.0; // in km
-    if (eucData.useMiles == true) {
-      eucData.totalDistance = totalDistance * 0.621371192;
-    } else {
-      eucData.totalDistance = totalDistance;
-    }
+
+    eucData.totalDistance = totalDistance;
+
     //eucData.totalDistance != 0: potential fix for avg speed issue on vesc
     if (startDistance == null && eucData.totalDistance != 0) {
       startDistance = eucData.totalDistance;

@@ -124,3 +124,7 @@ function xorChkSum(bytes) {
   }
   return chksum;
 }
+
+function kmToMiles(value) {
+  return value * 0.621371192;
+}

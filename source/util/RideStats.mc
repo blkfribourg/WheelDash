@@ -29,12 +29,11 @@ module rideStats {
     }
     if (eucData.correctedSpeed > minimalMovingSpeed) {
       if (startupDistance == null) {
-        startupDistance = eucData.tripDistance;
+        startupDistance = eucData.correctedTripDistance;
       }
       movingmsec = movingmsec + eucData.updateDelay;
       eucData.avgMovingSpeed =
-        ((eucData.tripDistance - startupDistance) *
-          eucData.speedCorrectionFactor) /
+        (eucData.correctedTripDistance - startupDistance) /
         (movingmsec / 3600000.0);
     }
   }

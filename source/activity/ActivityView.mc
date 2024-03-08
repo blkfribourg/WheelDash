@@ -112,19 +112,15 @@ class ActivityRecordView extends WatchUi.View {
   }
   function initSessionVar() {
     startingMoment = new Time.Moment(Time.now().value());
-    startingEUCTripDistance = eucData.totalDistance;
+    startingEUCTripDistance = eucData.correctedTotalDistance;
     minVoltage = eucData.getVoltage();
     maxVoltage = minVoltage;
     minBatteryPerc = eucData.getBatteryPercentage();
     maxBatteryPerc = minBatteryPerc;
   }
-  //! Load your resources here
-  //! @param dc Device context
+
   public function onLayout(dc as Dc) as Void {}
 
-  //! Called when this View is removed from the screen. Save the
-  //! state of this View here. This includes freeing resources from
-  //! memory.
   public function onHide() as Void {
     if (eucData.activityRecording == false) {
       //System.println("Stopping sensors");
@@ -211,8 +207,6 @@ class ActivityRecordView extends WatchUi.View {
     }
   }
 
-  //! Get whether a session is currently recording
-  //! @return true if there is a session currently recording, false otherwise
   public function isSessionRecording() as Boolean {
     if (_session != null) {
       return _session.isRecording();
@@ -463,31 +457,6 @@ class ActivityRecordView extends WatchUi.View {
       FitContributor.DATA_TYPE_STRING,
       { :mesgType => FitContributor.MESG_TYPE_SESSION, :count => 32 }
     );
-    /*
-    mSpeedField.setData(0.0);
-    mTripDistField.setData(0.0);
-    mMaxSpeedField.setData(0.0);
-    mAvgSpeedField.setData(0.0);
-    mPWMField.setData(0.0);
-    mVoltageField.setData(0.0);
-    mCurrentField.setData(0.0);
-    mPowerField.setData(0.0);
-    mTempField.setData(0.0);
-    mMaxPWMField.setData(0.0);
-    mMaxCurrentField.setData(0.0);
-    mMaxPowerField.setData(0.0);
-    mMaxTempField.setData(0.0);
-    //mMinTempField.setData(0.0);
-    mAvgCurrentField.setData(0.0);
-    mAvgSpeedField.setData(0.0);
-    mAvgPowerField.setData(0.0);
-    mRunningTimeDebugField.setData(0.0);
-    mMinVoltageField.setData(0.0);
-    mMaxVoltageField.setData(0.0);
-    mMaxBatteryField.setData(0.0);
-    mMinBatteryField.setData(0.0);
-    mWheelName.setData("unknown");
-    */
   }
   var maxSpeed = 0.0;
   var maxPWM = 0.0;
@@ -528,7 +497,7 @@ class ActivityRecordView extends WatchUi.View {
     mVoltageField.setData(currentVoltage); // id 2
     mCurrentField.setData(currentCurrent); // id 3
     mPowerField.setData(currentPower); // id 4
-    mTempField.setData(eucData.temperature); // id 5
+    mTempField.setData(eucData.DisplayedTemperature); // id 5
 
     if (correctedSpeed > maxSpeed) {
       maxSpeed = correctedSpeed;
@@ -546,12 +515,12 @@ class ActivityRecordView extends WatchUi.View {
       maxPower = currentPower;
       mMaxPowerField.setData(maxPower); // id 10
     }
-    if (eucData.temperature > maxTemp) {
-      maxTemp = eucData.temperature;
+    if (eucData.DisplayedTemperature > maxTemp) {
+      maxTemp = eucData.DisplayedTemperature;
       mMaxTempField.setData(maxTemp); // id 11
     }
-    if (eucData.temperature < minTemp && eucData.temperature != 0.0) {
-      minTemp = eucData.temperature;
+    if (eucData.DisplayedTemperature < minTemp && eucData.temperature != 0.0) {
+      minTemp = eucData.DisplayedTemperature;
       mMinTempField.setData(minTemp); // id 11
     }
     if (currentVoltage < minVoltage) {
@@ -575,11 +544,10 @@ class ActivityRecordView extends WatchUi.View {
     //System.println("elaspsed :" + elaspedTime.value());
     if (elaspedTime.value() != 0 && eucData.totalDistance > 0) {
       if (startingEUCTripDistance < 0) {
-        startingEUCTripDistance = eucData.totalDistance;
+        startingEUCTripDistance = eucData.correctedTotalDistance;
       }
       sessionDistance =
-        (eucData.totalDistance - startingEUCTripDistance) *
-        eucData.speedCorrectionFactor;
+        eucData.correctedTotalDistance - startingEUCTripDistance;
       avgSpeed = sessionDistance / (elaspedTime.value() / 3600.0);
     } else {
       sessionDistance = 0.0;

@@ -54,8 +54,6 @@ class ArcRenderer extends WatchUi.Drawable {
   private var screenHeight = System.getDeviceSettings().screenHeight;
   private var screenWidth = System.getDeviceSettings().screenWidth;
 
-  var font = WatchUi.loadResource(Rez.Fonts.GorgaBig);
-
   function initialize(params) {
     Drawable.initialize(params);
 
@@ -224,11 +222,16 @@ class ArcRenderer extends WatchUi.Drawable {
               secondResult
             );
           }
-
+          System.println("curentValue: " + currentValue);
+          System.println("lowestBatPerc! " + eucData.lowestBatteryPercentage);
+          System.println(
+            "testValue: " + currentValue * (1 + eucData.sagThreshold)
+          );
           if (
-            currentValue * eucData.sagThreshold >
-            eucData.lowestBatteryPercentage
+            1 - eucData.lowestBatteryPercentage / currentValue >
+            eucData.sagThreshold
           ) {
+            System.println("sag!");
             if (eucData.paired == false) {
               foregroundColor = 0x545454;
             } else {
