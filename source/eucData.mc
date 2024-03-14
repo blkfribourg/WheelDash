@@ -32,6 +32,8 @@ module eucData {
   var speedCorrectionFactor = 1; // correct distance aswell ...
   var useMiles = false;
   var useFahrenheit = false;
+  var convertToMiles = false;
+  var convertToFahrenheit = false;
   var deviceName = null;
   var voltage_scaling = 1;
   var speed = 0.0;
@@ -292,28 +294,28 @@ module eucData {
     return currentCurrent;
   }
   function getCorrectedSpeed() {
-    if (useMiles == true) {
+    if (convertToMiles == true) {
       return speed * speedCorrectionFactor.toFloat() * 0.621371192;
     } else {
       return speed * speedCorrectionFactor.toFloat();
     }
   }
   function getCorrectedTripDistance() {
-    if (useMiles == true) {
+    if (convertToMiles == true) {
       return tripDistance * speedCorrectionFactor.toFloat() * 0.621371192;
     } else {
       return tripDistance * speedCorrectionFactor.toFloat();
     }
   }
   function getCorrectedTotalDistance() {
-    if (useMiles == true) {
+    if (convertToMiles == true) {
       return totalDistance * speedCorrectionFactor.toFloat() * 0.621371192;
     } else {
       return totalDistance * speedCorrectionFactor.toFloat();
     }
   }
   function getTemperature() {
-    if (useFahrenheit == true) {
+    if (convertToFahrenheit == true) {
       return temperature * 1.8 + 32.0;
     } else {
       return temperature;

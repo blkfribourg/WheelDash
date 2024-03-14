@@ -71,8 +71,11 @@
     <string id="imHornSound">Inmotion horn (untested betatesters only)</string>
     <string id="KSVoiceMode">Enable Kingsong horn sound (transient voice mode)</string>
     
-    <string id="useMiles">Use Miles</string>
-    <string id="useFahrenheit">Use Fahrenheit</string>
+    <string id="useMiles">Miles unit</string>
+    <string id="useFahrenheit">Fahrenheit unit</string>
+    <string id="convertToMiles">Convert to Miles</string>
+    <string id="convertToFahrenheit">Convert to Fahrenheit</string>
+
 
     <string id="orangeColoringThreshold_p1">percentage threshold to color "top bar" with orange (Profile 1)</string>
     <string id="orangeColoringThreshold_p2">percentage threshold to color "top bar" with orange (Profile 2)</string>

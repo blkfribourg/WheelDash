@@ -30,7 +30,7 @@
         
         <fitField id="26" displayInChart="true" sortOrder = "7" precision="2"
         chartTitle="@Strings.temperature_graph_label" dataLabel="@Strings.temperature_label"
-        unitLabel="@Strings.temperature_unit" fillColor="#e67e22" />  
+        unitLabel="@Strings.temperature_unit_F" fillColor="#e67e22" />  
         
         <fitField id="21" displayInChart="false" displayInActivitySummary="true" sortOrder = "8"
         dataLabel="@Strings.wheelName_label"

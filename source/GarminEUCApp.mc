@@ -211,6 +211,8 @@ class GarminEUCApp extends Application.AppBase {
   function setGlobalSettings() {
     eucData.useMiles = AppStorage.getSetting("useMiles");
     eucData.useFahrenheit = AppStorage.getSetting("useFahrenheit");
+    eucData.convertToMiles = AppStorage.getSetting("convertToMiles");
+    eucData.convertToFahrenheit = AppStorage.getSetting("convertToFahrenheit");
     //Im Horn experimental
     eucData.imHornSound = AppStorage.getSetting("imHornSound");
     eucData.KSVoiceMode = AppStorage.getSetting("KSVoiceMode");

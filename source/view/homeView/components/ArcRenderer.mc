@@ -222,16 +222,12 @@ class ArcRenderer extends WatchUi.Drawable {
               secondResult
             );
           }
-          System.println("curentValue: " + currentValue);
-          System.println("lowestBatPerc! " + eucData.lowestBatteryPercentage);
-          System.println(
-            "testValue: " + currentValue * (1 + eucData.sagThreshold)
-          );
+
           if (
+            currentValue != 0 &&
             1 - eucData.lowestBatteryPercentage / currentValue >
-            eucData.sagThreshold
+              eucData.sagThreshold
           ) {
-            System.println("sag!");
             if (eucData.paired == false) {
               foregroundColor = 0x545454;
             } else {

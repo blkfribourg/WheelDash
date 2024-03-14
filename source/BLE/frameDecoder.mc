@@ -90,11 +90,13 @@ class GwDecoder {
     eucData.pedalMode = (settings >> 13) & 0x03;
     eucData.speedAlertMode = (settings >> 10) & 0x03;
     eucData.rollAngleMode = (settings >> 7) & 0x03;
+    /*
     if ((settings & 0x01) == 0x01) {
       eucData.useMiles = true;
     } else {
       eucData.useMiles = false;
     }
+    */
     eucData.ledMode = value[13].toNumber(); // 12 in euc dashboard by freestyl3r
     //eucData.lightMode=value[19]&0x03; unable to get light mode from wheel
     //System.println("light mode (frameA ):"+eucData.lightMode);

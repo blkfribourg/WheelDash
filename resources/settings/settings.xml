@@ -134,6 +134,20 @@
                 type="boolean"
             />
         </setting>
+         <setting
+            propertyKey="@Properties.convertToMiles"
+            title="@Strings.convertToMiles">
+            <settingConfig
+                type="boolean"
+            />
+        </setting>
+         <setting
+            propertyKey="@Properties.convertToFahrenheit"
+            title="@Strings.convertToFahrenheit">
+            <settingConfig
+                type="boolean"
+            />
+        </setting>
         
 
        <!--Profile 1-->

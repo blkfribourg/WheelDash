@@ -38,7 +38,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
     BleDelegate.initialize();
     profileManager = pm;
     profileNb = _profileNb;
-    char = profileManager.EUC_CHAR;
+    //char = profileManager.EUC_CHAR;
     queue = q;
     decoder = _decoder;
     /*
@@ -376,7 +376,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
             }
           }
         }
-        device = Ble.pairDevice(result);
+        device = Ble.pairDevice(result as Ble.ScanResult);
       }
     }
   }

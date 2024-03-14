@@ -18,6 +18,8 @@
     <property id ="KSVoiceMode" type="boolean">false</property>
     <property id ="useMiles" type="boolean">false</property>
     <property id ="useFahrenheit" type="boolean">false</property>
+     <property id ="convertToMiles" type="boolean">false</property>
+    <property id ="convertToFahrenheit" type="boolean">false</property>
     
 <!--Profile 1-->
     <property id="wheelName_p1" type="string">Profile 1</property>
