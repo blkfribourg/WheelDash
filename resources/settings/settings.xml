@@ -224,7 +224,7 @@
                     <settingConfig
                         type="numeric"
                         min="0"
-                        max="2"
+                        max="3"
                         errorMessage="@Strings.voltageCorrectionFactor_ErrorMessage" />
                 </setting>
                 <setting
@@ -450,7 +450,7 @@
                     <settingConfig
                         type="numeric"
                         min="0"
-                        max="2"
+                        max="3"
                         errorMessage="@Strings.voltageCorrectionFactor_ErrorMessage" />
                 </setting>
                 <setting
@@ -676,7 +676,7 @@
                     <settingConfig
                         type="numeric"
                         min="0"
-                        max="2"
+                        max="3"
                         errorMessage="@Strings.voltageCorrectionFactor_ErrorMessage" />
                 </setting>
                 <setting

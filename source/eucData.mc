@@ -3,7 +3,7 @@ using Toybox.System;
 module eucData {
   var wheelBrand;
   var wheelName;
-  var paired = false;
+  var paired = true;
   var limitedMemory = false;
   // Calculated PWM variables :
   // PLEASE UPDATE WITH YOU OWN VALUES BEFORE USE !
@@ -45,8 +45,9 @@ module eucData {
   var Phcurrent = 0.0;
   var current = 0.0;
   var temperature = 0.0;
-  var DisplayedTemperature = 0.0;
-  var maxTemperature = 65;
+
+  var displayedTemperature = 0.0;
+  var maxDisplayedTemperature = 65;
   var totalDistance = 0.0;
   var correctedTotalDistance = 0.0;
   var PWM = 0.0;
@@ -60,7 +61,7 @@ module eucData {
   var watchBatteryUsage = 0.0;
   var hPWM = 0.0;
   var currentCorrection;
-  var gothPWN = false;
+  var gothPWM = false;
   var battery = 0.0;
   // Veteran specific
   var version = 0;
@@ -92,6 +93,7 @@ module eucData {
 
   //VESC :
   var VESCCanId = 0;
+
   function getBatteryPercentage() {
     // using better battery formula from wheellog
 
@@ -259,10 +261,8 @@ module eucData {
   function getPWM() {
     if (eucData.voltage != 0) {
       //Quick&dirty fix for now, need to rewrite this:
-      if (wheelBrand != 0 || gothPWN == true) {
-        // 0 is begode/gotway, all other brands returns hPWM (Leaperkim / KS / OLD KS / IM / VESC)
-        return hPWM;
-      } else {
+      if ((wheelBrand == 0 && gothPWM == false) || wheelBrand == 5) {
+        //  System.println("calcPwm");
         var CalculatedPWM =
           eucData.speed.toFloat() /
           ((rotationSpeed / rotationVoltage) *
@@ -270,6 +270,12 @@ module eucData {
             eucData.voltage_scaling *
             powerFactor);
         return CalculatedPWM * 100;
+      }
+
+      // 0 is begode/gotway, all other brands returns hPWM (Leaperkim / KS / OLD KS / IM / VESC)
+      else {
+        //   System.println("hwPwm");
+        return hPWM;
       }
     } else {
       return 0;

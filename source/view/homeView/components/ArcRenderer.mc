@@ -262,12 +262,12 @@ class ArcRenderer extends WatchUi.Drawable {
           //System.println(WheelData.temperature.toNumber());
           //System.println(currentValue);
           if (
-            currentValue >= 0.75 * eucData.maxTemperature &&
-            currentValue < 0.8 * eucData.maxTemperature
+            currentValue >= 0.75 * eucData.maxDisplayedTemperature &&
+            currentValue < 0.8 * eucData.maxDisplayedTemperature
           ) {
             foregroundColor = mSecondColor;
             //System.println("secondColor");
-          } else if (currentValue > 0.8 * eucData.maxTemperature) {
+          } else if (currentValue > 0.8 * eucData.maxDisplayedTemperature) {
             foregroundColor = mThirdColor;
             //System.println("thirdColor");
           } else {

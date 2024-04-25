@@ -53,7 +53,7 @@ class GarminEUCDebugView extends WatchUi.View {
         alignAxe - 2 * xGap,
         3 * space + yGap,
         Graphics.FONT_TINY,
-        "temp: " + valueRound(eucData.DisplayedTemperature, "%.1f"),
+        "temp: " + valueRound(eucData.displayedTemperature, "%.1f"),
         Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
       );
       dc.drawText(
@@ -143,7 +143,7 @@ class GarminEUCDebugView extends WatchUi.View {
         alignAxe - 2 * xGap,
         3 * space + yGap,
         Graphics.FONT_TINY,
-        "temp: " + valueRound(eucData.DisplayedTemperature, "%.1f"),
+        "temp: " + valueRound(eucData.displayedTemperature, "%.1f"),
         Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
       );
       dc.drawText(

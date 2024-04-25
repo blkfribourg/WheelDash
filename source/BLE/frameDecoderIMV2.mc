@@ -74,6 +74,7 @@ class IMV2Decoder {
           //Should investigate if wrong packet or decoding error
           eucData.speed = speed;
         }
+        /* OUT OF ARRAY 
         var pwm =
           transmittedFrame
             .decodeNumber(Lang.NUMBER_FORMAT_SINT16, {
@@ -85,7 +86,7 @@ class IMV2Decoder {
           //Should investigate if wrong packet or decoding error
           eucData.hPWM = pwm;
         }
-
+*/
         eucData.current =
           transmittedFrame.decodeNumber(Lang.NUMBER_FORMAT_SINT16, {
             :offset => 7,

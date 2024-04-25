@@ -142,7 +142,7 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       eucData.maxDisplayedSpeed = AppStorage.getSetting("maxSpeed_p1");
       eucData.mainNumber = AppStorage.getSetting("mainNumber_p1");
       eucData.topBar = AppStorage.getSetting("topBar_p1");
-      eucData.gothPWN = AppStorage.getSetting("begodeCF_p1");
+      eucData.gothPWM = AppStorage.getSetting("begodeCF_p1");
 
       eucData.orangeColoringThreshold = AppStorage.getSetting(
         "orangeColoringThreshold_p1"
@@ -152,7 +152,8 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       );
 
       eucData.currentCorrection = AppStorage.getSetting("currentCorrection_p1");
-      eucData.maxTemperature = AppStorage.getSetting("maxTemperature_p1");
+      eucData.maxDisplayedTemperature =
+        AppStorage.getSetting("maxTemperature_p1");
 
       eucData.rotationSpeed = AppStorage.getSetting("rotationSpeed_PWM_p1");
       eucData.rotationVoltage = AppStorage.getSetting("rotationVoltage_PWM_p1");
@@ -195,7 +196,7 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       eucData.maxDisplayedSpeed = AppStorage.getSetting("maxSpeed_p2");
       eucData.mainNumber = AppStorage.getSetting("mainNumber_p2");
       eucData.topBar = AppStorage.getSetting("topBar_p2");
-      eucData.gothPWN = AppStorage.getSetting("begodeCF_p2");
+      eucData.gothPWM = AppStorage.getSetting("begodeCF_p2");
 
       eucData.orangeColoringThreshold = AppStorage.getSetting(
         "orangeColoringThreshold_p2"
@@ -205,7 +206,8 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       );
 
       eucData.currentCorrection = AppStorage.getSetting("currentCorrection_p2");
-      eucData.maxTemperature = AppStorage.getSetting("maxTemperature_p2");
+      eucData.maxDisplayedTemperature =
+        AppStorage.getSetting("maxTemperature_p2");
       eucData.rotationSpeed = AppStorage.getSetting("rotationSpeed_PWM_p2");
       eucData.rotationVoltage = AppStorage.getSetting("rotationVoltage_PWM_p2");
       eucData.powerFactor = AppStorage.getSetting("powerFactor_PWM_p2");
@@ -247,7 +249,7 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       eucData.maxDisplayedSpeed = AppStorage.getSetting("maxSpeed_p3");
       eucData.mainNumber = AppStorage.getSetting("mainNumber_p3");
       eucData.topBar = AppStorage.getSetting("topBar_p3");
-      eucData.gothPWN = AppStorage.getSetting("begodeCF_p3");
+      eucData.gothPWM = AppStorage.getSetting("begodeCF_p3");
 
       eucData.orangeColoringThreshold = AppStorage.getSetting(
         "orangeColoringThreshold_p3"
@@ -257,7 +259,8 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       );
 
       eucData.currentCorrection = AppStorage.getSetting("currentCorrection_p3");
-      eucData.maxTemperature = AppStorage.getSetting("maxTemperature_p3");
+      eucData.maxDisplayedTemperature =
+        AppStorage.getSetting("maxTemperature_p3");
 
       eucData.rotationSpeed = AppStorage.getSetting("rotationSpeed_PWM_p3");
       eucData.rotationVoltage = AppStorage.getSetting("rotationVoltage_PWM_p3");

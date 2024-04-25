@@ -59,7 +59,7 @@ module EUCAlarms {
     //Temperature alarm
     if (Attention has :vibrate && eucData.alarmThreshold_temp != 0) {
       if (
-        eucData.DisplayedTemperature > eucData.alarmThreshold_temp &&
+        eucData.displayedTemperature > eucData.alarmThreshold_temp &&
         alarmDelay <= 0 &&
         PWMAlarm == false
       ) {
@@ -68,7 +68,7 @@ module EUCAlarms {
         alarmDelay = 1000 / eucData.updateDelay;
         tempAlarm = true;
       }
-      if (eucData.DisplayedTemperature < eucData.alarmThreshold_temp) {
+      if (eucData.displayedTemperature < eucData.alarmThreshold_temp) {
         alarmDelay = 0;
         tempAlarm = false;
       } else {
