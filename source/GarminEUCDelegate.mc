@@ -9,7 +9,8 @@ class GarminEUCDelegate extends WatchUi.BehaviorDelegate {
   var activityView = null;
   var menu2Delegate = null;
   var actionButtonTrigger = null;
-
+  var DFlikeView = null;
+  hidden var DFViewOn = false;
   function initialize(
     main_view,
     _menu2,
@@ -37,8 +38,15 @@ class GarminEUCDelegate extends WatchUi.BehaviorDelegate {
     if (swipeEvent.getDirection() == WatchUi.SWIPE_UP) {
       goToActivityView();
     }
+    if (
+      swipeEvent.getDirection() == WatchUi.SWIPE_RIGHT &&
+      eucData.slideToDFView == true
+    ) {
+      goToDFView();
+    }
     return true;
   }
+
   function onNextPage() as Boolean {
     return false;
   }
@@ -64,6 +72,10 @@ class GarminEUCDelegate extends WatchUi.BehaviorDelegate {
   function getActivityView() {
     return activityView;
   }
+
+  function getDFlikeView() {
+    return DFlikeView;
+  }
   function unpair() {
     eucBleDelegate.manualUnpair();
   }
@@ -74,6 +86,18 @@ class GarminEUCDelegate extends WatchUi.BehaviorDelegate {
       new ActivityRecordDelegate(activityView),
       WatchUi.SLIDE_UP
     ); // Switch to activity view
+  }
+  function setDFlikeView(_DFLikeView) {
+    DFlikeView = _DFLikeView;
+  }
+  function goToDFView() {
+    if (DFViewOn == true) {
+      WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
+      DFViewOn = false;
+    } else {
+      DFViewOn = true;
+      WatchUi.pushView(DFlikeView, self, WatchUi.SLIDE_IMMEDIATE);
+    }
   }
   function getMenu2Delegate() {
     return menu2Delegate;

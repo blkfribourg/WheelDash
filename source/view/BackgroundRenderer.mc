@@ -10,15 +10,7 @@ class BackgroundRenderer extends WatchUi.Drawable {
       bg = Application.loadResource(Rez.Drawables.BackgroundImg);
     }
   }
-  function getXY(screenDiam, startingAngle, radius, angle, pos) {
-    var x =
-      screenDiam / 2 -
-      radius * Math.sin(Math.toRadians(startingAngle - angle * pos));
-    var y =
-      screenDiam / 2 -
-      radius * Math.cos(Math.toRadians(startingAngle - angle * pos));
-    return [x, y];
-  }
+
   function draw(dc) {
     var screenDiam = dc.getWidth();
     dc.setColor(0x000000, 0x000000);

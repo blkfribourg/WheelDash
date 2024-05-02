@@ -60,7 +60,7 @@ class GarminEUCView extends WatchUi.View {
       tempUnit = "°C";
     }
     cDrawables[:TemperatureNumber].setText(
-      valueRound(eucData.displayedTemperature, "%.1f").toString() + tempUnit
+      valueRound(eucData.DisplayedTemperature, "%.1f").toString() + tempUnit
     );
     cDrawables[:BottomSubtitle].setText(diplayStats());
     /* To implement later
@@ -115,7 +115,7 @@ class GarminEUCView extends WatchUi.View {
 
     cDrawables[:BatteryArc].setValues(batteryPercentage, 100);
     cDrawables[:TemperatureArc].setValues(
-      eucData.displayedTemperature,
+      eucData.DisplayedTemperature,
       eucData.maxDisplayedTemperature
     );
     cDrawables[:TimeDate].setColor(Graphics.COLOR_WHITE);

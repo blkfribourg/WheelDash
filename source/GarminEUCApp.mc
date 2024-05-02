@@ -31,9 +31,22 @@ class GarminEUCApp extends Application.AppBase {
     // end of sandbox
     setGlobalSettings();
     rideStatsInit();
+
     alarmsTimer.start(method(:onUpdateTimer), eucData.updateDelay, true);
   }
-
+  function DFViewInit() {
+    if (
+      eucData.dfViewBtn != 0 ||
+      eucData.slideToDFView == true ||
+      eucData.dfViewOnly == true
+    ) {
+      if (delegate.getDFlikeView() == null) {
+        // init DFlikeView
+        var DFlikeView = new DFView();
+        delegate.setDFlikeView(DFlikeView);
+      }
+    }
+  }
   // onStop() is called when your application is exiting
   function onStop(state as Dictionary?) as Void {
     if (eucData.activityAutorecording == true) {
@@ -53,7 +66,7 @@ class GarminEUCApp extends Application.AppBase {
   }
 
   // Return the initial view of your application here
-  function getInitialView() as Array<Views or InputDelegates>? {
+  function getInitialView() {
     view = profileSelector.createPSMenu();
     delegate = profileSelector.createPSDelegate();
     if (!usePS) {
@@ -64,11 +77,14 @@ class GarminEUCApp extends Application.AppBase {
       delegate = delegate.getDelegate();
     }
 
-    return [view, delegate] as Array<Views or InputDelegates>;
+    return [view, delegate];
   }
   // Timer callback for various alarms & update UI
   function onUpdateTimer() {
-    // dummyGen();
+    //dummyGen();
+    if (eucData.wheelName != null) {
+      DFViewInit();
+    }
     //Only starts if no profile selected
     if (eucData.wheelName == null && delegate != null && usePS) {
       timeOut = timeOut - eucData.updateDelay;
@@ -93,6 +109,7 @@ class GarminEUCApp extends Application.AppBase {
         ) {
           //enable sensor first ?
           activityRecordView.enableGPS();
+          eucData.GPS_requested = true;
           activityRecordingDelay = activityRecordingDelay - eucData.updateDelay;
           //force initialization
           activityRecordView.initialize();
@@ -132,7 +149,7 @@ class GarminEUCApp extends Application.AppBase {
         statsIndex++;
       }
       if (rideStats.showWatchBatteryConsumptionStatistic) {
-        rideStats.watchBatteryUsage();
+        rideStats.watchBatteryUsage(); 
         rideStats.statsArray[statsIndex] =
           "Wtch btry/h: " +
           valueRound(eucData.watchBatteryUsage, "%.1f").toString();
@@ -172,6 +189,14 @@ class GarminEUCApp extends Application.AppBase {
         //System.println(rideStats.statsArray[statsIndex]);
         statsIndex++;
       }
+
+      if (
+        eucData.dfViewBtn != 0 ||
+        eucData.slideToDFView == true ||
+        eucData.dfViewOnly == true
+      ) {
+        rideStats.computeDFViewStats();
+      }
     }
     WatchUi.requestUpdate();
   }
@@ -209,6 +234,10 @@ class GarminEUCApp extends Application.AppBase {
     //System.println("array size:" + rideStats.statsArray.size());
   }
   function setGlobalSettings() {
+    eucData.slideToDFView = AppStorage.getSetting("slideToDFView");
+    eucData.dfViewOnly = AppStorage.getSetting("dfViewOnly");
+    eucData.displayWind = AppStorage.getSetting("displayWind");
+    eucData.displayNorth = AppStorage.getSetting("displayNorth");
     eucData.useMiles = AppStorage.getSetting("useMiles");
     eucData.useFahrenheit = AppStorage.getSetting("useFahrenheit");
     eucData.convertToMiles = AppStorage.getSetting("convertToMiles");

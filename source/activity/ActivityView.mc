@@ -128,6 +128,7 @@ class ActivityRecordView extends WatchUi.View {
         Position.LOCATION_DISABLE,
         method(:onPosition)
       );
+      eucData.GPS_requested = false;
     }
   }
 
@@ -230,7 +231,7 @@ class ActivityRecordView extends WatchUi.View {
   const AVGSPEED_FIELD_ID = 12;
   const AVGCURRENT_FIELD_ID = 13;
   const AVGPOWER_FIELD_ID = 14;
-  const RUNNINGTIME_FIELD_ID = 15;
+  const EORBATTERY_FIELD_ID = 15;
 
   const MINVOLTAGE_FIELD_ID = 16;
   const MAXVOLTAGE_FIELD_ID = 17;
@@ -264,7 +265,7 @@ class ActivityRecordView extends WatchUi.View {
   hidden var mAvgSpeedField;
   hidden var mAvgCurrentField;
   hidden var mAvgPowerField;
-  hidden var mRunningTimeDebugField;
+  hidden var mEORBatteryField;
   hidden var mMinVoltageField;
   hidden var mMaxVoltageField;
   hidden var mMinBatteryField;
@@ -420,11 +421,11 @@ class ActivityRecordView extends WatchUi.View {
       FitContributor.DATA_TYPE_FLOAT,
       { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "W" }
     );
-    mRunningTimeDebugField = _session.createField(
-      "session_Running_Time",
-      RUNNINGTIME_FIELD_ID,
-      FitContributor.DATA_TYPE_FLOAT,
-      { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "s" }
+    mEORBatteryField = _session.createField(
+      "EORBattery",
+      EORBATTERY_FIELD_ID,
+      FitContributor.DATA_TYPE_UINT8,
+      { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "%" }
     );
 
     mMinVoltageField = _session.createField(
@@ -497,7 +498,7 @@ class ActivityRecordView extends WatchUi.View {
     mVoltageField.setData(currentVoltage); // id 2
     mCurrentField.setData(currentCurrent); // id 3
     mPowerField.setData(currentPower); // id 4
-    mTempField.setData(eucData.displayedTemperature); // id 5
+    mTempField.setData(eucData.DisplayedTemperature); // id 5
 
     if (correctedSpeed > maxSpeed) {
       maxSpeed = correctedSpeed;
@@ -515,12 +516,12 @@ class ActivityRecordView extends WatchUi.View {
       maxPower = currentPower;
       mMaxPowerField.setData(maxPower); // id 10
     }
-    if (eucData.displayedTemperature > maxTemp) {
-      maxTemp = eucData.displayedTemperature;
+    if (eucData.DisplayedTemperature > maxTemp) {
+      maxTemp = eucData.DisplayedTemperature;
       mMaxTempField.setData(maxTemp); // id 11
     }
-    if (eucData.displayedTemperature < minTemp && eucData.temperature != 0.0) {
-      minTemp = eucData.displayedTemperature;
+    if (eucData.DisplayedTemperature < minTemp && eucData.temperature != 0.0) {
+      minTemp = eucData.DisplayedTemperature;
       mMinTempField.setData(minTemp); // id 11
     }
     if (currentVoltage < minVoltage) {
@@ -538,6 +539,9 @@ class ActivityRecordView extends WatchUi.View {
     if (currentBatteryPerc < minBatteryPerc) {
       minBatteryPerc = currentBatteryPerc;
       mMinBatteryField.setData(minBatteryPerc);
+    }
+    if (currentBatteryPerc > 0 && eucData.paired == true) {
+      mEORBatteryField.setData(currentBatteryPerc);
     }
     var currentMoment = new Time.Moment(Time.now().value());
     var elaspedTime = startingMoment.subtract(currentMoment);
@@ -561,7 +565,7 @@ class ActivityRecordView extends WatchUi.View {
     mAvgCurrentField.setData(sumCurrent / callNb); // id 13
     mAvgPowerField.setData(sumPower / callNb); // id 14
 
-    mRunningTimeDebugField.setData(elaspedTime.value());
+    //mRunningTimeDebugField.setData(elaspedTime.value());
     mWheelName.setData(eucData.wheelName);
     // add Trip distance from EUC
     WatchUi.requestUpdate();

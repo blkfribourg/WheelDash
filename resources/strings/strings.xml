@@ -38,6 +38,9 @@
     <string id="beepButtonMap_p2">Button mapping to wheel beep (horn mode) (Profile 2)</string>
     <string id="beepButtonMap_p3">Button mapping to wheel beep (horn mode) (Profile 3)</string>
 
+    <string id="DFViewButtonMap_p1">Button mapping to datafield like view (Profile 1)</string>
+    <string id="DFViewButtonMap_p2">Button mapping to datafield like view (Profile 2)</string>
+    <string id="DFViewButtonMap_p3">Button mapping to datafield like view (Profile 3)</string>
     <string id="lockButtonMap_p1">DONOTUSE Button mapping to wheel lock/unlock (Profile 1)</string>
 
     <string id="none">None</string>
@@ -186,6 +189,59 @@
    <string id="watchBatteryStatistic">Display watch battery</string>
    <string id="profileName">Display profile name</string>
    <string id="debugMode">Enable Debug Mode (view)</string>
+
+   <!-- DF view Strings-->
+   <string id="dfViewOnly">Datafield-like view only</string>
+   <string id="displayNorth">Display North orientation (red triangle, datafield-like view)</string>
+   <string id="displayWind">Display Wind bearing (blue triangle, datafield-like view)</string>
+   <string id="slideToDFView">Toggle Datafield-like view when sliding right</string>
+   <string id="fieldNB">Datafield-like view field number</string>
+   
+   <string id="fieldNB4">4</string>
+   <string id="fieldNB6">6</string>
+
+   <string id="fieldLbl1">Field 1</string>
+   <string id="fieldLbl2">Field 2</string>
+   <string id="fieldLbl3">Field 3</string>
+   <string id="fieldLbl4">Field 4</string>
+   <string id="fieldLbl5">Field 5</string>
+   <string id="fieldLbl6">Field 6</string>
+
+   <string id="field0">Speed</string>
+   <string id="field1">Voltage</string>
+   <string id="field2">Trip distance</string>
+   <string id="field3">Current</string>
+   <string id="field4">Temperature</string>
+   <string id="field5">Total distance</string>
+   <string id="field6">PWM</string>
+   <string id="field7">Battery %</string>
+   <string id="field8">Battery used %</string>
+   <string id="field32">Battery usage</string>
+   <string id="field9">Max temperature</string>
+   <string id="field10">Top speed</string>
+   <string id="field11">Average moving speed</string>
+   <string id="field12">Min voltage</string>
+   <string id="field13">Max voltage</string>
+   <string id="field14">Max current</string>
+   <string id="field15">Average current</string>
+   <string id="field16">Min battery %</string>
+   <string id="field17">Max battery %</string>
+   <string id="field18">Average power</string>
+   <string id="field19">Max power</string>
+   <string id="field20">Max PWM</string>
+   <string id="field21">Altitude</string>
+   <string id="field22">GPS speed</string>
+   <string id="field23">Heart rate</string>
+   <string id="field24">Watch battery %</string>
+   <string id="field25">Watch battery usage</string>
+   <string id="field26">WX temperature</string>
+   <string id="field27">WX realFeel temperature</string>
+   <string id="field28">WX condition</string>
+   <string id="field29">WX precipitation chance</string>
+   <string id="field30">WX humidity</string>
+   <string id="field31">WX wind speed</string>
+   <string id="field8">Battery used/distance</string>
+   <string id="field33">Current Time</string>
     <!-- FIT Strings-->
 
     <string id="speed_graph_label">Speed</string>
@@ -229,8 +285,7 @@
     <string id="avgCurrent_unit">A</string>
     <string id="avgPower_label">Session average power</string>
     <string id="avgPower_unit">W</string>
-    <string id="runningTime_label">Session running time (debug)</string>
-    <string id="runnintTime_unit">s</string>
+    <string id="EORBattery_label">End of ride battery %</string>
 
     <string id="minVoltage_label">Session min voltage</string>
     <string id="maxVoltage_label">Session max voltage</string>

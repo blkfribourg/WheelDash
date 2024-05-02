@@ -6,6 +6,7 @@ class ActionButton {
   var lightToggleIndex = 0;
   //var lockStatus = 0;
   var recordActivityButton;
+  var DFViewButton;
   var cycleLightButton;
   var beepButton;
   //var lockButton;
@@ -15,6 +16,9 @@ class ActionButton {
     eucDict = getEUCSettingsDict();
   }
   function triggerAction(bleDelegate, keyNumber, _mainDelegate, _queue) {
+    if (DFViewButton == keyNumber && eucData.dfViewOnly == false) {
+      _mainDelegate.goToDFView();
+    }
     if (eucData.paired == true) {
       queueRequired = false;
       queue = _queue;
@@ -22,6 +26,7 @@ class ActionButton {
       if (recordActivityButton == keyNumber) {
         _mainDelegate.goToActivityView();
       }
+
       //if (bleDelegate != null && eucData.paired == true) {
       if (cycleLightButton == keyNumber) {
         queueRequired = true;
@@ -136,12 +141,28 @@ class ActionButton {
       if (beepButton == keyNumber) {
         queueRequired = true;
         // Action = beep beep
-        if (eucData.wheelBrand == 0 || eucData.wheelBrand == 1) {
+        if (
+          eucData.wheelBrand == 0 ||
+          (eucData.wheelBrand == 1 && eucData.version < 3)
+        ) {
           queue.add(
             [
               bleDelegate.getChar(),
               queue.C_WRITENR,
               string_to_byte_array("b" as String),
+            ],
+            bleDelegate.getPMService()
+          );
+        }
+        if (eucData.wheelBrand == 1 && eucData.version >= 3) {
+          queue.add(
+            [
+              bleDelegate.getChar(),
+              queue.C_WRITENR,
+              [
+                0x4c, 0x6b, 0x41, 0x70, 0x0e, 0x00, 0x80, 0x80, 0x80, 0x01,
+                0xca, 0x87, 0xe6, 0x6f,
+              ]b,
             ],
             bleDelegate.getPMService()
           );

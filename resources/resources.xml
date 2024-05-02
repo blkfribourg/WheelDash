@@ -113,8 +113,8 @@
         unitLabel="@Strings.percentage_unit"/>
 
         <fitField id="15" displayInChart="false" displayInActivitySummary="true" sortOrder = "28" precision="2"
-        dataLabel="@Strings.runningTime_label"
-        unitLabel="@Strings.runnintTime_unit"/>
+        dataLabel="@Strings.EORBattery_label"
+        unitLabel="@Strings.percentage_unit"/>
 
 
     </fitContributions>

@@ -200,6 +200,16 @@
                      <listEntry value="8">@Strings.downButton</listEntry>
                 </settingConfig>
             </setting>
+             <setting
+                propertyKey="@Properties.DFViewButtonMap_p1"
+                title="@Strings.DFViewButtonMap_p1">
+                <settingConfig type="list">
+                    <listEntry value="0">@Strings.none</listEntry>
+                    <listEntry value="4">@Strings.startStopButton</listEntry>
+                     <listEntry value="13">@Strings.middleButton</listEntry>
+                     <listEntry value="8">@Strings.downButton</listEntry>
+                </settingConfig>
+            </setting>
             <setting
                     propertyKey="@Properties.cmdQueueDelay_p1"
                     title="@Strings.cmdQueueDelay_p1">
@@ -373,6 +383,7 @@
                 max="250"
                 errorMessage="@Strings.alarmThreshold_temp_ErrorMessage" />
         </setting>
+        
        
         
 
@@ -419,6 +430,16 @@
             <setting
                 propertyKey="@Properties.beepButtonMap_p2"
                 title="@Strings.beepButtonMap_p2">
+                <settingConfig type="list">
+                    <listEntry value="0">@Strings.none</listEntry>
+                    <listEntry value="4">@Strings.startStopButton</listEntry>
+                     <listEntry value="13">@Strings.middleButton</listEntry>
+                     <listEntry value="8">@Strings.downButton</listEntry>
+                </settingConfig>
+            </setting>
+            <setting
+                propertyKey="@Properties.DFViewButtonMap_p2"
+                title="@Strings.DFViewButtonMap_p2">
                 <settingConfig type="list">
                     <listEntry value="0">@Strings.none</listEntry>
                     <listEntry value="4">@Strings.startStopButton</listEntry>
@@ -653,6 +674,16 @@
                 </settingConfig>
             </setting>
             <setting
+                propertyKey="@Properties.DFViewButtonMap_p3"
+                title="@Strings.DFViewButtonMap_p3">
+                <settingConfig type="list">
+                    <listEntry value="0">@Strings.none</listEntry>
+                    <listEntry value="4">@Strings.startStopButton</listEntry>
+                     <listEntry value="13">@Strings.middleButton</listEntry>
+                     <listEntry value="8">@Strings.downButton</listEntry>
+                </settingConfig>
+            </setting>
+            <setting
                     propertyKey="@Properties.cmdQueueDelay_p3"
                     title="@Strings.cmdQueueDelay_p3">
                     <settingConfig
@@ -825,6 +856,282 @@
                 max="250"
                 errorMessage="@Strings.alarmThreshold_temp_ErrorMessage" />
         </setting>
-        
+        <!-- Datafield like view settings -->
+         <setting
+            propertyKey="@Properties.dfViewOnly"
+            title="@Strings.dfViewOnly">
+            <settingConfig
+                type="boolean"
+            />
+        </setting>
+         <setting
+            propertyKey="@Properties.displayNorth"
+            title="@Strings.displayNorth">
+            <settingConfig
+                type="boolean"
+            />
+        </setting>
+         <setting
+            propertyKey="@Properties.displayWind"
+            title="@Strings.displayWind">
+            <settingConfig
+                type="boolean"
+            />
+        </setting>
+        <setting
+            propertyKey="@Properties.slideToDFView"
+            title="@Strings.slideToDFView">
+            <settingConfig
+                type="boolean"
+            />
+        </setting>
+        <setting
+            propertyKey="@Properties.fieldNB"
+            title="@Strings.fieldNB">  
+                <settingConfig type="list">
+                    <listEntry value="4">@Strings.fieldNB4</listEntry>
+                    <listEntry value="6">@Strings.fieldNB6</listEntry>
+                </settingConfig>
+        </setting>
+         <setting
+            propertyKey="@Properties.field1"
+            title="@Strings.fieldLbl1">  
+                <settingConfig type="list">
+                    <listEntry value="0">@Strings.field0</listEntry>
+                    <listEntry value="1">@Strings.field1</listEntry>
+                    <listEntry value="2">@Strings.field2</listEntry>
+                    <listEntry value="3">@Strings.field3</listEntry>
+                    <listEntry value="4">@Strings.field4</listEntry>
+                    <listEntry value="5">@Strings.field5</listEntry>
+                    <listEntry value="6">@Strings.field6</listEntry>
+                    <listEntry value="7">@Strings.field7</listEntry>
+                    <listEntry value="8">@Strings.field8</listEntry>
+                    <listEntry value="9">@Strings.field9</listEntry>
+                    <listEntry value="10">@Strings.field10</listEntry>
+                    <listEntry value="11">@Strings.field11</listEntry>
+                    <listEntry value="12">@Strings.field12</listEntry>
+                    <listEntry value="13">@Strings.field13</listEntry>
+                    <listEntry value="14">@Strings.field14</listEntry>
+                    <listEntry value="15">@Strings.field15</listEntry>
+                    <listEntry value="16">@Strings.field16</listEntry>
+                    <listEntry value="17">@Strings.field17</listEntry>
+                    <listEntry value="18">@Strings.field18</listEntry>
+                    <listEntry value="19">@Strings.field19</listEntry>
+                    <listEntry value="20">@Strings.field20</listEntry>
+                    <listEntry value="21">@Strings.field21</listEntry>
+                    <listEntry value="22">@Strings.field22</listEntry>
+                    <listEntry value="23">@Strings.field23</listEntry>
+                    <listEntry value="24">@Strings.field24</listEntry>
+                    <listEntry value="25">@Strings.field25</listEntry>
+                    <listEntry value="26">@Strings.field26</listEntry>
+                    <listEntry value="27">@Strings.field27</listEntry>
+                    <listEntry value="28">@Strings.field28</listEntry>
+                    <listEntry value="29">@Strings.field29</listEntry>
+                    <listEntry value="30">@Strings.field30</listEntry>
+                    <listEntry value="31">@Strings.field31</listEntry>
+                    <listEntry value="32">@Strings.field32</listEntry>
+                    <listEntry value="33">@Strings.field33</listEntry>
+                </settingConfig>
+        </setting>
+         <setting
+            propertyKey="@Properties.field2"
+            title="@Strings.fieldLbl2">  
+                <settingConfig type="list">
+                     <listEntry value="0">@Strings.field0</listEntry>
+                    <listEntry value="1">@Strings.field1</listEntry>
+                    <listEntry value="2">@Strings.field2</listEntry>
+                    <listEntry value="3">@Strings.field3</listEntry>
+                    <listEntry value="4">@Strings.field4</listEntry>
+                    <listEntry value="5">@Strings.field5</listEntry>
+                    <listEntry value="6">@Strings.field6</listEntry>
+                    <listEntry value="7">@Strings.field7</listEntry>
+                    <listEntry value="8">@Strings.field8</listEntry>
+                    <listEntry value="9">@Strings.field9</listEntry>
+                    <listEntry value="10">@Strings.field10</listEntry>
+                    <listEntry value="11">@Strings.field11</listEntry>
+                    <listEntry value="12">@Strings.field12</listEntry>
+                    <listEntry value="13">@Strings.field13</listEntry>
+                    <listEntry value="14">@Strings.field14</listEntry>
+                    <listEntry value="15">@Strings.field15</listEntry>
+                    <listEntry value="16">@Strings.field16</listEntry>
+                    <listEntry value="17">@Strings.field17</listEntry>
+                    <listEntry value="18">@Strings.field18</listEntry>
+                    <listEntry value="19">@Strings.field19</listEntry>
+                    <listEntry value="20">@Strings.field20</listEntry>
+                    <listEntry value="21">@Strings.field21</listEntry>
+                    <listEntry value="22">@Strings.field22</listEntry>
+                    <listEntry value="23">@Strings.field23</listEntry>
+                    <listEntry value="24">@Strings.field24</listEntry>
+                    <listEntry value="25">@Strings.field25</listEntry>
+                    <listEntry value="26">@Strings.field26</listEntry>
+                    <listEntry value="27">@Strings.field27</listEntry>
+                    <listEntry value="28">@Strings.field28</listEntry>
+                    <listEntry value="29">@Strings.field29</listEntry>
+                    <listEntry value="30">@Strings.field30</listEntry>
+                    <listEntry value="31">@Strings.field31</listEntry>
+                    <listEntry value="32">@Strings.field32</listEntry>
+                    <listEntry value="33">@Strings.field33</listEntry>
+                </settingConfig>
+        </setting>
+         <setting
+            propertyKey="@Properties.field3"
+            title="@Strings.fieldLbl3">  
+                <settingConfig type="list">
+                     <listEntry value="0">@Strings.field0</listEntry>
+                    <listEntry value="1">@Strings.field1</listEntry>
+                    <listEntry value="2">@Strings.field2</listEntry>
+                    <listEntry value="3">@Strings.field3</listEntry>
+                    <listEntry value="4">@Strings.field4</listEntry>
+                    <listEntry value="5">@Strings.field5</listEntry>
+                    <listEntry value="6">@Strings.field6</listEntry>
+                    <listEntry value="7">@Strings.field7</listEntry>
+                    <listEntry value="8">@Strings.field8</listEntry>
+                    <listEntry value="9">@Strings.field9</listEntry>
+                    <listEntry value="10">@Strings.field10</listEntry>
+                    <listEntry value="11">@Strings.field11</listEntry>
+                    <listEntry value="12">@Strings.field12</listEntry>
+                    <listEntry value="13">@Strings.field13</listEntry>
+                    <listEntry value="14">@Strings.field14</listEntry>
+                    <listEntry value="15">@Strings.field15</listEntry>
+                    <listEntry value="16">@Strings.field16</listEntry>
+                    <listEntry value="17">@Strings.field17</listEntry>
+                    <listEntry value="18">@Strings.field18</listEntry>
+                    <listEntry value="19">@Strings.field19</listEntry>
+                    <listEntry value="20">@Strings.field20</listEntry>
+                    <listEntry value="21">@Strings.field21</listEntry>
+                    <listEntry value="22">@Strings.field22</listEntry>
+                    <listEntry value="23">@Strings.field23</listEntry>
+                    <listEntry value="24">@Strings.field24</listEntry>
+                    <listEntry value="25">@Strings.field25</listEntry>
+                    <listEntry value="26">@Strings.field26</listEntry>
+                    <listEntry value="27">@Strings.field27</listEntry>
+                    <listEntry value="28">@Strings.field28</listEntry>
+                    <listEntry value="29">@Strings.field29</listEntry>
+                    <listEntry value="30">@Strings.field30</listEntry>
+                    <listEntry value="31">@Strings.field31</listEntry>
+                    <listEntry value="32">@Strings.field32</listEntry>
+                    <listEntry value="33">@Strings.field33</listEntry>
+                </settingConfig>
+        </setting>
+         <setting
+            propertyKey="@Properties.field4"
+            title="@Strings.fieldLbl4">  
+                <settingConfig type="list">
+                     <listEntry value="0">@Strings.field0</listEntry>
+                    <listEntry value="1">@Strings.field1</listEntry>
+                    <listEntry value="2">@Strings.field2</listEntry>
+                    <listEntry value="3">@Strings.field3</listEntry>
+                    <listEntry value="4">@Strings.field4</listEntry>
+                    <listEntry value="5">@Strings.field5</listEntry>
+                    <listEntry value="6">@Strings.field6</listEntry>
+                    <listEntry value="7">@Strings.field7</listEntry>
+                    <listEntry value="8">@Strings.field8</listEntry>
+                    <listEntry value="9">@Strings.field9</listEntry>
+                    <listEntry value="10">@Strings.field10</listEntry>
+                    <listEntry value="11">@Strings.field11</listEntry>
+                    <listEntry value="12">@Strings.field12</listEntry>
+                    <listEntry value="13">@Strings.field13</listEntry>
+                    <listEntry value="14">@Strings.field14</listEntry>
+                    <listEntry value="15">@Strings.field15</listEntry>
+                    <listEntry value="16">@Strings.field16</listEntry>
+                    <listEntry value="17">@Strings.field17</listEntry>
+                    <listEntry value="18">@Strings.field18</listEntry>
+                    <listEntry value="19">@Strings.field19</listEntry>
+                    <listEntry value="20">@Strings.field20</listEntry>
+                    <listEntry value="21">@Strings.field21</listEntry>
+                    <listEntry value="22">@Strings.field22</listEntry>
+                    <listEntry value="23">@Strings.field23</listEntry>
+                    <listEntry value="24">@Strings.field24</listEntry>
+                    <listEntry value="25">@Strings.field25</listEntry>
+                    <listEntry value="26">@Strings.field26</listEntry>
+                    <listEntry value="27">@Strings.field27</listEntry>
+                    <listEntry value="28">@Strings.field28</listEntry>
+                    <listEntry value="29">@Strings.field29</listEntry>
+                    <listEntry value="30">@Strings.field30</listEntry>
+                    <listEntry value="31">@Strings.field31</listEntry>
+                    <listEntry value="32">@Strings.field32</listEntry>
+                    <listEntry value="33">@Strings.field33</listEntry>
+                </settingConfig>
+        </setting>
+         <setting
+            propertyKey="@Properties.field5"
+            title="@Strings.fieldLbl5">  
+                <settingConfig type="list">
+                     <listEntry value="0">@Strings.field0</listEntry>
+                    <listEntry value="1">@Strings.field1</listEntry>
+                    <listEntry value="2">@Strings.field2</listEntry>
+                    <listEntry value="3">@Strings.field3</listEntry>
+                    <listEntry value="4">@Strings.field4</listEntry>
+                    <listEntry value="5">@Strings.field5</listEntry>
+                    <listEntry value="6">@Strings.field6</listEntry>
+                    <listEntry value="7">@Strings.field7</listEntry>
+                    <listEntry value="8">@Strings.field8</listEntry>
+                    <listEntry value="9">@Strings.field9</listEntry>
+                    <listEntry value="10">@Strings.field10</listEntry>
+                    <listEntry value="11">@Strings.field11</listEntry>
+                    <listEntry value="12">@Strings.field12</listEntry>
+                    <listEntry value="13">@Strings.field13</listEntry>
+                    <listEntry value="14">@Strings.field14</listEntry>
+                    <listEntry value="15">@Strings.field15</listEntry>
+                    <listEntry value="16">@Strings.field16</listEntry>
+                    <listEntry value="17">@Strings.field17</listEntry>
+                    <listEntry value="18">@Strings.field18</listEntry>
+                    <listEntry value="19">@Strings.field19</listEntry>
+                    <listEntry value="20">@Strings.field20</listEntry>
+                    <listEntry value="21">@Strings.field21</listEntry>
+                    <listEntry value="22">@Strings.field22</listEntry>
+                    <listEntry value="23">@Strings.field23</listEntry>
+                    <listEntry value="24">@Strings.field24</listEntry>
+                    <listEntry value="25">@Strings.field25</listEntry>
+                    <listEntry value="26">@Strings.field26</listEntry>
+                    <listEntry value="27">@Strings.field27</listEntry>
+                    <listEntry value="28">@Strings.field28</listEntry>
+                    <listEntry value="29">@Strings.field29</listEntry>
+                    <listEntry value="30">@Strings.field30</listEntry>
+                    <listEntry value="31">@Strings.field31</listEntry>
+                    <listEntry value="32">@Strings.field32</listEntry>
+                    <listEntry value="33">@Strings.field33</listEntry>
+                </settingConfig>
+        </setting>
+         <setting
+            propertyKey="@Properties.field6"
+            title="@Strings.fieldLbl6">  
+                <settingConfig type="list">
+                     <listEntry value="0">@Strings.field0</listEntry>
+                    <listEntry value="1">@Strings.field1</listEntry>
+                    <listEntry value="2">@Strings.field2</listEntry>
+                    <listEntry value="3">@Strings.field3</listEntry>
+                    <listEntry value="4">@Strings.field4</listEntry>
+                    <listEntry value="5">@Strings.field5</listEntry>
+                    <listEntry value="6">@Strings.field6</listEntry>
+                    <listEntry value="7">@Strings.field7</listEntry>
+                    <listEntry value="8">@Strings.field8</listEntry>
+                    <listEntry value="9">@Strings.field9</listEntry>
+                    <listEntry value="10">@Strings.field10</listEntry>
+                    <listEntry value="11">@Strings.field11</listEntry>
+                    <listEntry value="12">@Strings.field12</listEntry>
+                    <listEntry value="13">@Strings.field13</listEntry>
+                    <listEntry value="14">@Strings.field14</listEntry>
+                    <listEntry value="15">@Strings.field15</listEntry>
+                    <listEntry value="16">@Strings.field16</listEntry>
+                    <listEntry value="17">@Strings.field17</listEntry>
+                    <listEntry value="18">@Strings.field18</listEntry>
+                    <listEntry value="19">@Strings.field19</listEntry>
+                    <listEntry value="20">@Strings.field20</listEntry>
+                    <listEntry value="21">@Strings.field21</listEntry>
+                    <listEntry value="22">@Strings.field22</listEntry>
+                    <listEntry value="23">@Strings.field23</listEntry>
+                    <listEntry value="24">@Strings.field24</listEntry>
+                    <listEntry value="25">@Strings.field25</listEntry>
+                    <listEntry value="26">@Strings.field26</listEntry>
+                    <listEntry value="27">@Strings.field27</listEntry>
+                    <listEntry value="28">@Strings.field28</listEntry>
+                    <listEntry value="29">@Strings.field29</listEntry>
+                    <listEntry value="30">@Strings.field30</listEntry>
+                    <listEntry value="31">@Strings.field31</listEntry>
+                    <listEntry value="32">@Strings.field32</listEntry>
+                    <listEntry value="33">@Strings.field33</listEntry>
+                </settingConfig>
+        </setting>
    
 </settings>

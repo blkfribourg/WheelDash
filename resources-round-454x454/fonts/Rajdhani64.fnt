@@ -1,0 +1,16 @@
+info face="Rajdhani SemiBold" size=78 bold=0 italic=0 charset="" unicode=1 stretchH=100 smooth=1 aa=1 padding=0,0,0,0 spacing=1,1 outline=0
+common lineHeight=78 base=57 scaleW=256 scaleH=256 pages=1 packed=0 alphaChnl=1 redChnl=0 greenChnl=0 blueChnl=0
+page id=0 file="Rajdhani64_0.png"
+chars count=12
+char id=45   x=25    y=41    width=15    height=5     xoffset=2     yoffset=35    xadvance=19    page=0  chnl=15
+char id=46   x=16    y=41    width=8     height=10    xoffset=2     yoffset=47    xadvance=12    page=0  chnl=15
+char id=48   x=87    y=0     width=26    height=40    xoffset=3     yoffset=17    xadvance=32    page=0  chnl=15
+char id=49   x=0     y=41    width=15    height=40    xoffset=1     yoffset=17    xadvance=20    page=0  chnl=15
+char id=50   x=114   y=0     width=26    height=40    xoffset=2     yoffset=17    xadvance=30    page=0  chnl=15
+char id=51   x=141   y=0     width=26    height=40    xoffset=2     yoffset=17    xadvance=31    page=0  chnl=15
+char id=52   x=0     y=0     width=30    height=40    xoffset=2     yoffset=17    xadvance=33    page=0  chnl=15
+char id=53   x=168   y=0     width=26    height=40    xoffset=2     yoffset=17    xadvance=30    page=0  chnl=15
+char id=54   x=195   y=0     width=26    height=40    xoffset=3     yoffset=17    xadvance=31    page=0  chnl=15
+char id=55   x=222   y=0     width=25    height=40    xoffset=0     yoffset=17    xadvance=25    page=0  chnl=15
+char id=56   x=31    y=0     width=27    height=40    xoffset=3     yoffset=17    xadvance=33    page=0  chnl=15
+char id=57   x=59    y=0     width=27    height=40    xoffset=2     yoffset=17    xadvance=31    page=0  chnl=15

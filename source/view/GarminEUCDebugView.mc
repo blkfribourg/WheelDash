@@ -53,7 +53,7 @@ class GarminEUCDebugView extends WatchUi.View {
         alignAxe - 2 * xGap,
         3 * space + yGap,
         Graphics.FONT_TINY,
-        "temp: " + valueRound(eucData.displayedTemperature, "%.1f"),
+        "temp: " + valueRound(eucData.DisplayedTemperature, "%.1f"),
         Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
       );
       dc.drawText(
@@ -107,6 +107,58 @@ class GarminEUCDebugView extends WatchUi.View {
         Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
       );
       //  valueRound(batteryPercentage, "%.1f");
+
+      /*
+      var alignAxe = dc.getWidth() / 5;
+      var space = dc.getHeight() / 10;
+      var yGap = dc.getHeight() / 8;
+      var xGap = dc.getWidth() / 12;
+      dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_BLACK);
+      dc.fillRectangle(0, 0, dc.getWidth(), dc.getHeight());
+      dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
+      dc.drawRectangle(0, 0, dc.getWidth(), dc.getHeight());
+      dc.drawText(
+        alignAxe,
+        yGap,
+        Graphics.FONT_TINY,
+        "avgSpdDsp: " + rideStats.showAverageMovingSpeedStatistic,
+        Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+      );
+      dc.drawText(
+        alignAxe - xGap,
+        space + yGap,
+        Graphics.FONT_TINY,
+        "avgSpdCpt: " + rideStats.computeAvgMovingSpeed,
+        Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+      );
+      dc.drawText(
+        alignAxe - 2 * xGap,
+        2 * space + yGap,
+        Graphics.FONT_TINY,
+        "minMvSpd: " + rideStats.minimalMovingSpeed,
+        Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+      );
+      dc.drawText(
+        alignAxe - 2 * xGap,
+        3 * space + yGap,
+        Graphics.FONT_TINY,
+        "strtDst: " + valueRound(rideStats.startupDistance, "%.1f"),
+        Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+      );
+      dc.drawText(
+        alignAxe - 2 * xGap,
+        4 * space + yGap,
+        Graphics.FONT_TINY,
+        "msec: " + rideStats.movingmsec,
+        Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+      );
+      dc.drawText(
+        alignAxe - 2 * xGap,
+        5 * space + yGap,
+        Graphics.FONT_TINY,
+        "corTrpDst: " + valueRound(eucData.correctedTripDistance, "%.1f"),
+        Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+      );*/
     }
     if (eucData.wheelBrand == 2 || eucData.wheelBrand == 3) {
       var alignAxe = dc.getWidth() / 5;
@@ -143,7 +195,7 @@ class GarminEUCDebugView extends WatchUi.View {
         alignAxe - 2 * xGap,
         3 * space + yGap,
         Graphics.FONT_TINY,
-        "temp: " + valueRound(eucData.displayedTemperature, "%.1f"),
+        "temp: " + valueRound(eucData.DisplayedTemperature, "%.1f"),
         Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
       );
       dc.drawText(

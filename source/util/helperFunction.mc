@@ -3,6 +3,17 @@ using Toybox.StringUtil;
 using Toybox.Math;
 using Toybox.System;
 
+// Get a point coord on a circle
+function getXY(screenDiam, startingAngle, radius, angle, pos) {
+  var x =
+    screenDiam / 2 -
+    radius * Math.sin(Math.toRadians(startingAngle - angle * pos));
+  var y =
+    screenDiam / 2 -
+    radius * Math.cos(Math.toRadians(startingAngle - angle * pos));
+  return [x, y];
+}
+
 // convert string to byte, used when sending string command via BLE
 function string_to_byte_array(plain_text) {
   var options = {
@@ -16,9 +27,13 @@ function string_to_byte_array(plain_text) {
 
 //Just a round function with formating
 function valueRound(value, format) {
-  var rounded;
-  rounded = Math.round(value * 100) / 100;
-  return rounded.format(format);
+  if (value == null) {
+    return "--";
+  } else {
+    var rounded;
+    rounded = Math.round(value * 100) / 100;
+    return rounded.format(format);
+  }
 }
 
 //Returns the EUC settings class from the selected EUC brand
@@ -101,11 +116,12 @@ function shortFromBytesBE(bytes, starting) {
 function UInt32FromBytesBE(bytes, starting) {
   if (bytes.size() >= starting + 4) {
     return (
-      ((bytes[starting] & 0xff) << 24) |
-      ((bytes[starting + 1] & 0xff) << 16) |
-      ((bytes[starting + 2] & 0xff) << 8) |
-      (bytes[starting + 3] & 0xff)
-    );
+      (((bytes[starting] & 0xff) << 24) |
+        ((bytes[starting + 1] & 0xff) << 16) |
+        ((bytes[starting + 2] & 0xff) << 8) |
+        (bytes[starting + 3] & 0xff)) &
+      0xffffffffl
+    ).toNumber();
   }
   return 0;
 }

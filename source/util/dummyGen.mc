@@ -7,4 +7,5 @@ function dummyGen() {
   if (rd > 60) {
     eucData.voltage = rd;
   }
+  eucData.tripDistance = eucData.tripDistance + 0.001;
 }

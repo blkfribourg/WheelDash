@@ -20,7 +20,7 @@ class BleQueue {
   var sendAlive;
   var reqStats;
   var reqBatStats;
-  var lastPacketType;
+  var lastPacketType = "live";
   var UUID;
   var reqStatsTiming = 0;
   var reqBatStatsTiming = 3;

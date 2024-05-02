@@ -46,7 +46,7 @@ module eucData {
   var current = 0.0;
   var temperature = 0.0;
 
-  var displayedTemperature = 0.0;
+  var DisplayedTemperature = 0.0;
   var maxDisplayedTemperature = 65;
   var totalDistance = 0.0;
   var correctedTotalDistance = 0.0;
@@ -56,8 +56,8 @@ module eucData {
   var rollAngleMode = "0";
   var speedUnitMode = 0;
   var ledMode = "0";
-  var avgMovingSpeed = 0.0;
-  var topSpeed = 0.0;
+  var avgMovingSpeed;
+  var topSpeed = 0;
   var watchBatteryUsage = 0.0;
   var hPWM = 0.0;
   var currentCorrection;
@@ -94,6 +94,31 @@ module eucData {
   //VESC :
   var VESCCanId = 0;
 
+  // Addition for datafield-like view :
+  var slideToDFView = false;
+  var dfViewOnly = false;
+  var displayNorth = false;
+  var displayWind = false;
+  var dfViewBtn;
+  var GPS_requested = false;
+  var maxTemperature;
+  var minVoltage;
+  var maxVoltage;
+  var maxCurrent;
+  var avgCurrent;
+  var minBatteryPerc;
+  var maxBatteryPerc;
+  var avgPower;
+  var maxPower;
+  var maxPWM;
+  var batteryUsagePerc;
+  var batteryUsage;
+  var alternativeFont = true;
+  var txtColor = 0xffffff;
+  var txtColor_unpr = 0xff8000;
+  var linesColor = 0xffffff;
+  var drawLines = true;
+
   function getBatteryPercentage() {
     // using better battery formula from wheellog
 
@@ -113,7 +138,7 @@ module eucData {
     // VETERAN ------------------------------------------------
     if (wheelBrand == 1) {
       if (version < 4) {
-        // not Patton
+        // models before Patton
         if (voltage > 100.2) {
           battery = 100.0;
         } else if (voltage > 81.6) {
@@ -123,7 +148,9 @@ module eucData {
         } else {
           battery = 0.0;
         }
-      } else {
+      }
+      if (version > 4 && version < 5) {
+        // Patton
         if (voltage > 125.25) {
           battery = 100.0;
         } else if (voltage > 102.0) {
@@ -134,7 +161,20 @@ module eucData {
           battery = 0.0;
         }
       }
+      if (version > 5 && version < 6) {
+        // Lynx
+        if (voltage > 150.3) {
+          battery = 100.0;
+        } else if (voltage > 122.4) {
+          battery = (voltage - 119.7) / 0.306;
+        } else if (voltage > 115.2) {
+          battery = (voltage - 115.2) / 0.81;
+        } else {
+          battery = 0.0;
+        }
+      }
     }
+
     //-----------------------------------------------------------
     //Kingsong --------------------------------------------------
 

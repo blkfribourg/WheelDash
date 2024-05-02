@@ -48,7 +48,6 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       BluetoothLowEnergy.setDelegate(eucBleDelegate);
       profileManager.registerProfiles();
     }
-
     viewInit();
   }
   function viewInit() {
@@ -56,8 +55,13 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       mainView = new GarminEUCDebugView();
       mainView.setBleDelegate(eucBleDelegate);
     } else {
-      mainView = new GarminEUCView();
+      if (eucData.dfViewOnly == true) {
+        mainView = new DFView();
+      } else {
+        mainView = new GarminEUCView();
+      }
     }
+    eucData.dfViewBtn = actionButtonTrigger.DFViewButton;
     EUCSettingsDict = getEUCSettingsDict(); // in helper function
     actionButtonTrigger.setEUCDict();
     menu = createMenu(EUCSettingsDict.getConfigLabels(), "Settings");
@@ -104,6 +108,14 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
   }
   function getActivityView() {
     return mainViewdelegate.getActivityView();
+  }
+
+  function getDFlikeView() {
+    return mainViewdelegate.getDFlikeView();
+  }
+
+  function setDFlikeView(_DFLikeView) {
+    mainViewdelegate.setDFlikeView(_DFLikeView);
   }
 
   function setSettings(profileName) {
@@ -185,6 +197,8 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       actionButtonTrigger.cycleLightButton = AppStorage.getSetting(
         "cycleLightButtonMap_p1"
       );
+      actionButtonTrigger.DFViewButton =
+        AppStorage.getSetting("DFViewButtonMap_p1");
       actionButtonTrigger.beepButton =
         AppStorage.getSetting("beepButtonMap_p1");
       eucData.BLECmdDelay = AppStorage.getSetting("cmdQueueDelay_p1");
@@ -238,6 +252,8 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       actionButtonTrigger.cycleLightButton = AppStorage.getSetting(
         "cycleLightButtonMap_p2"
       );
+      actionButtonTrigger.DFViewButton =
+        AppStorage.getSetting("DFViewButtonMap_p2");
       actionButtonTrigger.beepButton =
         AppStorage.getSetting("beepButtonMap_p2");
       eucData.BLECmdDelay = AppStorage.getSetting("cmdQueueDelay_p2");
@@ -292,6 +308,8 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       actionButtonTrigger.cycleLightButton = AppStorage.getSetting(
         "cycleLightButtonMap_p3"
       );
+      actionButtonTrigger.DFViewButton =
+        AppStorage.getSetting("DFViewButtonMap_p3");
       actionButtonTrigger.beepButton =
         AppStorage.getSetting("beepButtonMap_p3");
       eucData.BLECmdDelay = AppStorage.getSetting("cmdQueueDelay_p3");

@@ -18,8 +18,22 @@
     <property id ="KSVoiceMode" type="boolean">false</property>
     <property id ="useMiles" type="boolean">false</property>
     <property id ="useFahrenheit" type="boolean">false</property>
-     <property id ="convertToMiles" type="boolean">false</property>
+    <property id ="convertToMiles" type="boolean">false</property>
     <property id ="convertToFahrenheit" type="boolean">false</property>
+    <property id ="fieldNB" type="number">6</property>
+    <property id ="field1" type="number">0</property>
+    <property id ="field2" type="number">0</property>
+    <property id ="field3" type="number">0</property>
+    <property id ="field4" type="number">0</property>
+    <property id ="field5" type="number">0</property>
+    <property id ="field6" type="number">0</property>
+    <property id="dfViewOnly" type="boolean">false</property>
+    <property id="displayNorth" type="boolean">false</property>
+    <property id="displayWind" type="boolean">false</property>
+    <property id="slideToDFView" type="boolean">false</property>
+      
+
+    
     
 <!--Profile 1-->
     <property id="wheelName_p1" type="string">Profile 1</property>
@@ -27,6 +41,7 @@
     <property id="recordActivityButtonMap_p1" type="number">0</property>
     <property id="cycleLightButtonMap_p1" type="number">0</property>
     <property id="beepButtonMap_p1" type="number">0</property>
+    <property id="DFViewButtonMap_p1" type="number">0</property>
     <property id="lockButtonMap_p1" type="number">0</property>
     <property id="cmdQueueDelay_p1" type="number">200</property>
     <property id="VESCCanId_p1" type="number">0</property>
@@ -55,6 +70,7 @@
     <property id="recordActivityButtonMap_p2" type="number">0</property>
     <property id="cycleLightButtonMap_p2" type="number">0</property>
     <property id="beepButtonMap_p2" type="number">0</property>
+    <property id="DFViewButtonMap_p2" type="number">0</property>
     <property id="cmdQueueDelay_p2" type="number">200</property>
     <property id="VESCCanId_p2" type="number">0</property>
     <property id="mainNumber_p2" type="number">0</property>
@@ -82,6 +98,7 @@
     <property id="recordActivityButtonMap_p3" type="number">0</property>
     <property id="cycleLightButtonMap_p3" type="number">0</property>
     <property id="beepButtonMap_p3" type="number">0</property>
+    <property id="DFViewButtonMap_p3" type="number">0</property>
     <property id="cmdQueueDelay_p3" type="number">200</property>
     <property id="VESCCanId_p3" type="number">0</property>
     <property id="mainNumber_p3" type="number">0</property>
