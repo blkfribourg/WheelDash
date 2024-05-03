@@ -39,7 +39,7 @@ class GarminEUCDelegate extends WatchUi.BehaviorDelegate {
       goToActivityView();
     }
     if (
-      swipeEvent.getDirection() == WatchUi.SWIPE_RIGHT &&
+      swipeEvent.getDirection() == WatchUi.SWIPE_LEFT &&
       eucData.slideToDFView == true
     ) {
       goToDFView();
@@ -91,12 +91,14 @@ class GarminEUCDelegate extends WatchUi.BehaviorDelegate {
     DFlikeView = _DFLikeView;
   }
   function goToDFView() {
-    if (DFViewOn == true) {
-      WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
-      DFViewOn = false;
-    } else {
-      DFViewOn = true;
-      WatchUi.pushView(DFlikeView, self, WatchUi.SLIDE_IMMEDIATE);
+    if (DFlikeView != null) {
+      if (DFViewOn == true) {
+        WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
+        DFViewOn = false;
+      } else {
+        DFViewOn = true;
+        WatchUi.pushView(DFlikeView, self, WatchUi.SLIDE_IMMEDIATE);
+      }
     }
   }
   function getMenu2Delegate() {

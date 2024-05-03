@@ -63,15 +63,6 @@ class GarminEUCView extends WatchUi.View {
       valueRound(eucData.DisplayedTemperature, "%.1f").toString() + tempUnit
     );
     cDrawables[:BottomSubtitle].setText(diplayStats());
-    /* To implement later
-            switch (AppStorage.getSetting("BottomSubtitleData")) {
-                case 0: cDrawables[:BottomSubtitle].setText(WheelData.wheelModel); break;
-                case 1: cDrawables[:BottomSubtitle].setText(Lang.format("$1$% / $2$%", [WheelData.pwm, WheelData.maxPwm])); break;
-                case 2: cDrawables[:BottomSubtitle].setText(Lang.format("$1$ / $2$", [WheelData.averageSpeed, WheelData.topSpeed])); break;
-                case 3: cDrawables[:BottomSubtitle].setText(WheelData.rideTime); break;
-                case 4: cDrawables[:BottomSubtitle].setText(WheelData.rideDistance.toString()); break;
-            }
-        */
 
     var speedNumberStr = "";
 

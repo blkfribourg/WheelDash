@@ -183,6 +183,9 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       eucData.alarmThreshold_PWM = AppStorage.getSetting(
         "alarmThreshold_PWM_p1"
       );
+      eucData.alarmThreshold2_PWM = AppStorage.getSetting(
+        "alarmThreshold2_PWM_p1"
+      );
       eucData.alarmThreshold_speed = AppStorage.getSetting(
         "alarmThreshold_speed_p1"
       );
@@ -202,7 +205,7 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       actionButtonTrigger.beepButton =
         AppStorage.getSetting("beepButtonMap_p1");
       eucData.BLECmdDelay = AppStorage.getSetting("cmdQueueDelay_p1");
-      eucData.VESCCanId = AppStorage.getSetting("VESCCanId_p1");
+
       eucData.wheelName = AppStorage.getSetting("wheelName_p1");
       Storage.setValue("lastProfile", profileName);
       return true;
@@ -238,6 +241,9 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       eucData.alarmThreshold_PWM = AppStorage.getSetting(
         "alarmThreshold_PWM_p2"
       );
+      eucData.alarmThreshold2_PWM = AppStorage.getSetting(
+        "alarmThreshold2_PWM_p2"
+      );
       eucData.alarmThreshold_speed = AppStorage.getSetting(
         "alarmThreshold_speed_p2"
       );
@@ -257,7 +263,7 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       actionButtonTrigger.beepButton =
         AppStorage.getSetting("beepButtonMap_p2");
       eucData.BLECmdDelay = AppStorage.getSetting("cmdQueueDelay_p2");
-      eucData.VESCCanId = AppStorage.getSetting("VESCCanId_p2");
+
       eucData.wheelName = AppStorage.getSetting("wheelName_p2");
       Storage.setValue("lastProfile", profileName);
       return true;
@@ -294,6 +300,9 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       eucData.alarmThreshold_PWM = AppStorage.getSetting(
         "alarmThreshold_PWM_p3"
       );
+      eucData.alarmThreshold2_PWM = AppStorage.getSetting(
+        "alarmThreshold2_PWM_p3"
+      );
       eucData.alarmThreshold_speed = AppStorage.getSetting(
         "alarmThreshold_speed_p3"
       );
@@ -313,7 +322,7 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       actionButtonTrigger.beepButton =
         AppStorage.getSetting("beepButtonMap_p3");
       eucData.BLECmdDelay = AppStorage.getSetting("cmdQueueDelay_p3");
-      eucData.VESCCanId = AppStorage.getSetting("VESCCanId_p3");
+
       eucData.wheelName = AppStorage.getSetting("wheelName_p3");
       Storage.setValue("lastProfile", profileName);
       return true;

@@ -40,57 +40,35 @@ class BleQueue {
 
   function run() {
     if (queue.size() == 0) {
-      if (
-        eucData.wheelBrand == 4 ||
-        eucData.wheelBrand == 5 ||
-        eucData.wheelBrand == 6
-      ) {
-        if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
-          if (reqLiveData != null && UUID != null && reqStats != null) {
-            reqStatsTiming = reqStatsTiming - 1;
-            if (reqBatStats != null) {
-              reqBatStatsTiming = reqBatStatsTiming - 1;
-            }
-            if (reqStatsTiming <= 0 && reqBatStatsTiming <= 0) {
-              //Skipping reqBatStatsTiming;
-              reqBatStatsTiming = 256;
-            }
+      if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
+        if (reqLiveData != null && UUID != null && reqStats != null) {
+          reqStatsTiming = reqStatsTiming - 1;
+          if (reqBatStats != null) {
+            reqBatStatsTiming = reqBatStatsTiming - 1;
+          }
+          if (reqStatsTiming <= 0 && reqBatStatsTiming <= 0) {
+            //Skipping reqBatStatsTiming;
+            reqBatStatsTiming = 256;
+          }
 
-            if (reqStatsTiming < 0) {
-              lastPacketType = "stats";
-              add(reqStats, UUID);
-              reqStatsTiming = 48;
-            }
-            if (reqBatStatsTiming < 0) {
-              lastPacketType = "batStats";
-              add(reqBatStats, UUID);
-              reqBatStatsTiming = 256;
-              batStatsCounter = batStatsCounter + 1;
-            }
-            if (queue.size() == 0) {
-              lastPacketType = "live";
-              add(reqLiveData, UUID);
-            }
+          if (reqStatsTiming < 0) {
+            lastPacketType = "stats";
+            add(reqStats, UUID);
+            reqStatsTiming = 48;
           }
-          //System.println(lastPacketType);
-          autoRestart();
-        }
-        if (eucData.wheelBrand == 6) {
-          if (reqLiveData != null && UUID != null) {
-            /*
-            if (sendAlive != null) {
-              if (run_id >= 8) {
-                add(sendAlive, UUID);
-                run_id = 0;
-              }
-            }*/
-            if (queue.size() == 0) {
-              lastPacketType = "live";
-              add(reqLiveData, UUID);
-            }
+          if (reqBatStatsTiming < 0) {
+            lastPacketType = "batStats";
+            add(reqBatStats, UUID);
+            reqBatStatsTiming = 256;
+            batStatsCounter = batStatsCounter + 1;
           }
-          // autoRestart();
+          if (queue.size() == 0) {
+            lastPacketType = "live";
+            add(reqLiveData, UUID);
+          }
         }
+        //System.println(lastPacketType);
+        autoRestart();
       } else {
         isRunning = false;
         //stopping timer

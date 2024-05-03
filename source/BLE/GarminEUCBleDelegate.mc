@@ -66,26 +66,6 @@ class eucBLEDelegate extends Ble.BleDelegate {
     queue = q;
     decoder = _decoder;
 
-    //    decoder.frameBuffer(self, V11Y);
-    /*
-    char_w = profileManager.EUC_CHAR_W;
-    // VESC COMM VAL SETUP:
-    if (eucData.VESCCanId != 0) {
-      queue.reqLiveData = [char_w, queue.C_WRITENR, packetForgeVESC(0x2f)];
-
-      queue.sendAlive = [char_w, queue.C_WRITENR, packetForgeVESC(0x1e)];
-    } else {
-      queue.reqLiveData = [
-        char_w,
-        queue.C_WRITENR,
-        [0x02, 0x01, 0x2f, 0xd5, 0x8d, 0x03]b,
-      ];
-    }
-    queue.UUID = profileManager.EUC_SERVICE;
-
-    queue.delayTimer.start(method(:timerCallback), eucData.BLECmdDelay, true);
-    //
-*/
     Ble.setScanState(Ble.SCAN_STATE_SCANNING);
     isFirst = isFirstConnection();
     //isFirst = false;
@@ -108,62 +88,11 @@ class eucBLEDelegate extends Ble.BleDelegate {
             0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x9b, 0x14, 0x5a, 0x5a,
           ]b;
-          /*
-          var voiceVal;
-          if (eucData.KSVoiceMode == true) {
-            voiceVal = 1;
-          } else {
-            voiceVal = 0;
-          }
-          var reqVoice = [
-            0xaa,
-            0x55,
-            voiceVal,
-            0x00,
-            0x00,
-            0x00,
-            0x00,
-            0x00,
-            0x00,
-            0x00,
-            0x00,
-            0x00,
-            0x00,
-            0x00,
-            0x00,
-            0x00,
-            0x73,
-            0x14,
-            0x5a,
-            0x5a,
-          ]b;
-*/
-          /*
-          var reqSerial = [
-            0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x14, 0x5a, 0x5a,
-          ]b;
-          var reqAlarms = [
-            0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x98, 0x14, 0x5a, 0x5a,
-          ]b;
-*/
+
           queue.add(
             [char, queue.C_WRITENR, reqModel],
             profileManager.EUC_SERVICE
           );
-          /*
-          queue.add(
-            [char, queue.C_WRITENR, reqVoice],
-            profileManager.EUC_SERVICE
-          );
-          */
-          /*
-          queue.add(
-            [char, queue.C_WRITENR, reqAlarms],
-            profileManager.EUC_SERVICE
-          );
-          */
         }
         // End of KS addition -------------------------------
         // Inmotion V2 or VESC ---------------------------
@@ -183,40 +112,10 @@ class eucBLEDelegate extends Ble.BleDelegate {
             queue.C_WRITENR,
             [0xaa, 0xaa, 0x14, 0x01, 0x11, 0x04]b,
           ];
-          /*
-          if (eucData.model.equals("V12")) {
-            // V12 V13 V14 I guess
-            // inmotion v2 request batteryStats:
-            queue.reqBatStats = [
-              char_w,
-              queue.C_WRITENR,
-              [0xaa, 0xaa, 0x14, 0x01, 0x05, 0x10]b,
-            ];
-          }
-          */
+
           queue.UUID = profileManager.EUC_SERVICE;
         }
 
-        if (eucData.wheelBrand == 6) {
-          char_w = service.getCharacteristic(profileManager.EUC_CHAR_W);
-          // VESC COMM VAL SETUP:
-          if (eucData.VESCCanId != 0) {
-            queue.reqLiveData = [
-              char_w,
-              queue.C_WRITENR,
-              packetForgeVESC(0x2f),
-            ];
-
-            // queue.sendAlive = [char_w, queue.C_WRITENR, packetForgeVESC(0x1e)];
-          } else {
-            queue.reqLiveData = [
-              char_w,
-              queue.C_WRITENR,
-              [0x02, 0x01, 0x2f, 0xd5, 0x8d, 0x03]b,
-            ];
-          }
-          queue.UUID = profileManager.EUC_SERVICE;
-        }
         // End of inmotion V2 or VESC
         cccd = char.getDescriptor(Ble.cccdUuid());
         cccd.requestWrite([0x01, 0x00]b);
@@ -353,29 +252,6 @@ class eucBLEDelegate extends Ble.BleDelegate {
               }
             }
           }
-          if (eucData.wheelBrand == 6) {
-            var advName = result.getDeviceName();
-            if (advName != null) {
-              var advModel = advName.substring(0, 4);
-              //if (advModel.equals("VESC")) {
-              if (advModel.equals("VESC")) {
-                eucData.model = advModel;
-                wheelFound = true;
-              } else {
-                wheelFound = contains(
-                  result.getServiceUuids(),
-                  profileManager.EUC_SERVICE,
-                  result
-                );
-              }
-            } else {
-              wheelFound = contains(
-                result.getServiceUuids(),
-                profileManager.EUC_SERVICE,
-                result
-              );
-            }
-          }
 
           if (wheelFound == true) {
             storeSR(result);
@@ -422,14 +298,6 @@ class eucBLEDelegate extends Ble.BleDelegate {
     if ((eucData.wheelBrand == 4 || eucData.wheelBrand == 5) && char != null) {
       queue.delayTimer.start(method(:timerCallback), eucData.BLECmdDelay, true);
     }
-    if (eucData.wheelBrand == 6 && char != null) {
-      // if (eucData.isExpress==true){
-      // pingVESC();
-      // }
-
-      queue.delayTimer.start(method(:timerCallback), eucData.BLECmdDelay, true);
-      // queue.delayTimer.start(method(:timerCallback), 200, false); // extremely dirty xD
-    }
   }
 
   function onCharacteristicWrite(desc, status) {}
@@ -451,42 +319,6 @@ class eucBLEDelegate extends Ble.BleDelegate {
     }
     if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
       decoder.frameBuffer(self, value);
-      // log to txt //
-      /*
-      var frameToStr = "";
-      if (value != null && value.size() > 0) {
-        for (var i = 0; i < value.size(); i++) {
-          if (i == value.size() - 1) {
-            frameToStr = frameToStr + value[i].format("%02X");
-          } else {
-            frameToStr = frameToStr + value[i].format("%02X") + ";";
-          }
-        }
-      }
-      System.println(frameToStr);
-*/
-      //
-      // queue.delayTimer.start(method(:timerCallback), 200, false);
-    }
-    if (eucData.wheelBrand == 6) {
-      /*
-      var frameToStr = "";
-      if (value != null && value.size() > 0) {
-        for (var i = 0; i < value.size(); i++) {
-          if (i == value.size() - 1) {
-            frameToStr = frameToStr + value[i].format("%02X");
-          } else {
-            frameToStr = frameToStr + value[i].format("%02X") + ";";
-          }
-        }
-      }
-      //System.println(frameToStr);
-
-      if (value[value.size() - 1] == 0x03 && value.size() < 20) {
-          queue.delayTimer.start(method(:timerCallback), 200, false);
-      }
-*/
-      decoder.frameBuilder(self, value);
     }
   }
 
@@ -515,21 +347,6 @@ class eucBLEDelegate extends Ble.BleDelegate {
     }
     return false;
   }
-  /*
-    hidden function string_to_byte_array(plain_text) {
-    var options = {
-		:fromRepresentation => StringUtil.REPRESENTATION_STRING_PLAIN_TEXT,
-        :toRepresentation => StringUtil.REPRESENTATION_BYTE_ARRAY,
-        :encoding => StringUtil.CHAR_ENCODING_UTF8
-    };
-    
-    //System.println(Lang.format("Converting '$1$' to ByteArray", [ plain_text ]));
-    var result = StringUtil.convertEncodedString(plain_text, options);
-    //System.println(Lang.format("           '$1$'..", [ result ]));
-    
-    return result;
-}
-*/
 
   function getChar() {
     return char;
@@ -546,15 +363,5 @@ class eucBLEDelegate extends Ble.BleDelegate {
     if (device != null) {
       Ble.unpairDevice(device);
     }
-  }
-
-  function packetForgeVESC(hexcmd) {
-    var cmd = [0x22, eucData.VESCCanId.toNumber(), hexcmd]b;
-    var end = CRC16.crc16(cmd);
-    end = end.addAll([0x03]b);
-    var pre = [0x02, 0x03]b;
-    var packet = pre.addAll(cmd);
-    packet = packet.addAll(end);
-    return packet;
   }
 }

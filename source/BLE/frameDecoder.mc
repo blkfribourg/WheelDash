@@ -15,9 +15,6 @@ module frameDecoder {
     }
     if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
       return new IMV2Decoder();
-    }
-    if (eucData.wheelBrand == 6) {
-      return new VESCDecoder();
     } else {
       return null;
     }
@@ -188,11 +185,9 @@ class VeteranDecoder {
   function frameBuffer(transmittedFrame) {
     for (var i = 0; i < transmittedFrame.size(); i++) {
       if (checkChar(transmittedFrame[i]) == true) {
-        System.println("frameOK");
         processFrame(frame);
       }
     }
-    System.println("Getting frame");
   }
 
   // adapted from wheellog

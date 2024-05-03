@@ -31,9 +31,10 @@
     <property id="displayNorth" type="boolean">false</property>
     <property id="displayWind" type="boolean">false</property>
     <property id="slideToDFView" type="boolean">false</property>
-      
-
+    <property id="alternativeFont" type="boolean">false</property>
+    <property id="vibeIntensity" type="number">90</property>
     
+
     
 <!--Profile 1-->
     <property id="wheelName_p1" type="string">Profile 1</property>
@@ -44,7 +45,6 @@
     <property id="DFViewButtonMap_p1" type="number">0</property>
     <property id="lockButtonMap_p1" type="number">0</property>
     <property id="cmdQueueDelay_p1" type="number">200</property>
-    <property id="VESCCanId_p1" type="number">0</property>
     <property id="mainNumber_p1" type="number">0</property>
     <property id="topBar_p1" type="number">0</property>     
     <property id="maxSpeed_p1" type="number">0</property>     
@@ -56,9 +56,10 @@
     <property id="voltageCorrectionFactor_p1" type="float">1.25</property>
     <property id="voltageSagIndicatorThresh_p1" type="float">0.3</property>
     <property id="speedCorrectionFactor_p1" type="float">1.0</property>
-    <property id="alarmThreshold_PWM_p1" type="number">80</property>
+    <property id="alarmThreshold_PWM_p1" type="number">0</property>
+    <property id="alarmThreshold2_PWM_p1" type="number">0</property>
     <property id="alarmThreshold_speed_p1" type="number">0</property>
-    <property id="alarmThreshold_temp_p1" type="number">0</property>
+    <property id="alarmThreshold_temp_p1" type="number">40</property>
     <property id="currentCorrection_p1" type="number">0</property>
     <property id="maxTemperature_p1" type="float">65</property>
     <property id="begodeCF_p1" type="boolean">false</property>
@@ -72,7 +73,6 @@
     <property id="beepButtonMap_p2" type="number">0</property>
     <property id="DFViewButtonMap_p2" type="number">0</property>
     <property id="cmdQueueDelay_p2" type="number">200</property>
-    <property id="VESCCanId_p2" type="number">0</property>
     <property id="mainNumber_p2" type="number">0</property>
     <property id="topBar_p2" type="number">0</property>     
     <property id="maxSpeed_p2" type="number">0</property>     
@@ -85,6 +85,7 @@
     <property id="voltageSagIndicatorThresh_p2" type="float">0.3</property>
     <property id="speedCorrectionFactor_p2" type="float">1.0</property>
     <property id="alarmThreshold_PWM_p2" type="number">80</property>
+    <property id="alarmThreshold2_PWM_p2" type="number">0</property>
     <property id="alarmThreshold_speed_p2" type="number">0</property>
     <property id="alarmThreshold_temp_p2" type="number">0</property>
     <property id="currentCorrection_p2" type="number">0</property>
@@ -100,7 +101,6 @@
     <property id="beepButtonMap_p3" type="number">0</property>
     <property id="DFViewButtonMap_p3" type="number">0</property>
     <property id="cmdQueueDelay_p3" type="number">200</property>
-    <property id="VESCCanId_p3" type="number">0</property>
     <property id="mainNumber_p3" type="number">0</property>
     <property id="topBar_p3" type="number">0</property>     
     <property id="maxSpeed_p3" type="number">0</property>     
@@ -113,6 +113,7 @@
     <property id="voltageSagIndicatorThresh_p3" type="float">0.3</property>
     <property id="speedCorrectionFactor_p3" type="float">1.0</property>
     <property id="alarmThreshold_PWM_p3" type="number">80</property>
+    <property id="alarmThreshold2_PWM_p3" type="number">0</property>
     <property id="alarmThreshold_speed_p3" type="number">0</property>
     <property id="alarmThreshold_temp_p3" type="number">0</property>
     <property id="currentCorrection_p3" type="number">0</property>

@@ -1,5 +1,5 @@
 <strings>
-    <string id="AppName">WheelDash (dev)</string>
+    <string id="AppName">WheelDash (beta)</string>
     <string id="firstConnStr">Profile $1$ 1st connection\nPlease turn on your wheel\n and wait for connection\n\nensure only one wheel is ON!\n\nIf you enjoy this app :\n ko-fi.com/wheeldash</string>
     <string id="connectedStr">Profile $1$ connected !\n\nSaving wheel unique identifier</string>
     <!-- Strings, that are used in Connect IQ Settings menu, like 
@@ -23,7 +23,7 @@
     <string id="wheelBrand3">Kingsong (old)</string>
     <string id="wheelBrand4">InMotion V11 (fw1.4)/V12 (experimental)</string>
     <string id="wheelBrand5">InMotion V11Y/V13/V14 (experimental)</string>
-    <string id="wheelBrand6">VESC (experimental)</string>
+   
     
 
     <string id="recordActivityButtonMap_p1">Button mapping to activity recording view (Profile 1)</string>
@@ -52,10 +52,6 @@
     <string id="cmdQueueDelay_p2">BLE command queuing delay (low value may cause app crash) (Profile 2)</string>
     <string id="cmdQueueDelay_p3">BLE command queuing delay (low value may cause app crash) (Profile 3)</string>
     <string id="cmdQueueDelay_ErrorMessage">Value should be in a range of 10 to 400</string>
-    
-    <string id="VESCCanId_p1">Can id of VESC if using a VESC Express module (Profile 1)</string>
-    <string id="VESCCanId_p2">Can id of VESC if using a VESC Express module (Profile 2)</string>
-    <string id="VESCCanId_p3">Can id of VESC if using a VESC Express module (Profile 3)</string>
         
     <string id="currentCorrection_p1">Current correction type (Profile 1)</string>
     <string id="currentCorrection_p2">Current correction type (Profile 2)</string>
@@ -78,6 +74,8 @@
     <string id="useFahrenheit">Fahrenheit unit</string>
     <string id="convertToMiles">Convert to Miles</string>
     <string id="convertToFahrenheit">Convert to Fahrenheit</string>
+
+    <string id="vibeIntensity">Alarms vibration intensity</string>
 
 
     <string id="orangeColoringThreshold_p1">percentage threshold to color "top bar" with orange (Profile 1)</string>
@@ -143,9 +141,12 @@
 
     <string id="powerFactor_PWM_ErrorMessage">Value out of range</string>
 
-    <string id="alarmThreshold_PWM_p1">Percentage of PWM that trigger an alarm (Profile 1)</string>
-    <string id="alarmThreshold_PWM_p2">Percentage of PWM that trigger an alarm (Profile 2)</string>
-    <string id="alarmThreshold_PWM_p3">Percentage of PWM that trigger an alarm (Profile 3)</string>
+    <string id="alarmThreshold_PWM_p1">Percentage of PWM that trigger 1st alarm (Profile 1)</string>
+    <string id="alarmThreshold_PWM_p2">Percentage of PWM that trigger 1st alarm (Profile 2)</string>
+    <string id="alarmThreshold_PWM_p3">Percentage of PWM that trigger 1st alarm (Profile 3)</string>
+    <string id="alarmThreshold2_PWM_p1">Percentage of PWM that trigger 2nd alarm (Profile 1)</string>
+    <string id="alarmThreshold2_PWM_p2">Percentage of PWM that trigger 2nd alarm (Profile 2)</string>
+    <string id="alarmThreshold2_PWM_p3">Percentage of PWM that trigger 2nd alarm (Profile 3)</string>
     <string id="alarmThreshold_PWM_ErrorMessage">Value out of range</string>
 
     <string id="alarmThreshold_speed_p1">Speed that trigger an alarm (Profile 1)</string>
@@ -191,10 +192,12 @@
    <string id="debugMode">Enable Debug Mode (view)</string>
 
    <!-- DF view Strings-->
+   
+   <string id="alternativeFont">Alternative font for numbers (Datafield-like view)</string>
    <string id="dfViewOnly">Datafield-like view only</string>
    <string id="displayNorth">Display North orientation (red triangle, datafield-like view)</string>
    <string id="displayWind">Display Wind bearing (blue triangle, datafield-like view)</string>
-   <string id="slideToDFView">Toggle Datafield-like view when sliding right</string>
+   <string id="slideToDFView">Toggle Datafield-like view when sliding left</string>
    <string id="fieldNB">Datafield-like view field number</string>
    
    <string id="fieldNB4">4</string>

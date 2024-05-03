@@ -155,23 +155,7 @@ class ArcRenderer extends WatchUi.Drawable {
             );
           }
         }
-        /* Blkfri : Not using lights or horn button for standalone
-                var dist;
-               
-                switch (AppStorage.getSetting("StartButtonAction")) {
-                    case 0: if (screenWidth <= 220) { dist = 0.85; } else { dist = 0.86; } 
-                   // dc.drawBitmap(screenWidth * dist, screenHeight * 0.25, WatchUi.loadResource(Rez.Drawables.Horn));
-                    break;
-                    case 1: {
-                        if (screenWidth <= 220) { dist = 0.85; } else { dist = 0.86; } 
-                        if (AppStorage.runtimeDb["comm_protocolVersion"] > 2) {
-                            dc.drawBitmap(screenWidth * dist, screenHeight * 0.25, WatchUi.loadResource(Rez.Drawables.Light));
-                        } else {
-                        //    dc.drawBitmap(screenWidth * dist, screenHeight * 0.25, WatchUi.loadResource(Rez.Drawables.Horn));
-                        }
-                        break;
-                    }
-                }*/
+
         break;
       }
       case :batteryArc: {

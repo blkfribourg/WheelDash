@@ -10,6 +10,15 @@
                 errorMessage="@Strings.updateDelay_ErrorMessage" />
         </setting>
         <setting
+            propertyKey="@Properties.vibeIntensity"
+            title="@Strings.vibeIntensity">
+            <settingConfig
+                type="numeric"
+                min="0"
+                max="100"
+            />
+        </setting>
+        <setting
             propertyKey="@Properties.activityRecordingOnStartup"
             title="@Strings.activityRecordingOnStartup">
             <settingConfig
@@ -167,7 +176,6 @@
                     <listEntry value="3">@Strings.wheelBrand3</listEntry>
                     <listEntry value="4">@Strings.wheelBrand4</listEntry>
                     <listEntry value="5">@Strings.wheelBrand5</listEntry>
-                    <listEntry value="6">@Strings.wheelBrand6</listEntry>
                 </settingConfig>
             </setting>
             <setting
@@ -218,15 +226,6 @@
                         min="10"
                         max="2000"
                         errorMessage="@Strings.cmdQueueDelay_ErrorMessage" />
-                </setting>
-                <setting
-                    propertyKey="@Properties.VESCCanId_p1"
-                    title="@Strings.VESCCanId_p1">
-                    <settingConfig
-                        type="numeric"
-                        min="0"
-                        max="100"
-                     />
                 </setting>
                 <setting
                     propertyKey="@Properties.voltageCorrectionFactor_p1"
@@ -334,7 +333,7 @@
             <settingConfig
                 type="numeric"
                 min="0"
-                max="140"
+                max="300"
                 errorMessage="@Strings.rotationSpeed_PWM_ErrorMessage" />
         </setting>
         <setting
@@ -343,7 +342,7 @@
             <settingConfig
                 type="numeric"
                 min="48"
-                max="136"
+                max="210"
                 errorMessage="@Strings.rotationVoltage_ErrorMessage" />
         </setting>
         <setting
@@ -359,6 +358,15 @@
         <setting
             propertyKey="@Properties.alarmThreshold_PWM_p1"
             title="@Strings.alarmThreshold_PWM_p1">
+            <settingConfig
+                type="numeric"
+                min="0"
+                max="100"
+                errorMessage="@Strings.alarmThreshold_PWM_ErrorMessage" />
+        </setting>
+        <setting
+            propertyKey="@Properties.alarmThreshold2_PWM_p1"
+            title="@Strings.alarmThreshold2_PWM_p1">
             <settingConfig
                 type="numeric"
                 min="0"
@@ -404,7 +412,6 @@
                     <listEntry value="3">@Strings.wheelBrand3</listEntry>
                     <listEntry value="4">@Strings.wheelBrand4</listEntry>
                     <listEntry value="5">@Strings.wheelBrand5</listEntry>
-                    <listEntry value="6">@Strings.wheelBrand6</listEntry>
                 </settingConfig>
             </setting>
             <setting
@@ -455,15 +462,6 @@
                         min="10"
                         max="2000"
                         errorMessage="@Strings.cmdQueueDelay_ErrorMessage" />
-                </setting>
-                <setting
-                    propertyKey="@Properties.VESCCanId_p2"
-                    title="@Strings.VESCCanId_p2">
-                    <settingConfig
-                        type="numeric"
-                        min="0"
-                        max="100"
-                     />
                 </setting>
                 <setting
                     propertyKey="@Properties.voltageCorrectionFactor_p2"
@@ -571,7 +569,7 @@
             <settingConfig
                 type="numeric"
                 min="0"
-                max="140"
+                max="300"
                 errorMessage="@Strings.rotationSpeed_PWM_ErrorMessage" />
         </setting>
         <setting
@@ -580,7 +578,7 @@
             <settingConfig
                 type="numeric"
                 min="48"
-                max="136"
+                max="210"
                 errorMessage="@Strings.rotationVoltage_ErrorMessage" />
         </setting>
         <setting
@@ -596,6 +594,15 @@
         <setting
             propertyKey="@Properties.alarmThreshold_PWM_p2"
             title="@Strings.alarmThreshold_PWM_p2">
+            <settingConfig
+                type="numeric"
+                min="0"
+                max="100"
+                errorMessage="@Strings.alarmThreshold_PWM_ErrorMessage" />
+        </setting>
+        <setting
+            propertyKey="@Properties.alarmThreshold2_PWM_p2"
+            title="@Strings.alarmThreshold2_PWM_p2">
             <settingConfig
                 type="numeric"
                 min="0"
@@ -640,8 +647,7 @@
                     <listEntry value="3">@Strings.wheelBrand3</listEntry>
                     <listEntry value="4">@Strings.wheelBrand4</listEntry>
                     <listEntry value="5">@Strings.wheelBrand5</listEntry>
-                    <listEntry value="6">@Strings.wheelBrand6</listEntry>
-                </settingConfig>
+                 </settingConfig>
             </setting>
             <setting
                 propertyKey="@Properties.recordActivityButtonMap_p3"
@@ -691,15 +697,6 @@
                         min="10"
                         max="2000"
                         errorMessage="@Strings.cmdQueueDelay_ErrorMessage" />
-                </setting>
-                <setting
-                    propertyKey="@Properties.VESCCanId_p3"
-                    title="@Strings.VESCCanId_p3">
-                    <settingConfig
-                        type="numeric"
-                        min="0"
-                        max="100"
-                     />
                 </setting>
                 <setting
                     propertyKey="@Properties.voltageCorrectionFactor_p3"
@@ -807,7 +804,7 @@
             <settingConfig
                 type="numeric"
                 min="0"
-                max="140"
+                max="300"
                 errorMessage="@Strings.rotationSpeed_PWM_ErrorMessage" />
         </setting>
         <setting
@@ -816,7 +813,7 @@
             <settingConfig
                 type="numeric"
                 min="48"
-                max="136"
+                max="210"
                 errorMessage="@Strings.rotationVoltage_ErrorMessage" />
         </setting>
         <setting
@@ -832,6 +829,15 @@
         <setting
             propertyKey="@Properties.alarmThreshold_PWM_p3"
             title="@Strings.alarmThreshold_PWM_p3">
+            <settingConfig
+                type="numeric"
+                min="0"
+                max="100"
+                errorMessage="@Strings.alarmThreshold_PWM_ErrorMessage" />
+        </setting>
+         <setting
+            propertyKey="@Properties.alarmThreshold2_PWM_p3"
+            title="@Strings.alarmThreshold2_PWM_p3">
             <settingConfig
                 type="numeric"
                 min="0"
@@ -860,6 +866,13 @@
          <setting
             propertyKey="@Properties.dfViewOnly"
             title="@Strings.dfViewOnly">
+            <settingConfig
+                type="boolean"
+            />
+        </setting>
+        <setting
+            propertyKey="@Properties.alternativeFont"
+            title="@Strings.alternativeFont">
             <settingConfig
                 type="boolean"
             />

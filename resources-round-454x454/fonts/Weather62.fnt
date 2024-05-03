@@ -1,0 +1,40 @@
+info face="Weather Icons" size=62 bold=0 italic=0 charset="" unicode=1 stretchH=100 smooth=1 aa=1 padding=0,0,0,0 spacing=1,1 outline=0
+common lineHeight=62 base=47 scaleW=256 scaleH=256 pages=2 packed=0 alphaChnl=1 redChnl=0 greenChnl=0 blueChnl=0
+page id=0 file="Weather62_0.png"
+page id=1 file="Weather62_1.png"
+chars count=35
+char id=61442 x=0     y=185   width=62    height=47    xoffset=-1    yoffset=0     xadvance=60    page=0  chnl=15
+char id=61444 x=189   y=0     width=62    height=60    xoffset=-1    yoffset=0     xadvance=61    page=0  chnl=15
+char id=61445 x=0     y=0     width=62    height=62    xoffset=-1    yoffset=0     xadvance=60    page=0  chnl=15
+char id=61446 x=63    y=0     width=62    height=61    xoffset=-1    yoffset=0     xadvance=61    page=0  chnl=15
+char id=61447 x=126   y=0     width=62    height=61    xoffset=-1    yoffset=0     xadvance=61    page=0  chnl=15
+char id=61448 x=0     y=63    width=62    height=60    xoffset=-1    yoffset=0     xadvance=60    page=0  chnl=15
+char id=61449 x=63    y=62    width=62    height=60    xoffset=-1    yoffset=0     xadvance=60    page=0  chnl=15
+char id=61450 x=126   y=62    width=62    height=60    xoffset=-1    yoffset=0     xadvance=60    page=0  chnl=15
+char id=61451 x=63    y=123   width=62    height=52    xoffset=-1    yoffset=0     xadvance=60    page=0  chnl=15
+char id=61452 x=126   y=123   width=55    height=50    xoffset=-1    yoffset=0     xadvance=53    page=0  chnl=15
+char id=61453 x=182   y=123   width=49    height=48    xoffset=-1    yoffset=7     xadvance=48    page=0  chnl=15
+char id=61454 x=189   y=61    width=62    height=60    xoffset=-1    yoffset=0     xadvance=61    page=0  chnl=15
+char id=61456 x=0     y=124   width=62    height=60    xoffset=-1    yoffset=0     xadvance=60    page=0  chnl=15
+char id=61457 x=41    y=47    width=53    height=41    xoffset=-1    yoffset=14    xadvance=51    page=1  chnl=15
+char id=61459 x=56    y=89    width=52    height=32    xoffset=-1    yoffset=15    xadvance=50    page=1  chnl=15
+char id=61460 x=136   y=47    width=57    height=40    xoffset=-1    yoffset=14    xadvance=55    page=1  chnl=15
+char id=61461 x=147   y=0     width=48    height=46    xoffset=-1    yoffset=14    xadvance=46    page=1  chnl=15
+char id=61463 x=98    y=0     width=48    height=46    xoffset=-1    yoffset=15    xadvance=46    page=1  chnl=15
+char id=61464 x=49    y=0     width=48    height=46    xoffset=-1    yoffset=15    xadvance=46    page=1  chnl=15
+char id=61465 x=196   y=0     width=48    height=45    xoffset=-1    yoffset=15    xadvance=47    page=1  chnl=15
+char id=61466 x=112   y=176   width=49    height=46    xoffset=-1    yoffset=14    xadvance=47    page=0  chnl=15
+char id=61467 x=0     y=0     width=48    height=46    xoffset=-1    yoffset=14    xadvance=47    page=1  chnl=15
+char id=61468 x=194   y=47    width=49    height=37    xoffset=-1    yoffset=15    xadvance=47    page=1  chnl=15
+char id=61469 x=162   y=174   width=48    height=46    xoffset=-1    yoffset=14    xadvance=46    page=0  chnl=15
+char id=61470 x=63    y=176   width=48    height=47    xoffset=-1    yoffset=14    xadvance=46    page=0  chnl=15
+char id=61473 x=100   y=224   width=48    height=17    xoffset=-1    yoffset=24    xadvance=46    page=0  chnl=15
+char id=61526 x=199   y=221   width=33    height=33    xoffset=-1    yoffset=14    xadvance=31    page=0  chnl=15
+char id=61538 x=95    y=47    width=40    height=41    xoffset=-1    yoffset=9     xadvance=38    page=1  chnl=15
+char id=61539 x=63    y=224   width=36    height=24    xoffset=-1    yoffset=20    xadvance=34    page=0  chnl=15
+char id=61555 x=232   y=122   width=19    height=35    xoffset=-1    yoffset=13    xadvance=18    page=0  chnl=15
+char id=61556 x=0     y=47    width=40    height=43    xoffset=-1    yoffset=8     xadvance=39    page=1  chnl=15
+char id=61558 x=162   y=221   width=36    height=34    xoffset=-1    yoffset=13    xadvance=34    page=0  chnl=15
+char id=61563 x=0     y=233   width=38    height=17    xoffset=-1    yoffset=23    xadvance=36    page=0  chnl=15
+char id=61570 x=0     y=91    width=55    height=32    xoffset=-1    yoffset=15    xadvance=53    page=1  chnl=15
+char id=61640 x=211   y=172   width=36    height=44    xoffset=-1    yoffset=6     xadvance=35    page=0  chnl=15

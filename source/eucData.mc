@@ -3,7 +3,7 @@ using Toybox.System;
 module eucData {
   var wheelBrand;
   var wheelName;
-  var paired = true;
+  var paired = false;
   var limitedMemory = false;
   // Calculated PWM variables :
   // PLEASE UPDATE WITH YOU OWN VALUES BEFORE USE !
@@ -15,7 +15,9 @@ module eucData {
   var topBar; // String : Speed or PWM
   var mainNumber; // String : Speed or PWM
   var maxDisplayedSpeed; // number, used if topBar equals Speed : read from settings
+  var vibeIntensity = 90;
   var alarmThreshold_PWM;
+  var alarmThreshold2_PWM;
   var alarmThreshold_speed;
   var alarmThreshold_temp;
   var activityAutorecording;
@@ -91,9 +93,6 @@ module eucData {
   var batteryTemp1 = 0.0;
   var batteryTemp2 = 0.0;
 
-  //VESC :
-  var VESCCanId = 0;
-
   // Addition for datafield-like view :
   var slideToDFView = false;
   var dfViewOnly = false;
@@ -113,7 +112,7 @@ module eucData {
   var maxPWM;
   var batteryUsagePerc;
   var batteryUsage;
-  var alternativeFont = true;
+  var alternativeFont = false;
   var txtColor = 0xffffff;
   var txtColor_unpr = 0xff8000;
   var linesColor = 0xffffff;
@@ -187,6 +186,8 @@ module eucData {
         "KS-18LH",
         "KS-18LY",
         "KS-S18",
+        "KS-S16",
+        "KS-S16P",
       ];
       var KSwheels100v = ["KS-S19"];
       var KSwheels126v = ["KS-S20", "KS-S22"];
