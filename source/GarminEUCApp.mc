@@ -81,7 +81,7 @@ class GarminEUCApp extends Application.AppBase {
   }
   // Timer callback for various alarms & update UI
   function onUpdateTimer() {
-    dummyGen();
+    //dummyGen();
     if (eucData.wheelName != null) {
       DFViewInit();
     }

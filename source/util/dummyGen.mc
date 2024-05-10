@@ -9,6 +9,7 @@ function dummyGen() {
     eucData.voltage = rd;
   }*/
   eucData.speed = 49;
+  eucData.tripDistance = 22.1;
   eucData.temperature = 63.2;
   eucData.totalDistance = 12903.3;
   eucData.voltage = 66.3;

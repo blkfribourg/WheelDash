@@ -190,6 +190,7 @@ class kingsongConfig {
     "On" => 0,
     "Off" => 1,
     "Auto" => 2,
+    "Test" => 3,
   };
   var dictPedalMode = {
     "Hard" => 0,
