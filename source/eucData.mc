@@ -118,6 +118,10 @@ module eucData {
   var linesColor = 0xffffff;
   var drawLines = true;
 
+  //ESP32 based BLE horn:
+  var ESP32Horn = false;
+  var ESP32HornPaired = false;
+
   function getBatteryPercentage() {
     // using better battery formula from wheellog
 

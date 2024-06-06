@@ -35,8 +35,10 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
     WatchUi.popView(WatchUi.SLIDE_DOWN);
   }
   function connInit() {
+    // Initialize Alarms
+    EUCAlarms.alarmsInit();
     var profileManager = new eucPM();
-
+    var hornProfile;
     if (Toybox has :BluetoothLowEnergy) {
       profileManager.setManager();
       eucBleDelegate = new eucBLEDelegate(
@@ -47,6 +49,11 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       );
       BluetoothLowEnergy.setDelegate(eucBleDelegate);
       profileManager.registerProfiles();
+      if (eucData.ESP32Horn == true) {
+        hornProfile = new hornPM();
+        hornProfile.registerProfiles();
+        eucBleDelegate.setHornProfile(hornProfile);
+      }
     }
     viewInit();
   }

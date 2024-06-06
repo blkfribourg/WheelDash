@@ -19,6 +19,13 @@
             />
         </setting>
         <setting
+            propertyKey="@Properties.ESP32Horn"
+            title="@Strings.ESP32Horn">
+            <settingConfig
+                type="boolean"
+            />
+        </setting>
+        <setting
             propertyKey="@Properties.activityRecordingOnStartup"
             title="@Strings.activityRecordingOnStartup">
             <settingConfig
@@ -157,6 +164,9 @@
                 type="boolean"
             />
         </setting>
+         
+
+        
         
 
        <!--Profile 1-->

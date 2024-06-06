@@ -1,5 +1,5 @@
 <strings>
-    <string id="AppName">WheelDash (beta)</string>
+    <string id="AppName">WheelDash (dev)</string>
     <string id="firstConnStr">Profile $1$ 1st connection\nPlease turn on your wheel\n and wait for connection\n\nensure only one wheel is ON!\n\nIf you enjoy this app :\n ko-fi.com/wheeldash</string>
     <string id="connectedStr">Profile $1$ connected !\n\nSaving wheel unique identifier</string>
     <!-- Strings, that are used in Connect IQ Settings menu, like 
@@ -76,6 +76,8 @@
     <string id="convertToFahrenheit">Convert to Fahrenheit</string>
 
     <string id="vibeIntensity">Alarms vibration intensity</string>
+    <string id="ESP32Horn">ESP32 WheelHorn</string>
+    
 
 
     <string id="orangeColoringThreshold_p1">percentage threshold to color "top bar" with orange (Profile 1)</string>
@@ -219,7 +221,6 @@
    <string id="field6">PWM</string>
    <string id="field7">Battery %</string>
    <string id="field8">Battery used %</string>
-   <string id="field32">Battery usage</string>
    <string id="field9">Max temperature</string>
    <string id="field10">Top speed</string>
    <string id="field11">Average moving speed</string>
@@ -243,7 +244,7 @@
    <string id="field29">WX precipitation chance</string>
    <string id="field30">WX humidity</string>
    <string id="field31">WX wind speed</string>
-   <string id="field8">Battery used/distance</string>
+   <string id="field32">Battery used/distance</string>
    <string id="field33">Current Time</string>
     <!-- FIT Strings-->
 

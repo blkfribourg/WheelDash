@@ -104,7 +104,7 @@ class BleQueue {
 
         run_id = run_id + 1;
       } catch (e instanceof Toybox.Lang.Exception) {
-        // System.println(e.getErrorMessage());
+        //System.println(e.getErrorMessage());
       }
     }
 

@@ -220,8 +220,6 @@ class VeteranDecoder {
           if (calc_crc == provided_crc) {
             return true;
           } else {
-            System.println("calc:" + calc_crc);
-            System.println("prov:" + provided_crc);
             return false;
           }
         }

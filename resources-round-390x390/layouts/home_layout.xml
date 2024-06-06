@@ -1,8 +1,10 @@
 <layout id="HomeLayout">
     <drawable id="Background" class="BackgroundRenderer" />
-    
     <label id="TimeDate" text="00 00" x="50%" y="18%" justification="Gfx.TEXT_JUSTIFY_CENTER" font="Gfx.FONT_SMALL"></label>
     <drawable id="RecordingIndicator" class="RecordIndicatorRenderer">
+        <param name="mainColor">0xd53420</param> 
+    </drawable>
+    <drawable id="HornIndicator" class="HornIndicatorRenderer">
         <param name="mainColor">0xd53420</param> 
     </drawable>
     <drawable id="SpeedDial" class="ArcRenderer">

@@ -556,7 +556,7 @@ class DFView extends WatchUi.View {
       fieldNameFont = Graphics.FONT_TINY;
       if (eucData.alternativeFont == true && eucData.limitedMemory == false) {
         fieldValueFont = WatchUi.loadResource(Rez.Fonts.Rajdhani);
-        System.println("altfont");
+        //System.println("altfont");
       } else {
         fieldValueFont = Graphics.FONT_NUMBER_MILD;
       }

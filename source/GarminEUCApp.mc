@@ -30,7 +30,7 @@ class GarminEUCApp extends Application.AppBase {
     // end of sandbox
     setGlobalSettings();
     rideStatsInit();
-    EUCAlarms.alarmsInit();
+
     alarmsTimer.start(method(:onUpdateTimer), eucData.updateDelay, true);
   }
   function DFViewInit() {
@@ -81,7 +81,7 @@ class GarminEUCApp extends Application.AppBase {
   }
   // Timer callback for various alarms & update UI
   function onUpdateTimer() {
-    //dummyGen();
+    // dummyGen();
     if (eucData.wheelName != null) {
       DFViewInit();
     }
@@ -235,6 +235,7 @@ class GarminEUCApp extends Application.AppBase {
     //System.println("array size:" + rideStats.statsArray.size());
   }
   function setGlobalSettings() {
+    eucData.ESP32Horn = AppStorage.getSetting("ESP32Horn");
     eucData.vibeIntensity = AppStorage.getSetting("vibeIntensity");
     eucData.alternativeFont = AppStorage.getSetting("alternativeFont");
     eucData.slideToDFView = AppStorage.getSetting("slideToDFView");

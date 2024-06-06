@@ -6,11 +6,11 @@ using Toybox.Application.Storage;
 
 class eucBLEDelegate extends Ble.BleDelegate {
   var profileManager = null;
-  var device = null;
   var service = null;
   var char = null;
   var service_w = null;
   var char_w = null;
+  var horn_char_w = null;
   var queue;
   var decoder = null;
   var isFirst = false;
@@ -26,6 +26,10 @@ class eucBLEDelegate extends Ble.BleDelegate {
   var message9 = "";
   var bleCharReadNb = 0;
   var timeWhenConnected;
+  var hornProfileManager = null;
+  var EUCDevice = null;
+  var hornDevice = null;
+  var horn_service = null;
   /*
   var V11Y = [
     0xaa, 0xaa, 0x14, 0x59, 0x84, 0x69, 0x1d, 0x0e, 0x00, 0x00, 0x00, 0x00,
@@ -68,77 +72,104 @@ class eucBLEDelegate extends Ble.BleDelegate {
 
     Ble.setScanState(Ble.SCAN_STATE_SCANNING);
     isFirst = isFirstConnection();
-    //isFirst = false;
+    isFirst = false;
   }
 
   function onConnectedStateChanged(device, state) {
     //		view.deviceStatus=state;
     if (state == Ble.CONNECTION_STATE_CONNECTED) {
-      message3 = "BLE connected";
-      var cccd;
-      service = device.getService(profileManager.EUC_SERVICE);
-      char =
-        service != null
-          ? service.getCharacteristic(profileManager.EUC_CHAR)
-          : null;
-      if (service != null && char != null) {
-        // If KS -> add init seq to ble queue -------- Addition
-        if (eucData.wheelBrand == 2 || eucData.wheelBrand == 3) {
-          var reqModel = [
-            0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x9b, 0x14, 0x5a, 0x5a,
-          ]b;
+      if (device.getService(profileManager.EUC_SERVICE) != null) {
+        //System.println("EUC connected");
+        message3 = "EUC connected";
+        service = device.getService(profileManager.EUC_SERVICE);
+        var cccd;
 
-          queue.add(
-            [char, queue.C_WRITENR, reqModel],
-            profileManager.EUC_SERVICE
-          );
-        }
-        // End of KS addition -------------------------------
-        // Inmotion V2 or VESC ---------------------------
-        if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
-          char_w = service.getCharacteristic(profileManager.EUC_CHAR_W);
+        char =
+          service != null
+            ? service.getCharacteristic(profileManager.EUC_CHAR)
+            : null;
+        if (service != null && char != null) {
+          // If KS -> add init seq to ble queue -------- Addition
+          if (eucData.wheelBrand == 2 || eucData.wheelBrand == 3) {
+            var reqModel = [
+              0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+              0x00, 0x00, 0x00, 0x00, 0x00, 0x9b, 0x14, 0x5a, 0x5a,
+            ]b;
 
-          // addition for inmotion v2 request live:
-          queue.reqLiveData = [
-            char_w,
-            queue.C_WRITENR,
-            [0xaa, 0xaa, 0x14, 0x01, 0x04, 0x11]b,
-          ];
+            queue.add(
+              [char, queue.C_WRITENR, reqModel],
+              profileManager.EUC_SERVICE
+            );
+          }
+          // End of KS addition -------------------------------
+          // Inmotion V2 or VESC ---------------------------
+          if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
+            char_w = service.getCharacteristic(profileManager.EUC_CHAR_W);
+            // addition for inmotion v2 request live:
+            queue.reqLiveData = [
+              char_w,
+              queue.C_WRITENR,
+              [0xaa, 0xaa, 0x14, 0x01, 0x04, 0x11]b,
+            ];
 
-          // inmotion v2 request stats :
-          queue.reqStats = [
-            char_w,
-            queue.C_WRITENR,
-            [0xaa, 0xaa, 0x14, 0x01, 0x11, 0x04]b,
-          ];
+            // inmotion v2 request stats :
+            queue.reqStats = [
+              char_w,
+              queue.C_WRITENR,
+              [0xaa, 0xaa, 0x14, 0x01, 0x11, 0x04]b,
+            ];
+            queue.UUID = profileManager.EUC_SERVICE;
+          }
 
-          queue.UUID = profileManager.EUC_SERVICE;
-        }
-
-        // End of inmotion V2 or VESC
-        cccd = char.getDescriptor(Ble.cccdUuid());
-        cccd.requestWrite([0x01, 0x00]b);
-        message4 = "characteristic notify enabled";
-        eucData.paired = true;
-        message5 = "BLE paired";
-        eucData.timeWhenConnected = new Time.Moment(Time.now().value());
-
-        /* NOT WORKING
-        if (device.getName() != null || device.getName().length != 0) {
-          eucData.name = device.getName();
+          // End of inmotion V2 or VESC
+          cccd = char.getDescriptor(Ble.cccdUuid());
+          cccd.requestWrite([0x01, 0x00]b);
+          message4 = "characteristic notify enabled";
+          eucData.paired = true;
+          message3 = "EUC connected";
+          eucData.timeWhenConnected = new Time.Moment(Time.now().value());
         } else {
-          eucData.name = "Unknown";
-        }*/
-      } else {
-        message6 = "unable to pair";
-        Ble.unpairDevice(device);
-        eucData.paired = false;
+          //System.println("unable to pair EUC");
+          message3 = "EUC not connected";
+          Ble.unpairDevice(device);
+          eucData.paired = false;
+        }
+      }
+
+      if (hornProfileManager != null && eucData.ESP32Horn == true) {
+        if (device.getService(hornProfileManager.WH_SERVICE) != null) {
+          //System.println("Horn connected");
+
+          horn_service = device.getService(hornProfileManager.WH_SERVICE);
+
+          horn_char_w =
+            horn_service != null
+              ? horn_service.getCharacteristic(hornProfileManager.WH_CHAR_W)
+              : null;
+          if (horn_service != null && horn_char_w != null) {
+            message4 = "Horn connected";
+            eucData.ESP32HornPaired = true;
+          } else {
+            Ble.unpairDevice(device);
+            eucData.ESP32HornPaired = false;
+            message4 = "Horn not connected";
+          }
+        }
       }
     } else {
-      Ble.unpairDevice(device);
-      Ble.setScanState(Ble.SCAN_STATE_SCANNING);
-      eucData.paired = false;
+      if (hornDevice != null && hornDevice.equals(device)) {
+        eucData.ESP32HornPaired = false;
+        message4 = "Horn disconnected";
+        Ble.unpairDevice(device);
+        Ble.setScanState(Ble.SCAN_STATE_SCANNING);
+      }
+      if (EUCDevice != null && EUCDevice.equals(device)) {
+        eucData.paired = false;
+        message3 = "EUC disconnected";
+        Ble.unpairDevice(device);
+        Ble.setScanState(Ble.SCAN_STATE_SCANNING);
+      }
+      //BLE Disconnected
     }
   }
   function isFirstConnection() {
@@ -209,6 +240,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
         result = scanResults.next()
       ) {
         if (result instanceof Ble.ScanResult) {
+          System.println(result.getDeviceName());
           if (eucData.wheelBrand == 0 || eucData.wheelBrand == 1) {
             // Begode/Leaperkim
             wheelFound = contains(
@@ -237,7 +269,6 @@ class eucBLEDelegate extends Ble.BleDelegate {
           }
           if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
             // V11 or V12 only for now
-
             var advName = result.getDeviceName();
             if (advName != null) {
               var advModel = advName.substring(0, 3);
@@ -252,16 +283,54 @@ class eucBLEDelegate extends Ble.BleDelegate {
               }
             }
           }
-
           if (wheelFound == true) {
             storeSR(result);
             Ble.setScanState(Ble.SCAN_STATE_OFF);
-            device = Ble.pairDevice(result as Ble.ScanResult);
+            try {
+              EUCDevice = Ble.pairDevice(result as Ble.ScanResult);
+            } catch (e instanceof Lang.Exception) {
+              System.println("EUCError: " + e.getErrorMessage());
+            }
           }
         }
       }
     } else {
-      Ble.setScanState(Ble.SCAN_STATE_OFF);
+      if (
+        hornProfileManager != null &&
+        hornProfileManager has :WH_SERVICE &&
+        eucData.ESP32Horn == true
+      ) {
+        if (eucData.ESP32HornPaired == false) {
+          for (
+            var result = scanResults.next();
+            result != null;
+            result = scanResults.next()
+          ) {
+            if (result instanceof Ble.ScanResult) {
+              if (
+                contains(
+                  result.getServiceUuids(),
+                  hornProfileManager.WH_SERVICE,
+                  result
+                ) == true
+              ) {
+                //System.println("HornFOund!");
+                Ble.setScanState(Ble.SCAN_STATE_OFF);
+                try {
+                  // Do something here
+                  hornDevice = Ble.pairDevice(result as Ble.ScanResult);
+                } catch (e instanceof Lang.Exception) {
+                  System.println("hornError: " + e.getErrorMessage());
+                }
+                //System.println("ConnectedToHorn?");
+              }
+            }
+          }
+        }
+      } else {
+        Ble.setScanState(Ble.SCAN_STATE_OFF);
+      }
+
       var result = loadSR(); // as Ble.ScanResult;
       if (result != false) {
         if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
@@ -279,7 +348,12 @@ class eucBLEDelegate extends Ble.BleDelegate {
             }
           }
         }
-        device = Ble.pairDevice(result as Ble.ScanResult);
+        try {
+          // Do something here
+          EUCDevice = Ble.pairDevice(result as Ble.ScanResult);
+        } catch (e instanceof Lang.Exception) {
+          System.println("EUCError: " + e.getErrorMessage());
+        }
       }
     }
   }
@@ -360,8 +434,18 @@ class eucBLEDelegate extends Ble.BleDelegate {
   }
 
   function manualUnpair() {
-    if (device != null) {
-      Ble.unpairDevice(device);
+    if (EUCDevice != null) {
+      Ble.unpairDevice(EUCDevice);
     }
+  }
+  function setHornProfile(_hornPM) {
+    hornProfileManager = _hornPM;
+  }
+  function getHornService() {
+    return horn_service;
+  }
+
+  function getHornChar() {
+    return horn_char_w;
   }
 }

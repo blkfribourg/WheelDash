@@ -95,6 +95,7 @@ class eucPM {
 
     self.initInmotionV2orVESC();
   }
+
   function setManager() {
     if (eucData.wheelBrand == 0 || eucData.wheelBrand == 1) {
       // System.println("GW PM");

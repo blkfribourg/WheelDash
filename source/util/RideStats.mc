@@ -193,13 +193,19 @@ module rideStats {
   }
 
   function calcBatteryUsagePerc() {
-    if (eucData.batteryUsagePerc == null) {
-      EUCBatteryPercStart = eucData.getBatteryPercentage();
+    var eucBattery = eucData.getBatteryPercentage();
+    if (
+      eucData.batteryUsagePerc == null &&
+      eucBattery > 0 &&
+      eucData.paired == true
+    ) {
+      EUCBatteryPercStart = eucBattery;
       eucData.batteryUsagePerc = 0;
     } else {
-      if (EUCBatteryPercStart > eucData.getBatteryPercentage()) {
-        eucData.batteryUsagePerc =
-          EUCBatteryPercStart - eucData.getBatteryPercentage();
+      if (EUCBatteryPercStart > eucBattery) {
+        eucData.batteryUsagePerc = EUCBatteryPercStart - eucBattery;
+      } else {
+        EUCBatteryPercStart = eucBattery;
       }
     }
   }

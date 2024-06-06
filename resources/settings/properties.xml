@@ -22,17 +22,19 @@
     <property id ="convertToFahrenheit" type="boolean">false</property>
     <property id ="fieldNB" type="number">6</property>
     <property id ="field1" type="number">0</property>
-    <property id ="field2" type="number">0</property>
-    <property id ="field3" type="number">0</property>
-    <property id ="field4" type="number">0</property>
-    <property id ="field5" type="number">0</property>
-    <property id ="field6" type="number">0</property>
+    <property id ="field2" type="number">1</property>
+    <property id ="field3" type="number">2</property>
+    <property id ="field4" type="number">3</property>
+    <property id ="field5" type="number">4</property>
+    <property id ="field6" type="number">5</property>
     <property id="dfViewOnly" type="boolean">false</property>
     <property id="displayNorth" type="boolean">false</property>
     <property id="displayWind" type="boolean">false</property>
-    <property id="slideToDFView" type="boolean">false</property>
+    <property id="slideToDFView" type="boolean">true</property>
     <property id="alternativeFont" type="boolean">false</property>
     <property id="vibeIntensity" type="number">90</property>
+    <property id="ESP32Horn" type="boolean">false</property>
+
     
 
     
@@ -56,10 +58,10 @@
     <property id="voltageCorrectionFactor_p1" type="float">1.25</property>
     <property id="voltageSagIndicatorThresh_p1" type="float">0.3</property>
     <property id="speedCorrectionFactor_p1" type="float">1.0</property>
-    <property id="alarmThreshold_PWM_p1" type="number">0</property>
+    <property id="alarmThreshold_PWM_p1" type="number">80</property>
     <property id="alarmThreshold2_PWM_p1" type="number">0</property>
     <property id="alarmThreshold_speed_p1" type="number">0</property>
-    <property id="alarmThreshold_temp_p1" type="number">40</property>
+    <property id="alarmThreshold_temp_p1" type="number">0</property>
     <property id="currentCorrection_p1" type="number">0</property>
     <property id="maxTemperature_p1" type="float">65</property>
     <property id="begodeCF_p1" type="boolean">false</property>
@@ -119,9 +121,6 @@
     <property id="currentCorrection_p3" type="number">0</property>
     <property id="maxTemperature_p3" type="float">65</property>
     <property id="begodeCF_p3" type="boolean">false</property>
-    
-    
-    
     
     
 </properties>
