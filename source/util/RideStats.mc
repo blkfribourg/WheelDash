@@ -154,18 +154,23 @@ module rideStats {
   }
 
   function calcAvgPower() {
+    var current = eucData.getCurrent().abs();
+    var voltage = eucData.getVoltage();
     if (eucData.avgPower == null) {
       if (eucData.useMiles == true) {
         minimalMovingSpeed = 2; // 2 mph
       } else {
         minimalMovingSpeed = 3; // 3 km/h
       }
-      powerSum = eucData.getCurrent().abs() * eucData.getVoltage();
-      powerCount = 1.0;
-      eucData.avgPower = powerSum;
+
+      if (current != null && voltage != null) {
+        powerSum = current * voltage;
+        powerCount = 1.0;
+        eucData.avgPower = powerSum;
+      }
     } else {
       if (eucData.correctedSpeed > minimalMovingSpeed) {
-        powerSum = powerSum + eucData.getCurrent().abs() * eucData.getVoltage();
+        powerSum = powerSum + current * voltage;
         powerCount = powerCount + 1;
         eucData.avgPower = powerSum / powerCount;
       }
@@ -173,36 +178,42 @@ module rideStats {
   }
 
   function calcMaxPower() {
+    var current = eucData.getCurrent().abs();
+    var voltage = eucData.getVoltage();
     if (eucData.maxPower == null) {
-      eucData.maxPower = eucData.getCurrent() * eucData.getVoltage();
+      if (current != null && voltage != null) {
+        eucData.maxPower = current * voltage;
+      }
     } else {
-      if (eucData.maxPower < eucData.getCurrent() * eucData.getVoltage()) {
-        eucData.maxPower = eucData.getCurrent() * eucData.getVoltage();
+      if (eucData.maxPower < current * voltage) {
+        eucData.maxPower = current * voltage;
       }
     }
   }
 
   function calcMaxPWM() {
+    var PWM = eucData.getPWM();
     if (eucData.maxPWM == null) {
-      eucData.maxPWM = eucData.getPWM();
+      eucData.maxPWM = PWM;
     } else {
-      if (eucData.maxPWM < eucData.getPWM()) {
-        eucData.maxPWM = eucData.getPWM();
+      if (eucData.maxPWM < PWM) {
+        eucData.maxPWM = PWM;
       }
     }
   }
 
   function calcBatteryUsagePerc() {
     var eucBattery = eucData.getBatteryPercentage();
+
     if (
       eucData.batteryUsagePerc == null &&
-      eucBattery > 0 &&
+      eucBattery > 0.0 &&
       eucData.paired == true
     ) {
       EUCBatteryPercStart = eucBattery;
       eucData.batteryUsagePerc = 0;
     } else {
-      if (EUCBatteryPercStart > eucBattery) {
+      if (EUCBatteryPercStart != null && EUCBatteryPercStart > eucBattery) {
         eucData.batteryUsagePerc = EUCBatteryPercStart - eucBattery;
       } else {
         EUCBatteryPercStart = eucBattery;
@@ -212,8 +223,9 @@ module rideStats {
 
   function calcBatteryUsage() {
     calcBatteryUsagePerc();
-    if (eucData.batteryUsagePerc != null && eucData.tripDistance > 0) {
-      eucData.batteryUsage = eucData.batteryUsagePerc / eucData.tripDistance;
+    if (eucData.batteryUsagePerc != null && eucData.correctedTripDistance > 0) {
+      eucData.batteryUsage =
+        eucData.batteryUsagePerc / eucData.correctedTripDistance;
     }
   }
 

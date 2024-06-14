@@ -72,7 +72,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
 
     Ble.setScanState(Ble.SCAN_STATE_SCANNING);
     isFirst = isFirstConnection();
-    isFirst = false;
+    //isFirst = true;
   }
 
   function onConnectedStateChanged(device, state) {
@@ -240,7 +240,6 @@ class eucBLEDelegate extends Ble.BleDelegate {
         result = scanResults.next()
       ) {
         if (result instanceof Ble.ScanResult) {
-          System.println(result.getDeviceName());
           if (eucData.wheelBrand == 0 || eucData.wheelBrand == 1) {
             // Begode/Leaperkim
             wheelFound = contains(
@@ -352,7 +351,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
           // Do something here
           EUCDevice = Ble.pairDevice(result as Ble.ScanResult);
         } catch (e instanceof Lang.Exception) {
-          System.println("EUCError: " + e.getErrorMessage());
+          // System.println("EUCError: " + e.getErrorMessage());
         }
       }
     }

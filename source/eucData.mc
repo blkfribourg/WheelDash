@@ -40,7 +40,7 @@ module eucData {
   var voltage_scaling = 1;
   var speed = 0.0;
   var correctedSpeed = 0.0;
-  var voltage = 0.0;
+  var voltage = null;
   var lowestBatteryPercentage = 101;
   var tripDistance = 0.0;
   var correctedTripDistance = 0.0;
@@ -122,189 +122,208 @@ module eucData {
   var ESP32Horn = false;
   var ESP32HornPaired = false;
 
+  // Motorbike headset
+  var motorbikeHeadset = false;
+
+  //varia
+  var radar = null;
+  var totalVehCount = 0;
+  var variaTargetNb = 0;
+  var variaTargetDist = 0;
+  var variaTargetSpeed = 0;
+  var timerState = -1;
+  var variaCloseAlarmDistThr = 15;
+  var variaFarAlarmDistThr = 50;
+
+  var useRadar = false;
+
   function getBatteryPercentage() {
-    // using better battery formula from wheellog
+    if (voltage != null) {
+      // using better battery formula from wheellog
 
-    // GOTWAY ---------------------------------------------------
-    if (wheelBrand == 0) {
-      if (voltage > 66.8) {
-        battery = 100.0;
-      } else if (voltage > 54.4) {
-        battery = (voltage - 53.8) / 0.13;
-      } else if (voltage > 52.9) {
-        battery = (voltage - 52.9) / 0.325;
-      } else {
-        battery = 0.0;
-      }
-    }
-    // ----------------------------------------------------------
-    // VETERAN ------------------------------------------------
-    if (wheelBrand == 1) {
-      if (version < 4) {
-        // models before Patton
-        if (voltage > 100.2) {
-          battery = 100.0;
-        } else if (voltage > 81.6) {
-          battery = (voltage - 80.7) / 0.195;
-        } else if (voltage > 79.35) {
-          battery = (voltage - 79.35) / 0.4875;
-        } else {
-          battery = 0.0;
-        }
-      }
-      if (version > 4 && version < 5) {
-        // Patton
-        if (voltage > 125.25) {
-          battery = 100.0;
-        } else if (voltage > 102.0) {
-          battery = (voltage - 99.75) / 0.255;
-        } else if (voltage > 96.0) {
-          battery = (voltage - 96.0) / 0.675;
-        } else {
-          battery = 0.0;
-        }
-      }
-      if (version > 5 && version < 6) {
-        // Lynx
-        if (voltage > 150.3) {
-          battery = 100.0;
-        } else if (voltage > 122.4) {
-          battery = (voltage - 119.7) / 0.306;
-        } else if (voltage > 115.2) {
-          battery = (voltage - 115.2) / 0.81;
-        } else {
-          battery = 0.0;
-        }
-      }
-    }
-
-    //-----------------------------------------------------------
-    //Kingsong --------------------------------------------------
-
-    if (wheelBrand == 2 || wheelBrand == 3) {
-      var KSwheels84v = [
-        "KS-18L",
-        "KS-16X",
-        "KS-16XF",
-        "RW",
-        "KS-18LH",
-        "KS-18LY",
-        "KS-S18",
-        "KS-S16",
-        "KS-S16P",
-      ];
-      var KSwheels100v = ["KS-S19"];
-      var KSwheels126v = ["KS-S20", "KS-S22"];
-
-      if (KSwheels84v.indexOf(model) != -1) {
-        if (voltage > 83.5) {
-          battery = 100.0;
-        } else if (voltage > 68.0) {
-          battery = (voltage - 66.5) / 0.17;
-        } else if (voltage > 64.0) {
-          battery = (voltage - 64.0) / 0.45;
-        } else {
-          battery = 0.0;
-        }
-      } else if (KSwheels100v.indexOf(model) != -1) {
-        if (voltage > 100.2) {
-          battery = 100.0;
-        } else if (voltage > 81.6) {
-          battery = (voltage - 79.8) / 0.204;
-        } else if (voltage > 76.8) {
-          battery = (voltage - 76.8) / 0.54;
-        } else {
-          battery = 0.0;
-        }
-      } else if (KSwheels126v.indexOf(model) != -1) {
-        if (voltage > 125.25) {
-          battery = 100.0;
-        } else if (voltage > 102.0) {
-          battery = (voltage - 99.75) / 0.255;
-        } else if (voltage > 96.0) {
-          battery = (voltage - 96.0) / 0.675;
-        } else {
-          battery = 0.0;
-        }
-      } else {
+      // GOTWAY ---------------------------------------------------
+      if (wheelBrand == 0) {
         if (voltage > 66.8) {
           battery = 100.0;
         } else if (voltage > 54.4) {
-          battery = (voltage - 53.2) / 0.136;
-        } else if (voltage > 51.2) {
-          battery = (voltage - 51.2) / 0.36;
+          battery = (voltage - 53.8) / 0.13;
+        } else if (voltage > 52.9) {
+          battery = (voltage - 52.9) / 0.325;
         } else {
           battery = 0.0;
         }
       }
-    }
+      // ----------------------------------------------------------
+      // VETERAN ------------------------------------------------
+      if (wheelBrand == 1) {
+        if (version < 4) {
+          // models before Patton
+          if (voltage > 100.2) {
+            battery = 100.0;
+          } else if (voltage > 81.6) {
+            battery = (voltage - 80.7) / 0.195;
+          } else if (voltage > 79.35) {
+            battery = (voltage - 79.35) / 0.4875;
+          } else {
+            battery = 0.0;
+          }
+        }
+        if (version > 4 && version < 5) {
+          // Patton
+          if (voltage > 125.25) {
+            battery = 100.0;
+          } else if (voltage > 102.0) {
+            battery = (voltage - 99.75) / 0.255;
+          } else if (voltage > 96.0) {
+            battery = (voltage - 96.0) / 0.675;
+          } else {
+            battery = 0.0;
+          }
+        }
+        if (version > 5 && version < 6) {
+          // Lynx
+          if (voltage > 150.3) {
+            battery = 100.0;
+          } else if (voltage > 122.4) {
+            battery = (voltage - 119.7) / 0.306;
+          } else if (voltage > 115.2) {
+            battery = (voltage - 115.2) / 0.81;
+          } else {
+            battery = 0.0;
+          }
+        }
+      }
 
-    // ----------------------------------------------------------
-    // INMOTION V11 :
-    if (wheelBrand == 4) {
-      if (model.equals("V11")) {
-        if (voltage > 83.5) {
-          battery = 100.0;
-        } else if (voltage > 68.0) {
-          battery = (voltage - 66.5) / 0.17;
-        } else if (voltage > 64.0) {
-          battery = (voltage - 64.0) / 0.45;
+      //-----------------------------------------------------------
+      //Kingsong --------------------------------------------------
+
+      if (wheelBrand == 2 || wheelBrand == 3) {
+        var KSwheels84v = [
+          "KS-18L",
+          "KS-16X",
+          "KS-16XF",
+          "RW",
+          "KS-18LH",
+          "KS-18LY",
+          "KS-S18",
+          "KS-S16",
+          "KS-S16P",
+        ];
+        var KSwheels100v = ["KS-S19"];
+        var KSwheels126v = ["KS-S20", "KS-S22"];
+
+        if (KSwheels84v.indexOf(model) != -1) {
+          if (voltage > 83.5) {
+            battery = 100.0;
+          } else if (voltage > 68.0) {
+            battery = (voltage - 66.5) / 0.17;
+          } else if (voltage > 64.0) {
+            battery = (voltage - 64.0) / 0.45;
+          } else {
+            battery = 0.0;
+          }
+        } else if (KSwheels100v.indexOf(model) != -1) {
+          if (voltage > 100.2) {
+            battery = 100.0;
+          } else if (voltage > 81.6) {
+            battery = (voltage - 79.8) / 0.204;
+          } else if (voltage > 76.8) {
+            battery = (voltage - 76.8) / 0.54;
+          } else {
+            battery = 0.0;
+          }
+        } else if (KSwheels126v.indexOf(model) != -1) {
+          if (voltage > 125.25) {
+            battery = 100.0;
+          } else if (voltage > 102.0) {
+            battery = (voltage - 99.75) / 0.255;
+          } else if (voltage > 96.0) {
+            battery = (voltage - 96.0) / 0.675;
+          } else {
+            battery = 0.0;
+          }
         } else {
-          battery = 0.0;
+          if (voltage > 66.8) {
+            battery = 100.0;
+          } else if (voltage > 54.4) {
+            battery = (voltage - 53.2) / 0.136;
+          } else if (voltage > 51.2) {
+            battery = (voltage - 51.2) / 0.36;
+          } else {
+            battery = 0.0;
+          }
         }
       }
-      if (model.equals("V12")) {
-        if (voltage > 100.2) {
-          battery = 100.0;
-        } else if (voltage > 81.6) {
-          battery = (voltage - 79.8) / 0.204;
-        } else if (voltage > 76.8) {
-          battery = (voltage - 76.8) / 0.54;
-        } else {
-          battery = 0.0;
+
+      // ----------------------------------------------------------
+      // INMOTION V11 :
+      if (wheelBrand == 4) {
+        if (model.equals("V11")) {
+          if (voltage > 83.5) {
+            battery = 100.0;
+          } else if (voltage > 68.0) {
+            battery = (voltage - 66.5) / 0.17;
+          } else if (voltage > 64.0) {
+            battery = (voltage - 64.0) / 0.45;
+          } else {
+            battery = 0.0;
+          }
+        }
+        if (model.equals("V12")) {
+          if (voltage > 100.2) {
+            battery = 100.0;
+          } else if (voltage > 81.6) {
+            battery = (voltage - 79.8) / 0.204;
+          } else if (voltage > 76.8) {
+            battery = (voltage - 76.8) / 0.54;
+          } else {
+            battery = 0.0;
+          }
         }
       }
+      if (wheelBrand == 5) {
+        if (model.equals("V11")) {
+          if (voltage > 83.5) {
+            battery = 100.0;
+          } else if (voltage > 68.0) {
+            battery = (voltage - 66.5) / 0.17;
+          } else if (voltage > 64.0) {
+            battery = (voltage - 64.0) / 0.45;
+          } else {
+            battery = 0.0;
+          }
+        }
+        if (model.equals("V13")) {
+          if (voltage > 100.2) {
+            battery = 100.0;
+          } else if (voltage > 81.6) {
+            battery = (voltage - 79.8) / 0.204;
+          } else if (voltage > 76.8) {
+            battery = (voltage - 76.8) / 0.54;
+          } else {
+            battery = 0.0;
+          }
+        }
+        if (model.equals("V14")) {
+          if (voltage > 133.6) {
+            battery = 100.0;
+          } else if (voltage > 108.8) {
+            battery = (voltage - 106.4) / 0.272;
+          } else if (voltage > 102.4) {
+            battery = (voltage - 102.4) / 0.72;
+          } else {
+            battery = 0.0;
+          }
+        }
+      }
+      return battery;
+    } else {
+      return 0;
     }
-    if (wheelBrand == 5) {
-      if (model.equals("V11")) {
-        if (voltage > 83.5) {
-          battery = 100.0;
-        } else if (voltage > 68.0) {
-          battery = (voltage - 66.5) / 0.17;
-        } else if (voltage > 64.0) {
-          battery = (voltage - 64.0) / 0.45;
-        } else {
-          battery = 0.0;
-        }
-      }
-      if (model.equals("V13")) {
-        if (voltage > 100.2) {
-          battery = 100.0;
-        } else if (voltage > 81.6) {
-          battery = (voltage - 79.8) / 0.204;
-        } else if (voltage > 76.8) {
-          battery = (voltage - 76.8) / 0.54;
-        } else {
-          battery = 0.0;
-        }
-      }
-      if (model.equals("V14")) {
-        if (voltage > 133.6) {
-          battery = 100.0;
-        } else if (voltage > 108.8) {
-          battery = (voltage - 106.4) / 0.272;
-        } else if (voltage > 102.4) {
-          battery = (voltage - 102.4) / 0.72;
-        } else {
-          battery = 0.0;
-        }
-      }
-    }
-    return battery;
   }
 
   function getPWM() {
-    if (eucData.voltage != 0) {
+    if (eucData.voltage != null && eucData.voltage > 0) {
       //Quick&dirty fix for now, need to rewrite this:
       if ((wheelBrand == 0 && gothPWM == false) || wheelBrand == 5) {
         //  System.println("calcPwm");
@@ -374,7 +393,7 @@ module eucData {
   }
 
   function getVoltage() {
-    if (wheelBrand == 0) {
+    if (wheelBrand == 0 && voltage != null) {
       // gotway
       return voltage * voltage_scaling;
     } else {

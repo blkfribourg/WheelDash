@@ -424,7 +424,7 @@ class ActivityRecordView extends WatchUi.View {
     mEORBatteryField = _session.createField(
       "EORBattery",
       EORBATTERY_FIELD_ID,
-      FitContributor.DATA_TYPE_UINT8,
+      FitContributor.DATA_TYPE_FLOAT,
       { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "%" }
     );
 

@@ -12,7 +12,7 @@ class DFView extends WatchUi.View {
   hidden var reqPos = false;
   hidden var reqWX = false;
   hidden var fieldIDs = null;
-  hidden var fieldNB = 6;
+  hidden var fieldNB = 8;
   hidden var current_position = null;
   hidden var current_weather = null;
   hidden var hourly_weather = null;
@@ -44,6 +44,8 @@ class DFView extends WatchUi.View {
       AppStorage.getSetting("field4"),
       AppStorage.getSetting("field5"),
       AppStorage.getSetting("field6"),
+      AppStorage.getSetting("field7"),
+      AppStorage.getSetting("field8"),
     ];
     fieldNB = AppStorage.getSetting("fieldNB");
 
@@ -59,6 +61,7 @@ class DFView extends WatchUi.View {
       enableGPS();
     }
     if (fieldIDs.slice(0, fieldNB).indexOf(28) != -1) {
+      //System.println("load temp font");
       weatherFont = WatchUi.loadResource(Rez.Fonts.Weather);
       initWeatherChar();
     }
@@ -115,13 +118,13 @@ class DFView extends WatchUi.View {
     if (fieldIDs.slice(0, fieldNB).indexOf(19) != -1) {
       rideStats.computeMaxPower = true;
     }
-    if (fieldIDs.slice(0, fieldNB).indexOf(10) != -1) {
+    if (fieldIDs.slice(0, fieldNB).indexOf(20) != -1) {
       rideStats.computeMaxPWM = true;
     }
     if (fieldIDs.slice(0, fieldNB).indexOf(25) != -1) {
       rideStats.computeWatchBatteryUsage = true;
     }
-    if (fieldIDs.slice(0, fieldNB - 1).indexOf(32) != -1) {
+    if (fieldIDs.slice(0, fieldNB).indexOf(32) != -1) {
       rideStats.computeBatteryUsage = true;
     }
   }
@@ -330,7 +333,7 @@ class DFView extends WatchUi.View {
         }
       }
       if (fieldIDs[field_id] == 29) {
-        fieldNames[field_id] = "RAIN";
+        fieldNames[field_id] = "RAIN %";
         if (
           current_weather != null &&
           current_weather.precipitationChance != null
@@ -354,7 +357,7 @@ class DFView extends WatchUi.View {
         }
       }
       if (fieldIDs[field_id] == 30) {
-        fieldNames[field_id] = "HUM";
+        fieldNames[field_id] = "HUM %";
         if (current_weather != null) {
           fieldValues[field_id] = valueRound(
             current_weather.relativeHumidity,
@@ -393,11 +396,7 @@ class DFView extends WatchUi.View {
       }
       if (fieldIDs[field_id] == 32) {
         fieldNames[field_id] = "BATT USG";
-        if (current_weather != null) {
-          fieldValues[field_id] = valueRound(eucData.batteryUsage, "%.1f");
-        } else {
-          fieldValues[field_id] = "--";
-        }
+        fieldValues[field_id] = valueRound(eucData.batteryUsage, "%.1f");
       }
       if (fieldIDs[field_id] == 33) {
         fieldNames[field_id] = "TIME";
@@ -405,6 +404,29 @@ class DFView extends WatchUi.View {
 
         fieldValues[field_id] =
           CurrentTime.hour.format("%d") + ":" + CurrentTime.min.format("%02d");
+      }
+      if (fieldIDs[field_id] == 34) {
+        fieldNames[field_id] = "VEH SPD";
+        var targetSpeed = eucData.variaTargetSpeed;
+        if (targetSpeed != null) {
+          targetSpeed = targetSpeed * 3.6; //Km/h only here, should implement mph when adding imperial unit support
+          if (eucData.useMiles == true) {
+            targetSpeed = kmToMiles(targetSpeed);
+          }
+        }
+        fieldValues[field_id] = valueRound(targetSpeed, "%.1f");
+      }
+      if (fieldIDs[field_id] == 35) {
+        fieldNames[field_id] = "VEH DST";
+        fieldValues[field_id] = valueRound(eucData.variaTargetDist, "%.1f");
+      }
+      if (fieldIDs[field_id] == 36) {
+        fieldNames[field_id] = "VEH NB";
+        fieldValues[field_id] = valueRound(eucData.variaTargetNb, "%1d");
+      }
+      if (fieldIDs[field_id] == 37) {
+        fieldNames[field_id] = "RD V";
+        fieldValues[field_id] = valueRound(Varia.getVariaVoltage(), "%1d");
       }
     }
   }
@@ -429,6 +451,153 @@ class DFView extends WatchUi.View {
 
     dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
     dc.clear();
+    dc.setPenWidth(2);
+    if (fieldNB == 8) {
+      fieldNameFont = Graphics.FONT_XTINY;
+      if (eucData.alternativeFont == true && eucData.limitedMemory == false) {
+        fieldValueFont = WatchUi.loadResource(Rez.Fonts.Rajdhani);
+      } else {
+        fieldValueFont = Graphics.FONT_SYSTEM_SMALL;
+        if (scr_width <= 260) {
+          fieldValueFont = Graphics.FONT_LARGE;
+        }
+      }
+      fieldNameFontHeight = Graphics.getFontHeight(fieldNameFont);
+      fieldValueFontHeight = Graphics.getFontHeight(fieldValueFont);
+      if (scr_width < 260) {
+        gap = dc.getWidth() / 80.0;
+        fieldNameFontHeight = fieldNameFontHeight - 4;
+      } else {
+        gap = dc.getWidth() / 100.0;
+      }
+      dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
+      dc.clear();
+
+      if (eucData.drawLines) {
+        dc.setColor(eucData.linesColor, Graphics.COLOR_BLACK);
+        dc.drawLine(gap, scr_height / 2.6, scr_width - gap, scr_height / 2.6);
+        dc.drawLine(
+          scr_width / 2,
+          2 * gap + fieldValueFontHeight,
+          scr_width / 2,
+          scr_height / 2.6 - 2 * gap
+        );
+        dc.drawLine(
+          scr_width / 2,
+          scr_height / 2.6 + 2 * gap,
+          scr_width / 2,
+          scr_height / 1.6 - 2 * gap
+        );
+        dc.drawLine(gap, scr_height / 1.6, scr_width - gap, scr_height / 1.6);
+        dc.drawLine(
+          scr_width / 2,
+          scr_height / 1.6 + 2 * gap,
+          scr_width / 2,
+          scr_height - (2 * gap + fieldValueFontHeight)
+        );
+      }
+      if (eucData.paired == true) {
+        dc.setColor(eucData.txtColor, Graphics.COLOR_TRANSPARENT);
+      } else {
+        dc.setColor(eucData.txtColor_unpr, Graphics.COLOR_TRANSPARENT);
+      }
+
+      //1st field doesn't have a name
+      drawDFTextValue(dc, scr_width / 2, gap, 0);
+
+      dc.drawText(
+        scr_width / 3.7,
+        scr_height / 6.4,
+        fieldNameFont,
+        fieldNames[1],
+        Graphics.TEXT_JUSTIFY_CENTER
+      );
+      drawDFTextValue(
+        dc,
+        scr_width / 3.7,
+        scr_height / 6.4 + fieldNameFontHeight,
+        1
+      );
+
+      dc.drawText(
+        scr_width - scr_width / 3.7,
+        scr_height / 6.4,
+        fieldNameFont,
+        fieldNames[2],
+        Graphics.TEXT_JUSTIFY_CENTER
+      );
+      drawDFTextValue(
+        dc,
+        scr_width - scr_width / 3.7,
+        scr_height / 6.4 + fieldNameFontHeight,
+        2
+      );
+
+      dc.drawText(
+        scr_width / 4.5,
+        scr_height / 2.6 + gap,
+        fieldNameFont,
+        fieldNames[3],
+        Graphics.TEXT_JUSTIFY_CENTER
+      );
+      drawDFTextValue(
+        dc,
+        scr_width / 4.5,
+        scr_height / 2.6 + gap + fieldNameFontHeight,
+        3
+      );
+
+      dc.drawText(
+        scr_width - scr_width / 4.5,
+        scr_height / 2.6 + gap,
+        fieldNameFont,
+        fieldNames[4],
+        Graphics.TEXT_JUSTIFY_CENTER
+      );
+      drawDFTextValue(
+        dc,
+        scr_width - scr_width / 4.5,
+        scr_height / 2.6 + gap + fieldNameFontHeight,
+        4
+      );
+
+      //
+      dc.drawText(
+        scr_width / 3.7,
+        scr_height / 1.6 + gap,
+        fieldNameFont,
+        fieldNames[5],
+        Graphics.TEXT_JUSTIFY_CENTER
+      );
+      drawDFTextValue(
+        dc,
+        scr_width / 3.7,
+        scr_height / 1.6 + gap + fieldNameFontHeight,
+        5
+      );
+
+      dc.drawText(
+        scr_width - scr_width / 3.7,
+        scr_height / 1.6 + gap,
+        fieldNameFont,
+        fieldNames[6],
+        Graphics.TEXT_JUSTIFY_CENTER
+      );
+      drawDFTextValue(
+        dc,
+        scr_width - scr_width / 3.7,
+        scr_height / 1.6 + gap + fieldNameFontHeight,
+        6
+      );
+      //
+
+      drawDFTextValue(
+        dc,
+        scr_width / 2,
+        scr_height - gap - fieldValueFontHeight,
+        7
+      );
+    }
     if (fieldNB == 6) {
       paddingCorrection = 0.85;
       fieldNameFont = Graphics.FONT_XTINY;
@@ -453,7 +622,6 @@ class DFView extends WatchUi.View {
       fieldValueFontHeight =
         Graphics.getFontHeight(fieldValueFont) * (paddingCorrection + 0.2);
       if (eucData.drawLines) {
-        dc.setPenWidth(2);
         dc.setColor(eucData.linesColor, Graphics.COLOR_BLACK);
         dc.drawLine(
           gap_lineMod * gap,
@@ -552,7 +720,8 @@ class DFView extends WatchUi.View {
         Graphics.TEXT_JUSTIFY_CENTER
       );
       drawDFTextValue(dc, scr_width / 2, scr_width - fieldValueFontHeight, 5);
-    } else {
+    }
+    if (fieldNB == 4) {
       fieldNameFont = Graphics.FONT_TINY;
       if (eucData.alternativeFont == true && eucData.limitedMemory == false) {
         fieldValueFont = WatchUi.loadResource(Rez.Fonts.Rajdhani);
@@ -564,7 +733,6 @@ class DFView extends WatchUi.View {
       fieldValueFontHeight = Graphics.getFontHeight(fieldValueFont);
       gap = dc.getWidth() / 20;
       if (eucData.drawLines) {
-        dc.setPenWidth(2);
         dc.setColor(eucData.linesColor, Graphics.COLOR_BLACK);
 
         dc.drawLine(
@@ -687,7 +855,7 @@ class DFView extends WatchUi.View {
         .toString();
       dc.drawText(
         xpos,
-        ypos + Graphics.getFontHeight(weatherFont) / 4,
+        ypos, // + Graphics.getFontHeight(weatherFont),
         font,
         fieldValues[valueID],
         Graphics.TEXT_JUSTIFY_CENTER
@@ -707,22 +875,16 @@ class DFView extends WatchUi.View {
     var rawNorth = Toybox.Position.getInfo().heading;
     if (rawNorth != null) {
       var north = rawNorth * -57.2958;
+      var ratio = 454.0 / screenDiam;
+      var arrow_width = (screenDiam * ratio) / 110;
+      var arrow_heigth = screenDiam / 2 - screenDiam / 20;
+      var arrow_heigth2 = screenDiam / 2 - screenDiam / 25;
+
       var x1 = getXY(screenDiam, 0, screenDiam / 2 - 1, north, 1);
-      var x2 = getXY(
-        screenDiam,
-        0,
-        screenDiam / 2 - screenDiam / 30,
-        north - screenDiam / 150,
-        1
-      );
-      var x3 = getXY(
-        screenDiam,
-        0,
-        screenDiam / 2 - screenDiam / 30,
-        north + screenDiam / 150,
-        1
-      );
-      var pts = [x1, x2, x3];
+      var x2 = getXY(screenDiam, 0, arrow_heigth, north - arrow_width, 1);
+      var x3 = getXY(screenDiam, 0, arrow_heigth2, north, 1);
+      var x4 = getXY(screenDiam, 0, arrow_heigth, north + arrow_width, 1);
+      var pts = [x1, x2, x3, x4];
       dc.setColor(0xd53420, Graphics.COLOR_TRANSPARENT);
       dc.fillPolygon(pts);
     }
@@ -742,22 +904,17 @@ class DFView extends WatchUi.View {
     if (rawNorth != null && windBearing != null) {
       var north = rawNorth * -57.2958;
       var wind = windBearing + north;
+
+      var ratio = 454.0 / screenDiam;
+      var arrow_width = (screenDiam * ratio) / 110;
+      var arrow_heigth = screenDiam / 2 - screenDiam / 20;
+      var arrow_heigth2 = screenDiam / 2 - screenDiam / 25;
+
       var x1 = getXY(screenDiam, 0, screenDiam / 2 - 1, wind, 1);
-      var x2 = getXY(
-        screenDiam,
-        0,
-        screenDiam / 2 - screenDiam / 30,
-        wind - screenDiam / 150,
-        1
-      );
-      var x3 = getXY(
-        screenDiam,
-        0,
-        screenDiam / 2 - screenDiam / 30,
-        wind + screenDiam / 150,
-        1
-      );
-      var pts = [x1, x2, x3];
+      var x2 = getXY(screenDiam, 0, arrow_heigth, wind - arrow_width, 1);
+      var x3 = getXY(screenDiam, 0, arrow_heigth2, wind, 1);
+      var x4 = getXY(screenDiam, 0, arrow_heigth, wind + arrow_width, 1);
+      var pts = [x1, x2, x3, x4];
       dc.setColor(0x0077b6, Graphics.COLOR_TRANSPARENT);
       dc.fillPolygon(pts);
     }

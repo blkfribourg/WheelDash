@@ -30,7 +30,7 @@ class GarminEUCApp extends Application.AppBase {
     // end of sandbox
     setGlobalSettings();
     rideStatsInit();
-
+    Varia.initVaria();
     alarmsTimer.start(method(:onUpdateTimer), eucData.updateDelay, true);
   }
   function DFViewInit() {
@@ -93,7 +93,9 @@ class GarminEUCApp extends Application.AppBase {
         delegate.setSettings(profile);
       }
     }
-
+    if (eucData.useRadar == true) {
+      Varia.checkVehicule();
+    }
     if (eucData.paired == true && eucData.wheelName != null) {
       // automatic recording ------------------
       // a bit hacky maybe ...
@@ -235,7 +237,15 @@ class GarminEUCApp extends Application.AppBase {
     //System.println("array size:" + rideStats.statsArray.size());
   }
   function setGlobalSettings() {
+    eucData.useRadar = AppStorage.getSetting("useRadar");
+    eucData.variaCloseAlarmDistThr = AppStorage.getSetting(
+      "variaCloseAlarmDistThr"
+    );
+    eucData.variaFarAlarmDistThr = AppStorage.getSetting(
+      "variaFarAlarmDistThr"
+    );
     eucData.ESP32Horn = AppStorage.getSetting("ESP32Horn");
+    eucData.motorbikeHeadset = AppStorage.getSetting("motorbikeHeadset");
     eucData.vibeIntensity = AppStorage.getSetting("vibeIntensity");
     eucData.alternativeFont = AppStorage.getSetting("alternativeFont");
     eucData.slideToDFView = AppStorage.getSetting("slideToDFView");

@@ -77,7 +77,10 @@
 
     <string id="vibeIntensity">Alarms vibration intensity</string>
     <string id="ESP32Horn">ESP32 WheelHorn</string>
-    
+    <string id="motorbikeHeadset">Alternative audio alarms (motorbikeHeadset)</string>
+    <string id="useRadar">Varia radar (or supported ANT+ radar)</string>
+    <string id="variaCloseAlarmDistThr">Varia close distance alarm threshold</string>
+    <string id="variaFarAlarmDistThr">Varia far distance alarm threshold</string>
 
 
     <string id="orangeColoringThreshold_p1">percentage threshold to color "top bar" with orange (Profile 1)</string>
@@ -204,6 +207,7 @@
    
    <string id="fieldNB4">4</string>
    <string id="fieldNB6">6</string>
+   <string id="fieldNB8">8</string>
 
    <string id="fieldLbl1">Field 1</string>
    <string id="fieldLbl2">Field 2</string>
@@ -211,6 +215,8 @@
    <string id="fieldLbl4">Field 4</string>
    <string id="fieldLbl5">Field 5</string>
    <string id="fieldLbl6">Field 6</string>
+   <string id="fieldLbl7">Field 7</string>
+   <string id="fieldLbl8">Field 8</string>
 
    <string id="field0">Speed</string>
    <string id="field1">Voltage</string>
@@ -246,6 +252,10 @@
    <string id="field31">WX wind speed</string>
    <string id="field32">Battery used/distance</string>
    <string id="field33">Current Time</string>
+   <string id="field34">Nearest Vehicule Speed (varia)</string>
+   <string id="field35">Nearest Vehicule Distance (varia)</string>
+   <string id="field36">Vehicule Number (varia)</string>
+   <string id="field37">Radar Battery (varia)</string>
     <!-- FIT Strings-->
 
     <string id="speed_graph_label">Speed</string>
@@ -297,6 +307,8 @@
     <string id="maxBattery_label">Session max battery %</string>
     <string id="wheelName_label">Wheel profile name</string>
     <string id="empty"></string>
+    <string id="VehRelativeSpd_label">Relative Approach Speed (Varia)</string>
+    <string id="VehTotalCnt_label">Vehicle Count (Varia)</string>
     
 
 </strings>
