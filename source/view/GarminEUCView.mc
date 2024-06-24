@@ -5,6 +5,7 @@ using Toybox.Timer;
 using Toybox.System;
 
 class GarminEUCView extends WatchUi.View {
+  private var debugTarget;
   private var cDrawables = {};
   function initialize() {
     View.initialize();
@@ -25,6 +26,9 @@ class GarminEUCView extends WatchUi.View {
     cDrawables[:TemperatureArc] = View.findDrawableById("TemperatureArc");
     cDrawables[:RecordingIndicator] =
       View.findDrawableById("RecordingIndicator");
+    if (eucData.useRadar == true) {
+      cDrawables[:VariaIndicator] = View.findDrawableById("VariaIndicator");
+    }
   }
 
   // Called when this View is brought to the foreground. Restore
@@ -41,6 +45,19 @@ class GarminEUCView extends WatchUi.View {
 
   // Update the view
   function onUpdate(dc) {
+    if (Varia.targetObject != null) {
+      Varia.targetObject = variaMove(Varia.targetObject);
+      cDrawables[:VariaIndicator].setValues(Varia.targetObject);
+    }
+
+    if (
+      eucData.useRadar == true &&
+      Varia.targetObject != null &&
+      eucData.variaTargetNb != 0
+    ) {
+      // at leat one vehicule detected
+      cDrawables[:VariaIndicator].setValues(Varia.targetObject);
+    }
     // Update label drawables
     cDrawables[:TimeDate].setText(
       // Update time
@@ -128,21 +145,25 @@ class GarminEUCView extends WatchUi.View {
       if (!EUCAlarms.alarmType.equals("none")) {
         rideStatsText = "!! Alarm: " + EUCAlarms.alarmType + " !!";
       } else {
-        if (
-          rideStats.statsArray != null &&
-          rideStats.statsNumberToDiplay != 0
-        ) {
-          rideStatsText = rideStats.statsArray[rideStats.statsIndexToDiplay];
+        if (eucData.variaTargetNb != 0) {
+          rideStatsText = "";
+        } else {
+          if (
+            rideStats.statsArray != null &&
+            rideStats.statsNumberToDiplay != 0
+          ) {
+            rideStatsText = rideStats.statsArray[rideStats.statsIndexToDiplay];
 
-          rideStats.statsTimer--;
-          if (rideStats.statsTimer < 0) {
-            rideStats.statsIndexToDiplay++;
-            rideStats.statsTimerReset();
-            if (
-              rideStats.statsIndexToDiplay >
-              rideStats.statsNumberToDiplay - 1
-            ) {
-              rideStats.statsIndexToDiplay = 0;
+            rideStats.statsTimer--;
+            if (rideStats.statsTimer < 0) {
+              rideStats.statsIndexToDiplay++;
+              rideStats.statsTimerReset();
+              if (
+                rideStats.statsIndexToDiplay >
+                rideStats.statsNumberToDiplay - 1
+              ) {
+                rideStats.statsIndexToDiplay = 0;
+              }
             }
           }
         }
