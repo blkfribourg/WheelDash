@@ -72,7 +72,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
 
     Ble.setScanState(Ble.SCAN_STATE_SCANNING);
     isFirst = isFirstConnection();
-    //isFirst = true;
+    //  isFirst = false;
   }
 
   function onConnectedStateChanged(device, state) {
@@ -104,6 +104,15 @@ class eucBLEDelegate extends Ble.BleDelegate {
           // End of KS addition -------------------------------
           // Inmotion V2 or VESC ---------------------------
           if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
+            if (eucData.speedLimit != 0) {
+              //request settings
+              var getSettings = [0xaa, 0xaa, 0x14, 0x02, 0x20, 0x20, 0x16]b;
+              queue.add(
+                [char_w, queue.C_WRITENR, getSettings],
+                profileManager.EUC_SERVICE
+              );
+              queue.lastPacketType = "settings";
+            }
             char_w = service.getCharacteristic(profileManager.EUC_CHAR_W);
             // addition for inmotion v2 request live:
             queue.reqLiveData = [

@@ -50,6 +50,7 @@
     <property id="recordActivityButtonMap_p1" type="number">0</property>
     <property id="cycleLightButtonMap_p1" type="number">0</property>
     <property id="beepButtonMap_p1" type="number">0</property>
+    <property id="spdLimitButtonMap_p1" type="number">0</property>
     <property id="DFViewButtonMap_p1" type="number">0</property>
     <property id="lockButtonMap_p1" type="number">0</property>
     <property id="cmdQueueDelay_p1" type="number">200</property>
@@ -68,6 +69,8 @@
     <property id="alarmThreshold2_PWM_p1" type="number">0</property>
     <property id="alarmThreshold_speed_p1" type="number">0</property>
     <property id="alarmThreshold_temp_p1" type="number">0</property>
+    <property id="tiltbackSpeed_p1" type="number">-1</property>
+    <property id="speedLimit_p1" type="number">0</property>
     <property id="currentCorrection_p1" type="number">0</property>
     <property id="maxTemperature_p1" type="float">65</property>
     <property id="begodeCF_p1" type="boolean">false</property>
@@ -79,6 +82,7 @@
     <property id="recordActivityButtonMap_p2" type="number">0</property>
     <property id="cycleLightButtonMap_p2" type="number">0</property>
     <property id="beepButtonMap_p2" type="number">4</property>
+    <property id="spdLimitButtonMap_p2" type="number">0</property>
     <property id="DFViewButtonMap_p2" type="number">0</property>
     <property id="cmdQueueDelay_p2" type="number">200</property>
     <property id="mainNumber_p2" type="number">0</property>
@@ -96,6 +100,8 @@
     <property id="alarmThreshold2_PWM_p2" type="number">0</property>
     <property id="alarmThreshold_speed_p2" type="number">0</property>
     <property id="alarmThreshold_temp_p2" type="number">0</property>
+    <property id="tiltbackSpeed_p2" type="number">-1</property>
+    <property id="speedLimit_p2" type="number">0</property>
     <property id="currentCorrection_p2" type="number">0</property>
     <property id="maxTemperature_p2" type="float">65</property>
     <property id="begodeCF_p2" type="boolean">false</property>
@@ -106,6 +112,7 @@
     <property id="wheelBrand_p3" type="number">0</property>
     <property id="recordActivityButtonMap_p3" type="number">0</property>
     <property id="cycleLightButtonMap_p3" type="number">0</property>
+    <property id="spdLimitButtonMap_p3" type="number">0</property>
     <property id="beepButtonMap_p3" type="number">0</property>
     <property id="DFViewButtonMap_p3" type="number">0</property>
     <property id="cmdQueueDelay_p3" type="number">200</property>
@@ -124,6 +131,8 @@
     <property id="alarmThreshold2_PWM_p3" type="number">0</property>
     <property id="alarmThreshold_speed_p3" type="number">0</property>
     <property id="alarmThreshold_temp_p3" type="number">0</property>
+    <property id="tiltbackSpeed_p3" type="number">-1</property>
+    <property id="speedLimit_p3" type="number">0</property>
     <property id="currentCorrection_p3" type="number">0</property>
     <property id="maxTemperature_p3" type="float">65</property>
     <property id="begodeCF_p3" type="boolean">false</property>

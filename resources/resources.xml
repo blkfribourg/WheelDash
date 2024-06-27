@@ -1,35 +1,35 @@
 <resources>
  <fitContributions>
         <fitField id="0" displayInChart="true" sortOrder = "0" precision="2"
-        chartTitle="@Strings.speed_graph_label" dataLabel="@Strings.speed_label"
+        chartTitle="@Strings.speed_label" dataLabel="@Strings.speed_label"
         unitLabel="@Strings.speed_unit_kmh" fillColor="#9b59b6" />
 
          <fitField id="22" displayInChart="true" sortOrder = "1" precision="2"
-        chartTitle="@Strings.speed_graph_label" dataLabel="@Strings.speed_label"
+        chartTitle="@Strings.speed_label" dataLabel="@Strings.speed_label"
         unitLabel="@Strings.speed_unit_mph" fillColor="#FF0000" />
 
         <fitField id="1" displayInChart="true" sortOrder = "2" precision="2"
-        chartTitle="@Strings.pwm_graph_label" dataLabel="@Strings.pwm_label"
+        chartTitle="@Strings.pwm_label" dataLabel="@Strings.pwm_label"
         unitLabel="@Strings.percentage_unit" fillColor="#3498db" />
 
         <fitField id="2" displayInChart="true" sortOrder = "3" precision="2"
-        chartTitle="@Strings.voltage_graph_label" dataLabel="@Strings.voltage_label"
+        chartTitle="@Strings.voltage_label" dataLabel="@Strings.voltage_label"
         unitLabel="@Strings.voltage_unit" fillColor="#f39c12" />
 
         <fitField id="3" displayInChart="true" sortOrder = "4" precision="2"
-        chartTitle="@Strings.current_graph_label" dataLabel="@Strings.current_label"
+        chartTitle="@Strings.current_label" dataLabel="@Strings.current_label"
         unitLabel="@Strings.current_unit" fillColor="#27ae60" />
 
         <fitField id="4" displayInChart="true" sortOrder = "5" precision="2"
-        chartTitle="@Strings.power_graph_label" dataLabel="@Strings.power_label"
+        chartTitle="@Strings.power_label" dataLabel="@Strings.power_label"
         unitLabel="@Strings.power_unit" fillColor="#e74c3c" />
 
         <fitField id="5" displayInChart="true" sortOrder = "6" precision="2"
-        chartTitle="@Strings.temperature_graph_label" dataLabel="@Strings.temperature_label"
+        chartTitle="@Strings.temperature_label" dataLabel="@Strings.temperature_label"
         unitLabel="@Strings.temperature_unit" fillColor="#e67e22" />
         
         <fitField id="26" displayInChart="true" sortOrder = "7" precision="2"
-        chartTitle="@Strings.temperature_graph_label" dataLabel="@Strings.temperature_label"
+        chartTitle="@Strings.temperature_label" dataLabel="@Strings.temperature_label"
         unitLabel="@Strings.temperature_unit_F" fillColor="#e67e22" />  
         
         <fitField id="21" displayInChart="false" displayInActivitySummary="true" sortOrder = "8"

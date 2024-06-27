@@ -1,9 +1,10 @@
 using Toybox.System;
 
 module eucData {
+  var currentProfile;
   var wheelBrand;
   var wheelName;
-  var paired = true;
+  var paired = false;
   var limitedMemory = false;
   // Calculated PWM variables :
   // PLEASE UPDATE WITH YOU OWN VALUES BEFORE USE !
@@ -33,6 +34,8 @@ module eucData {
   //speedLimiterIcon
   var speedLimitOn = false;
   var speedLimit = 25;
+  var tiltBackSpeed = 0;
+  var WDtiltBackSpd = 0;
   var speedCorrectionFactor = 1; // correct distance aswell ...
   var useMiles = false;
   var useFahrenheit = false;
@@ -82,7 +85,6 @@ module eucData {
   var KSVoiceMode = false;
   // var output;
 
-  var KSMaxSpeed;
   var KSAlarm3Speed;
   var KSAlarm2Speed;
   var KSAlarm1Speed;

@@ -249,6 +249,16 @@
                      <listEntry value="8">@Strings.downButton</listEntry>
                 </settingConfig>
             </setting>
+            <setting
+                propertyKey="@Properties.spdLimitButtonMap_p1"
+                title="@Strings.spdLimitButtonMap_p1">
+                <settingConfig type="list">
+                    <listEntry value="0">@Strings.none</listEntry>
+                    <listEntry value="4">@Strings.startStopButton</listEntry>
+                     <listEntry value="13">@Strings.middleButton</listEntry>
+                     <listEntry value="8">@Strings.downButton</listEntry>
+                </settingConfig>
+            </setting>
              <setting
                 propertyKey="@Properties.DFViewButtonMap_p1"
                 title="@Strings.DFViewButtonMap_p1">
@@ -432,7 +442,24 @@
                 max="250"
                 errorMessage="@Strings.alarmThreshold_temp_ErrorMessage" />
         </setting>
-        
+        <setting
+            propertyKey="@Properties.tiltbackSpeed_p1"
+            title="@Strings.tiltbackSpeed_p1">
+            <settingConfig
+                type="numeric"
+                min="-1"
+                max="250"
+            />
+        </setting>
+        <setting
+            propertyKey="@Properties.speedLimit_p1"
+            title="@Strings.speedLimit_p1">
+            <settingConfig
+                type="numeric"
+                min="0"
+                max="250"
+            />
+        </setting>
        
         
 
@@ -478,6 +505,16 @@
             <setting
                 propertyKey="@Properties.beepButtonMap_p2"
                 title="@Strings.beepButtonMap_p2">
+                <settingConfig type="list">
+                    <listEntry value="0">@Strings.none</listEntry>
+                    <listEntry value="4">@Strings.startStopButton</listEntry>
+                     <listEntry value="13">@Strings.middleButton</listEntry>
+                     <listEntry value="8">@Strings.downButton</listEntry>
+                </settingConfig>
+            </setting>
+            <setting
+                propertyKey="@Properties.spdLimitButtonMap_p2"
+                title="@Strings.spdLimitButtonMap_p2">
                 <settingConfig type="list">
                     <listEntry value="0">@Strings.none</listEntry>
                     <listEntry value="4">@Strings.startStopButton</listEntry>
@@ -668,7 +705,24 @@
                 max="250"
                 errorMessage="@Strings.alarmThreshold_temp_ErrorMessage" />
         </setting>
-        
+        <setting
+            propertyKey="@Properties.tiltbackSpeed_p2"
+            title="@Strings.tiltbackSpeed_p2">
+            <settingConfig
+                type="numeric"
+                min="-1"
+                max="250"
+            />
+        </setting>
+        <setting
+            propertyKey="@Properties.speedLimit_p2"
+            title="@Strings.speedLimit_p2">
+            <settingConfig
+                type="numeric"
+                min="0"
+                max="250"
+            />
+        </setting>
 
 
 <!--Profile 3-->
@@ -713,6 +767,16 @@
             <setting
                 propertyKey="@Properties.beepButtonMap_p3"
                 title="@Strings.beepButtonMap_p3">
+                <settingConfig type="list">
+                    <listEntry value="0">@Strings.none</listEntry>
+                    <listEntry value="4">@Strings.startStopButton</listEntry>
+                     <listEntry value="13">@Strings.middleButton</listEntry>
+                     <listEntry value="8">@Strings.downButton</listEntry>
+                </settingConfig>
+            </setting>
+            <setting
+                propertyKey="@Properties.spdLimitButtonMap_p3"
+                title="@Strings.spdLimitButtonMap_p3">
                 <settingConfig type="list">
                     <listEntry value="0">@Strings.none</listEntry>
                     <listEntry value="4">@Strings.startStopButton</listEntry>
@@ -903,6 +967,25 @@
                 max="250"
                 errorMessage="@Strings.alarmThreshold_temp_ErrorMessage" />
         </setting>
+        <setting
+            propertyKey="@Properties.tiltbackSpeed_p3"
+            title="@Strings.tiltbackSpeed_p3">
+            <settingConfig
+                type="numeric"
+                min="-1"
+                max="250"
+            />
+        </setting>
+        <setting
+            propertyKey="@Properties.speedLimit_p3"
+            title="@Strings.speedLimit_p3">
+            <settingConfig
+                type="numeric"
+                min="0"
+                max="250"
+            />
+        </setting>
+        
         <!-- Datafield like view settings -->
          <setting
             propertyKey="@Properties.dfViewOnly"

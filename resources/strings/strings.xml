@@ -1,5 +1,5 @@
 <strings>
-    <string id="AppName">WheelDash (dev)</string>
+    <string id="AppName">WheelDash (beta)</string>
     <string id="firstConnStr">Profile $1$ 1st connection\nPlease turn on your wheel\n and wait for connection\n\nensure only one wheel is ON!\n\nIf you enjoy this app :\n ko-fi.com/wheeldash</string>
     <string id="connectedStr">Profile $1$ connected !\n\nSaving wheel unique identifier</string>
     <!-- Strings, that are used in Connect IQ Settings menu, like 
@@ -38,10 +38,21 @@
     <string id="beepButtonMap_p2">Button mapping to wheel beep (horn mode) (Profile 2)</string>
     <string id="beepButtonMap_p3">Button mapping to wheel beep (horn mode) (Profile 3)</string>
 
+    <string id="speedLimit_p1">Speed limit (speed limiter mode) (Profile 1)</string>
+    <string id="speedLimit_p2">Speed limit (speed limiter mode) (Profile 2)</string>
+    <string id="speedLimit_p3">Speed limit (speed limiter mode) (Profile 3)</string>
+
+    <string id="tiltbackSpeed_p1">Tiltback speed (0 to disable) (Profile 1)</string>
+    <string id="tiltbackSpeed_p2">Tiltback speed (0 to disable) (Profile 2)</string>
+    <string id="tiltbackSpeed_p3">Tiltback speed (0 to disable) (Profile 3)</string>
+
+    <string id="spdLimitButtonMap_p1">Button mapping to speed limiter mode (Profile 1)</string>
+    <string id="spdLimitButtonMap_p2">Button mapping to speed limiter mode (Profile 2)</string>
+    <string id="spdLimitButtonMap_p3">Button mapping to speed limiter mode (Profile 3)</string>
+
     <string id="DFViewButtonMap_p1">Button mapping to datafield like view (Profile 1)</string>
     <string id="DFViewButtonMap_p2">Button mapping to datafield like view (Profile 2)</string>
     <string id="DFViewButtonMap_p3">Button mapping to datafield like view (Profile 3)</string>
-    <string id="lockButtonMap_p1">DONOTUSE Button mapping to wheel lock/unlock (Profile 1)</string>
 
     <string id="none">None</string>
     <string id="startStopButton">Start/Stop button</string>
@@ -258,23 +269,17 @@
    <string id="field37">Radar Battery (varia)</string>
     <!-- FIT Strings-->
 
-    <string id="speed_graph_label">Speed</string>
     <string id="speed_label">Speed</string>
     <string id="speed_unit_kmh">km/h</string>
     <string id="speed_unit_mph">mph</string>
-    <string id="pwm_graph_label">PWM</string>
     <string id="pwm_label">PWM</string>
     <string id="pwm_unit"></string>
-    <string id="voltage_graph_label">Voltage</string>
     <string id="voltage_label">Voltage</string>
     <string id="voltage_unit">V</string>
-    <string id="current_graph_label">Current</string>
     <string id="current_label">Current</string>
     <string id="current_unit">A</string>
-    <string id="power_graph_label">Motor power</string>
     <string id="power_label">Motor power</string>
     <string id="power_unit">W</string>
-    <string id="temperature_graph_label">MB Temperature</string>
     <string id="temperature_label">MB Temperature</string>
     <string id="temperature_unit">°C</string>
     <string id="temperature_unit_F">°F</string>
@@ -282,25 +287,18 @@
     <string id="distance_unit_km">km</string>
     <string id="distance_unit_miles">miles</string>
     <string id="maxSpeed_label">Session max speed</string>
-    
     <string id="maxPWM_label">Session max PWM</string>
-    
     <string id="percentage_unit">%</string>
     <string id="maxCurrent_label">Session max current</string>
-  
     <string id="maxPower_label">Session max power</string>
-   
     <string id="maxTemperature_label">Session max temperature</string>
     <string id="minTemperature_label">Session min temperature</string>
-
     <string id="avgSpeed_label">Session average speed</string>
-    
     <string id="avgCurrent_label">Session average current</string>
     <string id="avgCurrent_unit">A</string>
     <string id="avgPower_label">Session average power</string>
     <string id="avgPower_unit">W</string>
     <string id="EORBattery_label">End of ride battery %</string>
-
     <string id="minVoltage_label">Session min voltage</string>
     <string id="maxVoltage_label">Session max voltage</string>
     <string id="minBattery_label">Session min battery %</string>

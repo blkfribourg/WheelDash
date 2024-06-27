@@ -97,6 +97,13 @@ class GwDecoder {
     eucData.ledMode = value[13].toNumber(); // 12 in euc dashboard by freestyl3r
     //eucData.lightMode=value[19]&0x03; unable to get light mode from wheel
     //System.println("light mode (frameA ):"+eucData.lightMode);
+    if (eucData.speedLimit != 0) {
+      var tiltBackSpeed = shortFromBytesBE(value, 10);
+      if (tiltBackSpeed >= 100) {
+        tiltBackSpeed = 0;
+      }
+      eucData.tiltBackSpeed = tiltBackSpeed;
+    }
   }
   function processFrameA(value) {
     frameANb++;
@@ -456,8 +463,8 @@ class KingsongDecoder {
         return false;
       } else if ((value[16] & 255) == 0xa4 || (value[16] & 255) == 0xb5) {
         //max speed and alerts
-        eucData.KSMaxSpeed = value[10] & 255;
 
+        eucData.tiltBackSpeed = value[10] & 255;
         eucData.KSAlarm3Speed = value[8] & 255;
         eucData.KSAlarm2Speed = value[6] & 255;
         eucData.KSAlarm1Speed = value[4] & 255;

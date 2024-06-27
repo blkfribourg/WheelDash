@@ -206,3 +206,11 @@ function variaMove(targetArray) {
 function random(min, max) {
   return (Math.rand() % max) + 1;
 }
+
+function setWDTiltBackVal(speed) {
+  eucData.WDtiltBackSpd = speed;
+  if (eucData.currentProfile != null) {
+    var settingName = "tiltbackSpeed_p" + eucData.currentProfile;
+    AppStorage.setSetting(settingName, speed);
+  }
+}

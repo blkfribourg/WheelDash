@@ -121,6 +121,13 @@ class IMV2Decoder {
           :endianness => Lang.ENDIAN_LITTLE,
         }) + 80.0; //data[12]
     }
+    if (bleDelegate.queue.lastPacketType.equals("settings")) {
+      eucData.tiltBackSpeed =
+        transmittedFrame.decodeNumber(Lang.NUMBER_FORMAT_UINT16, {
+          :offset => 6,
+          :endianness => Lang.ENDIAN_LITTLE,
+        }) / 100.0; //data[4]
+    }
   }
 }
 

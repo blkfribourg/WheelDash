@@ -26,7 +26,7 @@ class GarminEUCApp extends Application.AppBase {
   // onStart() is called on application start up
   function onStart(state as Dictionary?) as Void {
     // Sandbox zone
-    Varia.targetObject = fakeVaria(3);
+    // Varia.targetObject = fakeVaria(3);
     // end of sandbox
     setGlobalSettings();
     rideStatsInit();
@@ -122,6 +122,16 @@ class GarminEUCApp extends Application.AppBase {
           }
 
           //System.println("autorecord started");
+        }
+      }
+      if (eucData.WDtiltBackSpd == -1 && eucData.speedLimit != 0) {
+        setWDTiltBackVal(eucData.tiltBackSpeed);
+      }
+      if (eucData.speedLimit != 0) {
+        if (eucData.tiltBackSpeed == eucData.speedLimit) {
+          eucData.speedLimitOn = true;
+        } else {
+          eucData.speedLimitOn = false;
         }
       }
       // -------------------------
