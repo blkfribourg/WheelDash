@@ -9,7 +9,6 @@ class ActionButton {
   var DFViewButton;
   var cycleLightButton;
   var beepButton;
-  var speedLimiterButton;
   //var lockButton;
   var queue;
   var queueRequired;
@@ -45,130 +44,7 @@ class ActionButton {
       if (recordActivityButton == keyNumber) {
         _mainDelegate.goToActivityView();
       }
-      if (speedLimiterButton == keyNumber && eucData.correctedSpeed < 3) {
-        queueRequired = true;
-        // Action = cycle light modes
-        if (eucData.wheelBrand == 0) {
-          // gotway/begode
-          var data;
-          var limit;
-          if (eucData.speedLimitOn == true) {
-            if (eucData.WDtiltBackSpd != 0) {
-              limit = eucData.WDtiltBackSpd;
-            } else {
-              limit = 0;
-            }
-            // eucData.speedLimitOn = false;
-          } else {
-            limit = eucData.speedLimit;
-            // eucData.speedLimitOn = true;
-          }
-          //  System.println("tiltb " + eucData.tiltBackSpeed);
-          //  System.println("currentLimit " + limit);
-          if (limit != 0) {
-            queue.add(
-              [
-                bleDelegate.getChar(),
-                queue.C_WRITENR,
-                string_to_byte_array("W"),
-              ],
-              bleDelegate.getPMService()
-            );
-            queue.add(
-              [
-                bleDelegate.getChar(),
-                queue.C_WRITENR,
-                string_to_byte_array("Y"),
-              ],
-              bleDelegate.getPMService()
-            );
-            data = [limit / 10 + 48]b;
-            queue.add(
-              [bleDelegate.getChar(), queue.C_WRITENR, data],
-              bleDelegate.getPMService()
-            );
-            data = [(limit % 10) + 48]b;
-            queue.add(
-              [bleDelegate.getChar(), queue.C_WRITENR, data],
-              bleDelegate.getPMService()
-            );
-            queue.add(
-              [
-                bleDelegate.getChar(),
-                queue.C_WRITENR,
-                string_to_byte_array("b" as String),
-              ],
-              bleDelegate.getPMService()
-            );
-          } else {
-            queue.add(
-              [bleDelegate.getChar(), queue.C_WRITENR, [0x22]b],
-              bleDelegate.getPMService()
-            );
-            queue.add(
-              [
-                bleDelegate.getChar(),
-                queue.C_WRITENR,
-                string_to_byte_array("b" as String),
-              ],
-              bleDelegate.getPMService()
-            );
-          }
-        }
-        if (eucData.wheelBrand == 1) {
-          // Implement speed limiter based on PWM tiltback ?
-        }
-        if (eucData.wheelBrand == 2 || eucData.wheelBrand == 3) {
-          var data = [
-            0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x31,
-            0x32, 0x33, 0x34, 0x35, 0x36, 0x85, 0x14, 0x5a, 0x5a,
-          ]b;
-          if (eucData.KSAlarm1Speed != null) {
-            data[2] = eucData.KSAlarm1Speed;
-          }
-          if (eucData.KSAlarm2Speed != null) {
-            data[4] = eucData.KSAlarm2Speed;
-          }
-          if (eucData.KSAlarm3Speed != null) {
-            data[6] = eucData.KSAlarm3Speed;
-          }
-          if (eucData.speedLimit != 0) {
-            if (eucData.speedLimitOn == false) {
-              data[8] = eucData.speedLimit;
-              //    eucData.speedLimitOn = true;
-            } else {
-              data[8] = eucData.WDtiltBackSpd;
-            }
-          } else {
-            data[8] = eucData.WDtiltBackSpd;
-          }
 
-          queue.add(
-            [bleDelegate.getChar(), queue.C_WRITENR, data],
-            bleDelegate.getPMService()
-          );
-        }
-        //Inmotion
-        if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
-          var data = [0xaa, 0xaa, 0x14, 0x04, 0x60, 0x21, 0x00, 0x00, 0x00]b;
-          var limit;
-          if (eucData.speedLimitOn == false) {
-            limit = eucData.speedLimit;
-            // eucData.speedLimitOn = true;
-          } else {
-            limit = eucData.WDtiltBackSpd;
-            //  eucData.speedLimitOn = false;
-          }
-          data[6] = (limit * 100) & 0xff;
-          data[7] = ((limit * 100) >> 8) & 0xff;
-          data[8] = xorChkSum(data.slice(0, data.size() - 1));
-          queue.flush();
-          queue.add(
-            [bleDelegate.getCharW(), queue.C_WRITENR, data],
-            bleDelegate.getPMService()
-          );
-        }
-      }
       //if (bleDelegate != null && eucData.paired == true) {
       if (cycleLightButton == keyNumber) {
         queueRequired = true;

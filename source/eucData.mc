@@ -1,7 +1,6 @@
 using Toybox.System;
 
 module eucData {
-  var currentProfile;
   var wheelBrand;
   var wheelName;
   var paired = false;
@@ -34,8 +33,6 @@ module eucData {
   //speedLimiterIcon
   var speedLimitOn = false;
   var speedLimit = 25;
-  var tiltBackSpeed = 0;
-  var WDtiltBackSpd = 0;
   var speedCorrectionFactor = 1; // correct distance aswell ...
   var useMiles = false;
   var useFahrenheit = false;
@@ -84,7 +81,7 @@ module eucData {
   var cpuLoad = 0;
   var KSVoiceMode = false;
   // var output;
-
+  var KSMaxSpeed;
   var KSAlarm3Speed;
   var KSAlarm2Speed;
   var KSAlarm1Speed;

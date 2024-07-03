@@ -3,6 +3,90 @@ import Toybox.Application.Properties;
 import Toybox.Application.Storage;
 import Toybox.System;
 
+class RecordIndicatorRenderer extends WatchUi.Drawable {
+  private var mMainColor;
+  private var screenWidth = System.getDeviceSettings().screenWidth;
+  private var pause = 1000;
+  function initialize(params) {
+    Drawable.initialize(params);
+    mMainColor = params.get(:mainColor);
+  }
+  function draw(dc) {
+    if (eucData.activityRecording == true) {
+      //System.println(pause);
+      var foregroundColor;
+      if (pause < 0) {
+        foregroundColor = 0x000000;
+      } else {
+        foregroundColor = mMainColor;
+      }
+      dc.setPenWidth(2);
+      dc.setColor(foregroundColor, 0x000000);
+      dc.fillCircle(screenWidth / 2, screenWidth * 0.715, screenWidth / 70);
+      dc.drawCircle(screenWidth / 2, screenWidth * 0.715, screenWidth / 40);
+      // dc.fillPolygon(hornIcon);
+      pause = pause - eucData.updateDelay;
+      if (pause < -1000) {
+        pause = 1000;
+      }
+    }
+  }
+}
+
+class HornIndicatorRenderer extends WatchUi.Drawable {
+  private var mMainColor;
+  private var screenWidth = System.getDeviceSettings().screenWidth;
+  function initialize(params) {
+    Drawable.initialize(params);
+    mMainColor = params.get(:mainColor);
+  }
+  function draw(dc) {
+    if (eucData.ESP32Horn == true) {
+      //System.println(pause);
+      var foregroundColor;
+      if (eucData.ESP32HornPaired == true) {
+        foregroundColor = mMainColor;
+      } else {
+        foregroundColor = 0x545454;
+      }
+      var oriX = screenWidth * 0.63;
+      var oriY = screenWidth * 0.227;
+      var w = 0.014;
+      var h = 0.024;
+
+      dc.setPenWidth(2);
+      dc.setColor(foregroundColor, 0x000000);
+      dc.fillRoundedRectangle(oriX, oriY, screenWidth * w, screenWidth * h, 2);
+      var polyTriangle = [
+        [screenWidth * 0.646, screenWidth * 0.229],
+        [(2 * screenWidth) / 3, screenWidth * 0.214],
+        [(2 * screenWidth) / 3, screenWidth * 0.26],
+        [screenWidth * 0.646, screenWidth * 0.247],
+      ];
+      dc.fillPolygon(polyTriangle);
+      dc.setPenWidth(3);
+      dc.drawArc(
+        screenWidth * 0.662,
+        screenWidth * 0.239,
+        screenWidth * 0.02,
+        Graphics.ARC_COUNTER_CLOCKWISE,
+        -screenWidth / 10,
+        screenWidth / 10
+      );
+      dc.drawArc(
+        screenWidth * 0.662,
+        screenWidth * 0.239,
+        screenWidth * 0.035,
+        Graphics.ARC_COUNTER_CLOCKWISE,
+        -screenWidth / 10,
+        screenWidth / 10
+      );
+      // dc.drawCircle(screenWidth / 2, screenWidth * 0.715, screenWidth / 40);
+      // dc.fillPolygon(hornIcon);
+    }
+  }
+}
+
 class ArcRenderer extends WatchUi.Drawable {
   private var mMainColor,
     mSecondColor,

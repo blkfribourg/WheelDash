@@ -484,95 +484,90 @@ class ActivityRecordView extends WatchUi.View {
   var avgPower = 0.0;
 
   function updateFitData() {
-    if (eucData.paired == true) {
-      //System.println("updateFit");
-      callNb++;
-      currentVoltage = eucData.getVoltage();
-      currentBatteryPerc = eucData.getBatteryPercentage();
-      currentPWM = eucData.PWM;
-      correctedSpeed = eucData.correctedSpeed;
-      currentCurrent = eucData.getCurrent();
-      currentPower = currentCurrent * currentVoltage;
+    //System.println("updateFit");
+    callNb++;
+    currentVoltage = eucData.getVoltage();
+    currentBatteryPerc = eucData.getBatteryPercentage();
+    currentPWM = eucData.PWM;
+    correctedSpeed = eucData.correctedSpeed;
+    currentCurrent = eucData.getCurrent();
+    currentPower = currentCurrent * currentVoltage;
 
-      mSpeedField.setData(correctedSpeed); // id 0
-      mPWMField.setData(currentPWM); //id 1
-      mVoltageField.setData(currentVoltage); // id 2
-      mCurrentField.setData(currentCurrent); // id 3
-      mPowerField.setData(currentPower); // id 4
-      mTempField.setData(eucData.DisplayedTemperature); // id 5
+    mSpeedField.setData(correctedSpeed); // id 0
+    mPWMField.setData(currentPWM); //id 1
+    mVoltageField.setData(currentVoltage); // id 2
+    mCurrentField.setData(currentCurrent); // id 3
+    mPowerField.setData(currentPower); // id 4
+    mTempField.setData(eucData.DisplayedTemperature); // id 5
 
-      if (correctedSpeed > maxSpeed) {
-        maxSpeed = correctedSpeed;
-        mMaxSpeedField.setData(maxSpeed); // id 7
-      }
-      if (currentPWM > maxPWM) {
-        maxPWM = currentPWM;
-        mMaxPWMField.setData(maxPWM); // id 8
-      }
-      if (currentCurrent > maxCurrent) {
-        maxCurrent = currentCurrent;
-        mMaxCurrentField.setData(maxCurrent); // id 9
-      }
-      if (currentPower > maxPower) {
-        maxPower = currentPower;
-        mMaxPowerField.setData(maxPower); // id 10
-      }
-      if (eucData.DisplayedTemperature > maxTemp) {
-        maxTemp = eucData.DisplayedTemperature;
-        mMaxTempField.setData(maxTemp); // id 11
-      }
-      if (
-        eucData.DisplayedTemperature < minTemp &&
-        eucData.temperature != 0.0
-      ) {
-        minTemp = eucData.DisplayedTemperature;
-        mMinTempField.setData(minTemp); // id 11
-      }
-      if (currentVoltage < minVoltage) {
-        minVoltage = currentVoltage;
-        mMinVoltageField.setData(minVoltage);
-      }
-      if (currentVoltage > maxVoltage) {
-        maxVoltage = currentVoltage;
-        mMaxVoltageField.setData(maxVoltage);
-      }
-      if (currentBatteryPerc > maxBatteryPerc) {
-        maxBatteryPerc = currentBatteryPerc;
-        mMaxBatteryField.setData(maxBatteryPerc);
-      }
-      if (currentBatteryPerc < minBatteryPerc) {
-        minBatteryPerc = currentBatteryPerc;
-        mMinBatteryField.setData(minBatteryPerc);
-      }
-      if (currentBatteryPerc > 0 && eucData.paired == true) {
-        mEORBatteryField.setData(currentBatteryPerc);
-      }
-      var currentMoment = new Time.Moment(Time.now().value());
-      var elaspedTime = startingMoment.subtract(currentMoment);
-      //System.println("elaspsed :" + elaspedTime.value());
-      if (elaspedTime.value() != 0 && eucData.totalDistance > 0) {
-        if (startingEUCTripDistance < 0) {
-          startingEUCTripDistance = eucData.correctedTotalDistance;
-        }
-        sessionDistance =
-          eucData.correctedTotalDistance - startingEUCTripDistance;
-        avgSpeed = sessionDistance / (elaspedTime.value() / 3600.0);
-      } else {
-        sessionDistance = 0.0;
-        avgSpeed = 0.0;
-      }
-      mTripDistField.setData(sessionDistance); // id 6
-
-      mAvgSpeedField.setData(avgSpeed); // id 12
-      sumCurrent = sumCurrent + currentCurrent;
-      sumPower = sumPower + currentPower;
-      mAvgCurrentField.setData(sumCurrent / callNb); // id 13
-      mAvgPowerField.setData(sumPower / callNb); // id 14
-
-      //mRunningTimeDebugField.setData(elaspedTime.value());
-      mWheelName.setData(eucData.wheelName);
-      // add Trip distance from EUC
+    if (correctedSpeed > maxSpeed) {
+      maxSpeed = correctedSpeed;
+      mMaxSpeedField.setData(maxSpeed); // id 7
     }
+    if (currentPWM > maxPWM) {
+      maxPWM = currentPWM;
+      mMaxPWMField.setData(maxPWM); // id 8
+    }
+    if (currentCurrent > maxCurrent) {
+      maxCurrent = currentCurrent;
+      mMaxCurrentField.setData(maxCurrent); // id 9
+    }
+    if (currentPower > maxPower) {
+      maxPower = currentPower;
+      mMaxPowerField.setData(maxPower); // id 10
+    }
+    if (eucData.DisplayedTemperature > maxTemp) {
+      maxTemp = eucData.DisplayedTemperature;
+      mMaxTempField.setData(maxTemp); // id 11
+    }
+    if (eucData.DisplayedTemperature < minTemp && eucData.temperature != 0.0) {
+      minTemp = eucData.DisplayedTemperature;
+      mMinTempField.setData(minTemp); // id 11
+    }
+    if (currentVoltage < minVoltage) {
+      minVoltage = currentVoltage;
+      mMinVoltageField.setData(minVoltage);
+    }
+    if (currentVoltage > maxVoltage) {
+      maxVoltage = currentVoltage;
+      mMaxVoltageField.setData(maxVoltage);
+    }
+    if (currentBatteryPerc > maxBatteryPerc) {
+      maxBatteryPerc = currentBatteryPerc;
+      mMaxBatteryField.setData(maxBatteryPerc);
+    }
+    if (currentBatteryPerc < minBatteryPerc) {
+      minBatteryPerc = currentBatteryPerc;
+      mMinBatteryField.setData(minBatteryPerc);
+    }
+    if (currentBatteryPerc > 0 && eucData.paired == true) {
+      mEORBatteryField.setData(currentBatteryPerc);
+    }
+    var currentMoment = new Time.Moment(Time.now().value());
+    var elaspedTime = startingMoment.subtract(currentMoment);
+    //System.println("elaspsed :" + elaspedTime.value());
+    if (elaspedTime.value() != 0 && eucData.totalDistance > 0) {
+      if (startingEUCTripDistance < 0) {
+        startingEUCTripDistance = eucData.correctedTotalDistance;
+      }
+      sessionDistance =
+        eucData.correctedTotalDistance - startingEUCTripDistance;
+      avgSpeed = sessionDistance / (elaspedTime.value() / 3600.0);
+    } else {
+      sessionDistance = 0.0;
+      avgSpeed = 0.0;
+    }
+    mTripDistField.setData(sessionDistance); // id 6
+
+    mAvgSpeedField.setData(avgSpeed); // id 12
+    sumCurrent = sumCurrent + currentCurrent;
+    sumPower = sumPower + currentPower;
+    mAvgCurrentField.setData(sumCurrent / callNb); // id 13
+    mAvgPowerField.setData(sumPower / callNb); // id 14
+
+    //mRunningTimeDebugField.setData(elaspedTime.value());
+    mWheelName.setData(eucData.wheelName);
+    // add Trip distance from EUC
     WatchUi.requestUpdate();
   }
 

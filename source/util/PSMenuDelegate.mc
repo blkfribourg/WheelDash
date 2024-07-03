@@ -126,9 +126,6 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
   }
 
   function setSettings(profileName) {
-    var profiles = getProfileList();
-    profileNb = profiles.indexOf(profileName) + 1;
-    eucData.currentProfile = profileNb;
     var profileSelected = pickProfile(profileName);
     if (profileSelected != true) {
       //load last used if exist or profile 1 if doesn't
@@ -202,8 +199,6 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       eucData.alarmThreshold_temp = AppStorage.getSetting(
         "alarmThreshold_temp_p1"
       );
-      eucData.speedLimit = AppStorage.getSetting("speedLimit_p1");
-      eucData.WDtiltBackSpd = AppStorage.getSetting("tiltbackSpeed_p1");
       eucData.wheelBrand = AppStorage.getSetting("wheelBrand_p1");
 
       actionButtonTrigger.recordActivityButton = AppStorage.getSetting(
@@ -211,9 +206,6 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       );
       actionButtonTrigger.cycleLightButton = AppStorage.getSetting(
         "cycleLightButtonMap_p1"
-      );
-      actionButtonTrigger.speedLimiterButton = AppStorage.getSetting(
-        "spdLimitButtonMap_p1"
       );
       actionButtonTrigger.DFViewButton =
         AppStorage.getSetting("DFViewButtonMap_p1");
@@ -265,8 +257,6 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       eucData.alarmThreshold_temp = AppStorage.getSetting(
         "alarmThreshold_temp_p2"
       );
-      eucData.speedLimit = AppStorage.getSetting("speedLimit_p2");
-      eucData.WDtiltBackSpd = AppStorage.getSetting("tiltbackSpeed_p2");
       eucData.wheelBrand = AppStorage.getSetting("wheelBrand_p2");
 
       actionButtonTrigger.recordActivityButton = AppStorage.getSetting(
@@ -274,9 +264,6 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       );
       actionButtonTrigger.cycleLightButton = AppStorage.getSetting(
         "cycleLightButtonMap_p2"
-      );
-      actionButtonTrigger.speedLimiterButton = AppStorage.getSetting(
-        "spdLimitButtonMap_p2"
       );
       actionButtonTrigger.DFViewButton =
         AppStorage.getSetting("DFViewButtonMap_p2");
@@ -329,8 +316,6 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       eucData.alarmThreshold_temp = AppStorage.getSetting(
         "alarmThreshold_temp_p3"
       );
-      eucData.speedLimit = AppStorage.getSetting("speedLimit_p3");
-      eucData.WDtiltBackSpd = AppStorage.getSetting("tiltbackSpeed_p3");
       eucData.wheelBrand = AppStorage.getSetting("wheelBrand_p3");
 
       actionButtonTrigger.recordActivityButton = AppStorage.getSetting(
@@ -338,9 +323,6 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       );
       actionButtonTrigger.cycleLightButton = AppStorage.getSetting(
         "cycleLightButtonMap_p3"
-      );
-      actionButtonTrigger.speedLimiterButton = AppStorage.getSetting(
-        "spdLimitButtonMap_p3"
       );
       actionButtonTrigger.DFViewButton =
         AppStorage.getSetting("DFViewButtonMap_p3");

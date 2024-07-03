@@ -39,7 +39,6 @@ module rideStats {
   var currentCount;
   var powerSum;
   var powerCount;
-  var batteryUsageCount;
   var EUCBatteryPercStart;
 
   function avgSpeed() {
@@ -213,13 +212,9 @@ module rideStats {
     ) {
       EUCBatteryPercStart = eucBattery;
       eucData.batteryUsagePerc = 0;
-      batteryUsageCount = 1;
     } else {
       if (EUCBatteryPercStart != null && EUCBatteryPercStart > eucBattery) {
-        eucData.batteryUsagePerc =
-          (eucData.batteryUsagePerc + (EUCBatteryPercStart - eucBattery)) /
-          batteryUsageCount;
-        batteryUsageCount++;
+        eucData.batteryUsagePerc = EUCBatteryPercStart - eucBattery;
       } else {
         EUCBatteryPercStart = eucBattery;
       }

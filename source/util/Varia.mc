@@ -3,13 +3,12 @@ using Toybox.System;
 using Toybox.Lang;
 import Toybox.Time;
 import Toybox.AntPlus;
-
 module Varia {
   var prevCount = 0;
   var triggerVariaAlarm = false;
   var nextVariaTrigger;
   var triggerDelay;
-  var targetObject;
+
   function initVaria() {
     if (eucData.useRadar == true) {
       eucData.radar = new AntPlus.BikeRadar(null);
@@ -18,8 +17,7 @@ module Varia {
   function checkVehicule() {
     if (eucData.useRadar == true && eucData.radar != null) {
       try {
-        // targetObject = eucData.radar.getRadarInfo();
-        //        Varia.processTarget(targetObject); // surrounding by try because varia may disconnect (unexpected crashes were observed)
+        Varia.processTarget(eucData.radar.getRadarInfo()); // surrounding by try because varia may disconnect (unexpected crashes were observed)
       } catch (e instanceof Lang.Exception) {
         // System.println(e.getErrorMessage());
       }
