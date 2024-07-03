@@ -284,7 +284,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
                 advModel.equals("V11") ||
                 advModel.equals("V12") ||
                 advModel.equals("V13") ||
-                advModel.equals("V14")
+                advModel.equals("Adv") //V14
               ) {
                 eucData.model = advModel;
                 wheelFound = true;
@@ -350,7 +350,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
               advModel.equals("V11") ||
               advModel.equals("V12") ||
               advModel.equals("V13") ||
-              advModel.equals("V14")
+              advModel.equals("Adv") //V14
             ) {
               eucData.model = advModel;
             }
