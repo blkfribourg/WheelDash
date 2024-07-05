@@ -55,7 +55,7 @@ class IMV2Decoder {
           }) / 100.0;
       }
       // V11Y V13 V14
-      if (eucData.wheelBrand == 5) {
+      if (eucData.wheelBrand == 5 && transmittedFrame[4] == 0x84) {
         eucData.voltage =
           transmittedFrame
             .decodeNumber(Lang.NUMBER_FORMAT_UINT16, {
@@ -96,7 +96,8 @@ class IMV2Decoder {
     }
     if (
       bleDelegate.queue.lastPacketType.equals("stats") &&
-      transmittedFrame.size() == 20
+      transmittedFrame.size() == 20 &&
+      transmittedFrame[4] == 0x91
     ) {
       eucData.totalDistance =
         transmittedFrame.decodeNumber(Lang.NUMBER_FORMAT_UINT32, {
@@ -110,6 +111,7 @@ class IMV2Decoder {
       eucData.tripDistance = eucData.totalDistance - start_dist;
     }
     if (bleDelegate.queue.lastPacketType.equals("batStats")) {
+     
       eucData.batteryTemp1 =
         transmittedFrame.decodeNumber(Lang.NUMBER_FORMAT_SINT8, {
           :offset => 9,

@@ -279,7 +279,7 @@ class GarminEUCDebugView extends WatchUi.View {
           alignAxe,
           yGap,
           Graphics.FONT_TINY,
-          "Spd: " + valueRound(eucData.speed, "%.1f"),
+          "Spd: " + eucData.imLD_id,
           Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
         );
         dc.drawText(

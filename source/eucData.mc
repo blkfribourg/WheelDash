@@ -305,7 +305,7 @@ module eucData {
             battery = 0.0;
           }
         }
-        if (model.equals("V14")) {
+        if (model.equals("Adv")) {
           if (voltage > 133.6) {
             battery = 100.0;
           } else if (voltage > 108.8) {
