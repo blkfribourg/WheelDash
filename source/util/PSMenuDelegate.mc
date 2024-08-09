@@ -90,14 +90,31 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       activityRecordView,
       actionButtonTrigger
     );
-
+    System.println(eucData.speedLimit);
+    System.println(actionButtonTrigger.speedLimiterButton);
+    if (
+      eucData.speedLimit != 0 &&
+      actionButtonTrigger.speedLimiterButton != 0
+    ) {
+      eucData.spdLimFeatEnabled = true;
+    }
+    System.println(eucData.spdLimFeatEnabled);
     if (eucBleDelegate.isFirst == false) {
       //System.println("not first");
-
-      WatchUi.pushView(mainView, mainViewdelegate, WatchUi.SLIDE_IMMEDIATE);
+      if (
+        eucData.spdLimFeatEnabled == true &&
+        Storage.getValue("spdLimDisclDone") != true
+      ) {
+        connView = new messageView(eucBleDelegate, profileNb, self, "spdLimOn");
+        connView.popViewDelay = 5000;
+        WatchUi.pushView(connView, null, WatchUi.SLIDE_IMMEDIATE);
+        Storage.setValue("spdLimDisclDone", true);
+      } else {
+        WatchUi.pushView(mainView, mainViewdelegate, WatchUi.SLIDE_IMMEDIATE);
+      }
     } else {
-      //  System.println("first");
-      connView = new connectionView(eucBleDelegate, profileNb, self);
+      System.println("first");
+      connView = new messageView(eucBleDelegate, profileNb, self, "1stConn");
       WatchUi.pushView(connView, null, WatchUi.SLIDE_IMMEDIATE);
     }
   }

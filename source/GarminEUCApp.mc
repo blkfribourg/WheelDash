@@ -4,6 +4,7 @@ import Toybox.WatchUi;
 import Toybox.System;
 using Toybox.Timer;
 using Toybox.StringUtil;
+import Toybox.Position;
 class GarminEUCApp extends Application.AppBase {
   private var view;
   private var delegate;
@@ -32,6 +33,7 @@ class GarminEUCApp extends Application.AppBase {
     rideStatsInit();
     Varia.initVaria();
     alarmsTimer.start(method(:onUpdateTimer), eucData.updateDelay, true);
+    // check if using GPS speed
   }
   function DFViewInit() {
     if (
@@ -122,6 +124,25 @@ class GarminEUCApp extends Application.AppBase {
           }
 
           //System.println("autorecord started");
+        }
+      }
+      if (eucData.mainNumber == 3) {
+        //enable GPS
+        if (eucData.GPS_requested == false) {
+          Position.enableLocationEvents(
+            Position.LOCATION_CONTINUOUS,
+            method(:onPosition)
+          );
+          eucData.GPS_requested = true;
+        }
+        var gpsSpeed = Position.getInfo().speed;
+        if (gpsSpeed != null) {
+          eucData.GPS_speed = gpsSpeed * 3.6;
+          if (eucData.useMiles == true || eucData.convertToMiles == true) {
+            eucData.GPS_speed = kmToMiles(gpsSpeed);
+          }
+        } else {
+          eucData.GPS_speed = "...";
         }
       }
       if (eucData.WDtiltBackSpd == -1 && eucData.speedLimit != 0) {
@@ -296,6 +317,8 @@ class GarminEUCApp extends Application.AppBase {
     );
     rideStats.showProfileName = AppStorage.getSetting("profileName");
   }
+
+  function onPosition(info as Info) as Void {}
 }
 
 function getApp() as GarminEUCApp {

@@ -110,6 +110,18 @@ class GarminEUCView extends WatchUi.View {
         speedNumberStr = valueRound(speedNumberVal, "%.1f").toString();
       }
     }
+    if (eucData.mainNumber == 3) {
+      var speedNumberVal = "";
+      speedNumberVal = eucData.GPS_speed;
+      if (speedNumberVal == null) {
+        speedNumberVal = 0.0;
+      }
+      if (speedNumberVal > 100) {
+        speedNumberStr = valueRound(eucData.GPS_speed, "%d").toString();
+      } else {
+        speedNumberStr = valueRound(eucData.GPS_speed, "%.1f").toString();
+      }
+    }
     cDrawables[:SpeedNumber].setText(speedNumberStr);
     //cDrawables[:SpeedArc].setValues(WheelData.currentSpeed.toFloat(), WheelData.speedLimit);
     if (eucData.topBar == 0) {

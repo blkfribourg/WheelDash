@@ -16,6 +16,7 @@ module eucData {
   var topBar; // String : Speed or PWM
   var mainNumber; // String : Speed or PWM
   var maxDisplayedSpeed; // number, used if topBar equals Speed : read from settings
+  var GPS_speed; // used when mainNumber =3
   var vibeIntensity = 90;
   var alarmThreshold_PWM;
   var alarmThreshold2_PWM;
@@ -31,11 +32,7 @@ module eucData {
   var sagThreshold = 0.3;
   var orangeColoringThreshold;
   var redColoringThreshold;
-  //speedLimiterIcon
-  var speedLimitOn = false;
-  var speedLimit = 25;
-  var tiltBackSpeed = 0;
-  var WDtiltBackSpd = 0;
+
   var speedCorrectionFactor = 1; // correct distance aswell ...
   var useMiles = false;
   var useFahrenheit = false;
@@ -138,8 +135,14 @@ module eucData {
   var timerState = -1;
   var variaCloseAlarmDistThr = 15;
   var variaFarAlarmDistThr = 50;
-
   var useRadar = false;
+
+  //speedLimiter
+  var speedLimitOn = false;
+  var speedLimit = 25;
+  var tiltBackSpeed = 0;
+  var WDtiltBackSpd = 0;
+  var spdLimFeatEnabled = false;
 
   function getBatteryPercentage() {
     if (voltage != null) {

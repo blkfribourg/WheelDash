@@ -330,6 +330,7 @@
                     <listEntry value="0">@Strings.speed_str</listEntry>
                     <listEntry value="1">@Strings.PWM_str</listEntry>
                     <listEntry value="2">@Strings.battPerc_str</listEntry>
+                    <listEntry value="3">@Strings.GPSSpeed_str</listEntry>
                 </settingConfig>
             </setting>
             <setting
@@ -593,6 +594,7 @@
                     <listEntry value="0">@Strings.speed_str</listEntry>
                     <listEntry value="1">@Strings.PWM_str</listEntry>
                     <listEntry value="2">@Strings.battPerc_str</listEntry>
+                    <listEntry value="3">@Strings.GPSSpeed_str</listEntry>
                 </settingConfig>
             </setting>
             <setting
@@ -855,6 +857,7 @@
                     <listEntry value="0">@Strings.speed_str</listEntry>
                     <listEntry value="1">@Strings.PWM_str</listEntry>
                     <listEntry value="2">@Strings.battPerc_str</listEntry>
+                    <listEntry value="3">@Strings.GPSSpeed_str</listEntry>
                 </settingConfig>
             </setting>
             <setting

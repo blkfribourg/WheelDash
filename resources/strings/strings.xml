@@ -2,6 +2,7 @@
     <string id="AppName">WheelDash (beta)</string>
     <string id="firstConnStr">Profile $1$ 1st connection\nPlease turn on your wheel\n and wait for connection\n\nensure only one wheel is ON!\n\nIf you enjoy this app :\n ko-fi.com/wheeldash</string>
     <string id="connectedStr">Profile $1$ connected !\n\nSaving wheel unique identifier</string>
+    <string id="spdLimiterStr">Speed limiter feature\n is enabled!\n\nPlease ensure your tiltback\nis working properly with\nlimiter on or off!</string>
     <!-- Strings, that are used in Connect IQ Settings menu, like 
         one you see in Garmin Express or Garmin Connect Mobile -->
     <string id="defaultProfile">Profile to use by default</string>
@@ -133,7 +134,9 @@
         
     <string id="speed_str">Speed</string>
     <string id="PWM_str">PWM</string>
-    <string id="battPerc_str">PWM</string>
+    <string id="battPerc_str">Battery Percentage</string>
+    <string id="GPSSpeed_str">GPS Speed</string>
+
     <string id="maxSpeed_p1">Displayed speed limit : used to scale the top arc if Top bar value set to Speed (Profile 1)</string>
     <string id="maxSpeed_p2">Displayed speed limit : used to scale the top arc if Top bar value set to Speed (Profile 2)</string>
     <string id="maxSpeed_p3">Displayed speed limit : used to scale the top arc if Top bar value set to Speed (Profile 3)</string>

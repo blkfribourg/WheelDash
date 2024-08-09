@@ -72,7 +72,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
 
     Ble.setScanState(Ble.SCAN_STATE_SCANNING);
     isFirst = isFirstConnection();
-    //  isFirst = false;
+    //isFirst = false;
   }
 
   function onConnectedStateChanged(device, state) {
