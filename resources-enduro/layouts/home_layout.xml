@@ -8,6 +8,9 @@
     <drawable id="HornIndicator" class="HornIndicatorRenderer">
         <param name="mainColor">0xd53420</param> 
     </drawable>
+    <drawable id="SpeedLimiterIndicator" class="SpeedLimiterRenderer">
+        <param name="mainColor">0xd53420</param> 
+    </drawable>
     <drawable id="SpeedDial" class="ArcRenderer">
         <param name="arcType">:speedArc</param>
         <!-- Colors -->

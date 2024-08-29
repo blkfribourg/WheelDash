@@ -49,6 +49,7 @@ class ActivityRecordDelegate extends WatchUi.BehaviorDelegate {
 }
 
 class ActivityRecordView extends WatchUi.View {
+  var elapsedTime;
   private var accuracy = [
     "not available",
     "last know GPS fix",
@@ -91,7 +92,18 @@ class ActivityRecordView extends WatchUi.View {
       fitTimer.stop();
     }
   }
-
+  function getElapsedTime() {
+    return elapsedTime;
+  }
+  function getMaxSpeed() {
+    return maxSpeed;
+  }
+  function getAvgSpeed() {
+    return avgSpeed;
+  }
+  function getSessionDist() {
+    return sessionDistance;
+  }
   //! Start recording a session
   public function startRecording() as Void {
     eucData.activityRecording = true;
@@ -548,15 +560,15 @@ class ActivityRecordView extends WatchUi.View {
         mEORBatteryField.setData(currentBatteryPerc);
       }
       var currentMoment = new Time.Moment(Time.now().value());
-      var elaspedTime = startingMoment.subtract(currentMoment);
-      //System.println("elaspsed :" + elaspedTime.value());
-      if (elaspedTime.value() != 0 && eucData.totalDistance > 0) {
+      elapsedTime = startingMoment.subtract(currentMoment);
+      //System.println("elaspsed :" + elapsedTime.value());
+      if (elapsedTime.value() != 0 && eucData.totalDistance > 0) {
         if (startingEUCTripDistance < 0) {
           startingEUCTripDistance = eucData.correctedTotalDistance;
         }
         sessionDistance =
           eucData.correctedTotalDistance - startingEUCTripDistance;
-        avgSpeed = sessionDistance / (elaspedTime.value() / 3600.0);
+        avgSpeed = sessionDistance / (elapsedTime.value() / 3600.0);
       } else {
         sessionDistance = 0.0;
         avgSpeed = 0.0;
@@ -569,7 +581,7 @@ class ActivityRecordView extends WatchUi.View {
       mAvgCurrentField.setData(sumCurrent / callNb); // id 13
       mAvgPowerField.setData(sumPower / callNb); // id 14
 
-      //mRunningTimeDebugField.setData(elaspedTime.value());
+      //mRunningTimeDebugField.setData(elapsedTime.value());
       mWheelName.setData(eucData.wheelName);
       // add Trip distance from EUC
     }

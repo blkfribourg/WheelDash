@@ -37,22 +37,22 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
   function connInit() {
     // Initialize Alarms
     EUCAlarms.alarmsInit();
-    var profileManager = new eucPM();
-    var hornProfile;
+
     if (Toybox has :BluetoothLowEnergy) {
-      profileManager.setManager();
+      eucPM.setManager();
       eucBleDelegate = new eucBLEDelegate(
-        profileManager,
         profileNb,
         queue,
         frameDecoder.init()
       );
       BluetoothLowEnergy.setDelegate(eucBleDelegate);
-      profileManager.registerProfiles();
+      eucPM.registerProfiles();
       if (eucData.ESP32Horn == true) {
-        hornProfile = new hornPM();
-        hornProfile.registerProfiles();
-        eucBleDelegate.setHornProfile(hornProfile);
+        hornPM.registerProfiles();
+      }
+      if (eucData.useEngo == true) {
+        engoPM.init();
+        engoPM.registerProfiles();
       }
     }
     viewInit();
@@ -90,15 +90,15 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       activityRecordView,
       actionButtonTrigger
     );
-    System.println(eucData.speedLimit);
-    System.println(actionButtonTrigger.speedLimiterButton);
+    // System.println(eucData.speedLimit);
+    //System.println(actionButtonTrigger.speedLimiterButton);
     if (
       eucData.speedLimit != 0 &&
       actionButtonTrigger.speedLimiterButton != 0
     ) {
       eucData.spdLimFeatEnabled = true;
     }
-    System.println(eucData.spdLimFeatEnabled);
+    //   System.println(eucData.spdLimFeatEnabled);
     if (eucBleDelegate.isFirst == false) {
       //System.println("not first");
       if (
@@ -113,7 +113,7 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
         WatchUi.pushView(mainView, mainViewdelegate, WatchUi.SLIDE_IMMEDIATE);
       }
     } else {
-      System.println("first");
+      //  System.println("first");
       connView = new messageView(eucBleDelegate, profileNb, self, "1stConn");
       WatchUi.pushView(connView, null, WatchUi.SLIDE_IMMEDIATE);
     }
@@ -140,6 +140,9 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
 
   function setDFlikeView(_DFLikeView) {
     mainViewdelegate.setDFlikeView(_DFLikeView);
+  }
+  function getBleDelegate() {
+    return mainViewdelegate.getBleDelegate();
   }
 
   function setSettings(profileName) {

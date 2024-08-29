@@ -207,10 +207,148 @@ function random(min, max) {
   return (Math.rand() % max) + 1;
 }
 
+//Speed limiter
 function setWDTiltBackVal(speed) {
   eucData.WDtiltBackSpd = speed;
   if (eucData.currentProfile != null) {
     var settingName = "tiltbackSpeed_p" + eucData.currentProfile;
     AppStorage.setSetting(settingName, speed);
   }
+}
+function speedLimiter(queue, bleDelegate, limit) {
+ // System.println("Tiltback: " + limit);
+  if (eucData.wheelBrand == 0) {
+    var data;
+    if (limit != 0) {
+      queue.add(
+        [bleDelegate.getChar(), queue.C_WRITENR, string_to_byte_array("W")],
+        bleDelegate.getPMService()
+      );
+      queue.add(
+        [bleDelegate.getChar(), queue.C_WRITENR, string_to_byte_array("Y")],
+        bleDelegate.getPMService()
+      );
+      data = [limit / 10 + 48]b;
+      queue.add(
+        [bleDelegate.getChar(), queue.C_WRITENR, data],
+        bleDelegate.getPMService()
+      );
+      data = [(limit % 10) + 48]b;
+      queue.add(
+        [bleDelegate.getChar(), queue.C_WRITENR, data],
+        bleDelegate.getPMService()
+      );
+      queue.add(
+        [
+          bleDelegate.getChar(),
+          queue.C_WRITENR,
+          string_to_byte_array("b" as String),
+        ],
+        bleDelegate.getPMService()
+      );
+    } else {
+      queue.add(
+        [bleDelegate.getChar(), queue.C_WRITENR, [0x22]b],
+        bleDelegate.getPMService()
+      );
+      queue.add(
+        [
+          bleDelegate.getChar(),
+          queue.C_WRITENR,
+          string_to_byte_array("b" as String),
+        ],
+        bleDelegate.getPMService()
+      );
+    }
+  }
+  if (eucData.wheelBrand == 2 || eucData.wheelBrand == 3) {
+    var data = [
+      0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x31, 0x32,
+      0x33, 0x34, 0x35, 0x36, 0x85, 0x14, 0x5a, 0x5a,
+    ]b;
+    if (eucData.KSAlarm1Speed != null) {
+      data[2] = eucData.KSAlarm1Speed;
+    }
+    if (eucData.KSAlarm2Speed != null) {
+      data[4] = eucData.KSAlarm2Speed;
+    }
+    if (eucData.KSAlarm3Speed != null) {
+      data[6] = eucData.KSAlarm3Speed;
+    }
+
+    data[8] = limit;
+
+    queue.add(
+      [bleDelegate.getChar(), queue.C_WRITENR, data],
+      bleDelegate.getPMService()
+    );
+  }
+  if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
+    var data = [0xaa, 0xaa, 0x14, 0x04, 0x60, 0x21, 0x00, 0x00, 0x00]b;
+    data[6] = (limit * 100) & 0xff;
+    data[7] = ((limit * 100) >> 8) & 0xff;
+    data[8] = xorChkSum(data.slice(0, data.size() - 1));
+    queue.flush();
+    queue.add(
+      [bleDelegate.getCharW(), queue.C_WRITENR, data],
+      bleDelegate.getPMService()
+    );
+  }
+  eucData.tiltBackSpeed = limit;
+}
+
+//engo
+function encodeint16(val) {
+  return [(val >> 8) & 0xff, val & 0xff]b;
+}
+function getWriteCmd(text, x, y, r, f, c) {
+  var hexText = getHexText(text);
+
+  var cmd = [0xff, 0x37, 0x00, 0x0d + hexText.size()]b;
+  cmd.addAll(encodeint16(x));
+  cmd.addAll(encodeint16(y)); // to finish, add X int16, Y int8
+  cmd.add(r);
+  cmd.add(f);
+  cmd.add(c);
+  cmd.addAll(hexText);
+  cmd.add(0x00);
+  cmd.add(0xaa);
+  return cmd;
+}
+
+function getPageCmd(payload, pageId) {
+  var cmd = [0xff, 0x83, 0x00, payload.size() + 6, pageId]b;
+  cmd.addAll(payload);
+  cmd.add(0xaa);
+  return cmd;
+}
+
+function getHexText(text) {
+  var hexText = Toybox.StringUtil.convertEncodedString(text, {
+    :fromRepresentation => Toybox.StringUtil.REPRESENTATION_STRING_PLAIN_TEXT,
+    :toRepresentation => Toybox.StringUtil.REPRESENTATION_BYTE_ARRAY,
+  });
+  var textLength = text.length();
+  if (textLength < 5) {
+    var leftPadding = []b;
+    while (leftPadding.size() < 5 - hexText.size()) {
+      leftPadding.add(0x20);
+    }
+    hexText = leftPadding.addAll(hexText);
+  }
+  hexText.add(0x20); //right padding 2 char for proper clearing
+  return hexText;
+}
+
+function pagePayload(textArray) {
+  var payload = []b;
+  for (var i = 0; i < textArray.size(); i++) {
+    payload.addAll(textArray[i]);
+    payload.add(0x00);
+  }
+  //System.println("payload: " + payload);
+  return payload;
+}
+function getJson(symbol) {
+  return WatchUi.loadResource(Rez.JsonData[symbol]);
 }

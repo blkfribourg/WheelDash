@@ -8,6 +8,9 @@ import Toybox.Position;
 class GarminEUCApp extends Application.AppBase {
   private var view;
   private var delegate;
+  private var bleDelegate = null;
+  private var engoNextUpdate = null;
+  private var tiltBackInit = null;
   var timeOut = 10000;
   var activityRecordingDelay = 3000;
   var usePS;
@@ -33,6 +36,7 @@ class GarminEUCApp extends Application.AppBase {
     rideStatsInit();
     Varia.initVaria();
     alarmsTimer.start(method(:onUpdateTimer), eucData.updateDelay, true);
+
     // check if using GPS speed
   }
   function DFViewInit() {
@@ -99,6 +103,9 @@ class GarminEUCApp extends Application.AppBase {
       Varia.checkVehicule();
     }
     if (eucData.paired == true && eucData.wheelName != null) {
+      if (bleDelegate == null) {
+        bleDelegate = delegate.getBleDelegate();
+      }
       // automatic recording ------------------
       // a bit hacky maybe ...
       if (eucData.activityAutorecording == true) {
@@ -145,9 +152,27 @@ class GarminEUCApp extends Application.AppBase {
           eucData.GPS_speed = "...";
         }
       }
-      if (eucData.WDtiltBackSpd == -1 && eucData.speedLimit != 0) {
+      if (eucData.WDtiltBackSpd == -1 && eucData.tiltBackSpeed != null) {
         setWDTiltBackVal(eucData.tiltBackSpeed);
+      } else {
+        if (
+          eucData.correctedSpeed < 3 &&
+          eucData.WDtiltBackSpd > 0 &&
+          tiltBackInit != true
+        ) {
+          if (eucData.tiltBackSpeed != null) {
+            if (eucData.tiltBackSpeed != eucData.speedLimit) {
+              speedLimiter(
+                bleDelegate.getQueue(),
+                bleDelegate,
+                eucData.WDtiltBackSpd
+              );
+              tiltBackInit = true;
+            }
+          }
+        }
       }
+
       if (eucData.speedLimit != 0) {
         if (eucData.tiltBackSpeed == eucData.speedLimit) {
           eucData.speedLimitOn = true;
@@ -163,6 +188,9 @@ class GarminEUCApp extends Application.AppBase {
       eucData.DisplayedTemperature = eucData.getTemperature();
       eucData.PWM = eucData.getPWM();
       EUCAlarms.alarmsCheck();
+      if (eucData.useEngo == true) {
+        engoScreenUpdate();
+      }
       if (delegate.getMenu2Delegate().requestSubLabelsUpdate == true) {
         delegate.getMenu2Delegate().updateSublabels();
       }
@@ -234,7 +262,89 @@ class GarminEUCApp extends Application.AppBase {
     }
     WatchUi.requestUpdate();
   }
+  function engoScreenUpdate() {
+    var now = new Time.Moment(Time.now().value());
+    if (engoNextUpdate == null || engoNextUpdate.compare(now) <= 0) {
+      engoNextUpdate = now.add(new Time.Duration(1));
+      //  eucData.speed = eucData.speed + 0.1;
 
+      if (
+        eucData.useEngo == true &&
+        eucData.engoPaired == true &&
+        bleDelegate.engoDisplayInit == true
+      ) {
+        eucData.engoBattReq = eucData.engoBattReq + 1;
+        if (eucData.engoBattReq > 300) {
+          eucData.engoBattReq = 0;
+          bleDelegate.getEngoBattery();
+        }
+        var textArray = new [6];
+
+        // var xpos = 225;
+        var currentTime = System.getClockTime();
+        if (eucData.engoBattery != null) {
+          textArray[0] = getHexText(eucData.engoBattery + " %");
+        } else {
+          textArray[0] = getHexText(" ");
+        }
+
+        textArray[1] = getHexText(
+          currentTime.hour.format("%02d") + ":" + currentTime.min.format("%02d")
+        );
+        if (eucData.engoPage == 1) {
+          textArray[2] = getHexText(valueRound(eucData.PWM, "%.1f") + " %");
+          textArray[3] = getHexText(
+            valueRound(eucData.correctedSpeed, "%.1f") + " km/h"
+          );
+          textArray[4] = getHexText(
+            valueRound(eucData.temperature, "%.1f") + " km/h"
+          );
+          textArray[5] = getHexText(
+            valueRound(eucData.getBatteryPercentage(), "%.1f") + " %"
+          );
+        }
+        if (eucData.engoPage == 2) {
+          //Chrono page 1
+
+          var chrono;
+          var activityTimerTime = null;
+          var sessionDistance = null;
+          var averageSpeed = null;
+          var maxSpeed = null;
+          if (activityRecordView != null) {
+            activityTimerTime = activityRecordView.getElapsedTime();
+            sessionDistance = activityRecordView.getSessionDist();
+            averageSpeed = activityRecordView.getAvgSpeed();
+            maxSpeed = activityRecordView.getMaxSpeed();
+          }
+          if (activityTimerTime != null) {
+            var sec = activityTimerTime / 1000;
+            var mn = sec / 60;
+            chrono = [mn / 60, mn % 60, sec % 60, activityTimerTime % 1000];
+          } else {
+            chrono = [0, 0, 0];
+          }
+          textArray[2] = getHexText(
+            chrono[0].format("%02d") +
+              ":" +
+              chrono[1].format("%02d") +
+              ":" +
+              chrono[2].format("%02d")
+          );
+          textArray[3] = getHexText(
+            valueRound(sessionDistance, "%.1f") + " km"
+          );
+          textArray[4] = getHexText(valueRound(averageSpeed, "%.1f") + " km/h");
+          textArray[5] = getHexText(valueRound(maxSpeed, "%.1f") + " km/h");
+        }
+        var data = pagePayload(textArray);
+
+        // System.println("sendCmd");
+        bleDelegate.sendCommands(getPageCmd(data, eucData.engoPage));
+        //    bleDelegate.sendCommands(cmdTime);
+      }
+    }
+  }
   function rideStatsInit() {
     rideStats.movingmsec = 0;
     rideStats.statsTimerReset();
@@ -268,6 +378,8 @@ class GarminEUCApp extends Application.AppBase {
     //System.println("array size:" + rideStats.statsArray.size());
   }
   function setGlobalSettings() {
+    eucData.useEngo = AppStorage.getSetting("useEngo");
+    eucData.engoTouch = AppStorage.getSetting("engoTouch");
     eucData.useRadar = AppStorage.getSetting("useRadar");
     eucData.variaCloseAlarmDistThr = AppStorage.getSetting(
       "variaCloseAlarmDistThr"

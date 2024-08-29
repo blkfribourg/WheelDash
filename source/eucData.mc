@@ -140,9 +140,18 @@ module eucData {
   //speedLimiter
   var speedLimitOn = false;
   var speedLimit = 25;
-  var tiltBackSpeed = 0;
+  var tiltBackSpeed = null;
   var WDtiltBackSpd = 0;
   var spdLimFeatEnabled = false;
+
+  // Engo
+  var useEngo = false;
+  var engoPaired = false;
+  var engoPage = 1;
+  var engoBattery = null;
+  var engoTouch = 0;
+  var engoBattReq = 300;
+  var engoPageNb = 2;
 
   function getBatteryPercentage() {
     if (voltage != null) {

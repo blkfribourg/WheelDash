@@ -97,13 +97,13 @@ class GwDecoder {
     eucData.ledMode = value[13].toNumber(); // 12 in euc dashboard by freestyl3r
     //eucData.lightMode=value[19]&0x03; unable to get light mode from wheel
     //System.println("light mode (frameA ):"+eucData.lightMode);
-    if (eucData.speedLimit != 0) {
-      var tiltBackSpeed = shortFromBytesBE(value, 10);
-      if (tiltBackSpeed >= 100) {
-        tiltBackSpeed = 0;
-      }
-      eucData.tiltBackSpeed = tiltBackSpeed;
+    // if (eucData.speedLimit != 0) {
+    var tiltBackSpeed = shortFromBytesBE(value, 10);
+    if (tiltBackSpeed >= 100) {
+      tiltBackSpeed = 0;
     }
+    eucData.tiltBackSpeed = tiltBackSpeed;
+    //  }
   }
   function processFrameA(value) {
     frameANb++;

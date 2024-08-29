@@ -846,13 +846,13 @@ class DFView extends WatchUi.View {
     }
     //varia alarm
 
-    // at leat one vehicule detected
-    renderVariaLateralIndicator(dc);
     if (
       eucData.useRadar == true &&
       Varia.targetObject != null &&
       eucData.variaTargetNb != 0
     ) {
+      // at leat one vehicule detected
+      //  renderVariaLateralIndicator(dc);
     }
   }
   function drawDFTextValue(dc, xpos, ypos, valueID) {

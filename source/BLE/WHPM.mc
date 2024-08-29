@@ -1,11 +1,11 @@
 using Toybox.BluetoothLowEnergy as Ble;
 using Toybox.System as Sys;
 
-class hornPM {
+module hornPM {
   var WH_SERVICE = Ble.longToUuid(0x0000ffe0484f524el, 0x800000805f9b34fbl);
   var WH_CHAR_W = Ble.longToUuid(0x0000ffe1484f524el, 0x800000805f9b34fbl);
 
-  private var WHProfileDef = {
+  var WHProfileDef = {
     :uuid => WH_SERVICE,
     :characteristics => [
       {

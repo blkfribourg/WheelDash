@@ -1,14 +1,14 @@
 using Toybox.BluetoothLowEnergy as Ble;
 using Toybox.System as Sys;
 
-class eucPM {
+module eucPM {
   var EUC_SERVICE;
   var EUC_CHAR;
   var EUC_CHAR2;
   var EUC_SERVICE_W;
   var EUC_CHAR_W;
   var OLD_KS_ADV_SERVICE;
-  private var eucProfileDef;
+  var eucProfileDef;
 
   function init() {
     eucProfileDef = {

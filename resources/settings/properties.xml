@@ -40,7 +40,8 @@
     <property id="variaCloseAlarmDistThr" type="number">20</property>
     <property id="motorbikeHeadset" type="boolean">true</property>
     <property id="ESP32Horn" type="boolean">true</property>
-
+    <property id ="useEngo" type="boolean">false</property>
+    <property id ="engoTouch" type="number">0</property>
     
 
     
