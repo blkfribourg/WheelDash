@@ -119,7 +119,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
               0x00, 0x00, 0x00, 0x00, 0x00, 0x9b, 0x14, 0x5a, 0x5a,
             ]b;
 
-            queue.add([euc_char, queue.C_WRITENR, reqModel], eucPM.EUC_SERVICE);
+            queue.add([euc_char, reqModel], eucPM.EUC_SERVICE);
           }
           // End of KS addition -------------------------------
           // Inmotion V2 or VESC ---------------------------
@@ -127,24 +127,21 @@ class eucBLEDelegate extends Ble.BleDelegate {
             if (eucData.speedLimit != 0) {
               //request settings
               var getSettings = [0xaa, 0xaa, 0x14, 0x02, 0x20, 0x20, 0x16]b;
-              queue.add(
-                [euc_char_w, queue.C_WRITENR, getSettings],
-                eucPM.EUC_SERVICE
-              );
+              queue.add([euc_char_w, getSettings], eucPM.EUC_SERVICE);
               queue.lastPacketType = "settings";
             }
             euc_char_w = euc_service.getCharacteristic(eucPM.EUC_CHAR_W);
             // addition for inmotion v2 request live:
             queue.reqLiveData = [
               euc_char_w,
-              queue.C_WRITENR,
+
               [0xaa, 0xaa, 0x14, 0x01, 0x04, 0x11]b,
             ];
 
             // inmotion v2 request stats :
             queue.reqStats = [
               euc_char_w,
-              queue.C_WRITENR,
+
               [0xaa, 0xaa, 0x14, 0x01, 0x11, 0x04]b,
             ];
             queue.UUID = eucPM.EUC_SERVICE;

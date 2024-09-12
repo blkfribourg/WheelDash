@@ -143,13 +143,11 @@ class GarminEUCApp extends Application.AppBase {
           eucData.GPS_requested = true;
         }
         var gpsSpeed = Position.getInfo().speed;
-        if (gpsSpeed != null) {
+        if (gpsSpeed != null && Position.getInfo().accuracy >= 2) {
           eucData.GPS_speed = gpsSpeed * 3.6;
           if (eucData.useMiles == true || eucData.convertToMiles == true) {
             eucData.GPS_speed = kmToMiles(gpsSpeed);
           }
-        } else {
-          eucData.GPS_speed = "...";
         }
       }
       if (eucData.WDtiltBackSpd == -1 && eucData.tiltBackSpeed != null) {
@@ -292,12 +290,14 @@ class GarminEUCApp extends Application.AppBase {
           currentTime.hour.format("%02d") + ":" + currentTime.min.format("%02d")
         );
         if (eucData.engoPage == 1) {
-          textArray[2] = getHexText(valueRound(eucData.PWM, "%.1f") + " %");
+          textArray[2] = getHexText(
+            valueRound(eucData.PWM.abs(), "%.1f") + " %"
+          );
           textArray[3] = getHexText(
             valueRound(eucData.correctedSpeed, "%.1f") + " km/h"
           );
           textArray[4] = getHexText(
-            valueRound(eucData.temperature, "%.1f") + " km/h"
+            valueRound(eucData.temperature, "%.1f") + " *C"
           );
           textArray[5] = getHexText(
             valueRound(eucData.getBatteryPercentage(), "%.1f") + " %"

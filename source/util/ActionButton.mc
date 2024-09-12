@@ -31,7 +31,7 @@ class ActionButton {
 
         //System.println("HornButton");
         queue.add(
-          [bleDelegate.getHornChar(), queue.C_WRITENR, [0x68]b],
+          [bleDelegate.getHornChar(), [0x68]b],
           bleDelegate.getHornService()
         );
       }
@@ -100,7 +100,7 @@ class ActionButton {
           queue.add(
             [
               bleDelegate.getChar(),
-              queue.C_WRITENR,
+
               string_to_byte_array(
                 eucDict.dictLightsMode.values()[lightToggleIndex] as String
               ),
@@ -118,7 +118,7 @@ class ActionButton {
           queue.add(
             [
               bleDelegate.getChar(),
-              queue.C_WRITENR,
+
               string_to_byte_array(
                 eucDict.dictLightsMode.values()[lightToggleIndex] as String
               ),
@@ -139,10 +139,7 @@ class ActionButton {
             eucDict.dictLightsMode.values()[lightToggleIndex].toNumber() + 0x12;
           data[3] = 0x01;
           data[16] = 0x73;
-          queue.add(
-            [bleDelegate.getChar(), queue.C_WRITENR, data],
-            bleDelegate.getPMService()
-          );
+          queue.add([bleDelegate.getChar(), data], bleDelegate.getPMService());
           lightToggleIndex = lightToggleIndex + 1;
           if (lightToggleIndex > 1) {
             lightToggleIndex = 0;
@@ -161,7 +158,7 @@ class ActionButton {
 
             queue.flush();
             queue.add(
-              [bleDelegate.getCharW(), queue.C_WRITENR, data],
+              [bleDelegate.getCharW(), data],
               bleDelegate.getPMService()
             );
           }
@@ -196,7 +193,7 @@ class ActionButton {
 
             queue.flush();
             queue.add(
-              [bleDelegate.getCharW(), queue.C_WRITENR, data],
+              [bleDelegate.getCharW(), data],
               bleDelegate.getPMService()
             );
           }
@@ -207,7 +204,7 @@ class ActionButton {
         if (eucData.ESP32HornPaired == true && eucData.ESP32Horn == true) {
           //System.println("HornButton");
           queue.add(
-            [bleDelegate.getHornChar(), queue.C_WRITENR, [0x68]b],
+            [bleDelegate.getHornChar(), [0x68]b],
             bleDelegate.getHornService()
           );
         } else {
@@ -217,11 +214,7 @@ class ActionButton {
             (eucData.wheelBrand == 1 && eucData.version < 3)
           ) {
             queue.add(
-              [
-                bleDelegate.getChar(),
-                queue.C_WRITENR,
-                string_to_byte_array("b" as String),
-              ],
+              [bleDelegate.getChar(), string_to_byte_array("b" as String)],
               bleDelegate.getPMService()
             );
           }
@@ -229,7 +222,7 @@ class ActionButton {
             queue.add(
               [
                 bleDelegate.getChar(),
-                queue.C_WRITENR,
+
                 [
                   0x4c, 0x6b, 0x41, 0x70, 0x0e, 0x00, 0x80, 0x80, 0x80, 0x01,
                   0xca, 0x87, 0xe6, 0x6f,
@@ -248,7 +241,7 @@ class ActionButton {
               queue.add(
                 [
                   bleDelegate.getChar(),
-                  queue.C_WRITENR,
+
                   [
                     0xaa, 0x55, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x73, 0x14, 0x5a, 0x5a,
@@ -258,7 +251,7 @@ class ActionButton {
               );
             }
             queue.add(
-              [bleDelegate.getChar(), queue.C_WRITENR, data],
+              [bleDelegate.getChar(), data],
               bleDelegate.getPMService()
             );
             if (eucData.KSVoiceMode == true) {
@@ -266,9 +259,9 @@ class ActionButton {
               queue.add(
                 [
                   bleDelegate.getChar(),
-                  queue.C_WRITENR,
+
                   [
-                    0xaa, 0x55, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                    0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x73, 0x14, 0x5a, 0x5a,
                   ]b,
                 ],
@@ -285,7 +278,7 @@ class ActionButton {
             data[8] = xorChkSum(data.slice(0, data.size() - 1));
             queue.flush();
             queue.add(
-              [bleDelegate.getCharW(), queue.C_WRITENR, data],
+              [bleDelegate.getCharW(), data],
               bleDelegate.getPMService()
             );
           }

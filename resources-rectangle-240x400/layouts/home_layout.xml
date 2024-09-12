@@ -11,9 +11,11 @@
     <drawable id="SpeedLimiterIndicator" class="SpeedLimiterRenderer">
         <param name="mainColor">0xd53420</param> 
     </drawable>
-    <drawable id="SpeedDial" class="ArcRenderer">
-        <param name="arcType">:speedArc</param>
+    <drawable id="TopArc" class="ArcRenderer">
+        <param name="arcType">:topArc</param>
         <!-- Colors -->
+        <param name="bgColor">0x333333</param>
+        <param name="revColor">0x58ba1a</param>
         <param name="mainColor">0x3366CC</param> <!-- This color is for idle state of the dial, basically first 20% of the speed dial-->
         <param name="secondColor">0xc35017</param> <!-- This color is for "not so safe" speed, 60 to 80 percent of the dial-->
         <param name="thirdColor">0xd53420</param><!-- This color is for pretty dangeroud speed, from 80% %to 100%-->
@@ -32,6 +34,7 @@
     <drawable id="BatteryArc" class="ArcRenderer">
         <param name="arcType">:batteryArc</param>
         <!-- Colors -->
+        <param name="bgColor">0x333333</param>
         <param name="mainColor">0x58ba1a</param> <!-- Main color -->
         <param name="secondColor">0xc35017</param> <!-- This color is for the yellow part of battery arc-->
         <!-- Arc size n' position -->
@@ -50,6 +53,7 @@
     <drawable id="TemperatureArc" class="ArcRenderer">
         <param name="arcType">:temperatureArc</param>
         <!-- Colors -->
+        <param name="bgColor">0x333333</param>
         <param name="mainColor">0x58ba1a</param>
         <param name="secondColor">0xc98f1f</param>
         <param name="thirdColor">0xd21a1a</param>

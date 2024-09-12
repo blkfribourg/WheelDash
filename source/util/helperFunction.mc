@@ -216,47 +216,30 @@ function setWDTiltBackVal(speed) {
   }
 }
 function speedLimiter(queue, bleDelegate, limit) {
- // System.println("Tiltback: " + limit);
+  // System.println("Tiltback: " + limit);
   if (eucData.wheelBrand == 0) {
     var data;
     if (limit != 0) {
       queue.add(
-        [bleDelegate.getChar(), queue.C_WRITENR, string_to_byte_array("W")],
+        [bleDelegate.getChar(), string_to_byte_array("W")],
         bleDelegate.getPMService()
       );
       queue.add(
-        [bleDelegate.getChar(), queue.C_WRITENR, string_to_byte_array("Y")],
+        [bleDelegate.getChar(), string_to_byte_array("Y")],
         bleDelegate.getPMService()
       );
       data = [limit / 10 + 48]b;
-      queue.add(
-        [bleDelegate.getChar(), queue.C_WRITENR, data],
-        bleDelegate.getPMService()
-      );
+      queue.add([bleDelegate.getChar(), data], bleDelegate.getPMService());
       data = [(limit % 10) + 48]b;
+      queue.add([bleDelegate.getChar(), data], bleDelegate.getPMService());
       queue.add(
-        [bleDelegate.getChar(), queue.C_WRITENR, data],
-        bleDelegate.getPMService()
-      );
-      queue.add(
-        [
-          bleDelegate.getChar(),
-          queue.C_WRITENR,
-          string_to_byte_array("b" as String),
-        ],
+        [bleDelegate.getChar(), string_to_byte_array("b" as String)],
         bleDelegate.getPMService()
       );
     } else {
+      queue.add([bleDelegate.getChar(), [0x22]b], bleDelegate.getPMService());
       queue.add(
-        [bleDelegate.getChar(), queue.C_WRITENR, [0x22]b],
-        bleDelegate.getPMService()
-      );
-      queue.add(
-        [
-          bleDelegate.getChar(),
-          queue.C_WRITENR,
-          string_to_byte_array("b" as String),
-        ],
+        [bleDelegate.getChar(), string_to_byte_array("b" as String)],
         bleDelegate.getPMService()
       );
     }
@@ -278,10 +261,7 @@ function speedLimiter(queue, bleDelegate, limit) {
 
     data[8] = limit;
 
-    queue.add(
-      [bleDelegate.getChar(), queue.C_WRITENR, data],
-      bleDelegate.getPMService()
-    );
+    queue.add([bleDelegate.getChar(), data], bleDelegate.getPMService());
   }
   if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
     var data = [0xaa, 0xaa, 0x14, 0x04, 0x60, 0x21, 0x00, 0x00, 0x00]b;
@@ -289,15 +269,20 @@ function speedLimiter(queue, bleDelegate, limit) {
     data[7] = ((limit * 100) >> 8) & 0xff;
     data[8] = xorChkSum(data.slice(0, data.size() - 1));
     queue.flush();
-    queue.add(
-      [bleDelegate.getCharW(), queue.C_WRITENR, data],
-      bleDelegate.getPMService()
-    );
+    queue.add([bleDelegate.getCharW(), data], bleDelegate.getPMService());
   }
   eucData.tiltBackSpeed = limit;
 }
 
 //engo
+
+function arrayToRawCmd(str_bytes) {
+  return Toybox.StringUtil.convertEncodedString(str_bytes, {
+    :fromRepresentation => Toybox.StringUtil.REPRESENTATION_STRING_HEX,
+    :toRepresentation => Toybox.StringUtil.REPRESENTATION_BYTE_ARRAY,
+  });
+}
+
 function encodeint16(val) {
   return [(val >> 8) & 0xff, val & 0xff]b;
 }

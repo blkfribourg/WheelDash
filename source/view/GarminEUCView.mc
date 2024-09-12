@@ -21,7 +21,7 @@ class GarminEUCView extends WatchUi.View {
     cDrawables[:TemperatureNumber] = View.findDrawableById("TemperatureNumber");
     cDrawables[:BottomSubtitle] = View.findDrawableById("BottomSubtitle");
     // And arc drawables
-    cDrawables[:SpeedArc] = View.findDrawableById("SpeedDial"); // used for PMW
+    cDrawables[:topArc] = View.findDrawableById("TopArc"); // used for PMW
     cDrawables[:BatteryArc] = View.findDrawableById("BatteryArc");
     cDrawables[:TemperatureArc] = View.findDrawableById("TemperatureArc");
     cDrawables[:RecordingIndicator] =
@@ -84,50 +84,50 @@ class GarminEUCView extends WatchUi.View {
     var speedNumberStr = "";
 
     if (eucData.mainNumber == 0) {
-      var speedNumberVal = "";
-      speedNumberVal = eucData.correctedSpeed;
-      if (speedNumberVal > 100) {
+      var numericVal = "";
+      numericVal = eucData.correctedSpeed;
+      if (numericVal > 100) {
         speedNumberStr = valueRound(eucData.correctedSpeed, "%d").toString();
       } else {
         speedNumberStr = valueRound(eucData.correctedSpeed, "%.1f").toString();
       }
     }
     if (eucData.mainNumber == 1) {
-      var speedNumberVal;
-      speedNumberVal = eucData.PWM;
-      if (speedNumberVal > 100) {
-        speedNumberStr = valueRound(eucData.PWM, "%d").toString();
+      var numericVal;
+      numericVal = eucData.PWM.abs();
+      if (numericVal > 100) {
+        speedNumberStr = valueRound(numericVal, "%d").toString();
       } else {
-        speedNumberStr = valueRound(eucData.PWM, "%.1f").toString();
+        speedNumberStr = valueRound(numericVal, "%.1f").toString();
       }
     }
     if (eucData.mainNumber == 2) {
-      var speedNumberVal;
-      speedNumberVal = eucData.getBatteryPercentage();
-      if (speedNumberVal > 100) {
-        speedNumberStr = valueRound(speedNumberVal, "%d").toString();
+      var numericVal;
+      numericVal = eucData.getBatteryPercentage();
+      if (numericVal > 100) {
+        speedNumberStr = valueRound(numericVal, "%d").toString();
       } else {
-        speedNumberStr = valueRound(speedNumberVal, "%.1f").toString();
+        speedNumberStr = valueRound(numericVal, "%.1f").toString();
       }
     }
     if (eucData.mainNumber == 3) {
-      var speedNumberVal = "";
-      speedNumberVal = eucData.GPS_speed;
-      if (speedNumberVal == null) {
-        speedNumberVal = 0.0;
+      var numericVal = "";
+      numericVal = eucData.GPS_speed;
+      if (numericVal == null) {
+        numericVal = 0.0;
       }
-      if (speedNumberVal > 100) {
+      if (numericVal > 100) {
         speedNumberStr = valueRound(eucData.GPS_speed, "%d").toString();
       } else {
         speedNumberStr = valueRound(eucData.GPS_speed, "%.1f").toString();
       }
     }
     cDrawables[:SpeedNumber].setText(speedNumberStr);
-    //cDrawables[:SpeedArc].setValues(WheelData.currentSpeed.toFloat(), WheelData.speedLimit);
+    //cDrawables[:topArc].setValues(WheelData.currentSpeed.toFloat(), WheelData.speedLimit);
     if (eucData.topBar == 0) {
-      cDrawables[:SpeedArc].setValues(eucData.PWM.toFloat(), 100);
+      cDrawables[:topArc].setValues(eucData.PWM.toFloat(), 100);
     } else {
-      cDrawables[:SpeedArc].setValues(
+      cDrawables[:topArc].setValues(
         eucData.correctedSpeed.toFloat(),
         eucData.maxDisplayedSpeed
       );

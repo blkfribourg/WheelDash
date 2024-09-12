@@ -259,6 +259,14 @@
         dataLabel="@Strings.EORBattery_label"
         unitLabel="@Strings.percentage_unit"/>
 
+         <fitField id="29" displayInChart="true" displayInActivitySummary="true" sortOrder = "29" precision="0"
+        dataLabel="@Strings.VehRelativeSpd_label" chartTitle="@Strings.VehRelativeSpd_label" fillColor="#27ae60"
+        unitLabel="@Strings.empty"/>
+
+        <fitField id="30" displayInChart="true" displayInActivitySummary="true" sortOrder = "30" precision="0"
+        dataLabel="@Strings.VehTotalCnt_label" chartTitle="@Strings.VehTotalCnt_label" fillColor="#e74c3c"
+        unitLabel="@Strings.empty"/>
+
 
     </fitContributions>
 

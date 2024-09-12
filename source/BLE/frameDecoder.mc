@@ -1,7 +1,14 @@
+///////////////////////////////////////////////////////////////////////////////
+// EUCs packets decoding
+// Most of this was translated to MonkeyC from open-sources app like EUCWatch,
+// WheelLog and EUCDash (Freestyler). Kudos to them !
+///////////////////////////////////////////////////////////////////////////////
+
 import Toybox.Lang;
 using Toybox.BluetoothLowEnergy as Ble;
 using Toybox.Time;
 
+// Decoder initialization depending on EUC brand, called in PSMenuDelegate (Profile Selector)
 module frameDecoder {
   function init() {
     if (eucData.wheelBrand == 0) {
@@ -125,11 +132,12 @@ class GwDecoder {
     } else {
       eucData.temperature = signedShortFromBytesBE(value, 12) / 340.0 + 36.53;
     }
-    eucData.hPWM = signedShortFromBytesBE(value, 14).abs() / 100.0;
+    eucData.hPWM = signedShortFromBytesBE(value, 14) / 100.0;
   }
 }
 
 class VeteranDecoder {
+  // CRC32 implementation
   function calculateCRC32(rawData, offset, crcLastIndex) {
     var crc = 0xffffffffl;
     for (var i = 0; i < crcLastIndex; i++) {
@@ -475,7 +483,7 @@ class KingsongDecoder {
           value[16] = 0x98;
           //let's use queue to be safe :
           queue.add(
-            [bleDelegate, queue.C_WRITENR, value],
+            [bleDelegate, value],
             bleDelegate.getPMService()
           );
           queue.delayTimer.start(method(:timerCallback), 200, true);
@@ -490,5 +498,139 @@ class KingsongDecoder {
       }
     }
     return false;
+  }
+}
+
+//Inmotion decoder (starting from V11, previous models are not compatible with Garmin due to bluetooth stack issue)
+class IMV2Decoder {
+  var frameNb = 0;
+  var start_dist;
+
+  function frameBuffer(bleDelegate, transmittedFrame) {
+    if (
+      bleDelegate.queue.lastPacketType.equals("live") &&
+      transmittedFrame.size() == 20
+    ) {
+      frameNb++;
+      if (eucData.timeWhenConnected != null) {
+        var elaspedTime = eucData.timeWhenConnected
+          .subtract(new Time.Moment(Time.now().value()))
+          .value();
+        if (elaspedTime != 0) {
+          eucData.BLEReadRate = frameNb / elaspedTime;
+        }
+      }
+      // V11 & V12
+      if (eucData.wheelBrand == 4) {
+        eucData.voltage =
+          transmittedFrame
+            .decodeNumber(Lang.NUMBER_FORMAT_UINT16, {
+              :offset => 5,
+              :endianness => Lang.ENDIAN_LITTLE,
+            })
+            .abs() / 100.0;
+        var speed =
+          transmittedFrame
+            .decodeNumber(Lang.NUMBER_FORMAT_SINT16, {
+              :offset => 9,
+              :endianness => Lang.ENDIAN_LITTLE,
+            })
+            .abs() / 100.0;
+        if (speed <= 100) {
+          //Should investigate if wrong packet or decoding error
+          eucData.speed = speed;
+        }
+        var pwm =
+          transmittedFrame
+            .decodeNumber(Lang.NUMBER_FORMAT_SINT16, {
+              :offset => 13,
+              :endianness => Lang.ENDIAN_LITTLE,
+            })
+            .abs() / 100.0;
+        if (pwm < 100.0) {
+          //Should investigate if wrong packet or decoding error
+          eucData.hPWM = pwm;
+        }
+
+        eucData.current =
+          transmittedFrame.decodeNumber(Lang.NUMBER_FORMAT_SINT16, {
+            :offset => 7,
+            :endianness => Lang.ENDIAN_LITTLE,
+          }) / 100.0;
+      }
+      // V11Y V13 V14
+      if (eucData.wheelBrand == 5) {
+        eucData.voltage =
+          transmittedFrame
+            .decodeNumber(Lang.NUMBER_FORMAT_UINT16, {
+              :offset => 5,
+              :endianness => Lang.ENDIAN_LITTLE,
+            })
+            .abs() / 100.0;
+        var speed =
+          transmittedFrame
+            .decodeNumber(Lang.NUMBER_FORMAT_SINT16, {
+              :offset => 13,
+              :endianness => Lang.ENDIAN_LITTLE,
+            })
+            .abs() / 100.0;
+        if (speed <= 100) {
+          //Should investigate if wrong packet or decoding error
+          eucData.speed = speed;
+        }
+        /* OUT OF ARRAY 
+        var pwm =
+          transmittedFrame
+            .decodeNumber(Lang.NUMBER_FORMAT_SINT16, {
+              :offset => 19,
+              :endianness => Lang.ENDIAN_LITTLE,
+            })
+            .abs() / 100.0;
+        if (pwm < 100.0) {
+          //Should investigate if wrong packet or decoding error
+          eucData.hPWM = pwm;
+        }
+*/
+        eucData.current =
+          transmittedFrame.decodeNumber(Lang.NUMBER_FORMAT_SINT16, {
+            :offset => 7,
+            :endianness => Lang.ENDIAN_LITTLE,
+          }) / 100.0;
+      }
+    }
+    if (
+      bleDelegate.queue.lastPacketType.equals("stats") &&
+      transmittedFrame.size() == 20
+    ) {
+      eucData.totalDistance =
+        transmittedFrame.decodeNumber(Lang.NUMBER_FORMAT_UINT32, {
+          :offset => 5,
+          :endianness => Lang.ENDIAN_LITTLE,
+        }) / 100.0;
+
+      if (start_dist == null) {
+        start_dist = eucData.totalDistance;
+      }
+      eucData.tripDistance = eucData.totalDistance - start_dist;
+    }
+    if (bleDelegate.queue.lastPacketType.equals("batStats")) {
+      eucData.batteryTemp1 =
+        transmittedFrame.decodeNumber(Lang.NUMBER_FORMAT_SINT8, {
+          :offset => 9,
+          :endianness => Lang.ENDIAN_LITTLE,
+        }) + 80.0; //data[4]
+      eucData.batteryTemp2 =
+        transmittedFrame.decodeNumber(Lang.NUMBER_FORMAT_SINT8, {
+          :offset => 17,
+          :endianness => Lang.ENDIAN_LITTLE,
+        }) + 80.0; //data[12]
+    }
+    if (bleDelegate.queue.lastPacketType.equals("settings")) {
+      eucData.tiltBackSpeed =
+        transmittedFrame.decodeNumber(Lang.NUMBER_FORMAT_UINT16, {
+          :offset => 6,
+          :endianness => Lang.ENDIAN_LITTLE,
+        }) / 100.0; //data[4]
+    }
   }
 }

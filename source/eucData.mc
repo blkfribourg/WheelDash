@@ -64,6 +64,7 @@ module eucData {
   var topSpeed = 0;
   var watchBatteryUsage = 0.0;
   var hPWM = 0.0;
+  var reportNegPWM = true;
   var currentCorrection;
   var gothPWM = false;
   var battery = 0.0;
@@ -349,13 +350,28 @@ module eucData {
             eucData.voltage.toFloat() *
             eucData.voltage_scaling *
             powerFactor);
-        return CalculatedPWM * 100;
+        if (eucData.Phcurrent > 0 && eucData.reportNegPWM == true) {
+          return -CalculatedPWM * 100;
+        } else {
+          return CalculatedPWM * 100;
+        }
       }
 
       // 0 is begode/gotway, all other brands returns hPWM (Leaperkim / KS / OLD KS / IM / VESC)
       else {
-        //   System.println("hwPwm");
-        return hPWM;
+        //System.println("hwPwm");
+        if (eucData.reportNegPWM == true) {
+          if (
+            eucData.Phcurrent > 0 &&
+            (eucData.wheelBrand == 0 || eucData.wheelBrand == 1)
+          ) {
+            return -hPWM;
+          } else {
+            return hPWM;
+          }
+        } else {
+          return hPWM;
+        }
       }
     } else {
       return 0;

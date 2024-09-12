@@ -151,6 +151,7 @@ module EUCAlarms {
     }
   }
   function alarmsCheck() {
+    var currentPWM = eucData.PWM.abs();
     //PWM alarm
     triggerAlarm = true;
     var now = new Time.Moment(Time.now().value());
@@ -162,8 +163,8 @@ module EUCAlarms {
     if (PWM1_thr != 0 && PWM1_thr != null) {
       if (PWM2_thr != 0 && PWM2_thr != null) {
         if (
-          eucData.PWM > PWM1_thr &&
-          eucData.PWM < PWM2_thr &&
+          currentPWM > PWM1_thr &&
+          currentPWM < PWM2_thr &&
           triggerAlarm == true
         ) {
           nextTrigger = new Time.Moment(Time.now().value());
@@ -178,7 +179,7 @@ module EUCAlarms {
           }
           PWMAlarm = true;
         }
-        if (eucData.PWM > PWM2_thr && triggerAlarm == true && PWM2_thr != 0) {
+        if (currentPWM > PWM2_thr && triggerAlarm == true && PWM2_thr != 0) {
           if (PWMDangerVibe != null && eucData.vibeIntensity != 0) {
             Attention.vibrate(PWMDangerVibe);
             vibeKilled = false;
@@ -192,7 +193,7 @@ module EUCAlarms {
           PWMAlarm = true;
         }
       } else {
-        if (eucData.PWM > PWM1_thr && triggerAlarm == true) {
+        if (currentPWM > PWM1_thr && triggerAlarm == true) {
           nextTrigger = new Time.Moment(Time.now().value());
           nextTrigger.add(new Time.Duration(1));
           if (PWMVibe != null && eucData.vibeIntensity != 0) {
@@ -206,7 +207,7 @@ module EUCAlarms {
           PWMAlarm = true;
         }
       }
-      if (eucData.PWM < PWM1_thr) {
+      if (currentPWM < PWM1_thr) {
         PWMAlarm = false;
       }
     }

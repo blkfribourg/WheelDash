@@ -221,20 +221,20 @@ class GarminEUCMenu2Delegate_generic extends WatchUi.Menu2InputDelegate {
       enc_cmd = string_to_byte_array(command as String);
 
       queue.add(
-        [eucBleDelegate.getChar(), queue.C_WRITENR, enc_cmd],
+        [eucBleDelegate.getChar(), enc_cmd],
         eucBleDelegate.getPMService()
       );
       command = "M";
       enc_cmd = string_to_byte_array(command as String);
 
       queue.add(
-        [eucBleDelegate.getChar(), queue.C_WRITENR, enc_cmd],
+        [eucBleDelegate.getChar(), enc_cmd],
         eucBleDelegate.getPMService()
       );
       command = cmd;
       enc_cmd = string_to_byte_array(command as String);
       queue.add(
-        [eucBleDelegate.getChar(), queue.C_WRITENR, enc_cmd],
+        [eucBleDelegate.getChar(), enc_cmd],
         eucBleDelegate.getPMService()
       );
     }
@@ -243,20 +243,20 @@ class GarminEUCMenu2Delegate_generic extends WatchUi.Menu2InputDelegate {
       enc_cmd = string_to_byte_array(command as String);
 
       queue.add(
-        [eucBleDelegate.getChar(), queue.C_WRITENR, enc_cmd],
+        [eucBleDelegate.getChar(), enc_cmd],
         eucBleDelegate.getPMService()
       );
       command = "B";
       enc_cmd = string_to_byte_array(command as String);
 
       queue.add(
-        [eucBleDelegate.getChar(), queue.C_WRITENR, enc_cmd],
+        [eucBleDelegate.getChar(), enc_cmd],
         eucBleDelegate.getPMService()
       );
       command = cmd;
       enc_cmd = string_to_byte_array(command as String);
       queue.add(
-        [eucBleDelegate.getChar(), queue.C_WRITENR, enc_cmd],
+        [eucBleDelegate.getChar(), enc_cmd],
         eucBleDelegate.getPMService()
       );
     } else {
@@ -307,7 +307,7 @@ class GarminEUCMenu2Delegate_generic extends WatchUi.Menu2InputDelegate {
         data[7] = xorChkSum(data.slice(0, data.size() - 1));
         queue.flush();
         queue.add(
-          [eucBleDelegate.getCharW(), queue.C_WRITENR, data],
+          [eucBleDelegate.getCharW(), data],
           eucBleDelegate.getPMService()
         );
       }
@@ -332,7 +332,7 @@ class GarminEUCMenu2Delegate_generic extends WatchUi.Menu2InputDelegate {
         data[8] = xorChkSum(data.slice(0, data.size() - 1));
         queue.flush();
         queue.add(
-          [eucBleDelegate.getCharW(), queue.C_WRITENR, data],
+          [eucBleDelegate.getCharW(), data],
           eucBleDelegate.getPMService()
         );
         // todo : store light preference for V12 in watch storage.
@@ -345,7 +345,7 @@ class GarminEUCMenu2Delegate_generic extends WatchUi.Menu2InputDelegate {
       data[7] = xorChkSum(data.slice(0, data.size() - 1));
       queue.flush();
       queue.add(
-        [eucBleDelegate.getCharW(), queue.C_WRITENR, data],
+        [eucBleDelegate.getCharW(), data],
         eucBleDelegate.getPMService()
       );
       //System.println("strobe_frame: " + cmd_frame.toString());
@@ -356,7 +356,7 @@ class GarminEUCMenu2Delegate_generic extends WatchUi.Menu2InputDelegate {
       data[7] = xorChkSum(data.slice(0, data.size() - 1));
       queue.flush();
       queue.add(
-        [eucBleDelegate.getCharW(), queue.C_WRITENR, data],
+        [eucBleDelegate.getCharW(), data],
         eucBleDelegate.getPMService()
       );
 
@@ -368,7 +368,7 @@ class GarminEUCMenu2Delegate_generic extends WatchUi.Menu2InputDelegate {
       data[7] = xorChkSum(data.slice(0, data.size() - 1));
       queue.flush();
       queue.add(
-        [eucBleDelegate.getCharW(), queue.C_WRITENR, data],
+        [eucBleDelegate.getCharW(), data],
         eucBleDelegate.getPMService()
       );
 

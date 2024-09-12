@@ -261,6 +261,9 @@ class ActivityRecordView extends WatchUi.View {
   const MINTEMP_FIELD_ID_K = 27;
   const MAXTEMP_FIELD_ID_K = 28;
 
+  const VEH_RELATIVE_SPD_ID = 29;
+  const VEH_TOTAL_CNT_ID = 30;
+
   hidden var mSpeedField;
   hidden var mPWMField;
   hidden var mVoltageField;
@@ -283,6 +286,8 @@ class ActivityRecordView extends WatchUi.View {
   hidden var mMinBatteryField;
   hidden var mMaxBatteryField;
   hidden var mWheelName;
+  hidden var mVehRelativeSpdField = null;
+  hidden var mVehTotalCntField = null;
 
   // Initializes the new fields in the activity file
   function setupFields() {
@@ -470,6 +475,29 @@ class ActivityRecordView extends WatchUi.View {
       FitContributor.DATA_TYPE_STRING,
       { :mesgType => FitContributor.MESG_TYPE_SESSION, :count => 32 }
     );
+    if (eucData.useRadar == true) {
+      if (eucData.radar != null) {
+        try {
+          //RadarConnState = eucData.radar.getDeviceState().state;
+          //   if (RadarConnState > 2) {
+          mVehRelativeSpdField = _session.createField(
+            "VehRelativeSpd",
+            VEH_RELATIVE_SPD_ID,
+            FitContributor.DATA_TYPE_UINT8,
+            { :mesgType => FitContributor.MESG_TYPE_RECORD, :units => "" }
+          );
+          mVehTotalCntField = _session.createField(
+            "VehTotalCnt",
+            VEH_TOTAL_CNT_ID,
+            FitContributor.DATA_TYPE_UINT16,
+            { :mesgType => FitContributor.MESG_TYPE_RECORD, :units => "" }
+          );
+          //    }
+        } catch (e instanceof Lang.Exception) {
+          // System.println(e.getErrorMessage());
+        }
+      }
+    }
   }
   var maxSpeed = 0.0;
   var maxPWM = 0.0;
@@ -501,7 +529,7 @@ class ActivityRecordView extends WatchUi.View {
       callNb++;
       currentVoltage = eucData.getVoltage();
       currentBatteryPerc = eucData.getBatteryPercentage();
-      currentPWM = eucData.PWM;
+      currentPWM = eucData.PWM.abs();
       correctedSpeed = eucData.correctedSpeed;
       currentCurrent = eucData.getCurrent();
       currentPower = currentCurrent * currentVoltage;

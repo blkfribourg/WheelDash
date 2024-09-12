@@ -5,6 +5,8 @@ import Toybox.System;
 
 class ArcRenderer extends WatchUi.Drawable {
   private var mMainColor,
+    mBgColor,
+    mRevColor,
     mSecondColor,
     mThirdColor,
     mStartDegree,
@@ -30,6 +32,8 @@ class ArcRenderer extends WatchUi.Drawable {
 
     mArcType = params[:arcType];
     mMainColor = params.get(:mainColor);
+    mBgColor = params.get(:bgColor);
+    mRevColor = params.get(:revColor);
     mSecondColor = params.get(:secondColor);
     if (mArcType != :batteryArc) {
       mThirdColor = params[:thirdColor];
@@ -59,7 +63,6 @@ class ArcRenderer extends WatchUi.Drawable {
   }
 
   function draw(dc) {
-    var backgroundColor = 0x333333;
     dc.setPenWidth(mArcSize);
 
     var foregroundColor;
@@ -70,7 +73,7 @@ class ArcRenderer extends WatchUi.Drawable {
     // touch it, and i have a spent a lot of nerves while trying to code this
     // crap (ggoraa comment)
 
-    dc.setColor(backgroundColor, 0x000000);
+    dc.setColor(mBgColor, 0x000000);
     dc.drawArc(
       mXCenterPosition,
       mYCenterPosition,
@@ -81,7 +84,7 @@ class ArcRenderer extends WatchUi.Drawable {
     );
 
     switch (mArcType) {
-      case :speedArc: {
+      case :topArc: {
         if (currentValue != 0.0) {
           if (
             //should move appstorage values elsewhere
@@ -92,7 +95,11 @@ class ArcRenderer extends WatchUi.Drawable {
           } else if (currentValue >= eucData.redColoringThreshold) {
             foregroundColor = mThirdColor;
           } else {
-            foregroundColor = mMainColor;
+            if (currentValue >= 0) {
+              foregroundColor = mMainColor;
+            } else {
+              foregroundColor = mRevColor;
+            }
           }
         } else {
           foregroundColor = mMainColor;
@@ -112,7 +119,7 @@ class ArcRenderer extends WatchUi.Drawable {
           );
         } else {
           var degreeRange = mStartDegree.abs() + mEndDegree.abs();
-          var percentage = currentValue.toFloat() / maxValue.toFloat();
+          var percentage = currentValue.abs().toFloat() / maxValue.toFloat();
           var preResult = degreeRange * percentage;
           var result = mStartDegree - preResult;
           if (result != mStartDegree) {

@@ -1,3 +1,7 @@
+///////////////////////////////////////////////////////////////////////////////
+// EUCs (Gotway/Begode - Leaperkim - Kingsong - Inmotion) BLE UUIDS and profile registration
+///////////////////////////////////////////////////////////////////////////////
+
 using Toybox.BluetoothLowEnergy as Ble;
 using Toybox.System as Sys;
 
@@ -107,11 +111,7 @@ module eucPM {
     if (eucData.wheelBrand == 3) {
       setOldKingsong();
     }
-    if (
-      eucData.wheelBrand == 4 ||
-      eucData.wheelBrand == 5 ||
-      eucData.wheelBrand == 6
-    ) {
+    if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
       setInmotionV2orVESC();
     } else {
     }

@@ -1,3 +1,8 @@
+///////////////////////////////////////////////////////////////////////////////
+// DIY bluetooth horn (called WheelHorn, need to publish source and doc :) ) BLE UUIDS and profile registration
+// Profile registration is called in PSMenuDelegate (Profile Selector)
+///////////////////////////////////////////////////////////////////////////////
+
 using Toybox.BluetoothLowEnergy as Ble;
 using Toybox.System as Sys;
 

@@ -1,3 +1,7 @@
+///////////////////////////////////////////////////////////////////////////////
+// Engo smartglasses from Activelook BLE UUIDS and profile registration
+///////////////////////////////////////////////////////////////////////////////
+
 using Toybox.BluetoothLowEnergy as Ble;
 using Toybox.System;
 
@@ -74,7 +78,7 @@ module engoPM {
   function registerProfiles() {
     try {
       Ble.registerProfile(engoProfileDef);
-     // System.println("Engo profile OK");
+      // System.println("Engo profile OK");
     } catch (e) {
       System.println("e=" + e.getErrorMessage());
     }
