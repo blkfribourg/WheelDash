@@ -49,7 +49,7 @@ class BleQueue {
     if (queue.size() == 0) {
       // Inmotion Specific : when queue is empty send the periodic request packets
       if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
-        if (reqLiveData != null && UUID != null && reqStats != null) {
+        if (reqLiveData != null && reqStats != null) {
           reqStatsTiming = reqStatsTiming - 1;
           if (reqBatStats != null) {
             reqBatStatsTiming = reqBatStatsTiming - 1;
