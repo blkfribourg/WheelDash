@@ -1,3 +1,7 @@
+///////////////////////////////////////////////////////////////////////////////
+// BLE Delegate, this deals with BLE device scanning, pairing and BLE data processing
+///////////////////////////////////////////////////////////////////////////////
+
 using Toybox.System;
 using Toybox.BluetoothLowEnergy as Ble;
 using Toybox.WatchUi as Ui;
@@ -77,6 +81,8 @@ class eucBLEDelegate extends Ble.BleDelegate {
   ];
   var frame5 = [0xef, 0x0f, 0xef, 0xda, 0xb2, 0x25, 0x18];
   */
+
+  // Upon initialisation start scanning for supported devices
   function initialize(_profileNb, q, _decoder) {
     //System.println("init");
     message1 = "initializeBle";
@@ -88,6 +94,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
     decoder = _decoder;
 
     Ble.setScanState(Ble.SCAN_STATE_SCANNING);
+    //checking if EUC Footprint already exist (see IsFirsConnection function description)
     isFirst = isFirstConnection();
     //isFirst = false;
     if (eucData.useEngo == true) {
@@ -98,62 +105,72 @@ class eucBLEDelegate extends Ble.BleDelegate {
     }
   }
 
+  // If a device with a registred BLE profile is paired, it trigger the onConnectedStateChanged callback.
+  // This is where I initiate the communication procedure by enabling notifications on a the characteristic that supports the notify property
   function onConnectedStateChanged(device, state) {
-    //		view.deviceStatus=state;
     if (state == Ble.CONNECTION_STATE_CONNECTED) {
+      // Checking we are dealing with an EUC and not another kind of supported device (horn, smartglasses)
       if (device.getService(eucPM.EUC_SERVICE) != null) {
         //System.println("EUC connected");
         message3 = "EUC connected";
         euc_service = device.getService(eucPM.EUC_SERVICE);
         var cccd;
-
+        //Getting characteristic as a Characteristic object to enable notifications later
         euc_char =
           euc_service != null
             ? euc_service.getCharacteristic(eucPM.EUC_CHAR)
             : null;
+
         if (euc_service != null && euc_char != null) {
-          // If KS -> add init seq to ble queue -------- Addition
+          // KS EUC specific ///////////////////////////////////////////////////////////////////////////////////////////////////////
+          // Need to send a model request frame to initiate the communication with the EUC (using queue for that)
           if (eucData.wheelBrand == 2 || eucData.wheelBrand == 3) {
             var reqModel = [
               0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
               0x00, 0x00, 0x00, 0x00, 0x00, 0x9b, 0x14, 0x5a, 0x5a,
             ]b;
-
             queue.add([euc_char, reqModel], eucPM.EUC_SERVICE);
           }
-          // End of KS addition -------------------------------
-          // Inmotion V2 or VESC ---------------------------
+          //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+          // Inmotion EUC specific /////////////////////////////////////////////////////////////////////////////////////////////////
           if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
+            // Inmotion EUCs have a separate characteritic with a write property -> that's the characteristic used when sending BLE requests
+            euc_char_w = euc_service.getCharacteristic(eucPM.EUC_CHAR_W);
+
+            // Untested code if speed limiter is enabled, use a request to get settings frame and read the current tiltback speed value
+            // (to restore correct tiltback speed when disabling speed limiter)
             if (eucData.speedLimit != 0) {
               //request settings
               var getSettings = [0xaa, 0xaa, 0x14, 0x02, 0x20, 0x20, 0x16]b;
               queue.add([euc_char_w, getSettings], eucPM.EUC_SERVICE);
               queue.lastPacketType = "settings";
             }
-            euc_char_w = euc_service.getCharacteristic(eucPM.EUC_CHAR_W);
-            // addition for inmotion v2 request live:
+            // Storing inmotion periodic request directly in variables from the queue class :
+            // inmotion v2 request live:
             queue.reqLiveData = [
               euc_char_w,
-
               [0xaa, 0xaa, 0x14, 0x01, 0x04, 0x11]b,
             ];
-
             // inmotion v2 request stats :
             queue.reqStats = [
               euc_char_w,
-
               [0xaa, 0xaa, 0x14, 0x01, 0x11, 0x04]b,
             ];
-            queue.UUID = eucPM.EUC_SERVICE;
           }
 
-          // End of inmotion V2 or VESC
+          //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+          // Enabling notification on characteristic (Begode and Leaperkim will start sending data right aways, KS requires one BLE request, and Inmotion requires periodic BLE request)
           cccd = euc_char.getDescriptor(Ble.cccdUuid());
+          // Enabling notification is done by writing 0x01 0x00 to the descriptor of the characteristic. That also trigger the onDescriptorWrite() callback -> that's where I send
+          // the required requests for KS and Inmotion EUCs
           cccd.requestWrite([0x01, 0x00]b);
           message4 = "characteristic notify enabled";
           eucData.paired = true;
           message3 = "EUC connected";
           eucData.timeWhenConnected = new Time.Moment(Time.now().value());
+          // At this point the EUC is considered as connected.
         } else {
           //System.println("unable to pair EUC");
           message3 = "EUC not connected";
@@ -167,6 +184,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
         }
       }
 
+      // if the paired device is a DIY Bluetooth Horn (WheelHorn)
       if (eucData.ESP32Horn == true) {
         if (device.getService(hornPM.WH_SERVICE) != null) {
           //System.println("Horn connected");
@@ -187,6 +205,8 @@ class eucBLEDelegate extends Ble.BleDelegate {
           }
         }
       }
+
+      // if the paired device is Engo smarglasses from Activelook
       if (eucData.useEngo == true) {
         if (device.getService(engoPM.BLE_SERV_ACTIVELOOK) != null) {
           // System.println("Engo connected");
@@ -234,6 +254,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
         }
       }
     } else {
+      // If a disconnection occurs, check what has been disconnected and restat a device scanning
       if (hornDevice != null && hornDevice.equals(device)) {
         eucData.ESP32HornPaired = false;
         message4 = "Horn disconnected";
@@ -260,6 +281,9 @@ class eucBLEDelegate extends Ble.BleDelegate {
       //BLE Disconnected
     }
   }
+
+  // Pair the device and increment connNb (number of connected BLE devices).
+  // Note : connNb is used to know if all expected devices are connected, if it is the case I will stop scanning for supported devices.
   function pair(result as Ble.ScanResult) {
     var dev = Ble.pairDevice(result);
     if (dev != null) {
@@ -267,12 +291,17 @@ class eucBLEDelegate extends Ble.BleDelegate {
     }
     return dev;
   }
+  // Unpair the device and decrement connNb (number of connected BLE devices)
+  // Note : connNb is used to know if all expected devices are connected, if it is the case I will stop scanning for supported devices.
   function unpair(device) {
     Ble.unpairDevice(device);
     connNb = connNb - 1;
   }
+
+  // function isFirstConnection() isuUsed to dertermine if a given profile was never connected to an EUC (in order to store a BLE Footprint in the watch local storage.
+  // This BLE footprint (which is simply a ScanResult object) will allow connecting ony to one specific EUC (the footprint is supposed to be unique))
   function isFirstConnection() {
-    // resetting profileScanResult if wheelName changed :
+    // resetting profileScanResult if wheelName changed (deleting associated footprint):
     if (
       !AppStorage.getSetting("wheelName_p1").equals(
         Storage.getValue("profile1Name")
@@ -294,7 +323,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
     ) {
       Storage.deleteValue("profile3Sr");
     }
-
+    // If a footprint doesn't exist, return true, else return false
     if (profileNb == 1 && Storage.getValue("profile1Sr") == null) {
       return true;
     } else if (profileNb == 2 && Storage.getValue("profile2Sr") == null) {
@@ -306,6 +335,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
     }
   }
 
+  // This function is used to store the footprint and the EUC name on the persistant storage
   function storeSR(sr) {
     if (profileNb == 1) {
       Storage.setValue("profile1Sr", sr);
@@ -318,6 +348,8 @@ class eucBLEDelegate extends Ble.BleDelegate {
       Storage.setValue("profile3Name", AppStorage.getSetting("wheelName_p3"));
     }
   }
+
+  // This function is used to load the footprint from the persistant storage
   function loadSR() {
     if (profileNb == 1) {
       return Storage.getValue("profile1Sr");
@@ -329,9 +361,13 @@ class eucBLEDelegate extends Ble.BleDelegate {
       return false;
     }
   }
+
+  // onScanResults callback is called periodically (no idea of the frequency) when BLE Status is : scanning
   //! @param scanResults An iterator of new scan results
   function onScanResults(scanResults as Ble.Iterator) {
     // System.println("scanning");
+    // Checking if scanResults match an EUC given the brand selected in the associated profile. When possible EUCs are identified by their BLE SERVICE UUID. But some time this data
+    // is not available (Garmin truncate the BLE Advertising packet). When SERVICE UUID is not available the device BLE advertising name is used instead.
     if (isFirst) {
       var wheelFound = false;
       for (
@@ -348,6 +384,8 @@ class eucBLEDelegate extends Ble.BleDelegate {
               result
             );
           }
+          // For some unknown reason (aka Garmin BLE implementation, advertising packet is truncated, data loss, usual business), another BLE service is shown instead of the expected one (with notify characteristic) for KS.
+          // This BLE service is only used for EUC identification.
           if (eucData.wheelBrand == 3 && eucPM.OLD_KS_ADV_SERVICE != null) {
             wheelFound = contains(
               result.getServiceUuids(),
@@ -355,6 +393,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
               result
             );
           }
+          // Using BLE adversiting name for recent KS, name always starts with KSN.
           if (eucData.wheelBrand == 2) {
             var advName = result.getDeviceName();
             if (advName != null) {
@@ -363,8 +402,8 @@ class eucBLEDelegate extends Ble.BleDelegate {
               }
             }
           }
+          // Using BLE adversiting name for Inmotion.
           if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
-            // V11 or V12 only for now
             var advName = result.getDeviceName();
             if (advName != null) {
               var advModel = advName.substring(0, 3);
@@ -379,7 +418,9 @@ class eucBLEDelegate extends Ble.BleDelegate {
               }
             }
           }
+
           if (wheelFound == true) {
+            // If a device matched expected UUID or Name, storing the footprint and stopping the BLE scanning.
             storeSR(result);
             Ble.setScanState(Ble.SCAN_STATE_OFF);
             try {
@@ -391,7 +432,8 @@ class eucBLEDelegate extends Ble.BleDelegate {
         }
       }
     } else {
-      // System.println("Scanning for other devices");
+      // Pairing to other devices is done after the first connection was done.
+      // I'll probably have to implement footprint saving for other devices (otherwise the app will pair to any device with corresponding UUID).
       for (
         var result = scanResults.next();
         result != null;
@@ -441,13 +483,12 @@ class eucBLEDelegate extends Ble.BleDelegate {
           }
         }
       }
-      //
     }
 
-    var result = loadSR(); // as Ble.ScanResult;
+    var result = loadSR(); // Load the saved EUC footprint (ScanResult object);
     if (result != false) {
+      // If Inmotion get the model name from the advertising packet (used for battery % computation)
       if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
-        // V11 or V12 only for now
         var advName = result.getDeviceName();
         if (advName != null) {
           var advModel = advName.substring(0, 3);
@@ -461,8 +502,8 @@ class eucBLEDelegate extends Ble.BleDelegate {
           }
         }
       }
+      // Pairing surrounded by try catch to avoid app crash in case of failure
       try {
-        // Do something here
         EUCDevice = pair(result as Ble.ScanResult);
       } catch (e instanceof Lang.Exception) {
         // System.println("EUCError: " + e.getErrorMessage());
@@ -471,21 +512,26 @@ class eucBLEDelegate extends Ble.BleDelegate {
     //  System.println("connected devices:" + connNb);
     //  System.println("expected devices:" + deviceNb);
 
+    // Check if active connections number matches the expected devices number to stop the BLE scanning
     if (deviceNb == connNb) {
       //  System.println("stopping scan");
       Ble.setScanState(Ble.SCAN_STATE_OFF);
     }
   }
 
+  // self explanatory, but the function name could be more meaningful :)
   function timerCallback() {
     queue.run();
   }
+
+  // onDescriptorWrite callback is called every time a write action occured on a descriptor (in our case, the typical scenario is after enabling notification).
   function onDescriptorWrite(desc, status) {
     message7 = "descWrite";
-    // If KS fire queue
+
     var currentChar = desc.getCharacteristic();
-    // send getName request for KS using ble queue
+    // if the descriptor characteristic belong to registred EUC device:
     if (currentChar.equals(eucPM.EUC_CHAR)) {
+      // If KS EUC, send getModel request using ble queue (getModel request was added during EUC pairing procedure)
       if (
         (eucData.wheelBrand == 2 || eucData.wheelBrand == 3) &&
         euc_char != null
@@ -496,7 +542,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
           true
         );
       }
-      // If Inmotion, trigger only once as it will be triggered at each charchanged -> didn't work so let's loop
+      // If Inmotion, start the ble queue, if the queue is empty it will start an continuous cycle of requests using requests that were stored in Inmotion related variables in the queue class.
       if (
         (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) &&
         euc_char != null
@@ -508,8 +554,10 @@ class eucBLEDelegate extends Ble.BleDelegate {
         );
       }
     } else {
+      // If descriptor write occured on something else than an EUC
       if (eucData.engoPaired == true) {
         // System.println("EngoPairedIsTrue, descript");
+        // If the smartglasses pairing was successful and notifications are already enabled on the user input (button or gesture), start the smartglasses init procedure -> requesting fw version
         if (currentChar.equals(engo_userInput) && engoGestureNotif == true) {
           try {
             engo_rx.requestWrite([0xff, 0x06, 0x00, 0x05, 0xaa]b, {
@@ -519,12 +567,16 @@ class eucBLEDelegate extends Ble.BleDelegate {
             // System.println(e.getErrorMessage());
           }
         } else {
+          // if notification are not yet activated for gesture that means it was a write on the tx characteristic descriptor -> enabling notification on the user input characteristic
           enableGesture();
         }
       }
     }
   }
 
+  // onCharacteristricWrite is called each time a write operation occurs on a characteristic. The following code should allow getting rid of the queue system, but while it's probably
+  // better in terms of performance (requests are sent again asap in case of failure) I'm not sure it's better in terms of used ressources (the timer will wait 200ms per default before resubmitting the request). To be confirmed !
+  // Note: this code is from activelook garmin app.
   function onCharacteristicWrite(
     characteristic as Toybox.BluetoothLowEnergy.Characteristic,
     status as Toybox.BluetoothLowEnergy.Status
@@ -544,9 +596,12 @@ class eucBLEDelegate extends Ble.BleDelegate {
     }
   }
 
+  // onCharacteristicChanged callback is called each time a notification is received (that means data from the EUC or the smartglasses).
   function onCharacteristicChanged(char, value) {
     // message7 = "CharacteristicChanged";
+    // If characteristic matches a the registred characteritic of a EUC
     if (char.equals(euc_char)) {
+      // Decoding data depending on EUC brand.
       if (
         decoder != null &&
         (eucData.wheelBrand == 0 || eucData.wheelBrand == 1)
@@ -564,70 +619,78 @@ class eucBLEDelegate extends Ble.BleDelegate {
         decoder.frameBuffer(self, value);
       }
     }
+    // If characteristic matches a the registred characteritic of the engo smartglasses
     if (char.equals(engo_tx)) {
       //System.println(value);
       //System.println("EngoCharChanged");
+
+      // If frame command ID matches the version/firmware frame
       if (value[1] == 0x06) {
         //firmware vers
         if (value.size() > 9) {
+          // store firmware version
           var firm = value.slice(4, 8);
           //System.println("firm: " + firm);
         }
 
-        //req cfg list
+        //send the command to get the list of configurations stored on the smartglasses
         sendRawCmd(engo_rx, [0xff, 0xd3, 0x00, 0x05, 0xaa]b);
       }
+      //Checking if the received frame matches the frame with the battery % of the smartglasses
       if (value[0] == 0xff && value[1] == 0x05) {
-        //battery
         eucData.engoBattery = value[4];
       }
+      //Checking if the received frame matches the frame containing the list of configuration stored on the smartglasses
       if (value[1] == 0xd3 && value[value.size() - 1] != 0xaa) {
         cfgReadFlag = true;
-        //cfg list
+        //check if WheelDash config for engo exists in the cfg list
         checkCfgName(value);
         return;
       }
+      // As config list can be sent on more than one frame checking for every frame if it contains WheelDash config name.
       if (cfgReadFlag == true && value[value.size() - 1] != 0xaa) {
         checkCfgName(value);
         return;
       }
+      // if the last packet of the config list arrived (0xAA is the footer byte), checking again if WheelDash config name is in the config list.
       if (cfgReadFlag == true && value[value.size() - 1] == 0xaa) {
         checkCfgName(value);
+        // As the last packet of the config list frame was received set cfgReadFlag as false
         cfgReadFlag = false;
+        // if no config found the engoCfg variable is null, set it to false
         if (engoCfgOK != true) {
-          //   System.println("wheeldash conf not found");
           engoCfgOK = false;
         }
       }
+      // if no config found or update needed (see checkCfgName function), uploading config.
       if (engoCfgOK == false) {
         clearScreen();
         sendRawCmd(engo_rx, getWriteCmd("updating config", 195, 110, 4, 5, 16));
         sendRawCmd(engo_rx, getWriteCmd("please wait...", 195, 70, 4, 5, 16));
         System.println("uploading config");
+        // Engo config is stored in Resources.xml as a json object to avoid OOM error if stored in a ByteArray(splitted in two because otherwise it's too big)
         for (var i = 0; i < getJson(:EngoCfg1).size(); i++) {
           var cmd = arrayToRawCmd(getJson(:EngoCfg1)[i]);
           sendRawCmd(engo_rx, cmd);
-          //System.println(cmd);
         }
         for (var i = 0; i < getJson(:EngoCfg2).size(); i++) {
           var cmd = arrayToRawCmd(getJson(:EngoCfg2)[i]);
           sendRawCmd(engo_rx, cmd);
-          //System.println(cmd);
         }
-        //   System.println("upload ongoing");
-
-        // req Cfg list again;
-        cfgList = new [0]b;
+        // request smartglasses config list again to ensure config upload was succesful
+        cfgList = new [0]b; // clearing cfgList before requesting the config list
         sendRawCmd(engo_rx, [0xff, 0xd3, 0x00, 0x05, 0xaa]b);
       }
+      // If notifications are enabled on the gesture related characteristic, enable the gesture sensor on the smartglasses (not required at every boot as it is a permanent setting,
+      // but that way I don't have to check the gesture sensor status.)
       if (engoGestureNotif == true && engoGestureOK == false) {
         if (eucData.engoTouch == 0) {
           sendRawCmd(engo_rx, [0xff, 0x21, 0x00, 0x06, 0x01, 0xaa]b);
         }
-
         //System.println("gesture enabled");
         engoGestureOK = true;
       }
+      // If config was successfuly uploaded set the current config to wheeldash config and clear screen
       if (engoCfgOK == true && engoDisplayInit == false) {
         //  System.println("select cfg");
         sendRawCmd(
@@ -655,9 +718,8 @@ class eucBLEDelegate extends Ble.BleDelegate {
         engoDisplayInit = true;
       }
     }
-    if (engoDisplayInit == true) {
-      //enable gesture
-    }
+
+    // If an event is triggered on the proximity sensor or the capacitive button, a notification is sent on the userInput Characteristic -> displaying next page on the smartglasses
     if (char.equals(engo_userInput)) {
       if (value[0] == 0x01) {
         //System.println("gesture detected");
@@ -669,13 +731,16 @@ class eucBLEDelegate extends Ble.BleDelegate {
       }
     }
   }
+  // Self explanatory : send clear screen command
   function clearScreen() {
     sendRawCmd(engo_rx, [0xff, 0x01, 0x00, 0x05, 0xaa]b);
     // sendRawCmd(engo_rx, [0xff, 0x86, 0x00, 0x06, eucData.engoPage, 0xaa]b);
   }
+  // Send battery % request
   function getEngoBattery() {
     sendRawCmd(engo_rx, [0xff, 0x05, 0x00, 0x05, 0xaa]b);
   }
+  // Reset the init variables for the Engo smartglasses, required when a disconnection occured with the smartglasses
   function resetEngo() {
     cfgReadFlag = false;
     cfgList = new [0]b;
@@ -684,6 +749,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
     engoGestureOK = false;
     engoGestureNotif = false;
   }
+  // checkCfgName function parse the received config list packet to check if wheeldash config is present in the config list.
   function checkCfgName(value) {
     cfgList.addAll(value);
     //System.println(cfgList);
@@ -733,6 +799,8 @@ class eucBLEDelegate extends Ble.BleDelegate {
       //System.println("config packet: " + cfgList);
     }
   }
+
+  // enableGesture enables notifications on the user_input characteristic
   function enableGesture() {
     if (engoGestureNotif == false) {
       try {
@@ -746,6 +814,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
     }
   }
 
+  // function sendCmd is used when no queue is required, only for EUCs.
   function sendCmd(cmd) {
     //Sys.println("enter sending command " + cmd);
 
@@ -757,13 +826,16 @@ class eucBLEDelegate extends Ble.BleDelegate {
     }
   }
 
+  // function sendCommands is only used for commands related to display (it's just a way to ensure the engo are properly initialized to avoid sending unecessary commands while
+  // the engo are initialising)
   function sendCommands(cmds) {
     if (engoCfgOK == true && engoDisplayInit == true) {
       sendRawCmd(engo_rx, cmds);
       // System.println(cmds[i]);
     }
   }
-  //coder même principe pour descriptor ? ou implementer même methode qu'activelook
+
+  // sendRawCmd split commands into packet of 20 bytes and sent a write request on the specified characteristic.
   function sendRawCmd(char, buffer) {
     var bufferToSend = []b;
     if (rawcmdError != null) {
@@ -791,6 +863,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
     }
   }
 
+  //contains function is an helper function to check if one registred UUID matches the scanResult UUID. Could be moved to helperFunction.mc but exclusively used in eucBLEDelegate class.
   private function contains(iter, obj, sr) {
     for (var uuid = iter.next(); uuid != null; uuid = iter.next()) {
       if (uuid.equals(obj)) {
@@ -825,6 +898,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
     }
   }
 
+  // __onWrite_finishPayload is part of an implementation of activelook garmin app. I haven't taken the time to properly understand how it work.
   function __onWrite_finishPayload(c, s) {
     _cbCharacteristicWrite = null;
     if (s == 0) {
@@ -833,8 +907,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
       throw new Toybox.Lang.InvalidValueException("(E) Could write on: " + c);
     }
   }
-  var shouldAdd;
-
+  // function for padding text for engo smartglasses, should be move to helperFunction.mc
   function stringToPadByteArray(str, size, leftPadding) {
     var result = StringUtil.convertEncodedString(str, {
       :fromRepresentation => StringUtil.REPRESENTATION_STRING_PLAIN_TEXT,

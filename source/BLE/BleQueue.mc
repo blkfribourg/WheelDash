@@ -27,7 +27,6 @@ class BleQueue {
   var reqStats;
   var reqBatStats;
   var lastPacketType = "live";
-  var UUID;
   var reqStatsTiming = 0;
   var reqBatStatsTiming = 3;
   var batStatsCounter = 0;
@@ -37,7 +36,7 @@ class BleQueue {
     delayTimer = new Timer.Timer();
   }
 
-  function add(data, uuid) {
+  function add(data) {
     if (data[0] != null) {
       queue.add(data);
       //Sys.println("add OK ? Data = " + data);
@@ -63,21 +62,21 @@ class BleQueue {
           // That's a workaround as Garmin MTU is limited to 20 bytes and is trimming BLE packets (information loss, Inmotion wheels refuses MTU size request so no luck)
           if (reqStatsTiming < 0) {
             lastPacketType = "stats";
-            add(reqStats, UUID);
+            add(reqStats);
             reqStatsTiming = 48;
           }
           // Requesing battery statistics (to get battery temperature, again workaround to display battery temperature instead of controler temp
           // because controler temperature is not available due to MTU issue)
           if (reqBatStatsTiming < 0) {
             lastPacketType = "batStats";
-            add(reqBatStats, UUID);
+            add(reqBatStats);
             reqBatStatsTiming = 256;
             batStatsCounter = batStatsCounter + 1;
           }
           // Requesting live data
           if (queue.size() == 0) {
             lastPacketType = "live";
-            add(reqLiveData, UUID);
+            add(reqLiveData);
           }
         }
         //System.println(lastPacketType);
