@@ -129,7 +129,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
               0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
               0x00, 0x00, 0x00, 0x00, 0x00, 0x9b, 0x14, 0x5a, 0x5a,
             ]b;
-            queue.add([euc_char, reqModel], eucPM.EUC_SERVICE);
+            queue.add([euc_char, reqModel]);
           }
           //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -143,7 +143,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
             if (eucData.speedLimit != 0) {
               //request settings
               var getSettings = [0xaa, 0xaa, 0x14, 0x02, 0x20, 0x20, 0x16]b;
-              queue.add([euc_char_w, getSettings], eucPM.EUC_SERVICE);
+              queue.add([euc_char_w, getSettings]);
               queue.lastPacketType = "settings";
             }
             // Storing inmotion periodic request directly in variables from the queue class :
@@ -665,9 +665,11 @@ class eucBLEDelegate extends Ble.BleDelegate {
       // if no config found or update needed (see checkCfgName function), uploading config.
       if (engoCfgOK == false) {
         clearScreen();
+
+        System.println("uploading config");
         sendRawCmd(engo_rx, getWriteCmd("updating config", 195, 110, 4, 5, 16));
         sendRawCmd(engo_rx, getWriteCmd("please wait...", 195, 70, 4, 5, 16));
-        System.println("uploading config");
+
         // Engo config is stored in Resources.xml as a json object to avoid OOM error if stored in a ByteArray(splitted in two because otherwise it's too big)
         for (var i = 0; i < getJson(:EngoCfg1).size(); i++) {
           var cmd = arrayToRawCmd(getJson(:EngoCfg1)[i]);
@@ -701,7 +703,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
           ]b
         );
         //
-        //System.println("clearing screen");
+
         clearScreen();
         //System.println("displaying page 1");
 
@@ -736,6 +738,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
     sendRawCmd(engo_rx, [0xff, 0x01, 0x00, 0x05, 0xaa]b);
     // sendRawCmd(engo_rx, [0xff, 0x86, 0x00, 0x06, eucData.engoPage, 0xaa]b);
   }
+
   // Send battery % request
   function getEngoBattery() {
     sendRawCmd(engo_rx, [0xff, 0x05, 0x00, 0x05, 0xaa]b);
@@ -781,8 +784,8 @@ class eucBLEDelegate extends Ble.BleDelegate {
             var cfgVer = arrayToRawCmd(
               getJson(:EngoCfg2)[getJson(:EngoCfg2).size() - 2]
             ).slice(14, 18);
-            //  System.println(cfgVer);
-            //  System.println(cfgEngoVer);
+            //System.println(cfgVer);
+            //System.println(cfgEngoVer);
             if (cfgEngoVer.equals(cfgVer)) {
               //    System.println("version is up to date");
               engoCfgOK = true;

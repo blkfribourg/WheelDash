@@ -220,28 +220,16 @@ function speedLimiter(queue, bleDelegate, limit) {
   if (eucData.wheelBrand == 0) {
     var data;
     if (limit != 0) {
-      queue.add(
-        [bleDelegate.getChar(), string_to_byte_array("W")],
-        bleDelegate.getPMService()
-      );
-      queue.add(
-        [bleDelegate.getChar(), string_to_byte_array("Y")],
-        bleDelegate.getPMService()
-      );
+      queue.add([bleDelegate.getChar(), string_to_byte_array("W")]);
+      queue.add([bleDelegate.getChar(), string_to_byte_array("Y")]);
       data = [limit / 10 + 48]b;
-      queue.add([bleDelegate.getChar(), data], bleDelegate.getPMService());
+      queue.add([bleDelegate.getChar(), data]);
       data = [(limit % 10) + 48]b;
-      queue.add([bleDelegate.getChar(), data], bleDelegate.getPMService());
-      queue.add(
-        [bleDelegate.getChar(), string_to_byte_array("b" as String)],
-        bleDelegate.getPMService()
-      );
+      queue.add([bleDelegate.getChar(), data]);
+      queue.add([bleDelegate.getChar(), string_to_byte_array("b" as String)]);
     } else {
-      queue.add([bleDelegate.getChar(), [0x22]b], bleDelegate.getPMService());
-      queue.add(
-        [bleDelegate.getChar(), string_to_byte_array("b" as String)],
-        bleDelegate.getPMService()
-      );
+      queue.add([bleDelegate.getChar(), [0x22]b]);
+      queue.add([bleDelegate.getChar(), string_to_byte_array("b" as String)]);
     }
   }
   if (eucData.wheelBrand == 2 || eucData.wheelBrand == 3) {
@@ -261,7 +249,7 @@ function speedLimiter(queue, bleDelegate, limit) {
 
     data[8] = limit;
 
-    queue.add([bleDelegate.getChar(), data], bleDelegate.getPMService());
+    queue.add([bleDelegate.getChar(), data]);
   }
   if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
     var data = [0xaa, 0xaa, 0x14, 0x04, 0x60, 0x21, 0x00, 0x00, 0x00]b;
@@ -269,7 +257,7 @@ function speedLimiter(queue, bleDelegate, limit) {
     data[7] = ((limit * 100) >> 8) & 0xff;
     data[8] = xorChkSum(data.slice(0, data.size() - 1));
     queue.flush();
-    queue.add([bleDelegate.getCharW(), data], bleDelegate.getPMService());
+    queue.add([bleDelegate.getCharW(), data]);
   }
   eucData.tiltBackSpeed = limit;
 }
@@ -287,7 +275,7 @@ function encodeint16(val) {
   return [(val >> 8) & 0xff, val & 0xff]b;
 }
 function getWriteCmd(text, x, y, r, f, c) {
-  var hexText = getHexText(text);
+  var hexText = getHexText(text, 0, 0);
 
   var cmd = [0xff, 0x37, 0x00, 0x0d + hexText.size()]b;
   cmd.addAll(encodeint16(x));
@@ -308,20 +296,27 @@ function getPageCmd(payload, pageId) {
   return cmd;
 }
 
-function getHexText(text) {
+function getHexText(text, lpadding, rpadding) {
   var hexText = Toybox.StringUtil.convertEncodedString(text, {
     :fromRepresentation => Toybox.StringUtil.REPRESENTATION_STRING_PLAIN_TEXT,
     :toRepresentation => Toybox.StringUtil.REPRESENTATION_BYTE_ARRAY,
   });
   var textLength = text.length();
-  if (textLength < 5) {
+  System.println(textLength);
+  if (lpadding > 0) {
     var leftPadding = []b;
-    while (leftPadding.size() < 5 - hexText.size()) {
-      leftPadding.add(0x20);
+    for (var i = 0; i < lpadding - textLength; i++) {
+      leftPadding.add(0x24);
+      System.print("left");
     }
     hexText = leftPadding.addAll(hexText);
+    System.println(hexText);
   }
-  hexText.add(0x20); //right padding 2 char for proper clearing
+  if (rpadding > 0) {
+    for (var i = 0; i < rpadding; i++) {
+      hexText.add(0x24);
+    }
+  }
   return hexText;
 }
 

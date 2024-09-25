@@ -87,7 +87,7 @@ class GarminEUCApp extends Application.AppBase {
   }
   // Timer callback for various alarms & update UI
   function onUpdateTimer() {
-    // dummyGen();
+    //dummyGen();
     if (eucData.wheelName != null) {
       DFViewInit();
     }
@@ -262,86 +262,123 @@ class GarminEUCApp extends Application.AppBase {
   }
   function engoScreenUpdate() {
     var now = new Time.Moment(Time.now().value());
-    if (engoNextUpdate == null || engoNextUpdate.compare(now) <= 0) {
-      engoNextUpdate = now.add(new Time.Duration(1));
-      //  eucData.speed = eucData.speed + 0.1;
+    if (eucData.engoPage == 3) {
+      var PWM_rd = Math.round(eucData.PWM.abs()).toNumber();
+      var speed_rd = Math.round(eucData.correctedSpeed).toNumber();
+      var HRRPArray = new [2]; // High Refresh Rate Page
+      HRRPArray[0] = getHexText(PWM_rd.toString(), 2, 0);
+      HRRPArray[1] = getHexText(speed_rd.toString(), 3, 1);
+      var gaugeCmd = [0xff, 0x70, 0x00, 0x07, 0x01, PWM_rd, 0xaa]b;
+      var pageCmd = getPageCmd(pagePayload(HRRPArray), 4);
+      gaugeCmd.addAll(pageCmd);
 
-      if (
-        eucData.useEngo == true &&
-        eucData.engoPaired == true &&
-        bleDelegate.engoDisplayInit == true
-      ) {
-        eucData.engoBattReq = eucData.engoBattReq + 1;
-        if (eucData.engoBattReq > 300) {
-          eucData.engoBattReq = 0;
-          bleDelegate.getEngoBattery();
-        }
-        var textArray = new [6];
+      bleDelegate.sendCommands(gaugeCmd);
+    } else {
+      if (engoNextUpdate == null || engoNextUpdate.compare(now) <= 0) {
+        engoNextUpdate = now.add(new Time.Duration(1));
+        //  eucData.speed = eucData.speed + 0.1;
 
-        // var xpos = 225;
-        var currentTime = System.getClockTime();
-        if (eucData.engoBattery != null) {
-          textArray[0] = getHexText(eucData.engoBattery + " %");
-        } else {
-          textArray[0] = getHexText(" ");
-        }
-
-        textArray[1] = getHexText(
-          currentTime.hour.format("%02d") + ":" + currentTime.min.format("%02d")
-        );
-        if (eucData.engoPage == 1) {
-          textArray[2] = getHexText(
-            valueRound(eucData.PWM.abs(), "%.1f") + " %"
-          );
-          textArray[3] = getHexText(
-            valueRound(eucData.correctedSpeed, "%.1f") + " km/h"
-          );
-          textArray[4] = getHexText(
-            valueRound(eucData.temperature, "%.1f") + " *C"
-          );
-          textArray[5] = getHexText(
-            valueRound(eucData.getBatteryPercentage(), "%.1f") + " %"
-          );
-        }
-        if (eucData.engoPage == 2) {
-          //Chrono page 1
-
-          var chrono;
-          var activityTimerTime = null;
-          var sessionDistance = null;
-          var averageSpeed = null;
-          var maxSpeed = null;
-          if (activityRecordView != null) {
-            activityTimerTime = activityRecordView.getElapsedTime();
-            sessionDistance = activityRecordView.getSessionDist();
-            averageSpeed = activityRecordView.getAvgSpeed();
-            maxSpeed = activityRecordView.getMaxSpeed();
+        if (
+          eucData.useEngo == true &&
+          eucData.engoPaired == true &&
+          bleDelegate.engoDisplayInit == true
+        ) {
+          eucData.engoBattReq = eucData.engoBattReq + 1;
+          if (eucData.engoBattReq > 300) {
+            eucData.engoBattReq = 0;
+            bleDelegate.getEngoBattery();
           }
-          if (activityTimerTime != null) {
-            var sec = activityTimerTime / 1000;
-            var mn = sec / 60;
-            chrono = [mn / 60, mn % 60, sec % 60, activityTimerTime % 1000];
+          var textArray = new [6];
+
+          // var xpos = 225;
+          var currentTime = System.getClockTime();
+          if (eucData.engoBattery != null) {
+            textArray[0] = getHexText(eucData.engoBattery + " %", 0, 0);
           } else {
-            chrono = [0, 0, 0];
+            textArray[0] = getHexText(" ", 0, 0);
           }
-          textArray[2] = getHexText(
-            chrono[0].format("%02d") +
-              ":" +
-              chrono[1].format("%02d") +
-              ":" +
-              chrono[2].format("%02d")
-          );
-          textArray[3] = getHexText(
-            valueRound(sessionDistance, "%.1f") + " km"
-          );
-          textArray[4] = getHexText(valueRound(averageSpeed, "%.1f") + " km/h");
-          textArray[5] = getHexText(valueRound(maxSpeed, "%.1f") + " km/h");
-        }
-        var data = pagePayload(textArray);
 
-        // System.println("sendCmd");
-        bleDelegate.sendCommands(getPageCmd(data, eucData.engoPage));
-        //    bleDelegate.sendCommands(cmdTime);
+          textArray[1] = getHexText(
+            currentTime.hour.format("%02d") +
+              ":" +
+              currentTime.min.format("%02d"),
+            0,
+            0
+          );
+          if (eucData.engoPage == 1) {
+            textArray[2] = getHexText(
+              valueRound(eucData.PWM.abs(), "%.1f") + " %",
+              0,
+              0
+            );
+            textArray[3] = getHexText(
+              valueRound(eucData.correctedSpeed, "%.1f") + " km/h",
+              0,
+              0
+            );
+            textArray[4] = getHexText(
+              valueRound(eucData.temperature, "%.1f") + " *C",
+              0,
+              0
+            );
+            textArray[5] = getHexText(
+              valueRound(eucData.getBatteryPercentage(), "%.1f") + " %",
+              0,
+              0
+            );
+          }
+          if (eucData.engoPage == 2) {
+            //Chrono page 1
+
+            var chrono;
+            var activityTimerTime = null;
+            var sessionDistance = null;
+            var averageSpeed = null;
+            var maxSpeed = null;
+            if (activityRecordView != null) {
+              activityTimerTime = activityRecordView.getElapsedTime();
+              sessionDistance = activityRecordView.getSessionDist();
+              averageSpeed = activityRecordView.getAvgSpeed();
+              maxSpeed = activityRecordView.getMaxSpeed();
+            }
+            if (activityTimerTime != null) {
+              var sec = activityTimerTime / 1000;
+              var mn = sec / 60;
+              chrono = [mn / 60, mn % 60, sec % 60, activityTimerTime % 1000];
+            } else {
+              chrono = [0, 0, 0];
+            }
+            textArray[2] = getHexText(
+              chrono[0].format("%02d") +
+                ":" +
+                chrono[1].format("%02d") +
+                ":" +
+                chrono[2].format("%02d"),
+              0,
+              0
+            );
+            textArray[3] = getHexText(
+              valueRound(sessionDistance, "%.1f") + " km",
+              0,
+              0
+            );
+            textArray[4] = getHexText(
+              valueRound(averageSpeed, "%.1f") + " km/h",
+              0,
+              0
+            );
+            textArray[5] = getHexText(
+              valueRound(maxSpeed, "%.1f") + " km/h",
+              0,
+              0
+            );
+          }
+          var data = pagePayload(textArray);
+
+          // System.println("sendCmd");
+          bleDelegate.sendCommands(getPageCmd(data, eucData.engoPage));
+          //    bleDelegate.sendCommands(cmdTime);
+        }
       }
     }
   }

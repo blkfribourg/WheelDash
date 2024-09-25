@@ -93,7 +93,7 @@ class ActivityRecordView extends WatchUi.View {
     }
   }
   function getElapsedTime() {
-    return elapsedTime;
+    return elapsedTime.value();
   }
   function getMaxSpeed() {
     return maxSpeed;
@@ -125,8 +125,6 @@ class ActivityRecordView extends WatchUi.View {
   function initSessionVar() {
     startingMoment = new Time.Moment(Time.now().value());
     startingEUCTripDistance = eucData.correctedTotalDistance;
-    minVoltage = eucData.getVoltage();
-    maxVoltage = minVoltage;
     minBatteryPerc = eucData.getBatteryPercentage();
     maxBatteryPerc = minBatteryPerc;
   }
@@ -515,7 +513,7 @@ class ActivityRecordView extends WatchUi.View {
   var currentPower = 0.0;
   var sumPower = 0.0;
   var sessionDistance = 0.0;
-  var minVoltage = 0.0;
+  var minVoltage = 255.0;
   var maxVoltage = 0.0;
   var minBatteryPerc = 0.0;
   var maxBatteryPerc = 0.0;
@@ -532,13 +530,26 @@ class ActivityRecordView extends WatchUi.View {
       currentPWM = eucData.PWM.abs();
       correctedSpeed = eucData.correctedSpeed;
       currentCurrent = eucData.getCurrent();
-      currentPower = currentCurrent * currentVoltage;
+      if (currentVoltage != null) {
+        currentPower = currentCurrent * currentVoltage;
+        mVoltageField.setData(currentVoltage); // id 2
+        mPowerField.setData(currentPower); // id 4
+
+        if (currentVoltage < minVoltage) {
+          minVoltage = currentVoltage;
+          mMinVoltageField.setData(minVoltage);
+        }
+        if (currentVoltage > maxVoltage) {
+          maxVoltage = currentVoltage;
+          mMaxVoltageField.setData(maxVoltage);
+        }
+      }
 
       mSpeedField.setData(correctedSpeed); // id 0
       mPWMField.setData(currentPWM); //id 1
-      mVoltageField.setData(currentVoltage); // id 2
+
       mCurrentField.setData(currentCurrent); // id 3
-      mPowerField.setData(currentPower); // id 4
+
       mTempField.setData(eucData.DisplayedTemperature); // id 5
 
       if (correctedSpeed > maxSpeed) {
@@ -568,14 +579,7 @@ class ActivityRecordView extends WatchUi.View {
         minTemp = eucData.DisplayedTemperature;
         mMinTempField.setData(minTemp); // id 11
       }
-      if (currentVoltage < minVoltage) {
-        minVoltage = currentVoltage;
-        mMinVoltageField.setData(minVoltage);
-      }
-      if (currentVoltage > maxVoltage) {
-        maxVoltage = currentVoltage;
-        mMaxVoltageField.setData(maxVoltage);
-      }
+
       if (currentBatteryPerc > maxBatteryPerc) {
         maxBatteryPerc = currentBatteryPerc;
         mMaxBatteryField.setData(maxBatteryPerc);

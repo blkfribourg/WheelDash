@@ -22,7 +22,7 @@ module eucData {
   var alarmThreshold2_PWM;
   var alarmThreshold_speed;
   var alarmThreshold_temp;
-  var activityAutorecording;
+  var activityAutorecording = true; // remove true
   var activityAutosave;
   var activityRecording = false;
   var debug;
@@ -152,7 +152,7 @@ module eucData {
   var engoBattery = null;
   var engoTouch = 0;
   var engoBattReq = 300;
-  var engoPageNb = 2;
+  var engoPageNb = 3;
 
   function getBatteryPercentage() {
     if (voltage != null) {
@@ -363,7 +363,7 @@ module eucData {
         if (eucData.reportNegPWM == true) {
           if (
             eucData.Phcurrent > 0 &&
-            (eucData.wheelBrand == 0 || eucData.wheelBrand == 1)
+            eucData.wheelBrand == 0 // To double check bug begode EUC usually reports negative current when going forward.
           ) {
             return -hPWM;
           } else {
