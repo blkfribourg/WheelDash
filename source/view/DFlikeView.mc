@@ -188,14 +188,14 @@ class DFView extends WatchUi.View {
         fieldValues[field_id] = valueRound(eucData.PWM, "%.1f");
       }
       if (fieldIDs[field_id] == 7) {
-        fieldNames[field_id] = "BAT %";
+        fieldNames[field_id] = "BATT %";
         fieldValues[field_id] = valueRound(
           eucData.getBatteryPercentage(),
           "%.1f"
         );
       }
       if (fieldIDs[field_id] == 8) {
-        fieldNames[field_id] = "AVG BAT USG%"; //TODO
+        fieldNames[field_id] = "BATT USG%"; //TODO
         fieldValues[field_id] = valueRound(eucData.batteryUsagePerc, "%.1f");
       }
       if (fieldIDs[field_id] == 9) {
@@ -227,14 +227,14 @@ class DFView extends WatchUi.View {
         fieldValues[field_id] = valueRound(eucData.avgCurrent, "%.1f");
       }
       if (fieldIDs[field_id] == 16) {
-        fieldNames[field_id] = "MIN BAT %";
+        fieldNames[field_id] = "MIN BATT %";
         fieldValues[field_id] = valueRound(
           eucData.lowestBatteryPercentage,
           "%.1f"
         );
       }
       if (fieldIDs[field_id] == 17) {
-        fieldNames[field_id] = "MAX BAT %";
+        fieldNames[field_id] = "MAX BATT %";
         fieldValues[field_id] = valueRound(eucData.maxBatteryPerc, "%.1f");
       }
       if (fieldIDs[field_id] == 18) {
@@ -395,7 +395,7 @@ class DFView extends WatchUi.View {
         }
       }
       if (fieldIDs[field_id] == 32) {
-        fieldNames[field_id] = "AVG BAT USG";
+        fieldNames[field_id] = "BATT USG";
         fieldValues[field_id] = valueRound(eucData.batteryUsage, "%.1f");
       }
       if (fieldIDs[field_id] == 33) {
@@ -928,41 +928,6 @@ class DFView extends WatchUi.View {
       dc.setColor(0x0077b6, Graphics.COLOR_TRANSPARENT);
       dc.fillPolygon(pts);
     }
-
-    if (!EUCAlarms.alarmType.equals("none")) {
-      dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_BLACK);
-      dc.fillRectangle(
-        0,
-        dc.getWidth() / 2 - Graphics.getFontHeight(Graphics.FONT_SMALL) / 2,
-        dc.getWidth(),
-        Graphics.getFontHeight(Graphics.FONT_SMALL)
-      );
-      dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
-      dc.drawLine(
-        0,
-        dc.getHeight() / 2 -
-          Graphics.getFontHeight(Graphics.FONT_SMALL) / 2 -
-          1,
-        dc.getWidth(),
-        dc.getHeight() / 2 - Graphics.getFontHeight(Graphics.FONT_SMALL) / 2 - 1
-      );
-      dc.drawLine(
-        0,
-        dc.getHeight() / 2 +
-          Graphics.getFontHeight(Graphics.FONT_SMALL) / 2 +
-          1,
-        dc.getWidth(),
-        dc.getHeight() / 2 + Graphics.getFontHeight(Graphics.FONT_SMALL) / 2 + 1
-      );
-      dc.setColor(Graphics.COLOR_RED, Graphics.COLOR_TRANSPARENT);
-      dc.drawText(
-        dc.getWidth() / 2,
-        dc.getHeight() / 2 - Graphics.getFontHeight(Graphics.FONT_SMALL) / 2,
-        Graphics.FONT_SMALL,
-        "!!Alarm " + EUCAlarms.alarmType + " !!",
-        Graphics.TEXT_JUSTIFY_CENTER
-      );
-    }
   }
 
   function enableGPS() {
@@ -1073,117 +1038,5 @@ class DFView extends WatchUi.View {
       61442,
       61563,
     ];
-  }
-
-  function renderVariaLateralIndicator(dc) {
-    var maxDistance = 100;
-    var screenWidth = dc.getWidth();
-    var drawBg = true;
-    var roadSpace = screenWidth * 0.05;
-    var orig = screenWidth / 2;
-
-    var mMainColor, mDangerColor;
-    mMainColor = 0x206ba3;
-    mDangerColor = 0xd53420;
-
-    if (Varia.targetObject != null) {
-      for (var i = 0; i < Varia.targetObject.size(); i++) {
-        var distance = Varia.targetObject[i].range;
-        var threat = Varia.targetObject[i].threat;
-        if (threat != 0) {
-          var pos = (distance.toFloat() * 90) / maxDistance.toFloat();
-
-          if (drawBg == true) {
-            dc.setPenWidth(20);
-            dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_BLACK);
-            dc.drawArc(
-              orig,
-              orig,
-              orig - roadSpace * 1.5,
-              Graphics.ARC_CLOCKWISE,
-              45,
-              315
-            );
-            dc.setPenWidth(2);
-            dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
-            dc.drawArc(
-              orig,
-              orig,
-              orig - roadSpace * 2,
-              Graphics.ARC_CLOCKWISE,
-              45,
-              315
-            );
-            dc.drawArc(
-              orig,
-              orig,
-              orig - roadSpace,
-              Graphics.ARC_CLOCKWISE,
-              45,
-              315
-            );
-            var uperRound = getXY(
-              screenWidth,
-              45 - 90,
-              orig - roadSpace * 1.5,
-              0,
-              0
-            );
-            var lowerRound = getXY(
-              screenWidth,
-              315 - 90,
-              orig - roadSpace * 1.5,
-              0,
-              0
-            );
-            dc.drawArc(
-              uperRound[0] - 1,
-              uperRound[1],
-              (roadSpace + 1) / 2.0,
-              Graphics.ARC_CLOCKWISE,
-              230,
-              35
-            );
-            dc.drawArc(
-              lowerRound[0],
-              lowerRound[1],
-              (roadSpace + 1) / 2.0,
-              Graphics.ARC_CLOCKWISE,
-              325,
-              140
-            );
-            drawBg = false;
-          }
-          //car
-          if (distance < maxDistance && distance != 0) {
-            var carPos = getXY(
-              screenWidth,
-              -45,
-              orig - roadSpace * 1.5,
-              pos,
-              1
-            );
-            if (threat == 1) {
-              dc.setColor(mMainColor, Graphics.COLOR_TRANSPARENT);
-            }
-            if (threat == 2) {
-              dc.setColor(mDangerColor, Graphics.COLOR_TRANSPARENT);
-            }
-            dc.fillCircle(
-              carPos[0],
-              carPos[1],
-              roadSpace / 2.0 - roadSpace / 6.0 - 1
-            );
-            dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-            dc.setPenWidth(1);
-            dc.drawCircle(
-              carPos[0],
-              carPos[1],
-              roadSpace / 2.0 - roadSpace / 6.0
-            );
-          }
-        }
-      }
-    }
   }
 }

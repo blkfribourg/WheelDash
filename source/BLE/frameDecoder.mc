@@ -471,8 +471,8 @@ class KingsongDecoder {
         return false;
       } else if ((value[16] & 255) == 0xa4 || (value[16] & 255) == 0xb5) {
         //max speed and alerts
+        eucData.KSMaxSpeed = value[10] & 255;
 
-        eucData.tiltBackSpeed = value[10] & 255;
         eucData.KSAlarm3Speed = value[8] & 255;
         eucData.KSAlarm2Speed = value[6] & 255;
         eucData.KSAlarm1Speed = value[4] & 255;

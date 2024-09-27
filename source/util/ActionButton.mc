@@ -9,7 +9,6 @@ class ActionButton {
   var DFViewButton;
   var cycleLightButton;
   var beepButton;
-  var speedLimiterButton;
   //var lockButton;
   var queue;
   var queueRequired;

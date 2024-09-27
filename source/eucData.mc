@@ -1,7 +1,6 @@
 using Toybox.System;
 
 module eucData {
-  var currentProfile;
   var wheelBrand;
   var wheelName;
   var paired = false;
@@ -82,7 +81,7 @@ module eucData {
   var cpuLoad = 0;
   var KSVoiceMode = false;
   // var output;
-
+  var KSMaxSpeed;
   var KSAlarm3Speed;
   var KSAlarm2Speed;
   var KSAlarm1Speed;
@@ -322,7 +321,7 @@ module eucData {
             battery = 0.0;
           }
         }
-        if (model.equals("V14")) {
+        if (model.equals("Adv")) {
           if (voltage > 133.6) {
             battery = 100.0;
           } else if (voltage > 108.8) {

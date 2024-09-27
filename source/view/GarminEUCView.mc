@@ -5,7 +5,6 @@ using Toybox.Timer;
 using Toybox.System;
 
 class GarminEUCView extends WatchUi.View {
-  private var debugTarget;
   private var cDrawables = {};
   function initialize() {
     View.initialize();
@@ -26,9 +25,6 @@ class GarminEUCView extends WatchUi.View {
     cDrawables[:TemperatureArc] = View.findDrawableById("TemperatureArc");
     cDrawables[:RecordingIndicator] =
       View.findDrawableById("RecordingIndicator");
-    if (eucData.useRadar == true) {
-      cDrawables[:VariaIndicator] = View.findDrawableById("VariaIndicator");
-    }
   }
 
   // Called when this View is brought to the foreground. Restore
@@ -45,19 +41,6 @@ class GarminEUCView extends WatchUi.View {
 
   // Update the view
   function onUpdate(dc) {
-    if (Varia.targetObject != null) {
-      Varia.targetObject = variaMove(Varia.targetObject);
-      cDrawables[:VariaIndicator].setValues(Varia.targetObject);
-    }
-
-    if (
-      eucData.useRadar == true &&
-      Varia.targetObject != null &&
-      eucData.variaTargetNb != 0
-    ) {
-      // at leat one vehicule detected
-      cDrawables[:VariaIndicator].setValues(Varia.targetObject);
-    }
     // Update label drawables
     cDrawables[:TimeDate].setText(
       // Update time
