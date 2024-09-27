@@ -196,6 +196,21 @@
                 max="150"
             />
         </setting>
+           <setting
+            propertyKey="@Properties.useEngo"
+            title="@Strings.useEngo">
+                <settingConfig
+                    type="boolean"
+                />
+        </setting>
+        <setting
+                propertyKey="@Properties.engoTouch"
+                title="@Strings.engoTouch">
+                <settingConfig type="list">
+                    <listEntry value="0">@Strings.engoTouch0</listEntry>
+                    <listEntry value="1">@Strings.engoTouch1</listEntry>                    
+                </settingConfig>
+            </setting>
 
         
         
@@ -249,6 +264,18 @@
                      <listEntry value="8">@Strings.downButton</listEntry>
                 </settingConfig>
             </setting>
+            <!--
+            <setting
+                propertyKey="@Properties.spdLimitButtonMap_p1"
+                title="@Strings.spdLimitButtonMap_p1">
+                <settingConfig type="list">
+                    <listEntry value="0">@Strings.none</listEntry>
+                    <listEntry value="4">@Strings.startStopButton</listEntry>
+                     <listEntry value="13">@Strings.middleButton</listEntry>
+                     <listEntry value="8">@Strings.downButton</listEntry>
+                </settingConfig>
+            </setting>
+            -->
              <setting
                 propertyKey="@Properties.DFViewButtonMap_p1"
                 title="@Strings.DFViewButtonMap_p1">
@@ -275,7 +302,7 @@
                         type="numeric"
                         min="0"
                         max="3"
-                        errorMessage="@Strings.voltageCorrectionFactor_ErrorMessage" />
+                       />
                 </setting>
                 <setting
                     propertyKey="@Properties.voltageSagIndicatorThresh_p1"
@@ -284,7 +311,7 @@
                         type="numeric"
                         min="0"
                         max="1"
-                        errorMessage="@Strings.voltageSagIndicatorThresh_ErrorMessage" />
+                       />
                 </setting>
                 <setting
                     propertyKey="@Properties.begodeCF_p1"
@@ -310,7 +337,7 @@
                         type="numeric"
                         min="0"
                         max="2"
-                        errorMessage="@Strings.speedCorrectionFactor_ErrorMessage" />
+                       />
            
             </setting>
             <setting
@@ -320,6 +347,7 @@
                     <listEntry value="0">@Strings.speed_str</listEntry>
                     <listEntry value="1">@Strings.PWM_str</listEntry>
                     <listEntry value="2">@Strings.battPerc_str</listEntry>
+                    <listEntry value="3">@Strings.GPSSpeed_str</listEntry>
                 </settingConfig>
             </setting>
             <setting
@@ -337,7 +365,7 @@
                         type="numeric"
                         min="0"
                         max="200"
-                        errorMessage="@Strings.maxSpeed_ErrorMessage" />
+                       />
            
             </setting>
                 <setting
@@ -347,7 +375,7 @@
                         type="numeric"
                         min="0"
                         max="250"
-                        errorMessage="@Strings.maxTemperature_ErrorMessage" />
+                     />
             </setting>
             <setting
             propertyKey="@Properties.orangeColoringThreshold_p1"
@@ -356,7 +384,7 @@
                 type="numeric"
                 min="0"
                 max="100"
-                errorMessage="@Strings.coloringThreshold_ErrorMessage" />
+            />
             </setting>
             <setting
             propertyKey="@Properties.redColoringThreshold_p1"
@@ -365,7 +393,7 @@
                 type="numeric"
                 min="0"
                 max="100"
-                errorMessage="@Strings.coloringThreshold_ErrorMessage" />
+            />
             </setting>
        
         <setting
@@ -375,7 +403,7 @@
                 type="numeric"
                 min="0"
                 max="300"
-                errorMessage="@Strings.rotationSpeed_PWM_ErrorMessage" />
+      />
         </setting>
         <setting
             propertyKey="@Properties.rotationVoltage_PWM_p1"
@@ -384,7 +412,7 @@
                 type="numeric"
                 min="48"
                 max="210"
-                errorMessage="@Strings.rotationVoltage_ErrorMessage" />
+            />
         </setting>
         <setting
             propertyKey="@Properties.powerFactor_PWM_p1"
@@ -393,7 +421,7 @@
                 type="numeric"
                 min="0"
                 max="1"
-                errorMessage="@Strings.powerFactor_PWM_ErrorMessage" />
+              />
         </setting>
   
         <setting
@@ -403,7 +431,7 @@
                 type="numeric"
                 min="0"
                 max="100"
-                errorMessage="@Strings.alarmThreshold_PWM_ErrorMessage" />
+   />
         </setting>
         <setting
             propertyKey="@Properties.alarmThreshold2_PWM_p1"
@@ -412,7 +440,7 @@
                 type="numeric"
                 min="0"
                 max="100"
-                errorMessage="@Strings.alarmThreshold_PWM_ErrorMessage" />
+           />
         </setting>
         <setting
             propertyKey="@Properties.alarmThreshold_speed_p1"
@@ -421,7 +449,7 @@
                 type="numeric"
                 min="0"
                 max="200"
-                errorMessage="@Strings.alarmThreshold_speed_ErrorMessage" />
+             />
         </setting>
         <setting
             propertyKey="@Properties.alarmThreshold_temp_p1"
@@ -430,10 +458,28 @@
                 type="numeric"
                 min="0"
                 max="250"
-                errorMessage="@Strings.alarmThreshold_temp_ErrorMessage" />
+          />
         </setting>
-        
-       
+        <!--
+        <setting
+            propertyKey="@Properties.tiltbackSpeed_p1"
+            title="@Strings.tiltbackSpeed_p1">
+            <settingConfig
+                type="numeric"
+                min="-1"
+                max="250"
+            />
+        </setting>
+        <setting
+            propertyKey="@Properties.speedLimit_p1"
+            title="@Strings.speedLimit_p1">
+            <settingConfig
+                type="numeric"
+                min="0"
+                max="250"
+            />
+        </setting>
+       -->
         
 
 <!--Profile 2-->
@@ -485,6 +531,18 @@
                      <listEntry value="8">@Strings.downButton</listEntry>
                 </settingConfig>
             </setting>
+            <!--
+            <setting
+                propertyKey="@Properties.spdLimitButtonMap_p2"
+                title="@Strings.spdLimitButtonMap_p2">
+                <settingConfig type="list">
+                    <listEntry value="0">@Strings.none</listEntry>
+                    <listEntry value="4">@Strings.startStopButton</listEntry>
+                     <listEntry value="13">@Strings.middleButton</listEntry>
+                     <listEntry value="8">@Strings.downButton</listEntry>
+                </settingConfig>
+            </setting>
+            -->
             <setting
                 propertyKey="@Properties.DFViewButtonMap_p2"
                 title="@Strings.DFViewButtonMap_p2">
@@ -511,7 +569,7 @@
                         type="numeric"
                         min="0"
                         max="3"
-                        errorMessage="@Strings.voltageCorrectionFactor_ErrorMessage" />
+                  />
                 </setting>
                 <setting
                     propertyKey="@Properties.voltageSagIndicatorThresh_p2"
@@ -520,7 +578,7 @@
                         type="numeric"
                         min="0"
                         max="1"
-                        errorMessage="@Strings.voltageSagIndicatorThresh_ErrorMessage" />
+                   />
                 </setting>
                 <setting
                     propertyKey="@Properties.begodeCF_p2"
@@ -546,7 +604,7 @@
                         type="numeric"
                         min="0"
                         max="2"
-                        errorMessage="@Strings.speedCorrectionFactor_ErrorMessage" />
+     />
            
             </setting>
             <setting
@@ -556,6 +614,7 @@
                     <listEntry value="0">@Strings.speed_str</listEntry>
                     <listEntry value="1">@Strings.PWM_str</listEntry>
                     <listEntry value="2">@Strings.battPerc_str</listEntry>
+                    <listEntry value="3">@Strings.GPSSpeed_str</listEntry>
                 </settingConfig>
             </setting>
             <setting
@@ -573,7 +632,7 @@
                         type="numeric"
                         min="0"
                         max="200"
-                        errorMessage="@Strings.maxSpeed_ErrorMessage" />
+                     />
            
             </setting>
                 <setting
@@ -592,7 +651,7 @@
                 type="numeric"
                 min="0"
                 max="100"
-                errorMessage="@Strings.coloringThreshold_ErrorMessage" />
+             />
             </setting>
             <setting
             propertyKey="@Properties.redColoringThreshold_p2"
@@ -601,7 +660,7 @@
                 type="numeric"
                 min="0"
                 max="100"
-                errorMessage="@Strings.coloringThreshold_ErrorMessage" />
+              />
             </setting>
        
         <setting
@@ -611,7 +670,7 @@
                 type="numeric"
                 min="0"
                 max="300"
-                errorMessage="@Strings.rotationSpeed_PWM_ErrorMessage" />
+       />
         </setting>
         <setting
             propertyKey="@Properties.rotationVoltage_PWM_p2"
@@ -620,7 +679,7 @@
                 type="numeric"
                 min="48"
                 max="210"
-                errorMessage="@Strings.rotationVoltage_ErrorMessage" />
+               />
         </setting>
         <setting
             propertyKey="@Properties.powerFactor_PWM_p2"
@@ -629,7 +688,7 @@
                 type="numeric"
                 min="0"
                 max="1"
-                errorMessage="@Strings.powerFactor_PWM_ErrorMessage" />
+         />
         </setting>
   
         <setting
@@ -639,7 +698,7 @@
                 type="numeric"
                 min="0"
                 max="100"
-                errorMessage="@Strings.alarmThreshold_PWM_ErrorMessage" />
+               />
         </setting>
         <setting
             propertyKey="@Properties.alarmThreshold2_PWM_p2"
@@ -648,7 +707,7 @@
                 type="numeric"
                 min="0"
                 max="100"
-                errorMessage="@Strings.alarmThreshold_PWM_ErrorMessage" />
+             />
         </setting>
         <setting
             propertyKey="@Properties.alarmThreshold_speed_p2"
@@ -657,7 +716,7 @@
                 type="numeric"
                 min="0"
                 max="200"
-                errorMessage="@Strings.alarmThreshold_speed_ErrorMessage" />
+               />
         </setting>
         <setting
             propertyKey="@Properties.alarmThreshold_temp_p2"
@@ -666,10 +725,28 @@
                 type="numeric"
                 min="0"
                 max="250"
-                errorMessage="@Strings.alarmThreshold_temp_ErrorMessage" />
+           />
         </setting>
-        
-
+        <!--
+        <setting
+            propertyKey="@Properties.tiltbackSpeed_p2"
+            title="@Strings.tiltbackSpeed_p2">
+            <settingConfig
+                type="numeric"
+                min="-1"
+                max="250"
+            />
+        </setting>
+        <setting
+            propertyKey="@Properties.speedLimit_p2"
+            title="@Strings.speedLimit_p2">
+            <settingConfig
+                type="numeric"
+                min="0"
+                max="250"
+            />
+        </setting>
+        -->
 
 <!--Profile 3-->
 
@@ -720,6 +797,18 @@
                      <listEntry value="8">@Strings.downButton</listEntry>
                 </settingConfig>
             </setting>
+            <!--
+            <setting
+                propertyKey="@Properties.spdLimitButtonMap_p3"
+                title="@Strings.spdLimitButtonMap_p3">
+                <settingConfig type="list">
+                    <listEntry value="0">@Strings.none</listEntry>
+                    <listEntry value="4">@Strings.startStopButton</listEntry>
+                     <listEntry value="13">@Strings.middleButton</listEntry>
+                     <listEntry value="8">@Strings.downButton</listEntry>
+                </settingConfig>
+            </setting>
+            -->
             <setting
                 propertyKey="@Properties.DFViewButtonMap_p3"
                 title="@Strings.DFViewButtonMap_p3">
@@ -746,7 +835,7 @@
                         type="numeric"
                         min="0"
                         max="3"
-                        errorMessage="@Strings.voltageCorrectionFactor_ErrorMessage" />
+                       />
                 </setting>
                 <setting
                     propertyKey="@Properties.voltageSagIndicatorThresh_p3"
@@ -755,7 +844,7 @@
                         type="numeric"
                         min="0"
                         max="1"
-                        errorMessage="@Strings.voltageSagIndicatorThresh_ErrorMessage" />
+            />
                 </setting>
                 <setting
                     propertyKey="@Properties.begodeCF_p3"
@@ -781,7 +870,7 @@
                         type="numeric"
                         min="0"
                         max="2"
-                        errorMessage="@Strings.speedCorrectionFactor_ErrorMessage" />
+                   />
            
             </setting>
             <setting
@@ -791,6 +880,7 @@
                     <listEntry value="0">@Strings.speed_str</listEntry>
                     <listEntry value="1">@Strings.PWM_str</listEntry>
                     <listEntry value="2">@Strings.battPerc_str</listEntry>
+                    <listEntry value="3">@Strings.GPSSpeed_str</listEntry>
                 </settingConfig>
             </setting>
             <setting
@@ -808,7 +898,7 @@
                         type="numeric"
                         min="0"
                         max="200"
-                        errorMessage="@Strings.maxSpeed_ErrorMessage" />
+                       />
            
             </setting>
                 <setting
@@ -827,7 +917,7 @@
                 type="numeric"
                 min="0"
                 max="100"
-                errorMessage="@Strings.coloringThreshold_ErrorMessage" />
+          />
             </setting>
             <setting
             propertyKey="@Properties.redColoringThreshold_p3"
@@ -836,7 +926,7 @@
                 type="numeric"
                 min="0"
                 max="100"
-                errorMessage="@Strings.coloringThreshold_ErrorMessage" />
+             />
             </setting>
        
         <setting
@@ -846,7 +936,7 @@
                 type="numeric"
                 min="0"
                 max="300"
-                errorMessage="@Strings.rotationSpeed_PWM_ErrorMessage" />
+         />
         </setting>
         <setting
             propertyKey="@Properties.rotationVoltage_PWM_p3"
@@ -855,7 +945,7 @@
                 type="numeric"
                 min="48"
                 max="210"
-                errorMessage="@Strings.rotationVoltage_ErrorMessage" />
+               />
         </setting>
         <setting
             propertyKey="@Properties.powerFactor_PWM_p3"
@@ -864,7 +954,7 @@
                 type="numeric"
                 min="0"
                 max="1"
-                errorMessage="@Strings.powerFactor_PWM_ErrorMessage" />
+           />
         </setting>
   
         <setting
@@ -874,7 +964,7 @@
                 type="numeric"
                 min="0"
                 max="100"
-                errorMessage="@Strings.alarmThreshold_PWM_ErrorMessage" />
+                />
         </setting>
          <setting
             propertyKey="@Properties.alarmThreshold2_PWM_p3"
@@ -883,7 +973,7 @@
                 type="numeric"
                 min="0"
                 max="100"
-                errorMessage="@Strings.alarmThreshold_PWM_ErrorMessage" />
+              />
         </setting>
         <setting
             propertyKey="@Properties.alarmThreshold_speed_p3"
@@ -892,7 +982,7 @@
                 type="numeric"
                 min="0"
                 max="200"
-                errorMessage="@Strings.alarmThreshold_speed_ErrorMessage" />
+                 />
         </setting>
         <setting
             propertyKey="@Properties.alarmThreshold_temp_p3"
@@ -901,8 +991,28 @@
                 type="numeric"
                 min="0"
                 max="250"
-                errorMessage="@Strings.alarmThreshold_temp_ErrorMessage" />
+                />
         </setting>
+        <!--
+        <setting
+            propertyKey="@Properties.tiltbackSpeed_p3"
+            title="@Strings.tiltbackSpeed_p3">
+            <settingConfig
+                type="numeric"
+                min="-1"
+                max="250"
+            />
+        </setting>
+        <setting
+            propertyKey="@Properties.speedLimit_p3"
+            title="@Strings.speedLimit_p3">
+            <settingConfig
+                type="numeric"
+                min="0"
+                max="250"
+            />
+        </setting>
+        -->
         <!-- Datafield like view settings -->
          <setting
             propertyKey="@Properties.dfViewOnly"

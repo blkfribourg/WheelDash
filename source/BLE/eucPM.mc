@@ -1,14 +1,19 @@
+///////////////////////////////////////////////////////////////////////////////
+// EUCs (Gotway/Begode - Leaperkim - Kingsong - Inmotion) BLE UUIDS and profile registration
+// Profile registration is called in PSMenuDelegate (Profile Selector)
+///////////////////////////////////////////////////////////////////////////////
+
 using Toybox.BluetoothLowEnergy as Ble;
 using Toybox.System as Sys;
 
-class eucPM {
+module eucPM {
   var EUC_SERVICE;
   var EUC_CHAR;
   var EUC_CHAR2;
   var EUC_SERVICE_W;
   var EUC_CHAR_W;
   var OLD_KS_ADV_SERVICE;
-  private var eucProfileDef;
+  var eucProfileDef;
 
   function init() {
     eucProfileDef = {
@@ -107,11 +112,7 @@ class eucPM {
     if (eucData.wheelBrand == 3) {
       setOldKingsong();
     }
-    if (
-      eucData.wheelBrand == 4 ||
-      eucData.wheelBrand == 5 ||
-      eucData.wheelBrand == 6
-    ) {
+    if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
       setInmotionV2orVESC();
     } else {
     }

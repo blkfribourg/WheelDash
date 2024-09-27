@@ -15,12 +15,13 @@ module eucData {
   var topBar; // String : Speed or PWM
   var mainNumber; // String : Speed or PWM
   var maxDisplayedSpeed; // number, used if topBar equals Speed : read from settings
+  var GPS_speed; // used when mainNumber =3
   var vibeIntensity = 90;
   var alarmThreshold_PWM;
   var alarmThreshold2_PWM;
   var alarmThreshold_speed;
   var alarmThreshold_temp;
-  var activityAutorecording;
+  var activityAutorecording = true; // remove true
   var activityAutosave;
   var activityRecording = false;
   var debug;
@@ -30,9 +31,7 @@ module eucData {
   var sagThreshold = 0.3;
   var orangeColoringThreshold;
   var redColoringThreshold;
-  //speedLimiterIcon
-  var speedLimitOn = false;
-  var speedLimit = 25;
+
   var speedCorrectionFactor = 1; // correct distance aswell ...
   var useMiles = false;
   var useFahrenheit = false;
@@ -64,6 +63,7 @@ module eucData {
   var topSpeed = 0;
   var watchBatteryUsage = 0.0;
   var hPWM = 0.0;
+  var reportNegPWM = true;
   var currentCorrection;
   var gothPWM = false;
   var battery = 0.0;
@@ -135,8 +135,24 @@ module eucData {
   var timerState = -1;
   var variaCloseAlarmDistThr = 15;
   var variaFarAlarmDistThr = 50;
-
   var useRadar = false;
+
+  //speedLimiter
+  var speedLimitOn = false;
+  var speedLimit = 25;
+  var tiltBackSpeed = null;
+  var WDtiltBackSpd = 0;
+  var spdLimFeatEnabled = false;
+
+  // Engo
+  var useEngo = false;
+  var engoPaired = false;
+  var engoPage = 1;
+  var engoBattery = null;
+  var engoTouch = 0;
+  var engoBattReq = 300;
+  var engoPageNb = 3;
+  var engoCfgUpdate = null;
 
   function getBatteryPercentage() {
     if (voltage != null) {
@@ -334,13 +350,28 @@ module eucData {
             eucData.voltage.toFloat() *
             eucData.voltage_scaling *
             powerFactor);
-        return CalculatedPWM * 100;
+        if (eucData.Phcurrent > 0 && eucData.reportNegPWM == true) {
+          return -CalculatedPWM * 100;
+        } else {
+          return CalculatedPWM * 100;
+        }
       }
 
       // 0 is begode/gotway, all other brands returns hPWM (Leaperkim / KS / OLD KS / IM / VESC)
       else {
-        //   System.println("hwPwm");
-        return hPWM;
+        //System.println("hwPwm");
+        if (eucData.reportNegPWM == true) {
+          if (
+            eucData.Phcurrent > 0 &&
+            eucData.wheelBrand == 0 // To double check bug begode EUC usually reports negative current when going forward.
+          ) {
+            return -hPWM;
+          } else {
+            return hPWM;
+          }
+        } else {
+          return hPWM;
+        }
       }
     } else {
       return 0;

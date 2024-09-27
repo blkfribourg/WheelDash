@@ -2,6 +2,7 @@
     <string id="AppName">WheelDash (dev)</string>
     <string id="firstConnStr">Profile $1$ 1st connection\nPlease turn on your wheel\n and wait for connection\n\nensure only one wheel is ON!\n\nIf you enjoy this app :\n ko-fi.com/wheeldash</string>
     <string id="connectedStr">Profile $1$ connected !\n\nSaving wheel unique identifier</string>
+    <string id="spdLimiterStr">Speed limiter feature\n is enabled!\n\nPlease ensure your tiltback\nis working properly with\nlimiter on or off!</string>
     <!-- Strings, that are used in Connect IQ Settings menu, like 
         one you see in Garmin Express or Garmin Connect Mobile -->
     <string id="defaultProfile">Profile to use by default</string>
@@ -86,7 +87,6 @@
     <string id="orangeColoringThreshold_p1">percentage threshold to color "top bar" with orange (Profile 1)</string>
     <string id="orangeColoringThreshold_p2">percentage threshold to color "top bar" with orange (Profile 2)</string>
     <string id="orangeColoringThreshold_p3">percentage threshold to color "top bar" with orange (Profile 3) </string>
-    <string id="coloringThreshold_ErrorMessage">Value out of range</string>
 
     <string id="redColoringThreshold_p1">percentage threshold to color "top bar" bar with red (Profile 1)</string>
     <string id="redColoringThreshold_p2">percentage threshold to color "top bar" bar with red (Profile 2)</string>
@@ -95,12 +95,12 @@
     <string id="voltageCorrectionFactor_p1">Voltage Correction Factor (Gotway/Begode only), 1 for 67.2V, 1.25 for 84V ... (Profile 1)</string>
     <string id="voltageCorrectionFactor_p2">Voltage Correction Factor (Gotway/Begode only), 1 for 67.2V, 1.25 for 84V ... (Profile 2)</string>
     <string id="voltageCorrectionFactor_p3">Voltage Correction Factor (Gotway/Begode only), 1 for 67.2V, 1.25 for 84V ... (Profile 3)</string>
-    <string id="voltageCorrectionFactor_ErrorMessage">Value out of range</string>
+    
 
     <string id="voltageSagIndicatorThresh_p1">Voltage Sag Threshold for Sag Indicator (Profile 1)</string>
     <string id="voltageSagIndicatorThresh_p2">Voltage Sag Threshold for Sag Indicator (Profile 2)</string>
     <string id="voltageSagIndicatorThresh_p3">Voltage Sag Threshold for Sag Indicator (Profile 3)</string>
-    <string id="voltageSagIndicatorThresh_ErrorMessage">Value out of range</string>
+   
 
     <string id="begodeCF_p1">Gotway/Begode with custom firmware (to use hardware PWM) (Profile 1)</string>
     <string id="begodeCF_p2">Gotway/Begode with custom firmware (to use hardware PWM) (Profile 2)</string>
@@ -110,7 +110,6 @@
     <string id="speedCorrectionFactor_p2">Speed Correction Factor, to adjust wheel reported speed. PWM will still be calculated using uncorrected speed reported by EUC. (Profile 2)</string>
     <string id="speedCorrectionFactor_p3">Speed Correction Factor, to adjust wheel reported speed. PWM will still be calculated using uncorrected speed reported by EUC. (Profile 3)</string>
 
-    <string id="speedCorrectionFactor_ErrorMessage">Value out of range</string>
 
     <string id="mainNumber_p1">Value to display on the main numeric indicator (center of the screen) (Profile 1)</string>
     <string id="mainNumber_p2">Value to display on the main numeric indicator (center of the screen) (Profile 2)</string>
@@ -122,29 +121,31 @@
         
     <string id="speed_str">Speed</string>
     <string id="PWM_str">PWM</string>
-    <string id="battPerc_str">PWM</string>
+    <string id="battPerc_str">Battery Percentage</string>
+    <string id="GPSSpeed_str">GPS Speed</string>
+
     <string id="maxSpeed_p1">Displayed speed limit : used to scale the top arc if Top bar value set to Speed (Profile 1)</string>
     <string id="maxSpeed_p2">Displayed speed limit : used to scale the top arc if Top bar value set to Speed (Profile 2)</string>
     <string id="maxSpeed_p3">Displayed speed limit : used to scale the top arc if Top bar value set to Speed (Profile 3)</string>
-    <string id="maxSpeed_ErrorMessage">Value out of range</string>
+   
     
 
     <string id="rotationSpeed_PWM_p1">Cut-out speed when performing free spin test (Profile 1)</string>
     <string id="rotationSpeed_PWM_p2">Cut-out speed when performing free spin test (Profile 2)</string>
     <string id="rotationSpeed_PWM_p3">Cut-out speed when performing free spin test (Profile 3)</string>
-    <string id="rotationSpeed_PWM_ErrorMessage">Value out of range</string>
+
 
     <string id="rotationVoltage_PWM_p1">Voltage when performing free spin test (Profile 1)</string>
     <string id="rotationVoltage_PWM_p2">Voltage when performing free spin test (Profile 2)</string>
     <string id="rotationVoltage_PWM_p3">Voltage when performing free spin test (Profile 3)</string>
 
-    <string id="rotationVoltage_ErrorMessage">Value out of range</string>
+
 
     <string id="powerFactor_PWM_p1">Power factor correction, don't touch it if you don't know what you're doing (Profile 1)</string>
     <string id="powerFactor_PWM_p2">Power factor correction, don't touch it if you don't know what you're doing (Profile 2)</string>
     <string id="powerFactor_PWM_p3">Power factor correction, don't touch it if you don't know what you're doing (Profile 3)</string>
 
-    <string id="powerFactor_PWM_ErrorMessage">Value out of range</string>
+   
 
     <string id="alarmThreshold_PWM_p1">Percentage of PWM that trigger 1st alarm (Profile 1)</string>
     <string id="alarmThreshold_PWM_p2">Percentage of PWM that trigger 1st alarm (Profile 2)</string>
@@ -152,17 +153,14 @@
     <string id="alarmThreshold2_PWM_p1">Percentage of PWM that trigger 2nd alarm (Profile 1)</string>
     <string id="alarmThreshold2_PWM_p2">Percentage of PWM that trigger 2nd alarm (Profile 2)</string>
     <string id="alarmThreshold2_PWM_p3">Percentage of PWM that trigger 2nd alarm (Profile 3)</string>
-    <string id="alarmThreshold_PWM_ErrorMessage">Value out of range</string>
 
     <string id="alarmThreshold_speed_p1">Speed that trigger an alarm (Profile 1)</string>
     <string id="alarmThreshold_speed_p2">Speed that trigger an alarm (Profile 2)</string>
     <string id="alarmThreshold_speed_p3">Speed that trigger an alarm (Profile 3)</string>
-    <string id="alarmThreshold_speed_ErrorMessage">Value out of range</string>
 
     <string id="alarmThreshold_temp_p1">Temperature that trigger an alarm (Profile 1)</string>
     <string id="alarmThreshold_temp_p2">Temperature that trigger an alarm (Profile 2)</string>
     <string id="alarmThreshold_temp_p3">Temperature that trigger an alarm (Profile 3)</string>
-    <string id="alarmThreshold_temp_ErrorMessage">Value out of range</string>
    
     <string id="UIsettings">App UI settings</string>
     <string id="UIsettingsDescription">UI settings, please be aware that watch battery usage will be impacted by refresh rate (battery usage / accuracy trade-off)</string>
@@ -195,6 +193,10 @@
    <string id="watchBatteryStatistic">Display watch battery</string>
    <string id="profileName">Display profile name</string>
    <string id="debugMode">Enable Debug Mode (view)</string>
+   <string id="useEngo">ActiveView Engo support</string>
+    <string id="engoTouch">Switch view mode</string>    
+    <string id="engoTouch0">Gesture (proximity sensor)</string>
+    <string id="engoTouch1">Capacitative Button</string>
 
    <!-- DF view Strings-->
    

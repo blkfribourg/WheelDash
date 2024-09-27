@@ -29,10 +29,7 @@ class ActionButton {
         queueRequired = true;
 
         //System.println("HornButton");
-        queue.add(
-          [bleDelegate.getHornChar(), queue.C_WRITENR, [0x68]b],
-          bleDelegate.getHornService()
-        );
+        queue.add([bleDelegate.getHornChar(), [0x68]b]);
       }
     }
 
@@ -44,23 +41,67 @@ class ActionButton {
       if (recordActivityButton == keyNumber) {
         _mainDelegate.goToActivityView();
       }
+      /* DISABLED IN DEV -- Speed limiter code ---
+      if (
+        speedLimiterButton == keyNumber &&
+        eucData.correctedSpeed < 3 &&
+        eucData.speedLimit > 0
+      ) {
+        queueRequired = true;
+        // Action = cycle light modes
+        if (eucData.wheelBrand == 0) {
+          // gotway/begode
+          var data;
+          var limit;
+          if (eucData.speedLimitOn == true) {
+            if (eucData.WDtiltBackSpd != 0) {
+              limit = eucData.WDtiltBackSpd;
+            } else {
+              limit = 0;
+            }
+            // eucData.speedLimitOn = false;
+          } else {
+            limit = eucData.speedLimit;
+            // eucData.speedLimitOn = true;
+          }
+          //  System.println("tiltb " + eucData.tiltBackSpeed);
+          //  System.println("currentLimit " + limit);
+          speedLimiter(queue, bleDelegate, limit);
+        }
+        if (eucData.wheelBrand == 1) {
+          // Implement speed limiter based on PWM tiltback ?
+        }
+        if (
+          eucData.wheelBrand == 2 ||
+          eucData.wheelBrand == 3 ||
+          eucData.wheelBrand == 4 ||
+          eucData.wheelBrand == 5
+        ) {
+          var limit;
 
+          if (eucData.speedLimitOn == false) {
+            limit = eucData.speedLimit;
+          } else {
+            limit = eucData.WDtiltBackSpd;
+          }
+
+          speedLimiter(queue, bleDelegate, limit);
+        }
+      }
+      */
       //if (bleDelegate != null && eucData.paired == true) {
       if (cycleLightButton == keyNumber) {
         queueRequired = true;
         // Action = cycle light modes
         if (eucData.wheelBrand == 0) {
           // gotway/begode
-          queue.add(
-            [
-              bleDelegate.getChar(),
-              queue.C_WRITENR,
-              string_to_byte_array(
-                eucDict.dictLightsMode.values()[lightToggleIndex] as String
-              ),
-            ],
-            bleDelegate.getPMService()
-          );
+          queue.add([
+            bleDelegate.getChar(),
+
+            string_to_byte_array(
+              eucDict.dictLightsMode.values()[lightToggleIndex] as String
+            ),
+          ]);
 
           lightToggleIndex = lightToggleIndex + 1;
           if (lightToggleIndex > 2) {
@@ -69,16 +110,13 @@ class ActionButton {
         }
         if (eucData.wheelBrand == 1) {
           //System.println(eucDict.dictLightsMode.values()[lightToggleIndex]);
-          queue.add(
-            [
-              bleDelegate.getChar(),
-              queue.C_WRITENR,
-              string_to_byte_array(
-                eucDict.dictLightsMode.values()[lightToggleIndex] as String
-              ),
-            ],
-            bleDelegate.getPMService()
-          );
+          queue.add([
+            bleDelegate.getChar(),
+
+            string_to_byte_array(
+              eucDict.dictLightsMode.values()[lightToggleIndex] as String
+            ),
+          ]);
           lightToggleIndex = lightToggleIndex + 1;
           if (lightToggleIndex > 1) {
             lightToggleIndex = 0;
@@ -93,10 +131,7 @@ class ActionButton {
             eucDict.dictLightsMode.values()[lightToggleIndex].toNumber() + 0x12;
           data[3] = 0x01;
           data[16] = 0x73;
-          queue.add(
-            [bleDelegate.getChar(), queue.C_WRITENR, data],
-            bleDelegate.getPMService()
-          );
+          queue.add([bleDelegate.getChar(), data]);
           lightToggleIndex = lightToggleIndex + 1;
           if (lightToggleIndex > 1) {
             lightToggleIndex = 0;
@@ -114,10 +149,7 @@ class ActionButton {
             data[7] = data[7] - lightToggleIndex;
 
             queue.flush();
-            queue.add(
-              [bleDelegate.getCharW(), queue.C_WRITENR, data],
-              bleDelegate.getPMService()
-            );
+            queue.add([bleDelegate.getCharW(), data]);
           }
           if (eucData.model.equals("V12")) {
             var data = [0xaa, 0xaa, 0x14, 0x04, 0x60, 0x50, 0x00, 0x00, 0x00]b; // Thanks Seba ;)
@@ -149,10 +181,7 @@ class ActionButton {
             data[8] = xorChkSum(data.slice(0, data.size() - 1));
 
             queue.flush();
-            queue.add(
-              [bleDelegate.getCharW(), queue.C_WRITENR, data],
-              bleDelegate.getPMService()
-            );
+            queue.add([bleDelegate.getCharW(), data]);
           }
         }
       }
@@ -160,74 +189,58 @@ class ActionButton {
         queueRequired = true;
         if (eucData.ESP32HornPaired == true && eucData.ESP32Horn == true) {
           //System.println("HornButton");
-          queue.add(
-            [bleDelegate.getHornChar(), queue.C_WRITENR, [0x68]b],
-            bleDelegate.getHornService()
-          );
+          queue.add([bleDelegate.getHornChar(), [0x68]b]);
         } else {
           // Action = beep beep
           if (
             eucData.wheelBrand == 0 ||
             (eucData.wheelBrand == 1 && eucData.version < 3)
           ) {
-            queue.add(
-              [
-                bleDelegate.getChar(),
-                queue.C_WRITENR,
-                string_to_byte_array("b" as String),
-              ],
-              bleDelegate.getPMService()
-            );
+            queue.add([
+              bleDelegate.getChar(),
+              string_to_byte_array("b" as String),
+            ]);
           }
           if (eucData.wheelBrand == 1 && eucData.version >= 3) {
-            queue.add(
+            queue.add([
+              bleDelegate.getChar(),
+
               [
-                bleDelegate.getChar(),
-                queue.C_WRITENR,
-                [
-                  0x4c, 0x6b, 0x41, 0x70, 0x0e, 0x00, 0x80, 0x80, 0x80, 0x01,
-                  0xca, 0x87, 0xe6, 0x6f,
-                ]b,
-              ],
-              bleDelegate.getPMService()
-            );
+                0x4c, 0x6b, 0x41, 0x70, 0x0e, 0x00, 0x80, 0x80, 0x80, 0x01,
+                0xca, 0x87, 0xe6, 0x6f,
+              ]b,
+            ]);
           }
           if (eucData.wheelBrand == 2 || eucData.wheelBrand == 3) {
+            // horn command
             var data = [
               0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
               0x00, 0x00, 0x00, 0x00, 0x00, 0x88, 0x14, 0x5a, 0x5a,
             ]b;
 
             if (eucData.KSVoiceMode == true) {
-              queue.add(
+              // voice mode ON
+              queue.add([
+                bleDelegate.getChar(),
                 [
-                  bleDelegate.getChar(),
-                  queue.C_WRITENR,
-                  [
-                    0xaa, 0x55, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x73, 0x14, 0x5a, 0x5a,
-                  ]b,
-                ],
-                bleDelegate.getPMService()
-              );
+                  0xaa, 0x55, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x73, 0x14, 0x5a, 0x5a,
+                ]b,
+              ]);
             }
-            queue.add(
-              [bleDelegate.getChar(), queue.C_WRITENR, data],
-              bleDelegate.getPMService()
-            );
+            // send horn cmd
+            queue.add([bleDelegate.getChar(), data]);
+
             if (eucData.KSVoiceMode == true) {
-              //deactivate KSVoiceMode let's try 0x02 val
-              queue.add(
+              //deactivate KSVoiceMode ? try 0done 1done 2 , also try with idx 3 at 1 and 2 at 0
+              queue.add([
+                bleDelegate.getChar(),
+
                 [
-                  bleDelegate.getChar(),
-                  queue.C_WRITENR,
-                  [
-                    0xaa, 0x55, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x73, 0x14, 0x5a, 0x5a,
-                  ]b,
-                ],
-                bleDelegate.getPMService()
-              );
+                  0xaa, 0x55, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x73, 0x14, 0x5a, 0x5a,
+                ]b,
+              ]);
             }
           }
           if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
@@ -238,10 +251,7 @@ class ActionButton {
 
             data[8] = xorChkSum(data.slice(0, data.size() - 1));
             queue.flush();
-            queue.add(
-              [bleDelegate.getCharW(), queue.C_WRITENR, data],
-              bleDelegate.getPMService()
-            );
+            queue.add([bleDelegate.getCharW(), data]);
           }
         }
       }

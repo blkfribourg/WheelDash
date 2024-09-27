@@ -8,15 +8,19 @@ function dummyGen() {
   if (rd > 60) {
     eucData.voltage = rd;
   }*/
-  eucData.speed=41.2;
+  eucData.speed = eucData.speed + 1;
+  eucData.hPWM = eucData.hPWM + 1;
   eucData.tripDistance = 22.1;
-  
+
   eucData.totalDistance = 12903.3;
   eucData.voltage = 66.3;
 
-  if ( eucData.temperature >20){
-     eucData.temperature =  eucData.temperature- 0.5;
-  }else{
-eucData.temperature = 63.2;
+  if (eucData.speed > 120) {
+    eucData.speed = 12;
+  } else {
+    eucData.temperature = 63.2;
+  }
+  if (eucData.hPWM > 100) {
+    eucData.hPWM = 0;
   }
 }

@@ -844,6 +844,16 @@ class DFView extends WatchUi.View {
     ) {
       renderWindOnUI(scr_width, dc);
     }
+    //varia alarm
+
+    if (
+      eucData.useRadar == true &&
+      Varia.targetObject != null &&
+      eucData.variaTargetNb != 0
+    ) {
+      // at leat one vehicule detected
+      //  renderVariaLateralIndicator(dc);
+    }
   }
   function drawDFTextValue(dc, xpos, ypos, valueID) {
     var font;

@@ -220,45 +220,27 @@ class GarminEUCMenu2Delegate_generic extends WatchUi.Menu2InputDelegate {
       command = "W";
       enc_cmd = string_to_byte_array(command as String);
 
-      queue.add(
-        [eucBleDelegate.getChar(), queue.C_WRITENR, enc_cmd],
-        eucBleDelegate.getPMService()
-      );
+      queue.add([eucBleDelegate.getChar(), enc_cmd]);
       command = "M";
       enc_cmd = string_to_byte_array(command as String);
 
-      queue.add(
-        [eucBleDelegate.getChar(), queue.C_WRITENR, enc_cmd],
-        eucBleDelegate.getPMService()
-      );
+      queue.add([eucBleDelegate.getChar(), enc_cmd]);
       command = cmd;
       enc_cmd = string_to_byte_array(command as String);
-      queue.add(
-        [eucBleDelegate.getChar(), queue.C_WRITENR, enc_cmd],
-        eucBleDelegate.getPMService()
-      );
+      queue.add([eucBleDelegate.getChar(), enc_cmd]);
     }
     if (parentMenu.equals("Beep Volume")) {
       command = "W";
       enc_cmd = string_to_byte_array(command as String);
 
-      queue.add(
-        [eucBleDelegate.getChar(), queue.C_WRITENR, enc_cmd],
-        eucBleDelegate.getPMService()
-      );
+      queue.add([eucBleDelegate.getChar(), enc_cmd]);
       command = "B";
       enc_cmd = string_to_byte_array(command as String);
 
-      queue.add(
-        [eucBleDelegate.getChar(), queue.C_WRITENR, enc_cmd],
-        eucBleDelegate.getPMService()
-      );
+      queue.add([eucBleDelegate.getChar(), enc_cmd]);
       command = cmd;
       enc_cmd = string_to_byte_array(command as String);
-      queue.add(
-        [eucBleDelegate.getChar(), queue.C_WRITENR, enc_cmd],
-        eucBleDelegate.getPMService()
-      );
+      queue.add([eucBleDelegate.getChar(), enc_cmd]);
     } else {
       eucBleDelegate.sendCmd(cmd);
     }
@@ -306,10 +288,7 @@ class GarminEUCMenu2Delegate_generic extends WatchUi.Menu2InputDelegate {
         data[6] = cmd.toNumber();
         data[7] = xorChkSum(data.slice(0, data.size() - 1));
         queue.flush();
-        queue.add(
-          [eucBleDelegate.getCharW(), queue.C_WRITENR, data],
-          eucBleDelegate.getPMService()
-        );
+        queue.add([eucBleDelegate.getCharW(), data]);
       }
       if (eucData.model.equals("V12")) {
         var data = [0xaa, 0xaa, 0x14, 0x04, 0x60, 0x50, 0x00, 0x00, 0x00]b; // Thanks Seba ;)
@@ -331,10 +310,7 @@ class GarminEUCMenu2Delegate_generic extends WatchUi.Menu2InputDelegate {
         }
         data[8] = xorChkSum(data.slice(0, data.size() - 1));
         queue.flush();
-        queue.add(
-          [eucBleDelegate.getCharW(), queue.C_WRITENR, data],
-          eucBleDelegate.getPMService()
-        );
+        queue.add([eucBleDelegate.getCharW(), data]);
         // todo : store light preference for V12 in watch storage.
       }
       //System.println("lights_frame: " + cmd_frame.toString());
@@ -344,10 +320,7 @@ class GarminEUCMenu2Delegate_generic extends WatchUi.Menu2InputDelegate {
       data[6] = cmd.toNumber();
       data[7] = xorChkSum(data.slice(0, data.size() - 1));
       queue.flush();
-      queue.add(
-        [eucBleDelegate.getCharW(), queue.C_WRITENR, data],
-        eucBleDelegate.getPMService()
-      );
+      queue.add([eucBleDelegate.getCharW(), data]);
       //System.println("strobe_frame: " + cmd_frame.toString());
     }
     if (parentMenu.equals("Ride Mode")) {
@@ -355,10 +328,7 @@ class GarminEUCMenu2Delegate_generic extends WatchUi.Menu2InputDelegate {
       data[6] = cmd.toNumber();
       data[7] = xorChkSum(data.slice(0, data.size() - 1));
       queue.flush();
-      queue.add(
-        [eucBleDelegate.getCharW(), queue.C_WRITENR, data],
-        eucBleDelegate.getPMService()
-      );
+      queue.add([eucBleDelegate.getCharW(), data]);
 
       //System.println("leds_frame: " + cmd_frame.toString());
     }
@@ -367,10 +337,7 @@ class GarminEUCMenu2Delegate_generic extends WatchUi.Menu2InputDelegate {
       data[6] = cmd.toNumber();
       data[7] = xorChkSum(data.slice(0, data.size() - 1));
       queue.flush();
-      queue.add(
-        [eucBleDelegate.getCharW(), queue.C_WRITENR, data],
-        eucBleDelegate.getPMService()
-      );
+      queue.add([eucBleDelegate.getCharW(), data]);
 
       //System.println("pedal_frame: " + cmd_frame.toString());
     }

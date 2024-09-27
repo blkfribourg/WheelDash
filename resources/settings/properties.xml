@@ -32,15 +32,17 @@
     <property id="dfViewOnly" type="boolean">false</property>
     <property id="displayNorth" type="boolean">false</property>
     <property id="displayWind" type="boolean">false</property>
-    <property id="slideToDFView" type="boolean">true</property>
+    <property id="slideToDFView" type="boolean">false</property>
     <property id="alternativeFont" type="boolean">false</property>
     <property id="vibeIntensity" type="number">90</property>
+    <property id="useRadar" type="boolean">false</property>
     <property id="useRadar" type="boolean">false</property>
     <property id="variaFarAlarmDistThr" type="number">60</property>
     <property id="variaCloseAlarmDistThr" type="number">20</property>
     <property id="motorbikeHeadset" type="boolean">false</property>
     <property id="ESP32Horn" type="boolean">false</property>
-
+    <property id ="useEngo" type="boolean">false</property>
+    <property id ="engoTouch" type="number">0</property>
     
 
     

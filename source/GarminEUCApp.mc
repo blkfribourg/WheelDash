@@ -4,9 +4,13 @@ import Toybox.WatchUi;
 import Toybox.System;
 using Toybox.Timer;
 using Toybox.StringUtil;
+import Toybox.Position;
 class GarminEUCApp extends Application.AppBase {
   private var view;
   private var delegate;
+  private var bleDelegate = null;
+  private var engoNextUpdate = null;
+  private var tiltBackInit = null;
   var timeOut = 10000;
   var activityRecordingDelay = 3000;
   var usePS;
@@ -26,12 +30,14 @@ class GarminEUCApp extends Application.AppBase {
   // onStart() is called on application start up
   function onStart(state as Dictionary?) as Void {
     // Sandbox zone
-   // Varia.targetObject = fakeVaria(3);
+    // Varia.targetObject = fakeVaria(3);
     // end of sandbox
     setGlobalSettings();
     rideStatsInit();
     Varia.initVaria();
     alarmsTimer.start(method(:onUpdateTimer), eucData.updateDelay, true);
+
+    // check if using GPS speed
   }
   function DFViewInit() {
     if (
@@ -81,7 +87,7 @@ class GarminEUCApp extends Application.AppBase {
   }
   // Timer callback for various alarms & update UI
   function onUpdateTimer() {
-    // dummyGen();
+    //dummyGen();
     if (eucData.wheelName != null) {
       DFViewInit();
     }
@@ -96,7 +102,16 @@ class GarminEUCApp extends Application.AppBase {
     if (eucData.useRadar == true) {
       Varia.checkVehicule();
     }
+    if (eucData.wheelName != null) {
+      // ensure a profile was loaded
+      if (eucData.useEngo == true) {
+        engoScreenUpdate();
+      }
+    }
     if (eucData.paired == true && eucData.wheelName != null) {
+      if (bleDelegate == null) {
+        bleDelegate = delegate.getBleDelegate();
+      }
       // automatic recording ------------------
       // a bit hacky maybe ...
       if (eucData.activityAutorecording == true) {
@@ -124,6 +139,54 @@ class GarminEUCApp extends Application.AppBase {
           //System.println("autorecord started");
         }
       }
+      if (eucData.mainNumber == 3) {
+        //enable GPS
+        if (eucData.GPS_requested == false) {
+          Position.enableLocationEvents(
+            Position.LOCATION_CONTINUOUS,
+            method(:onPosition)
+          );
+          eucData.GPS_requested = true;
+        }
+        var gpsSpeed = Position.getInfo().speed;
+        if (gpsSpeed != null && Position.getInfo().accuracy >= 2) {
+          eucData.GPS_speed = gpsSpeed * 3.6;
+          if (eucData.useMiles == true || eucData.convertToMiles == true) {
+            eucData.GPS_speed = kmToMiles(gpsSpeed);
+          }
+        }
+      }
+      /* DISABLED IN DEV -- Speed limiter code ---
+
+      if (eucData.WDtiltBackSpd == -1 && eucData.tiltBackSpeed != null) {
+        setWDTiltBackVal(eucData.tiltBackSpeed);
+      } else {
+        if (
+          eucData.correctedSpeed < 3 &&
+          eucData.WDtiltBackSpd > 0 &&
+          tiltBackInit != true
+        ) {
+          if (eucData.tiltBackSpeed != null) {
+            if (eucData.tiltBackSpeed != eucData.speedLimit) {
+              speedLimiter(
+                bleDelegate.getQueue(),
+                bleDelegate,
+                eucData.WDtiltBackSpd
+              );
+              tiltBackInit = true;
+            }
+          }
+        }
+      }
+
+      if (eucData.speedLimit != 0) {
+        if (eucData.tiltBackSpeed == eucData.speedLimit) {
+          eucData.speedLimitOn = true;
+        } else {
+          eucData.speedLimitOn = false;
+        }
+      }
+      */
       // -------------------------
       //attributing here to avoid multiple calls
       eucData.correctedSpeed = eucData.getCorrectedSpeed();
@@ -132,6 +195,7 @@ class GarminEUCApp extends Application.AppBase {
       eucData.DisplayedTemperature = eucData.getTemperature();
       eucData.PWM = eucData.getPWM();
       EUCAlarms.alarmsCheck();
+
       if (delegate.getMenu2Delegate().requestSubLabelsUpdate == true) {
         delegate.getMenu2Delegate().updateSublabels();
       }
@@ -203,7 +267,129 @@ class GarminEUCApp extends Application.AppBase {
     }
     WatchUi.requestUpdate();
   }
+  function engoScreenUpdate() {
+    var now = new Time.Moment(Time.now().value());
+    if (eucData.engoPage == 3) {
+      var PWM_rd = Math.round(eucData.PWM.abs()).toNumber();
+      var speed_rd = Math.round(eucData.correctedSpeed).toNumber();
+      var HRRPArray = new [2]; // High Refresh Rate Page
+      HRRPArray[0] = getHexText(PWM_rd.toString(), 2, 0);
+      HRRPArray[1] = getHexText(speed_rd.toString(), 3, 1);
+      var gaugeCmd = [0xff, 0x70, 0x00, 0x07, 0x01, PWM_rd, 0xaa]b;
+      var pageCmd = getPageCmd(pagePayload(HRRPArray), 4);
+      //gaugeCmd.addAll(pageCmd);
+      // pageCmd.addAll(gaugeCmd);
+      //bleDelegate.sendCommands(gaugeCmd);
+      bleDelegate.sendCommands(pageCmd);
+    } else {
+      if (engoNextUpdate == null || engoNextUpdate.compare(now) <= 0) {
+        engoNextUpdate = now.add(new Time.Duration(1));
+        //  eucData.speed = eucData.speed + 0.1;
 
+        if (
+          eucData.useEngo == true &&
+          eucData.engoPaired == true &&
+          bleDelegate.engoDisplayInit == true
+        ) {
+          eucData.engoBattReq = eucData.engoBattReq + 1;
+          if (eucData.engoBattReq > 300) {
+            eucData.engoBattReq = 0;
+            bleDelegate.getEngoBattery();
+          }
+          var textArray = new [6];
+
+          // var xpos = 225;
+          var currentTime = System.getClockTime();
+          if (eucData.engoBattery != null) {
+            textArray[0] = getHexText(eucData.engoBattery + " %", 0, 1);
+          } else {
+            textArray[0] = getHexText(" ", 0, 1);
+          }
+
+          textArray[1] = getHexText(
+            currentTime.hour.format("%02d") +
+              ":" +
+              currentTime.min.format("%02d"),
+            0,
+            1
+          );
+          if (eucData.engoPage == 1) {
+            textArray[2] = getHexText(
+              valueRound(eucData.PWM.abs(), "%.1f") + " %",
+              0,
+              3
+            );
+            textArray[3] = getHexText(
+              valueRound(eucData.correctedSpeed, "%.1f") + " km/h",
+              0,
+              3
+            );
+            textArray[4] = getHexText(
+              valueRound(eucData.temperature, "%.1f") + " *C",
+              0,
+              3
+            );
+            textArray[5] = getHexText(
+              valueRound(eucData.getBatteryPercentage(), "%.1f") + " %",
+              0,
+              3
+            );
+          }
+          if (eucData.engoPage == 2) {
+            //Chrono page 1
+
+            var chrono;
+            var activityTimerTime = null;
+            var sessionDistance = null;
+            var averageSpeed = null;
+            var maxSpeed = null;
+            if (activityRecordView != null) {
+              activityTimerTime = activityRecordView.getElapsedTime();
+              sessionDistance = activityRecordView.getSessionDist();
+              averageSpeed = activityRecordView.getAvgSpeed();
+              maxSpeed = activityRecordView.getMaxSpeed();
+            }
+            if (activityTimerTime != null) {
+              var sec = activityTimerTime / 1000;
+              var mn = sec / 60;
+              chrono = [mn / 60, mn % 60, sec % 60, activityTimerTime % 1000];
+            } else {
+              chrono = [0, 0, 0];
+            }
+            textArray[2] = getHexText(
+              chrono[0].format("%02d") +
+                ":" +
+                chrono[1].format("%02d") +
+                ":" +
+                chrono[2].format("%02d"),
+              0,
+              1
+            );
+            textArray[3] = getHexText(
+              valueRound(sessionDistance, "%.1f") + " km",
+              0,
+              1
+            );
+            textArray[4] = getHexText(
+              valueRound(averageSpeed, "%.1f") + " km/h",
+              0,
+              1
+            );
+            textArray[5] = getHexText(
+              valueRound(maxSpeed, "%.1f") + " km/h",
+              0,
+              1
+            );
+          }
+          var data = pagePayload(textArray);
+
+          // System.println("sendCmd");
+          bleDelegate.sendCommands(getPageCmd(data, eucData.engoPage));
+          //    bleDelegate.sendCommands(cmdTime);
+        }
+      }
+    }
+  }
   function rideStatsInit() {
     rideStats.movingmsec = 0;
     rideStats.statsTimerReset();
@@ -237,6 +423,8 @@ class GarminEUCApp extends Application.AppBase {
     //System.println("array size:" + rideStats.statsArray.size());
   }
   function setGlobalSettings() {
+    eucData.useEngo = AppStorage.getSetting("useEngo");
+    eucData.engoTouch = AppStorage.getSetting("engoTouch");
     eucData.useRadar = AppStorage.getSetting("useRadar");
     eucData.variaCloseAlarmDistThr = AppStorage.getSetting(
       "variaCloseAlarmDistThr"
@@ -286,6 +474,8 @@ class GarminEUCApp extends Application.AppBase {
     );
     rideStats.showProfileName = AppStorage.getSetting("profileName");
   }
+
+  function onPosition(info as Info) as Void {}
 }
 
 function getApp() as GarminEUCApp {

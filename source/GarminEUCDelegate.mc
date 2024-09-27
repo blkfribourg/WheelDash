@@ -76,6 +76,10 @@ class GarminEUCDelegate extends WatchUi.BehaviorDelegate {
   function getDFlikeView() {
     return DFlikeView;
   }
+
+  function getBleDelegate() {
+    return eucBleDelegate;
+  }
   function unpair() {
     eucBleDelegate.manualUnpair();
   }

@@ -8,8 +8,11 @@
     <drawable id="HornIndicator" class="HornIndicatorRenderer">
         <param name="mainColor">0xd53420</param> 
     </drawable>
-    <drawable id="SpeedDial" class="ArcRenderer">
-        <param name="arcType">:speedArc</param>
+    <drawable id="SpeedLimiterIndicator" class="SpeedLimiterRenderer">
+        <param name="mainColor">0xd53420</param> 
+    </drawable>
+    <drawable id="TopArc" class="ArcRenderer">
+        <param name="arcType">:topArc</param>
         <!-- Colors -->
         <param name="mainColor">0x0055ff</param> <!-- This color is for idle state of the dial, basically first 20% of the speed dial-->
         <param name="secondColor">0xff5500</param> <!-- This color is for "not so safe" speed, 60 to 80 percent of the dial-->
