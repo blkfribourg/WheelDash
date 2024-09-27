@@ -156,6 +156,8 @@ class GarminEUCApp extends Application.AppBase {
           }
         }
       }
+      /* DISABLED IN DEV -- Speed limiter code ---
+
       if (eucData.WDtiltBackSpd == -1 && eucData.tiltBackSpeed != null) {
         setWDTiltBackVal(eucData.tiltBackSpeed);
       } else {
@@ -184,6 +186,7 @@ class GarminEUCApp extends Application.AppBase {
           eucData.speedLimitOn = false;
         }
       }
+      */
       // -------------------------
       //attributing here to avoid multiple calls
       eucData.correctedSpeed = eucData.getCorrectedSpeed();

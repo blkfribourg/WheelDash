@@ -90,8 +90,7 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       activityRecordView,
       actionButtonTrigger
     );
-    // System.println(eucData.speedLimit);
-    //System.println(actionButtonTrigger.speedLimiterButton);
+
     if (
       eucData.speedLimit != 0 &&
       actionButtonTrigger.speedLimiterButton != 0

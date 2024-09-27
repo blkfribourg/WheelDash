@@ -42,6 +42,7 @@ class ActionButton {
       if (recordActivityButton == keyNumber) {
         _mainDelegate.goToActivityView();
       }
+      /* DISABLED IN DEV -- Speed limiter code ---
       if (
         speedLimiterButton == keyNumber &&
         eucData.correctedSpeed < 3 &&
@@ -88,6 +89,7 @@ class ActionButton {
           speedLimiter(queue, bleDelegate, limit);
         }
       }
+      */
       //if (bleDelegate != null && eucData.paired == true) {
       if (cycleLightButton == keyNumber) {
         queueRequired = true;

@@ -143,12 +143,16 @@ class eucBLEDelegate extends Ble.BleDelegate {
 
             // Untested code if speed limiter is enabled, use a request to get settings frame and read the current tiltback speed value
             // (to restore correct tiltback speed when disabling speed limiter)
+
+            /* DISABLED IN DEV -- Speed limiter code ---
             if (eucData.speedLimit != 0) {
               //request settings
               var getSettings = [0xaa, 0xaa, 0x14, 0x02, 0x20, 0x20, 0x16]b;
               queue.add([euc_char_w, getSettings]);
               queue.lastPacketType = "settings";
             }
+            */
+
             // Storing inmotion periodic request directly in variables from the queue class :
             // inmotion v2 request live:
             queue.reqLiveData = [
