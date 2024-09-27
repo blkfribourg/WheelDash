@@ -91,12 +91,13 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       actionButtonTrigger
     );
 
-    if (
+    /*    if (
       eucData.speedLimit != 0 &&
       actionButtonTrigger.speedLimiterButton != 0
     ) {
       eucData.spdLimFeatEnabled = true;
     }
+    */
     //   System.println(eucData.spdLimFeatEnabled);
     if (eucBleDelegate.isFirst == false) {
       //System.println("not first");

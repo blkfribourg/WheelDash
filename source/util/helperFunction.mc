@@ -207,6 +207,7 @@ function random(min, max) {
   return (Math.rand() % max) + 1;
 }
 
+/*
 //Speed limiter
 function setWDTiltBackVal(speed) {
   eucData.WDtiltBackSpd = speed;
@@ -261,7 +262,7 @@ function speedLimiter(queue, bleDelegate, limit) {
   }
   eucData.tiltBackSpeed = limit;
 }
-
+*/
 //engo
 
 function arrayToRawCmd(str_bytes) {
