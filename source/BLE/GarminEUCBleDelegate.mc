@@ -51,6 +51,9 @@ class eucBLEDelegate extends Ble.BleDelegate {
   var firstChar;
   var deviceNb = 1;
   var connNb = 0;
+  var cfgPacketsTotal = null;
+  var cfgPacketsCount = 0;
+
   /*
   var V11Y = [
     0xaa, 0xaa, 0x14, 0x59, 0x84, 0x69, 0x1d, 0x0e, 0x00, 0x00, 0x00, 0x00,
@@ -456,7 +459,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
                   // Do something here
                   engoDevice = pair(result as Ble.ScanResult);
                 } catch (e instanceof Lang.Exception) {
-                  System.println("hornError: " + e.getErrorMessage());
+                  System.println("engoError: " + e.getErrorMessage());
                 }
                 //System.println("ConnectedToHorn?");
               }
@@ -573,7 +576,18 @@ class eucBLEDelegate extends Ble.BleDelegate {
       }
     }
   }
+  function cfgUpdateStatus() {
+    // means update started
 
+    cfgPacketsCount++;
+
+    eucData.engoCfgUpdate =
+      ((cfgPacketsCount * 100) / cfgPacketsTotal).toString() + "%";
+    if (cfgPacketsCount >= cfgPacketsTotal) {
+      cfgPacketsTotal = null;
+      eucData.engoCfgUpdate = "Loading";
+    }
+  }
   // onCharacteristricWrite is called each time a write operation occurs on a characteristic. The following code should allow getting rid of the queue system, but while it's probably
   // better in terms of performance (requests are sent again asap in case of failure) I'm not sure it's better in terms of used ressources (the timer will wait 200ms per default before resubmitting the request). To be confirmed !
   // Note: this code is from activelook garmin app.
@@ -581,6 +595,9 @@ class eucBLEDelegate extends Ble.BleDelegate {
     characteristic as Toybox.BluetoothLowEnergy.Characteristic,
     status as Toybox.BluetoothLowEnergy.Status
   ) as Void {
+    if (characteristic.equals(engo_rx) && cfgPacketsTotal != null) {
+      cfgUpdateStatus();
+    }
     // _log("onCharacteristicWrite", [characteristic, status]);
     if (isUpdatingBleParams && !isBleParamsUpdated) {
       isUpdatingBleParams = false;
@@ -666,19 +683,24 @@ class eucBLEDelegate extends Ble.BleDelegate {
       if (engoCfgOK == false) {
         clearScreen();
 
-        System.println("uploading config");
+        //System.println("uploading config");
         sendRawCmd(engo_rx, getWriteCmd("updating config", 195, 110, 4, 5, 16));
         sendRawCmd(engo_rx, getWriteCmd("please wait...", 195, 70, 4, 5, 16));
-
+        cfgPacketsTotal = 0;
         // Engo config is stored in Resources.xml as a json object to avoid OOM error if stored in a ByteArray(splitted in two because otherwise it's too big)
         for (var i = 0; i < getJson(:EngoCfg1).size(); i++) {
+          var charNb = getJson(:EngoCfg1)[i].length();
+          cfgPacketsTotal = cfgPacketsTotal + Math.ceil(charNb / 40);
           var cmd = arrayToRawCmd(getJson(:EngoCfg1)[i]);
           sendRawCmd(engo_rx, cmd);
         }
         for (var i = 0; i < getJson(:EngoCfg2).size(); i++) {
+          var charNb = getJson(:EngoCfg2)[i].length();
+          cfgPacketsTotal = cfgPacketsTotal + Math.ceil(charNb / 40);
           var cmd = arrayToRawCmd(getJson(:EngoCfg2)[i]);
           sendRawCmd(engo_rx, cmd);
         }
+        //eucData.engoCfgUpdate = null;
         // request smartglasses config list again to ensure config upload was succesful
         cfgList = new [0]b; // clearing cfgList before requesting the config list
         sendRawCmd(engo_rx, [0xff, 0xd3, 0x00, 0x05, 0xaa]b);
@@ -694,6 +716,8 @@ class eucBLEDelegate extends Ble.BleDelegate {
       }
       // If config was successfuly uploaded set the current config to wheeldash config and clear screen
       if (engoCfgOK == true && engoDisplayInit == false) {
+        //If cfg was updated, clearing percentage progression status:
+        eucData.engoCfgUpdate = null;
         //  System.println("select cfg");
         sendRawCmd(
           engo_rx,
@@ -751,6 +775,9 @@ class eucBLEDelegate extends Ble.BleDelegate {
     engoCfgOK = null;
     engoGestureOK = false;
     engoGestureNotif = false;
+    cfgPacketsTotal = null;
+    cfgPacketsCount = 0;
+    eucData.engoCfgUpdate = null;
   }
   // checkCfgName function parse the received config list packet to check if wheeldash config is present in the config list.
   function checkCfgName(value) {

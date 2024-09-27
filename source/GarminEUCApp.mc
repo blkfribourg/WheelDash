@@ -102,6 +102,12 @@ class GarminEUCApp extends Application.AppBase {
     if (eucData.useRadar == true) {
       Varia.checkVehicule();
     }
+    if (eucData.wheelName != null) {
+      // ensure a profile was loaded
+      if (eucData.useEngo == true) {
+        engoScreenUpdate();
+      }
+    }
     if (eucData.paired == true && eucData.wheelName != null) {
       if (bleDelegate == null) {
         bleDelegate = delegate.getBleDelegate();
@@ -186,9 +192,7 @@ class GarminEUCApp extends Application.AppBase {
       eucData.DisplayedTemperature = eucData.getTemperature();
       eucData.PWM = eucData.getPWM();
       EUCAlarms.alarmsCheck();
-      if (eucData.useEngo == true) {
-        engoScreenUpdate();
-      }
+
       if (delegate.getMenu2Delegate().requestSubLabelsUpdate == true) {
         delegate.getMenu2Delegate().updateSublabels();
       }
@@ -270,9 +274,10 @@ class GarminEUCApp extends Application.AppBase {
       HRRPArray[1] = getHexText(speed_rd.toString(), 3, 1);
       var gaugeCmd = [0xff, 0x70, 0x00, 0x07, 0x01, PWM_rd, 0xaa]b;
       var pageCmd = getPageCmd(pagePayload(HRRPArray), 4);
-      gaugeCmd.addAll(pageCmd);
-
-      bleDelegate.sendCommands(gaugeCmd);
+      //gaugeCmd.addAll(pageCmd);
+      // pageCmd.addAll(gaugeCmd);
+      //bleDelegate.sendCommands(gaugeCmd);
+      bleDelegate.sendCommands(pageCmd);
     } else {
       if (engoNextUpdate == null || engoNextUpdate.compare(now) <= 0) {
         engoNextUpdate = now.add(new Time.Duration(1));
@@ -293,9 +298,9 @@ class GarminEUCApp extends Application.AppBase {
           // var xpos = 225;
           var currentTime = System.getClockTime();
           if (eucData.engoBattery != null) {
-            textArray[0] = getHexText(eucData.engoBattery + " %", 0, 0);
+            textArray[0] = getHexText(eucData.engoBattery + " %", 0, 1);
           } else {
-            textArray[0] = getHexText(" ", 0, 0);
+            textArray[0] = getHexText(" ", 0, 1);
           }
 
           textArray[1] = getHexText(
@@ -303,28 +308,28 @@ class GarminEUCApp extends Application.AppBase {
               ":" +
               currentTime.min.format("%02d"),
             0,
-            0
+            1
           );
           if (eucData.engoPage == 1) {
             textArray[2] = getHexText(
               valueRound(eucData.PWM.abs(), "%.1f") + " %",
               0,
-              0
+              3
             );
             textArray[3] = getHexText(
               valueRound(eucData.correctedSpeed, "%.1f") + " km/h",
               0,
-              0
+              3
             );
             textArray[4] = getHexText(
               valueRound(eucData.temperature, "%.1f") + " *C",
               0,
-              0
+              3
             );
             textArray[5] = getHexText(
               valueRound(eucData.getBatteryPercentage(), "%.1f") + " %",
               0,
-              0
+              3
             );
           }
           if (eucData.engoPage == 2) {
@@ -355,22 +360,22 @@ class GarminEUCApp extends Application.AppBase {
                 ":" +
                 chrono[2].format("%02d"),
               0,
-              0
+              1
             );
             textArray[3] = getHexText(
               valueRound(sessionDistance, "%.1f") + " km",
               0,
-              0
+              1
             );
             textArray[4] = getHexText(
               valueRound(averageSpeed, "%.1f") + " km/h",
               0,
-              0
+              1
             );
             textArray[5] = getHexText(
               valueRound(maxSpeed, "%.1f") + " km/h",
               0,
-              0
+              1
             );
           }
           var data = pagePayload(textArray);

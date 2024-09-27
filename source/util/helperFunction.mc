@@ -307,10 +307,10 @@ function getHexText(text, lpadding, rpadding) {
     var leftPadding = []b;
     for (var i = 0; i < lpadding - textLength; i++) {
       leftPadding.add(0x24);
-      System.print("left");
+      //  System.print("left");
     }
     hexText = leftPadding.addAll(hexText);
-    System.println(hexText);
+    // System.println(hexText);
   }
   if (rpadding > 0) {
     for (var i = 0; i < rpadding; i++) {

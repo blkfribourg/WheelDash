@@ -151,30 +151,35 @@ class GarminEUCView extends WatchUi.View {
   function diplayStats() {
     //System.println(EUCAlarms.alarmType);
     var rideStatsText = "";
-    if (!eucData.paired) {
-      rideStatsText = "EUC Not\nConnected";
+    if (eucData.engoCfgUpdate != null) {
+      rideStatsText = "Engo cfg update\n" + eucData.engoCfgUpdate;
     } else {
-      if (!EUCAlarms.alarmType.equals("none")) {
-        rideStatsText = "!! Alarm: " + EUCAlarms.alarmType + " !!";
+      if (!eucData.paired) {
+        rideStatsText = "EUC Not\nConnected";
       } else {
-        if (eucData.variaTargetNb != 0) {
-          rideStatsText = "";
+        if (!EUCAlarms.alarmType.equals("none")) {
+          rideStatsText = "!! Alarm: " + EUCAlarms.alarmType + " !!";
         } else {
-          if (
-            rideStats.statsArray != null &&
-            rideStats.statsNumberToDiplay != 0
-          ) {
-            rideStatsText = rideStats.statsArray[rideStats.statsIndexToDiplay];
+          if (eucData.variaTargetNb != 0) {
+            rideStatsText = "";
+          } else {
+            if (
+              rideStats.statsArray != null &&
+              rideStats.statsNumberToDiplay != 0
+            ) {
+              rideStatsText =
+                rideStats.statsArray[rideStats.statsIndexToDiplay];
 
-            rideStats.statsTimer--;
-            if (rideStats.statsTimer < 0) {
-              rideStats.statsIndexToDiplay++;
-              rideStats.statsTimerReset();
-              if (
-                rideStats.statsIndexToDiplay >
-                rideStats.statsNumberToDiplay - 1
-              ) {
-                rideStats.statsIndexToDiplay = 0;
+              rideStats.statsTimer--;
+              if (rideStats.statsTimer < 0) {
+                rideStats.statsIndexToDiplay++;
+                rideStats.statsTimerReset();
+                if (
+                  rideStats.statsIndexToDiplay >
+                  rideStats.statsNumberToDiplay - 1
+                ) {
+                  rideStats.statsIndexToDiplay = 0;
+                }
               }
             }
           }

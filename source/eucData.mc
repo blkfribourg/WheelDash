@@ -153,6 +153,7 @@ module eucData {
   var engoTouch = 0;
   var engoBattReq = 300;
   var engoPageNb = 3;
+  var engoCfgUpdate = null;
 
   function getBatteryPercentage() {
     if (voltage != null) {
