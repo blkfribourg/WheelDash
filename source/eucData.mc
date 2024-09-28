@@ -80,6 +80,7 @@ module eucData {
   var temperature2 = 0;
   var cpuLoad = 0;
   var KSVoiceMode = false;
+  var KSVoiceModeVal =0;
   // var output;
   var KSMaxSpeed;
   var KSAlarm3Speed;
@@ -139,7 +140,7 @@ module eucData {
 
   //speedLimiter
   var speedLimitOn = false;
-  var speedLimit = 25;
+  var speedLimit = 0;
   var tiltBackSpeed = null;
   var WDtiltBackSpd = 0;
   var spdLimFeatEnabled = false;

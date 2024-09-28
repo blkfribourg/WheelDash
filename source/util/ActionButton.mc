@@ -233,14 +233,21 @@ class ActionButton {
 
             if (eucData.KSVoiceMode == true) {
               //deactivate KSVoiceMode ? try 0done 1done 2 , also try with idx 3 at 1 and 2 at 0
-              queue.add([
-                bleDelegate.getChar(),
-
-                [
-                  0xaa, 0x55, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+              var voiceModeOff = [
+                0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x73, 0x14, 0x5a, 0x5a,
+              ]b;
+              if (eucData.KSVoiceModeVal >= 0 && eucData.KSVoiceModeVal < 3) {
+                voiceModeOff[2] =
+                  eucData.KSVoiceModeVal.format("%02d").toNumberWithBase(16);
+              } else {
+                voiceModeOff = [
+                  0xaa, 0x55, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x73, 0x14, 0x5a, 0x5a,
-                ]b,
-              ]);
+                ]b;
+              }
+              // System.println(voiceModeOff);
+              queue.add([bleDelegate.getChar(), voiceModeOff]);
             }
           }
           if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {

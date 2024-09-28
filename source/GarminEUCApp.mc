@@ -102,13 +102,13 @@ class GarminEUCApp extends Application.AppBase {
     if (eucData.useRadar == true) {
       Varia.checkVehicule();
     }
-    if (eucData.wheelName != null) {
-      // ensure a profile was loaded
+    // ensure a profile was loaded
+    if (eucData.wheelName != null && bleDelegate != null) {
       if (eucData.useEngo == true) {
         engoScreenUpdate();
       }
     }
-    if (eucData.paired == true && eucData.wheelName != null) {
+    if (eucData.wheelName != null) {
       if (bleDelegate == null) {
         bleDelegate = delegate.getBleDelegate();
       }
@@ -447,6 +447,7 @@ class GarminEUCApp extends Application.AppBase {
     //Im Horn experimental
     eucData.imHornSound = AppStorage.getSetting("imHornSound");
     eucData.KSVoiceMode = AppStorage.getSetting("KSVoiceMode");
+    eucData.KSVoiceModeVal = AppStorage.getSetting("KSVoiceModeVal");
     eucData.updateDelay = AppStorage.getSetting("updateDelay");
     eucData.debug = AppStorage.getSetting("debugMode");
     eucData.activityAutorecording = AppStorage.getSetting(

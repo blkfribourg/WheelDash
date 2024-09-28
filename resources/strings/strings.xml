@@ -1,5 +1,5 @@
 <strings>
-    <string id="AppName">WheelDash (dev)</string>
+    <string id="AppName">WheelDash (beta)</string>
     <string id="firstConnStr">Profile $1$ 1st connection\nPlease turn on your wheel\n and wait for connection\n\nensure only one wheel is ON!\n\nIf you enjoy this app :\n ko-fi.com/wheeldash</string>
     <string id="connectedStr">Profile $1$ connected !\n\nSaving wheel unique identifier</string>
     <string id="spdLimiterStr">Speed limiter feature\n is enabled!\n\nPlease ensure your tiltback\nis working properly with\nlimiter on or off!</string>
@@ -70,6 +70,8 @@
     <string id="updateDelay_ErrorMessage">Value should be in a range of 100 msec to 1000 msec</string>
     <string id="imHornSound">Inmotion horn (untested betatesters only)</string>
     <string id="KSVoiceMode">Enable Kingsong horn sound (transient voice mode)</string>
+    <string id="KSVoiceModeVal">Kingsong voice mode (debug)</string>
+    
     
     <string id="useMiles">Miles unit</string>
     <string id="useFahrenheit">Fahrenheit unit</string>
@@ -196,7 +198,7 @@
    <string id="useEngo">ActiveView Engo support</string>
     <string id="engoTouch">Switch view mode</string>    
     <string id="engoTouch0">Gesture (proximity sensor)</string>
-    <string id="engoTouch1">Capacitative Button</string>
+    <string id="engoTouch1">Capacitive Button</string>
 
    <!-- DF view Strings-->
    

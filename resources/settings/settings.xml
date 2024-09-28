@@ -143,6 +143,15 @@
                 type="boolean"
             />
         </setting>
+        <setting
+            propertyKey="@Properties.KSVoiceModeVal"
+            title="@Strings.KSVoiceModeVal">
+            <settingConfig
+                type="numeric"
+                min="0"
+                max="4"
+            />
+        </setting>
          <setting
             propertyKey="@Properties.useMiles"
             title="@Strings.useMiles">
