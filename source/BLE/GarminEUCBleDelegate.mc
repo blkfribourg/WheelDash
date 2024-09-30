@@ -46,8 +46,8 @@ class eucBLEDelegate extends Ble.BleDelegate {
   var rawcmdError = null;
   var engoDisplayInit = false;
   var cfgList = new [0]b;
-  var isUpdatingBleParams as Toybox.Lang.Boolean = false;
-  var isBleParamsUpdated as Toybox.Lang.Boolean = false;
+  // var isUpdatingBleParams as Toybox.Lang.Boolean = false;
+  //var isBleParamsUpdated as Toybox.Lang.Boolean = false;
   var firstChar;
   var deviceNb = 1;
   var connNb = 0;
@@ -603,17 +603,19 @@ class eucBLEDelegate extends Ble.BleDelegate {
       cfgUpdateStatus();
     }
     // _log("onCharacteristicWrite", [characteristic, status]);
+    //not using this:
+    /*
     if (isUpdatingBleParams && !isBleParamsUpdated) {
       isUpdatingBleParams = false;
       if (status == Toybox.BluetoothLowEnergy.STATUS_SUCCESS) {
         isBleParamsUpdated = true;
       }
-    } else {
-      // TODO: Refactor to avoid callback like this
-      var _cb = _cbCharacteristicWrite;
-      if (_cb != null) {
-        _cb.invoke(characteristic, status);
-      }
+    } else {**/
+    // TODO: Refactor to avoid callback like this
+    var _cb = _cbCharacteristicWrite;
+    if (_cb != null) {
+      _cb.invoke(characteristic, status);
+      // }
     }
   }
 

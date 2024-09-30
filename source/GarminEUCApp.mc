@@ -447,7 +447,7 @@ class GarminEUCApp extends Application.AppBase {
     //Im Horn experimental
     eucData.imHornSound = AppStorage.getSetting("imHornSound");
     eucData.KSVoiceMode = AppStorage.getSetting("KSVoiceMode");
-    eucData.KSVoiceModeVal = AppStorage.getSetting("KSVoiceModeVal");
+    //eucData.KSVoiceModeVal = AppStorage.getSetting("KSVoiceModeVal");
     eucData.updateDelay = AppStorage.getSetting("updateDelay");
     eucData.debug = AppStorage.getSetting("debugMode");
     eucData.activityAutorecording = AppStorage.getSetting(

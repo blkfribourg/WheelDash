@@ -70,7 +70,7 @@
     <string id="updateDelay_ErrorMessage">Value should be in a range of 100 msec to 1000 msec</string>
     <string id="imHornSound">Inmotion horn (untested betatesters only)</string>
     <string id="KSVoiceMode">Enable Kingsong horn sound (transient voice mode)</string>
-    <string id="KSVoiceModeVal">Kingsong voice mode (debug)</string>
+    <!--<string id="KSVoiceModeVal">Kingsong voice mode (debug)</string>-->
     
     
     <string id="useMiles">Miles unit</string>

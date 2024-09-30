@@ -143,6 +143,7 @@
                 type="boolean"
             />
         </setting>
+        <!--
         <setting
             propertyKey="@Properties.KSVoiceModeVal"
             title="@Strings.KSVoiceModeVal">
@@ -152,6 +153,7 @@
                 max="4"
             />
         </setting>
+        -->
          <setting
             propertyKey="@Properties.useMiles"
             title="@Strings.useMiles">
