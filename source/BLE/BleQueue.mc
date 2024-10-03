@@ -95,6 +95,7 @@ class BleQueue {
     isRunning = true;
     var char = queue[0][0];
     //writing BLE request
+    // System.println(queue[0][1]);
     try {
       char.requestWrite(queue[0][1], {
         :writeType => Ble.WRITE_TYPE_DEFAULT,

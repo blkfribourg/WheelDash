@@ -100,6 +100,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
     //checking if EUC Footprint already exist (see IsFirsConnection function description)
     isFirst = isFirstConnection();
     //isFirst = false;
+
     if (eucData.useEngo == true) {
       deviceNb = deviceNb + 1;
     }
@@ -115,7 +116,6 @@ class eucBLEDelegate extends Ble.BleDelegate {
       // Checking we are dealing with an EUC and not another kind of supported device (horn, smartglasses)
       if (device.getService(eucPM.EUC_SERVICE) != null) {
         //System.println("EUC connected");
-        message3 = "EUC connected";
         euc_service = device.getService(eucPM.EUC_SERVICE);
         var cccd;
         //Getting characteristic as a Characteristic object to enable notifications later
@@ -173,14 +173,14 @@ class eucBLEDelegate extends Ble.BleDelegate {
           // Enabling notification is done by writing 0x01 0x00 to the descriptor of the characteristic. That also trigger the onDescriptorWrite() callback -> that's where I send
           // the required requests for KS and Inmotion EUCs
           cccd.requestWrite([0x01, 0x00]b);
-          message4 = "characteristic notify enabled";
+          message3 = "char notify enabled";
           eucData.paired = true;
-          message3 = "EUC connected";
+          message2 = "EUC connected";
           eucData.timeWhenConnected = new Time.Moment(Time.now().value());
           // At this point the EUC is considered as connected.
         } else {
           //System.println("unable to pair EUC");
-          message3 = "EUC not connected";
+          message2 = "EUC not connected";
           try {
             unpair(device);
             eucData.paired = false;
@@ -203,12 +203,12 @@ class eucBLEDelegate extends Ble.BleDelegate {
               ? horn_service.getCharacteristic(hornPM.WH_CHAR_W)
               : null;
           if (horn_service != null && horn_char_w != null) {
-            message4 = "Horn connected";
+            // message4 = "Horn connected";
             eucData.ESP32HornPaired = true;
           } else {
             unpair(device);
             eucData.ESP32HornPaired = false;
-            message4 = "Horn not connected";
+            // message4 = "Horn not connected";
           }
         }
       }
@@ -264,13 +264,13 @@ class eucBLEDelegate extends Ble.BleDelegate {
       // If a disconnection occurs, check what has been disconnected and restat a device scanning
       if (hornDevice != null && hornDevice.equals(device)) {
         eucData.ESP32HornPaired = false;
-        message4 = "Horn disconnected";
+        //  message4 = "Horn disconnected";
         unpair(device);
         Ble.setScanState(Ble.SCAN_STATE_SCANNING);
       }
       if (EUCDevice != null && EUCDevice.equals(device)) {
         eucData.paired = false;
-        message3 = "EUC disconnected";
+        //   message3 = "EUC disconnected";
         unpair(device);
         Ble.setScanState(Ble.SCAN_STATE_SCANNING);
       }
@@ -533,11 +533,12 @@ class eucBLEDelegate extends Ble.BleDelegate {
 
   // onDescriptorWrite callback is called every time a write action occured on a descriptor (in our case, the typical scenario is after enabling notification).
   function onDescriptorWrite(desc, status) {
-    message7 = "descWrite";
+    message4 = "descWrite";
 
     var currentChar = desc.getCharacteristic();
     // if the descriptor characteristic belong to registred EUC device:
     if (currentChar.equals(euc_char)) {
+      //  System.println("wheelDesc!!");
       // If KS EUC, send getModel request using ble queue (getModel request was added during EUC pairing procedure)
       if (eucData.wheelBrand == 2 || eucData.wheelBrand == 3) {
         queue.delayTimer.start(
@@ -548,6 +549,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
       }
       // If Inmotion, start the ble queue, if the queue is empty it will start an continuous cycle of requests using requests that were stored in Inmotion related variables in the queue class.
       if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
+        message5 = "Q started " + queue.run_id;
         queue.delayTimer.start(
           method(:timerCallback),
           eucData.BLECmdDelay,
@@ -615,9 +617,10 @@ class eucBLEDelegate extends Ble.BleDelegate {
 
   // onCharacteristicChanged callback is called each time a notification is received (that means data from the EUC or the smartglasses).
   function onCharacteristicChanged(char, value) {
-    // message7 = "CharacteristicChanged";
     // If characteristic matches a the registred characteritic of a EUC
+    message6 = "CharChanged";
     if (char.equals(euc_char)) {
+      message7 = "EUCCharChanged";
       // Decoding data depending on EUC brand.
       if (
         decoder != null &&
@@ -629,7 +632,6 @@ class eucBLEDelegate extends Ble.BleDelegate {
         decoder != null &&
         (eucData.wheelBrand == 2 || eucData.wheelBrand == 3)
       ) {
-        message8 = "decoding";
         decoder.processFrame(value);
       }
       if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
