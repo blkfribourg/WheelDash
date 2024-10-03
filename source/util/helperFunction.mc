@@ -303,7 +303,7 @@ function getHexText(text, lpadding, rpadding) {
     :toRepresentation => Toybox.StringUtil.REPRESENTATION_BYTE_ARRAY,
   });
   var textLength = text.length();
-  System.println(textLength);
+  // System.println(textLength);
   if (lpadding > 0) {
     var leftPadding = []b;
     for (var i = 0; i < lpadding - textLength; i++) {

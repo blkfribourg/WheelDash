@@ -99,7 +99,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
     Ble.setScanState(Ble.SCAN_STATE_SCANNING);
     //checking if EUC Footprint already exist (see IsFirsConnection function description)
     isFirst = isFirstConnection();
-    isFirst = false;
+    //isFirst = false;
     if (eucData.useEngo == true) {
       deviceNb = deviceNb + 1;
     }
@@ -537,12 +537,9 @@ class eucBLEDelegate extends Ble.BleDelegate {
 
     var currentChar = desc.getCharacteristic();
     // if the descriptor characteristic belong to registred EUC device:
-    if (currentChar.equals(eucPM.EUC_CHAR)) {
+    if (currentChar.equals(euc_char)) {
       // If KS EUC, send getModel request using ble queue (getModel request was added during EUC pairing procedure)
-      if (
-        (eucData.wheelBrand == 2 || eucData.wheelBrand == 3) &&
-        euc_char != null
-      ) {
+      if (eucData.wheelBrand == 2 || eucData.wheelBrand == 3) {
         queue.delayTimer.start(
           method(:timerCallback),
           eucData.BLECmdDelay,
@@ -550,10 +547,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
         );
       }
       // If Inmotion, start the ble queue, if the queue is empty it will start an continuous cycle of requests using requests that were stored in Inmotion related variables in the queue class.
-      if (
-        (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) &&
-        euc_char != null
-      ) {
+      if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
         queue.delayTimer.start(
           method(:timerCallback),
           eucData.BLECmdDelay,

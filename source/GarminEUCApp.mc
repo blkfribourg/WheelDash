@@ -114,7 +114,7 @@ class GarminEUCApp extends Application.AppBase {
       }
       // automatic recording ------------------
       // a bit hacky maybe ...
-      if (eucData.activityAutorecording == true) {
+      if (eucData.activityAutorecording == true && eucData.paired == true) {
         if (delegate != null && activityRecordView == null) {
           // System.println("initialize autorecording");
           activityRecordView = delegate.getActivityView();
@@ -339,20 +339,22 @@ class GarminEUCApp extends Application.AppBase {
             //Chrono page 1
 
             var chrono;
-            var activityTimerTime = null;
+            var activityTimerSec = null;
             var sessionDistance = null;
             var averageSpeed = null;
             var maxSpeed = null;
-            if (activityRecordView != null) {
-              activityTimerTime = activityRecordView.getElapsedTime();
+            if (
+              activityRecordView != null &&
+              activityRecordView.isSessionRecording() == true
+            ) {
+              activityTimerSec = activityRecordView.getElapsedTime();
               sessionDistance = activityRecordView.getSessionDist();
               averageSpeed = activityRecordView.getAvgSpeed();
               maxSpeed = activityRecordView.getMaxSpeed();
             }
-            if (activityTimerTime != null) {
-              var sec = activityTimerTime / 1000;
-              var mn = sec / 60;
-              chrono = [mn / 60, mn % 60, sec % 60, activityTimerTime % 1000];
+            if (activityTimerSec != null) {
+              var mn = activityTimerSec / 60;
+              chrono = [mn / 60, mn % 60, activityTimerSec % 60];
             } else {
               chrono = [0, 0, 0];
             }
