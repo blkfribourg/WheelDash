@@ -1,5 +1,5 @@
 <strings>
-    <string id="AppName">WheelDash (beta)</string>
+    <string id="AppName">WheelDash (dev)</string>
     <string id="firstConnStr">Profile $1$ 1st connection\nPlease turn on your wheel\n and wait for connection\n\nensure only one wheel is ON!\n\nIf you enjoy this app :\n ko-fi.com/wheeldash</string>
     <string id="connectedStr">Profile $1$ connected !\n\nSaving wheel unique identifier</string>
     <string id="spdLimiterStr">Speed limiter feature\n is enabled!\n\nPlease ensure your tiltback\nis working properly with\nlimiter on or off!</string>
