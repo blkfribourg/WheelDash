@@ -169,13 +169,6 @@
             />
         </setting>
          <setting
-            propertyKey="@Properties.convertToMiles"
-            title="@Strings.convertToMiles">
-            <settingConfig
-                type="boolean"
-            />
-        </setting>
-         <setting
             propertyKey="@Properties.convertToFahrenheit"
             title="@Strings.convertToFahrenheit">
             <settingConfig
@@ -221,8 +214,14 @@
                     <listEntry value="0">@Strings.engoTouch0</listEntry>
                     <listEntry value="1">@Strings.engoTouch1</listEntry>                    
                 </settingConfig>
-            </setting>
-
+         </setting>
+           <setting
+            propertyKey="@Properties.useEUCWorldAPI"
+            title="@Strings.useEUCWorldAPI">
+                <settingConfig
+                    type="boolean"
+                />
+        </setting>
         
         
 
@@ -243,6 +242,7 @@
                     <listEntry value="3">@Strings.wheelBrand3</listEntry>
                     <listEntry value="4">@Strings.wheelBrand4</listEntry>
                     <listEntry value="5">@Strings.wheelBrand5</listEntry>
+                    <listEntry value="6">@Strings.wheelBrand6</listEntry>
                 </settingConfig>
             </setting>
             <setting
@@ -471,6 +471,13 @@
                 max="250"
           />
         </setting>
+        <setting
+            propertyKey="@Properties.convertToMiles_p1"
+            title="@Strings.convertToMiles_p1">
+            <settingConfig
+                type="boolean"
+            />
+        </setting>
         <!--
         <setting
             propertyKey="@Properties.tiltbackSpeed_p1"
@@ -510,6 +517,7 @@
                     <listEntry value="3">@Strings.wheelBrand3</listEntry>
                     <listEntry value="4">@Strings.wheelBrand4</listEntry>
                     <listEntry value="5">@Strings.wheelBrand5</listEntry>
+                    <listEntry value="6">@Strings.wheelBrand6</listEntry>
                 </settingConfig>
             </setting>
             <setting
@@ -738,6 +746,13 @@
                 max="250"
            />
         </setting>
+         <setting
+            propertyKey="@Properties.convertToMiles_p2"
+            title="@Strings.convertToMiles_p2">
+            <settingConfig
+                type="boolean"
+            />
+        </setting>
         <!--
         <setting
             propertyKey="@Properties.tiltbackSpeed_p2"
@@ -776,6 +791,7 @@
                     <listEntry value="3">@Strings.wheelBrand3</listEntry>
                     <listEntry value="4">@Strings.wheelBrand4</listEntry>
                     <listEntry value="5">@Strings.wheelBrand5</listEntry>
+                    <listEntry value="6">@Strings.wheelBrand6</listEntry>
                  </settingConfig>
             </setting>
             <setting
@@ -1003,6 +1019,13 @@
                 min="0"
                 max="250"
                 />
+        </setting>
+         <setting
+            propertyKey="@Properties.convertToMiles_p3"
+            title="@Strings.convertToMiles_p3">
+            <settingConfig
+                type="boolean"
+            />
         </setting>
         <!--
         <setting

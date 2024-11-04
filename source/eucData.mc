@@ -155,6 +155,9 @@ module eucData {
   var engoPageNb = 3;
   var engoCfgUpdate = null;
 
+  // EUCWorldCompat
+  var useEUCWorldAPI = false;
+  var fVal = -1;
   function getBatteryPercentage() {
     if (voltage != null) {
       // using better battery formula from wheellog

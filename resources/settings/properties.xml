@@ -19,8 +19,8 @@
     <!--<property id ="KSVoiceModeVal" type="number">0</property>-->
     <property id ="useMiles" type="boolean">false</property>
     <property id ="useFahrenheit" type="boolean">false</property>
-    <property id ="convertToMiles" type="boolean">false</property>
     <property id ="convertToFahrenheit" type="boolean">false</property>
+    <property id ="useEUCWorldAPI" type="boolean">false</property>
     <property id ="fieldNB" type="number">6</property>
     <property id ="field1" type="number">0</property>
     <property id ="field2" type="number">1</property>
@@ -74,6 +74,7 @@
     <property id="currentCorrection_p1" type="number">0</property>
     <property id="maxTemperature_p1" type="float">65</property>
     <property id="begodeCF_p1" type="boolean">false</property>
+    <property id ="convertToMiles_p1" type="boolean">false</property>
     
 
 <!--Profile 2-->
@@ -102,6 +103,7 @@
     <property id="currentCorrection_p2" type="number">0</property>
     <property id="maxTemperature_p2" type="float">65</property>
     <property id="begodeCF_p2" type="boolean">false</property>
+    <property id ="convertToMiles_p2" type="boolean">false</property>
     
 
 <!--Profile 3-->
@@ -130,6 +132,7 @@
     <property id="currentCorrection_p3" type="number">0</property>
     <property id="maxTemperature_p3" type="float">65</property>
     <property id="begodeCF_p3" type="boolean">false</property>
+    <property id ="convertToMiles_p3" type="boolean">false</property>
     
     
 </properties>

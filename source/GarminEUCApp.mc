@@ -2,6 +2,7 @@ import Toybox.Application;
 import Toybox.Lang;
 import Toybox.WatchUi;
 import Toybox.System;
+import Toybox.Communications;
 using Toybox.Timer;
 using Toybox.StringUtil;
 import Toybox.Position;
@@ -11,6 +12,7 @@ class GarminEUCApp extends Application.AppBase {
   private var bleDelegate = null;
   private var engoNextUpdate = null;
   private var tiltBackInit = null;
+  private var EUCWorld;
   var timeOut = 10000;
   var activityRecordingDelay = 3000;
   var usePS;
@@ -87,6 +89,12 @@ class GarminEUCApp extends Application.AppBase {
   }
   // Timer callback for various alarms & update UI
   function onUpdateTimer() {
+    // compatibility with EUC World. Requires multiple webRequests. As timer number are limited, I use this one. It's not the nicest approach but for for now it's the one I choosed :)
+
+    if (eucData.wheelBrand == 6) {
+      EUCWorldCompat();
+    } //EUC World
+
     //dummyGen();
     if (eucData.wheelName != null) {
       DFViewInit();
@@ -444,7 +452,8 @@ class GarminEUCApp extends Application.AppBase {
     eucData.displayNorth = AppStorage.getSetting("displayNorth");
     eucData.useMiles = AppStorage.getSetting("useMiles");
     eucData.useFahrenheit = AppStorage.getSetting("useFahrenheit");
-    eucData.convertToMiles = AppStorage.getSetting("convertToMiles");
+    // eucData.convertToMiles = AppStorage.getSetting("convertToMiles"); -> moved to profile setting : now in PSMenuDelegate
+    eucData.useEUCWorldAPI = AppStorage.getSetting("useEUCWorldAPI");
     eucData.convertToFahrenheit = AppStorage.getSetting("convertToFahrenheit");
     //Im Horn experimental
     eucData.imHornSound = AppStorage.getSetting("imHornSound");

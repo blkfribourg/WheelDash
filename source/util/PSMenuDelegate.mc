@@ -39,26 +39,47 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
     EUCAlarms.alarmsInit();
 
     if (Toybox has :BluetoothLowEnergy) {
-      eucPM.setManager();
-      eucBleDelegate = new eucBLEDelegate(
-        profileNb,
-        queue,
-        frameDecoder.init()
-      );
-      BluetoothLowEnergy.setDelegate(eucBleDelegate);
-      eucPM.registerProfiles();
-      if (eucData.ESP32Horn == true) {
-        hornPM.registerProfiles();
-      }
-      if (eucData.useEngo == true) {
-        engoPM.init();
-        engoPM.registerProfiles();
+      if (eucData.wheelBrand < 6) {
+        eucPM.setManager();
+        eucBleDelegate = new eucBLEDelegate(
+          profileNb,
+          queue,
+          frameDecoder.init()
+        );
+
+        BluetoothLowEnergy.setDelegate(eucBleDelegate);
+        eucPM.registerProfiles();
+        if (eucData.ESP32Horn == true) {
+          hornPM.registerProfiles();
+        }
+        if (eucData.useEngo == true) {
+          engoPM.init();
+          engoPM.registerProfiles();
+        }
+      } else {
+        if (eucData.ESP32Horn == true || eucData.useEngo == true) {
+          eucBleDelegate = new eucBLEDelegate(
+            profileNb,
+            queue,
+            frameDecoder.init()
+          );
+
+          BluetoothLowEnergy.setDelegate(eucBleDelegate);
+          eucPM.registerProfiles();
+          if (eucData.ESP32Horn == true) {
+            hornPM.registerProfiles();
+          }
+          if (eucData.useEngo == true) {
+            engoPM.init();
+            engoPM.registerProfiles();
+          }
+        }
       }
     }
     viewInit();
   }
   function viewInit() {
-    if (eucData.debug == true) {
+    if (eucData.debug == true && eucBleDelegate != null) {
       mainView = new GarminEUCDebugView();
       mainView.setBleDelegate(eucBleDelegate);
     } else {
@@ -99,8 +120,12 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
     }
     */
     //   System.println(eucData.spdLimFeatEnabled);
-    if (eucBleDelegate.isFirst == false) {
-      //System.println("not first");
+    if (eucData.wheelBrand == 6) {
+      WatchUi.pushView(mainView, mainViewdelegate, WatchUi.SLIDE_IMMEDIATE);
+    } else {
+      if (eucBleDelegate.isFirst == false) {
+        //System.println("not first");
+        /*
       if (
         eucData.spdLimFeatEnabled == true &&
         Storage.getValue("spdLimDisclDone") != true
@@ -109,13 +134,14 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
         connView.popViewDelay = 5000;
         WatchUi.pushView(connView, null, WatchUi.SLIDE_IMMEDIATE);
         Storage.setValue("spdLimDisclDone", true);
-      } else {
+      } else {*/
         WatchUi.pushView(mainView, mainViewdelegate, WatchUi.SLIDE_IMMEDIATE);
+        // }
+      } else {
+        //  System.println("first");
+        connView = new messageView(eucBleDelegate, profileNb, self, "1stConn");
+        WatchUi.pushView(connView, null, WatchUi.SLIDE_IMMEDIATE);
       }
-    } else {
-      //  System.println("first");
-      connView = new messageView(eucBleDelegate, profileNb, self, "1stConn");
-      WatchUi.pushView(connView, null, WatchUi.SLIDE_IMMEDIATE);
     }
   }
   function unpair() {
@@ -234,6 +260,7 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       eucData.BLECmdDelay = AppStorage.getSetting("cmdQueueDelay_p1");
 
       eucData.wheelName = AppStorage.getSetting("wheelName_p1");
+      eucData.convertToMiles = AppStorage.getSetting("convertToMiles_p1");
       Storage.setValue("lastProfile", profileName);
       return true;
     } else if (profileNb == 2) {
@@ -290,6 +317,7 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       actionButtonTrigger.beepButton =
         AppStorage.getSetting("beepButtonMap_p2");
       eucData.BLECmdDelay = AppStorage.getSetting("cmdQueueDelay_p2");
+      eucData.convertToMiles = AppStorage.getSetting("convertToMiles_p2");
 
       eucData.wheelName = AppStorage.getSetting("wheelName_p2");
       Storage.setValue("lastProfile", profileName);
@@ -349,7 +377,7 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       actionButtonTrigger.beepButton =
         AppStorage.getSetting("beepButtonMap_p3");
       eucData.BLECmdDelay = AppStorage.getSetting("cmdQueueDelay_p3");
-
+      eucData.convertToMiles = AppStorage.getSetting("convertToMiles_p3");
       eucData.wheelName = AppStorage.getSetting("wheelName_p3");
       Storage.setValue("lastProfile", profileName);
       return true;

@@ -546,6 +546,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
           eucData.BLECmdDelay,
           true
         );
+        message5 = "Q started " + queue.run_id;
       }
       // If Inmotion, start the ble queue, if the queue is empty it will start an continuous cycle of requests using requests that were stored in Inmotion related variables in the queue class.
       if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {

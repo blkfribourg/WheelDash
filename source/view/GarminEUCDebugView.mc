@@ -103,6 +103,78 @@ class GarminEUCDebugView extends WatchUi.View {
       );
     }
     if (eucData.wheelBrand == 2 || eucData.wheelBrand == 3) {
+      if (BleDelegate != null) {
+        var alignAxe = dc.getWidth() / 5;
+        var space = dc.getHeight() / 10;
+        var yGap = dc.getHeight() / 8;
+        var xGap = dc.getWidth() / 12;
+        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
+        dc.clear();
+        dc.drawText(
+          alignAxe,
+          yGap,
+          Graphics.FONT_XTINY,
+          BleDelegate.message1,
+          Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+        );
+        dc.drawText(
+          alignAxe - xGap,
+          space + yGap,
+          Graphics.FONT_XTINY,
+          BleDelegate.message2,
+          Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+        );
+        dc.drawText(
+          alignAxe - 2 * xGap,
+          2 * space + yGap,
+          Graphics.FONT_XTINY,
+          BleDelegate.message3,
+          Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+        );
+        dc.drawText(
+          alignAxe - 2 * xGap,
+          3 * space + yGap,
+          Graphics.FONT_XTINY,
+          BleDelegate.message4,
+          Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+        );
+        dc.drawText(
+          alignAxe - 2 * xGap,
+          4 * space + yGap,
+          Graphics.FONT_XTINY,
+          BleDelegate.message5,
+          Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+        );
+        dc.drawText(
+          alignAxe - 2 * xGap,
+          5 * space + yGap,
+          Graphics.FONT_XTINY,
+          BleDelegate.message6,
+          Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+        );
+        dc.drawText(
+          alignAxe - xGap,
+          6 * space + yGap,
+          Graphics.FONT_XTINY,
+          BleDelegate.message7,
+          Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+        );
+        dc.drawText(
+          alignAxe,
+          7 * space + yGap,
+          Graphics.FONT_XTINY,
+          BleDelegate.message8,
+          Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+        );
+        dc.drawText(
+          alignAxe + xGap,
+          8 * space + yGap,
+          Graphics.FONT_XTINY,
+          BleDelegate.message9,
+          Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+        );
+      }
+      /*
       var alignAxe = dc.getWidth() / 5;
       var space = dc.getHeight() / 10;
       var yGap = dc.getHeight() / 8;
@@ -187,6 +259,7 @@ class GarminEUCDebugView extends WatchUi.View {
         "data/s: " + valueRound(eucData.BLEReadRate, "%.1f"),
         Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
       );
+      */
     }
     if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
       if (BleDelegate != null) {
@@ -260,6 +333,7 @@ class GarminEUCDebugView extends WatchUi.View {
           Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
         );
       }
+
       /*
       if (BleDelegate != null) {
         var alignAxe = dc.getWidth() / 5;
@@ -354,6 +428,80 @@ class GarminEUCDebugView extends WatchUi.View {
           Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
         );
       }*/
+    }
+    if (eucData.wheelBrand == 6) {
+      var alignAxe = dc.getWidth() / 5;
+      var space = dc.getHeight() / 10;
+      var yGap = dc.getHeight() / 8;
+      var xGap = dc.getWidth() / 12;
+
+      dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
+      dc.clear();
+      dc.drawText(
+        alignAxe,
+        yGap,
+        Graphics.FONT_TINY,
+        "Spd: " + valueRound(eucData.speed, "%.1f"),
+        Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+      );
+      dc.drawText(
+        alignAxe - xGap,
+        space + yGap,
+        Graphics.FONT_TINY,
+        "Vlt: " + valueRound(eucData.voltage, "%.1f"),
+        Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+      );
+      dc.drawText(
+        alignAxe - 2 * xGap,
+        2 * space + yGap,
+        Graphics.FONT_TINY,
+        "phC: " + valueRound(eucData.Phcurrent, "%.1f"),
+        Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+      );
+      dc.drawText(
+        alignAxe - 2 * xGap,
+        3 * space + yGap,
+        Graphics.FONT_TINY,
+        "temp: " + valueRound(eucData.DisplayedTemperature, "%.1f"),
+        Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+      );
+      dc.drawText(
+        alignAxe - 2 * xGap,
+        4 * space + yGap,
+        Graphics.FONT_TINY,
+        "fVal: " + eucData.fVal,
+        Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+      );
+      dc.drawText(
+        alignAxe - 2 * xGap,
+        5 * space + yGap,
+        Graphics.FONT_TINY,
+        "hPWM: " + valueRound(eucData.hPWM, "%.1f"),
+        Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+      );
+
+      dc.drawText(
+        alignAxe,
+        7 * space + yGap,
+        Graphics.FONT_TINY,
+        "dst: " + valueRound(eucData.tripDistance, "%.2f"),
+        Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+      );
+      dc.drawText(
+        alignAxe + xGap,
+        8 * space + yGap,
+        Graphics.FONT_TINY,
+        "t.dst: " + valueRound(eucData.totalDistance, "%.1f"),
+        Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+      );
+
+      dc.drawText(
+        dc.getWidth() - 2.6 * alignAxe,
+        4 * space + yGap,
+        Graphics.FONT_TINY,
+        "bat%: " + valueRound(eucData.getBatteryPercentage(), "%.1f"),
+        Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+      );
     }
   }
 }

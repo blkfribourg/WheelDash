@@ -1,5 +1,5 @@
 <strings>
-    <string id="AppName">WheelDash (dev)</string>
+    <string id="AppName">WheelDash (beta)</string>
     <string id="firstConnStr">Profile $1$ 1st connection\nPlease turn on your wheel\n and wait for connection\n\nensure only one wheel is ON!\n\nIf you enjoy this app :\n ko-fi.com/wheeldash</string>
     <string id="connectedStr">Profile $1$ connected !\n\nSaving wheel unique identifier</string>
     <string id="spdLimiterStr">Speed limiter feature\n is enabled!\n\nPlease ensure your tiltback\nis working properly with\nlimiter on or off!</string>
@@ -24,6 +24,7 @@
     <string id="wheelBrand3">Kingsong (old)</string>
     <string id="wheelBrand4">InMotion V11 (fw1.4)/V12 (experimental)</string>
     <string id="wheelBrand5">InMotion V11Y/V13/V14 (experimental)</string>
+    <string id="wheelBrand6">EUC World (experimental)</string>
    
     
 
@@ -75,9 +76,12 @@
     
     <string id="useMiles">Miles unit</string>
     <string id="useFahrenheit">Fahrenheit unit</string>
-    <string id="convertToMiles">Convert to Miles</string>
+    <string id="convertToMiles_p1">Convert to Miles (Profile 1)</string>
+    <string id="convertToMiles_p2">Convert to Miles (Profile 2)</string>
+    <string id="convertToMiles_p3">Convert to Miles (Profile 3)</string>
     <string id="convertToFahrenheit">Convert to Fahrenheit</string>
 
+    <string id="useEUCWorldAPI">Use EUC World Server API</string>
     <string id="vibeIntensity">Alarms vibration intensity</string>
     <string id="ESP32Horn">ESP32 WheelHorn</string>
     <string id="motorbikeHeadset">Alternative audio alarms (motorbikeHeadset)</string>
