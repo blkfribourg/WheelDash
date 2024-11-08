@@ -30,6 +30,30 @@ class GarminEUCDebugView extends WatchUi.View {
         "Spd: " + valueRound(eucData.speed, "%.1f"),
         Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
       );
+
+      dc.drawText(
+        alignAxe - xGap,
+        space + yGap,
+        Graphics.FONT_TINY,
+        "BLERI: " + eucData.BLEReadInterval,
+        Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+      );
+      dc.drawText(
+        alignAxe - 2 * xGap,
+        2 * space + yGap,
+        Graphics.FONT_TINY,
+        "BLEPT: " + eucData.BLEReadProcTime,
+        Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+      );
+
+      dc.drawText(
+        alignAxe - 2 * xGap,
+        3 * space + yGap,
+        Graphics.FONT_TINY,
+        "BLEWI: " + eucData.BLEWriteInterval,
+        Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
+      );
+      /*
       dc.drawText(
         alignAxe - xGap,
         space + yGap,
@@ -51,6 +75,7 @@ class GarminEUCDebugView extends WatchUi.View {
         "temp: " + valueRound(eucData.DisplayedTemperature, "%.1f"),
         Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
       );
+      */
       dc.drawText(
         alignAxe - 2 * xGap,
         4 * space + yGap,
@@ -98,7 +123,7 @@ class GarminEUCDebugView extends WatchUi.View {
         dc.getWidth() - 2.7 * alignAxe,
         3 * space + yGap,
         Graphics.FONT_TINY,
-        "data/s: " + valueRound(eucData.BLEReadRate, "%.1f"),
+        "data/s: " + valueRound(eucData.BLEReadInterval, "%.1f"),
         Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
       );
     }
@@ -256,7 +281,7 @@ class GarminEUCDebugView extends WatchUi.View {
         dc.getWidth() - 2.7 * alignAxe,
         3 * space + yGap,
         Graphics.FONT_TINY,
-        "data/s: " + valueRound(eucData.BLEReadRate, "%.1f"),
+        "data/s: " + valueRound(eucData.BLEReadInterval, "%.1f"),
         Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
       );
       */
@@ -389,7 +414,7 @@ class GarminEUCDebugView extends WatchUi.View {
           alignAxe - xGap,
           6 * space + yGap,
           Graphics.FONT_TINY,
-          "data/s: " + valueRound(eucData.BLEReadRate, "%.1f"),
+          "data/s: " + valueRound(eucData.BLEReadInterval, "%.1f"),
           Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
         );
         dc.drawText(

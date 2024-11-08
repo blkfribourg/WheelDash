@@ -29,7 +29,7 @@ module frameDecoder {
 }
 
 class GwDecoder {
-  var frameANb = 0;
+  //var frameANb = 0;
 
   var settings = 0x0000;
   function frameBuffer(transmittedFrame) {
@@ -113,15 +113,16 @@ class GwDecoder {
     //  }
   }
   function processFrameA(value) {
-    frameANb++;
+    /*  frameANb++;
     if (eucData.timeWhenConnected != null) {
       var elaspedTime = eucData.timeWhenConnected
         .subtract(new Time.Moment(Time.now().value()))
         .value();
       if (elaspedTime != 0) {
-        eucData.BLEReadRate = frameANb / elaspedTime;
+        eucData.BLEReadInterval = frameANb / elaspedTime;
       }
     }
+    */
     eucData.voltage = shortFromBytesBE(value, 2) / 100.0;
     eucData.speed = (signedShortFromBytesBE(value, 4).abs() * 3.6) / 100.0;
     eucData.tripDistance = shortFromBytesBE(value, 8) / 1000.0; //in km
@@ -196,7 +197,7 @@ class VeteranDecoder {
     0xb40bbe37, 0xc30c8ea1, 0x5a05df1b, 0x2d02ef8d,
   ];
 
-  var frameNb = 0;
+  //var frameNb = 0;
   function frameBuffer(transmittedFrame) {
     for (var i = 0; i < transmittedFrame.size(); i++) {
       if (checkChar(transmittedFrame[i]) == true) {
@@ -275,16 +276,16 @@ class VeteranDecoder {
   }
 
   function processFrame(value) {
-    frameNb++;
+    /*  frameNb++;
     if (eucData.timeWhenConnected != null) {
       var elaspedTime = eucData.timeWhenConnected
         .subtract(new Time.Moment(Time.now().value()))
         .value();
       if (elaspedTime != 0) {
-        eucData.BLEReadRate = frameNb / elaspedTime;
+        eucData.BLEReadInterval = frameNb / elaspedTime;
       }
     }
-
+*/
     eucData.voltage =
       value.decodeNumber(Lang.NUMBER_FORMAT_SINT16, {
         :offset => 4,
@@ -344,7 +345,7 @@ class VeteranDecoder {
 }
 
 class KingsongDecoder {
-  var frameNb = 0;
+  // var frameNb = 0;
 
   function processFrame(value) {
     //System.println("Processing KS frame");
@@ -362,15 +363,15 @@ class KingsongDecoder {
         return false;
       }
       if ((value[16] & 255) == 0xa9) {
-        frameNb++;
+        /*   frameNb++;
         if (eucData.timeWhenConnected != null) {
           var elaspedTime = eucData.timeWhenConnected
             .subtract(new Time.Moment(Time.now().value()))
             .value();
           if (elaspedTime != 0) {
-            eucData.BLEReadRate = frameNb / elaspedTime;
+            eucData.BLEReadInterval = frameNb / elaspedTime;
           }
-        }
+        }*/
         // Live data
         var voltage = decode2bytes(value[2], value[3]) / 100.0;
         eucData.voltage = voltage; //wd.setVoltage(voltage);
@@ -503,7 +504,7 @@ class KingsongDecoder {
 
 //Inmotion decoder (starting from V11, previous models are not compatible with Garmin due to bluetooth stack issue)
 class IMV2Decoder {
-  var frameNb = 0;
+  //var frameNb = 0;
   var start_dist;
 
   function frameBuffer(bleDelegate, transmittedFrame) {
@@ -511,15 +512,15 @@ class IMV2Decoder {
       bleDelegate.queue.lastPacketType.equals("live") &&
       transmittedFrame.size() == 20
     ) {
-      frameNb++;
+      /* frameNb++;
       if (eucData.timeWhenConnected != null) {
         var elaspedTime = eucData.timeWhenConnected
           .subtract(new Time.Moment(Time.now().value()))
           .value();
         if (elaspedTime != 0) {
-          eucData.BLEReadRate = frameNb / elaspedTime;
+          eucData.BLEReadInterval = frameNb / elaspedTime;
         }
-      }
+      }*/
       // V11 & V12
       if (eucData.wheelBrand == 4) {
         eucData.voltage =

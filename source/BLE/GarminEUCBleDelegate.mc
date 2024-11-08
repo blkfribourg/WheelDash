@@ -54,6 +54,9 @@ class eucBLEDelegate extends Ble.BleDelegate {
   var cfgPacketsTotal = null;
   var cfgPacketsCount = 0;
 
+  var euc_BLE_TX_startTime;
+  var BLE_RX_startTime;
+
   /*
   var V11Y = [
     0xaa, 0xaa, 0x14, 0x59, 0x84, 0x69, 0x1d, 0x0e, 0x00, 0x00, 0x00, 0x00,
@@ -596,6 +599,12 @@ class eucBLEDelegate extends Ble.BleDelegate {
     characteristic as Toybox.BluetoothLowEnergy.Characteristic,
     status as Toybox.BluetoothLowEnergy.Status
   ) as Void {
+    if (eucData.debug) {
+      if (BLE_RX_startTime != null) {
+        eucData.BLEWriteInterval = System.getTimer() - BLE_RX_startTime;
+      }
+      BLE_RX_startTime = System.getTimer();
+    }
     if (characteristic.equals(engo_rx) && cfgPacketsTotal != null) {
       cfgUpdateStatus();
     }
@@ -621,6 +630,17 @@ class eucBLEDelegate extends Ble.BleDelegate {
     // If characteristic matches a the registred characteritic of a EUC
     message6 = "CharChanged";
     if (char.equals(euc_char)) {
+      if (eucData.debug) {
+        System.println("SysTime: " + System.getTimer());
+
+        if (euc_BLE_TX_startTime != null) {
+          var interval = System.getTimer() - euc_BLE_TX_startTime;
+          System.println("Interval: " + interval);
+          eucData.BLEReadInterval = interval;
+        }
+
+        euc_BLE_TX_startTime = System.getTimer();
+      }
       message7 = "EUCCharChanged";
       // Decoding data depending on EUC brand.
       if (
@@ -637,6 +657,9 @@ class eucBLEDelegate extends Ble.BleDelegate {
       }
       if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
         decoder.frameBuffer(self, value);
+      }
+      if (eucData.debug) {
+        eucData.BLEReadProcTime = System.getTimer() - euc_BLE_TX_startTime;
       }
     }
     // If characteristic matches a the registred characteritic of the engo smartglasses

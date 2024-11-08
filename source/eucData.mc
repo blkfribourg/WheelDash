@@ -25,7 +25,9 @@ module eucData {
   var activityAutosave;
   var activityRecording = false;
   var debug;
-  var BLEReadRate = 0;
+  var BLEReadInterval = 0;
+  var BLEReadProcTime = 0;
+  var BLEWriteInterval = 0;
   var timeWhenConnected;
   //UI
   var sagThreshold = 0.3;
