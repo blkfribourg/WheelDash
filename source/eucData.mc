@@ -203,7 +203,7 @@ module eucData {
             battery = 0.0;
           }
         }
-        if (version > 5 && version < 6) {
+        if (version > 5) {
           // Lynx
           if (voltage > 150.3) {
             battery = 100.0;
