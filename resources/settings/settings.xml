@@ -1,6 +1,11 @@
 <settings>
 <!-- Global settings-->
         <setting
+                propertyKey="@Properties.settingsUrl"
+                title="@Strings.settingsUrl">
+                <settingConfig type="alphaNumeric"/>
+        </setting>
+        <setting
             propertyKey="@Properties.updateDelay"
             title="@Strings.updateDelay">
             <settingConfig

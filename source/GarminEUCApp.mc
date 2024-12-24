@@ -31,6 +31,10 @@ class GarminEUCApp extends Application.AppBase {
 
   // onStart() is called on application start up
   function onStart(state as Dictionary?) as Void {
+    if (eucData.settingsChanged == false) {
+      //if setting change was detected it means checkSettingsURL was already called
+      checkSettingsURL();
+    }
     // Sandbox zone
     // Varia.targetObject = fakeVaria(3);
     // end of sandbox
@@ -89,6 +93,17 @@ class GarminEUCApp extends Application.AppBase {
   }
   // Timer callback for various alarms & update UI
   function onUpdateTimer() {
+    if (eucData.settingsChanged == true) {
+      // System.println("settingsChanged!");
+
+      //reset timeout
+      timeOut = 10000;
+      initialize(); //req?
+      onStart(null);
+      getInitialView();
+      WatchUi.switchToView(view, delegate, WatchUi.SLIDE_IMMEDIATE);
+      eucData.settingsChanged = false;
+    }
     // compatibility with EUC World. Requires multiple webRequests. As timer number are limited, I use this one. It's not the nicest approach but for for now it's the one I choosed :)
 
     if (eucData.wheelBrand == 6) {
@@ -101,10 +116,13 @@ class GarminEUCApp extends Application.AppBase {
     }
     //Only starts if no profile selected
     if (eucData.wheelName == null && delegate != null && usePS) {
-      timeOut = timeOut - eucData.updateDelay;
-      if (timeOut <= 0) {
-        var profile = AppStorage.getSetting("defaultProfile");
-        delegate.setSettings(profile);
+      //should check settingsChanged status, and reset timeOut value if true
+      if (eucData.PSlock == false) {
+        timeOut = timeOut - eucData.updateDelay;
+        if (timeOut <= 0) {
+          var profile = AppStorage.getSetting("defaultProfile");
+          delegate.setSettings(profile);
+        }
       }
     }
     if (eucData.useRadar == true) {

@@ -62,7 +62,7 @@ class GarminEUCDelegate extends WatchUi.BehaviorDelegate {
     if (keyEvent.getKey().equals(WatchUi.KEY_ESC)) {
       var message = "Exit WheelDash?";
       var dialog = new WatchUi.Confirmation(message);
-      var confirmDelegate = new MyConfirmationDelegate();
+      var confirmDelegate = new ExitConfirmationDelegate();
       WatchUi.pushView(dialog, confirmDelegate, WatchUi.SLIDE_IMMEDIATE);
     }
 
@@ -110,7 +110,7 @@ class GarminEUCDelegate extends WatchUi.BehaviorDelegate {
   }
 }
 
-class MyConfirmationDelegate extends WatchUi.ConfirmationDelegate {
+class ExitConfirmationDelegate extends WatchUi.ConfirmationDelegate {
   function initialize() {
     ConfirmationDelegate.initialize();
   }
