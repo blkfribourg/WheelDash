@@ -175,24 +175,21 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
     return mainViewdelegate.getBleDelegate();
   }
 
-  function setSettings(profileName) {
-    var profileSelected = pickProfile(profileName);
-    if (profileSelected != true) {
-      //load last used if exist or profile 1 if doesn't
-      var lastProfile = Storage.getValue("lastProfile");
+  function getDefaultSettings(profileIdx) {
+    //load last used if exist or default profile if doesn't
+    var lastProfile = Storage.getValue("lastProfile");
 
-      if (lastProfile != null && AppStorage.getSetting("defaultProfile") == 0) {
-        if (pickProfile(lastProfile) == false) {
-          // to avoid infinite loop if user change lastprofile profile name charge profile 1.
-          pickProfile(getProfileList()[0]);
-        }
-        connInit();
-      } else {
-        pickProfile(
-          getProfileList()[AppStorage.getSetting("defaultProfile") - 1]
-        );
-        connInit();
+    if (lastProfile != null && AppStorage.getSetting("defaultProfile") == 0) {
+      if (setSettings(lastProfile) == false) {
+        // to avoid infinite loop if user change lastprofile profile name charge profile 1.
+        setSettings(getProfileList()[0]);
       }
+      connInit();
+    } else {
+      setSettings(
+        getProfileList()[AppStorage.getSetting("defaultProfile") - 1]
+      );
+      connInit();
     }
   }
   function getProfileList() {
@@ -202,9 +199,11 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       AppStorage.getSetting("wheelName_p3"),
     ];
   }
-  function pickProfile(profileName) {
-    var profiles = getProfileList();
 
+  function setSettings(profileName) {
+    var profiles = getProfileList();
+    System.println(profileName);
+    System.println(profiles.indexOf(profileName) + 1);
     profileNb = profiles.indexOf(profileName) + 1;
 
     eucData.maxDisplayedSpeed = AppStorage.getSetting("maxSpeed_p" + profileNb);
@@ -457,41 +456,37 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
     return mainViewdelegate.getBleDelegate();
   }
 
-  function setSettings(profileName) {
-    System.println("loading: " + profileName);
-    var profileSelected = pickProfile(profileName);
-    if (profileSelected != true) {
-      //load last used if exist or profile 1 if doesn't
-      var lastProfile = (JSONSettings.get("lastProfile") as Dictionary).get(
-        "v"
-      );
+  function getDefaultSettings(profileIdx) {
+    System.println("loading: " + profileIdx);
 
-      if (lastProfile != null && JSONSettings.get("defaultProfile") == 0) {
-        if (pickProfile(lastProfile) == false) {
-          // to avoid infinite loop if user change lastprofile profile name charge profile 1.
-          pickProfile(profileSelector.getJSONProfileList()[0]);
-        }
-        connInit();
-      } else {
-        pickProfile(
-          profileSelector.getJSONProfileList()[
-            (
-              (JSONSettings.get("defaultProfile") as Dictionary).get("v") as
-                Number
-            ) - 1
-          ]
-        );
-        connInit();
+    //load last used if exist or profile 1 if doesn't
+    var lastProfile = Storage.getValue("lastProfile");
+
+    if (lastProfile != null && JSONSettings.get("defaultProfile") == 0) {
+      if (setSettings(lastProfile) == false) {
+        // to avoid infinite loop if user change lastprofile profile name charge profile 1.
+        setSettings(profileSelector.getJSONProfileList()[0]);
       }
+      connInit();
+    } else {
+      setSettings(
+        profileSelector.getJSONProfileList()[
+          (
+            (JSONSettings.get("defaultProfile") as Dictionary).get("v") as
+              String
+          ).toNumber() - 1
+        ]
+      );
+      connInit();
     }
   }
 
-  function pickProfile(profileName) {
+  function setSettings(profileName) {
     var profiles = profileSelector.getJSONProfileList();
     profileNb = profiles.indexOf(profileName) + 1;
-    System.println("profileNb: " + profileNb);
-    System.println("maxSpeed_p" + profileNb);
-    System.println(JSONSettings);
+    //System.println("profileNb: " + profileNb);
+    //System.println("maxSpeed_p" + profileNb);
+    //  System.println(JSONSettings);
     eucData.maxDisplayedSpeed = (
       (JSONSettings.get("maxSpeed_p" + profileNb) as Dictionary).get("v") as
         String

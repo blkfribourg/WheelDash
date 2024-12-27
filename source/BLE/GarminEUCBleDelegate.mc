@@ -102,7 +102,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
     Ble.setScanState(Ble.SCAN_STATE_SCANNING);
     //checking if EUC Footprint already exist (see IsFirsConnection function description)
     isFirst = isFirstConnection();
-    //isFirst = false;
+    isFirst = false;
 
     if (eucData.useEngo == true) {
       deviceNb = deviceNb + 1;

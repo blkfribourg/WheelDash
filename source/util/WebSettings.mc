@@ -84,7 +84,7 @@ class WebSettings {
             }
           }
         } catch (e) {
-          System.println(e);
+          // System.println(e);
         }
       }
     }
@@ -92,11 +92,10 @@ class WebSettings {
   }
   function settingsChanged(json as Dictionary) {
     // checking if a stored JSON exists :
-    var storedJSON = Storage.getValue("JSONSettings");
+    var storedJSON = Storage.getValue("JSONSettings") as Dictionary;
     //if stored JSON exists and is the same as the new one, return false
     if (storedJSON != null) {
-      System.println("localJSON detected");
-      if (storedJSON.equals(json)) {
+      if (compareJSON(storedJSON, json) == true) {
         System.println("localJSON is identical");
         return false;
       }
@@ -120,7 +119,7 @@ class WebSettings {
         var pStr = keys[i].substring(pStrIdx + 2, null);
         if (pStr != null) {
           if (pStr.toNumber() > eucData.profilesNb) {
-            System.println("new profile detected:" + pStr);
+            //  System.println("new profile detected:" + pStr);
             eucData.profilesNb = pStr.toNumber(); // updating last profile id
           }
         }
@@ -146,7 +145,7 @@ class WebSettings {
           }
         }
       } catch (e) {
-        System.println(e);
+        // System.println(e);
       }
     }
 
@@ -166,7 +165,7 @@ class WebSettings {
     responseCode as Number,
     data as Dictionary<String, Object?> or String or Null
   ) as Void {
-    System.println(responseCode);
+    // System.println(responseCode);
     // System.println(data);
     if (responseCode == 200 && data != null) {
       fetchTimer.stop();
@@ -180,6 +179,59 @@ class WebSettings {
         startFetchTimer();
       }
     }
+  }
+  function compareJSON(json1 as Dictionary, json2 as Dictionary) {
+    // if jsons are identical returns true, else returns false
+
+    var keys1 = json1.keys() as Array;
+    var keys2 = json2.keys() as Array;
+    if (keys1.size() != keys2.size()) {
+      return false;
+    }
+    System.println(keys1.size());
+    for (var i = 0; i < keys1.size(); i++) {
+      var firstLvl = json1.get(keys1[i]) as Dictionary;
+      if (firstLvl instanceof Dictionary) {
+        var secondLvlKeys = firstLvl.keys();
+        for (var j = 0; j < secondLvlKeys.size(); j++) {
+          // System.println(secondLvlKeys);
+          if (secondLvlKeys instanceof Array) {
+            var thirdLvl = firstLvl.get(secondLvlKeys[j]);
+
+            if (thirdLvl instanceof Dictionary) {
+              var thirdLvlKeys = thirdLvl.keys();
+              if (thirdLvlKeys instanceof Array) {
+                for (var k = 0; k < thirdLvlKeys.size(); k++) {
+                  var value1 = (
+                    (json1.get(keys1[i]) as Dictionary).get(secondLvlKeys[j]) as
+                      Dictionary
+                  ).get(thirdLvlKeys[k]);
+                  var value2 = (
+                    (json2.get(keys1[i]) as Dictionary).get(secondLvlKeys[j]) as
+                      Dictionary
+                  ).get(thirdLvlKeys[k]);
+
+                  if (!value1.equals(value2)) {
+                    //System.println("keys " + keys1[i] + " are different");
+                    return false;
+                  }
+                }
+              }
+            }
+          }
+          //  System.println(secondLvl);
+        }
+      } else {
+        var value1 = json1.get(keys1[i]);
+        var value2 = json2.get(keys1[i]);
+
+        if (!value1.equals(value2)) {
+          //System.println("keys " + keys1[i] + " are different");
+          return false;
+        }
+      }
+    }
+    return true;
   }
 }
 
@@ -195,6 +247,9 @@ class SettingConfirmationDelegate extends WatchUi.ConfirmationDelegate {
 
   function onResponse(response) {
     if (response == WatchUi.CONFIRM_YES) {
+      //deleting last profile id on storage (to avoid a non existing profile to be loaded) :
+      Storage.deleteValue("lastProfile");
+
       parent.setSettings(data);
     }
     eucData.PSlock = false;

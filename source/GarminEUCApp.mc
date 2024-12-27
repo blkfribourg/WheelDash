@@ -84,7 +84,7 @@ class GarminEUCApp extends Application.AppBase {
     if (!usePS) {
       var profile = AppStorage.getSetting("defaultProfile");
       //System.println(profile);
-      delegate.setSettings(profile);
+      delegate.getDefaultSettings(profile);
       view = delegate.getView();
       delegate = delegate.getDelegate();
     }
@@ -121,7 +121,7 @@ class GarminEUCApp extends Application.AppBase {
         timeOut = timeOut - eucData.updateDelay;
         if (timeOut <= 0) {
           var profile = AppStorage.getSetting("defaultProfile");
-          delegate.setSettings(profile);
+          delegate.getDefaultSettings(profile);
         }
       }
     }
