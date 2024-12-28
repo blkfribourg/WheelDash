@@ -55,6 +55,11 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
         if (eucData.useEngo == true) {
           engoPM.init();
           engoPM.registerProfiles();
+          if (eucData.useMiles == true) {
+            eucData.engoDistUnit = "mi";
+            eucData.engoSpdUnit = "mph";
+            eucData.engoTempUnit = "F";
+          }
         }
       } else {
         if (eucData.ESP32Horn == true || eucData.useEngo == true) {

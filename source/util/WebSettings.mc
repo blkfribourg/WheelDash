@@ -31,6 +31,7 @@ class WebSettings {
   }
 
   function startFetchTimer() {
+    eucData.PSlock = true; // stop profile selector 10 sec timer
     fetchTimer.start(method(:fetch), 1000, false);
   }
 
@@ -97,6 +98,7 @@ class WebSettings {
     if (storedJSON != null) {
       if (compareJSON(storedJSON, json) == true) {
         System.println("localJSON is identical");
+
         return false;
       }
     } else {
@@ -152,7 +154,6 @@ class WebSettings {
     return false;
   }
   function confirmUpdate(data) {
-    eucData.PSlock = true;
     var message = "Settings conflict detected!\nUpdate local?";
     var dialog = new WatchUi.Confirmation(message);
     WatchUi.pushView(
@@ -165,7 +166,7 @@ class WebSettings {
     responseCode as Number,
     data as Dictionary<String, Object?> or String or Null
   ) as Void {
-    // System.println(responseCode);
+    System.println(responseCode);
     // System.println(data);
     if (responseCode == 200 && data != null) {
       fetchTimer.stop();
@@ -173,10 +174,14 @@ class WebSettings {
       if (settingsChanged(data) == true) {
         confirmUpdate(data);
         return;
+      } else {
+        eucData.PSlock = false;
       }
     } else {
       if (fetchCnt < 3) {
         startFetchTimer();
+      } else {
+        eucData.PSlock = false;
       }
     }
   }
@@ -253,6 +258,7 @@ class SettingConfirmationDelegate extends WatchUi.ConfirmationDelegate {
       parent.setSettings(data);
     }
     eucData.PSlock = false;
+
     return true;
   }
 }

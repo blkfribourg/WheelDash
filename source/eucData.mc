@@ -159,6 +159,9 @@ module eucData {
   var engoBattReq = 300;
   var engoPageNb = 3;
   var engoCfgUpdate = null;
+  var engoDistUnit = "km";
+  var engoSpdUnit = "km/h";
+  var engoTempUnit = "C";
 
   // EUCWorldCompat
   var useEUCWorldAPI = false;

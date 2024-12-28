@@ -25,12 +25,12 @@ class GarminEUCApp extends Application.AppBase {
   function initialize() {
     eucData.limitedMemory = System.getSystemStats().totalMemory < 128000;
     AppBase.initialize();
-    usePS = AppStorage.getSetting("useProfileSelector");
     alarmsTimer = new Timer.Timer();
   }
 
   // onStart() is called on application start up
   function onStart(state as Dictionary?) as Void {
+    usePS = AppStorage.getSetting("useProfileSelector");
     if (eucData.settingsChanged == false) {
       //if setting change was detected it means checkSettingsURL was already called
       checkSettingsURL();
@@ -98,7 +98,7 @@ class GarminEUCApp extends Application.AppBase {
 
       //reset timeout
       timeOut = 10000;
-      initialize(); //req?
+      // initialize(); //req?
       onStart(null);
       getInitialView();
       WatchUi.switchToView(view, delegate, WatchUi.SLIDE_IMMEDIATE);
@@ -114,6 +114,7 @@ class GarminEUCApp extends Application.AppBase {
     if (eucData.wheelName != null) {
       DFViewInit();
     }
+
     //Only starts if no profile selected
     if (eucData.wheelName == null && delegate != null && usePS) {
       //should check settingsChanged status, and reset timeOut value if true
@@ -322,6 +323,7 @@ class GarminEUCApp extends Application.AppBase {
             eucData.engoBattReq = 0;
             bleDelegate.getEngoBattery();
           }
+
           var textArray = new [6];
 
           // var xpos = 225;
@@ -346,12 +348,16 @@ class GarminEUCApp extends Application.AppBase {
               3
             );
             textArray[3] = getHexText(
-              valueRound(eucData.correctedSpeed, "%.1f") + " km/h",
+              valueRound(eucData.correctedSpeed, "%.1f") +
+                " " +
+                eucData.engoSpdUnit,
               0,
               3
             );
             textArray[4] = getHexText(
-              valueRound(eucData.temperature, "%.1f") + " *C",
+              valueRound(eucData.temperature, "%.1f") +
+                " *" +
+                eucData.engoTempUnit,
               0,
               3
             );
@@ -394,17 +400,17 @@ class GarminEUCApp extends Application.AppBase {
               1
             );
             textArray[3] = getHexText(
-              valueRound(sessionDistance, "%.1f") + " km",
+              valueRound(sessionDistance, "%.1f") + " " + eucData.engoDistUnit,
               0,
               1
             );
             textArray[4] = getHexText(
-              valueRound(averageSpeed, "%.1f") + " km/h",
+              valueRound(averageSpeed, "%.1f") + " " + eucData.engoSpdUnit,
               0,
               1
             );
             textArray[5] = getHexText(
-              valueRound(maxSpeed, "%.1f") + " km/h",
+              valueRound(maxSpeed, "%.1f") + " " + eucData.engoSpdUnit,
               0,
               1
             );
