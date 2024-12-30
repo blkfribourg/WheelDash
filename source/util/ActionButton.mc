@@ -9,6 +9,7 @@ class ActionButton {
   var DFViewButton;
   var cycleLightButton;
   var beepButton;
+  var engoNextButton;
   //var lockButton;
   var queue;
   var queueRequired;
@@ -40,6 +41,16 @@ class ActionButton {
       }
       if (recordActivityButton == keyNumber) {
         _mainDelegate.goToActivityView();
+      }
+
+      if (engoNextButton == keyNumber) {
+        if (eucData.engoPaired == true) {
+          eucData.engoPage = eucData.engoPage + 1;
+          if (eucData.engoPage > eucData.engoPageNb) {
+            eucData.engoPage = 1;
+          }
+          bleDelegate.clearScreen();
+        }
       }
       /* DISABLED IN DEV -- Speed limiter code ---
       if (

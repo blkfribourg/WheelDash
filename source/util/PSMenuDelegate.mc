@@ -207,8 +207,7 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
 
   function setSettings(profileName) {
     var profiles = getProfileList();
-    System.println(profileName);
-    System.println(profiles.indexOf(profileName) + 1);
+
     profileNb = profiles.indexOf(profileName) + 1;
 
     eucData.maxDisplayedSpeed = AppStorage.getSetting("maxSpeed_p" + profileNb);
@@ -275,6 +274,9 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
     actionButtonTrigger.beepButton = AppStorage.getSetting(
       "beepButtonMap_p" + profileNb
     );
+    actionButtonTrigger.engoNextButton = AppStorage.getSetting(
+      "engoNextButtonMap_p" + profileNb
+    );
     eucData.BLECmdDelay = AppStorage.getSetting("cmdQueueDelay_p" + profileNb);
 
     eucData.wheelName = AppStorage.getSetting("wheelName_p" + profileNb);
@@ -287,7 +289,7 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
 }
 
 class JSONPSMenuDelegate extends PSMenuDelegate {
-  // should add some fallback to PSMenuDelegate if JSONSettings is not available!
+  // Todo : remove/clean unecessary functions
   private var queue;
   private var eucBleDelegate;
   private var mainView;
@@ -608,6 +610,13 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
         "v"
       ) as String
     ).toNumber();
+
+    actionButtonTrigger.engoNextButton = (
+      (JSONSettings.get("engoNextButtonMap_p" + profileNb) as Dictionary).get(
+        "v"
+      ) as String
+    ).toNumber();
+
     eucData.BLECmdDelay = (
       (JSONSettings.get("cmdQueueDelay_p" + profileNb) as Dictionary).get(
         "v"

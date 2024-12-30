@@ -6,7 +6,7 @@ module eucData {
   var profilesNb = 0; // number of profiles
   var wheelBrand;
   var wheelName;
-  var paired = true;
+  var paired = false;
   var limitedMemory = false;
   // Calculated PWM variables :
   // PLEASE UPDATE WITH YOU OWN VALUES BEFORE USE !

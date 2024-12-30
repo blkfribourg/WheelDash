@@ -102,7 +102,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
     Ble.setScanState(Ble.SCAN_STATE_SCANNING);
     //checking if EUC Footprint already exist (see IsFirsConnection function description)
     isFirst = isFirstConnection();
-    isFirst = false;
+    //isFirst = false;
 
     if (eucData.useEngo == true) {
       deviceNb = deviceNb + 1;
@@ -110,6 +110,8 @@ class eucBLEDelegate extends Ble.BleDelegate {
     if (eucData.ESP32Horn == true) {
       deviceNb = deviceNb + 1;
     }
+
+    //Change a line in Engo config and reupload config in case of useMiles==true, just do it when switching useMiles
   }
 
   // If a device with a registred BLE profile is paired, it trigger the onConnectedStateChanged callback.
@@ -308,37 +310,27 @@ class eucBLEDelegate extends Ble.BleDelegate {
     connNb = connNb - 1;
   }
 
-  // function isFirstConnection() isuUsed to dertermine if a given profile was never connected to an EUC (in order to store a BLE Footprint in the watch local storage.
+  // function isFirstConnection() is used to determine if a given profile was never connected to an EUC (in order to store a BLE Footprint in the watch local storage.
   // This BLE footprint (which is simply a ScanResult object) will allow connecting ony to one specific EUC (the footprint is supposed to be unique))
   function isFirstConnection() {
     // resetting profileScanResult if wheelName changed (deleting associated footprint):
-    if (
-      !AppStorage.getSetting("wheelName_p1").equals(
-        Storage.getValue("profile1Name")
-      )
-    ) {
-      Storage.deleteValue("profile1Sr");
+    var maxProfile = eucData.profilesNb;
+    if (maxProfile == 0) {
+      // not using Easy config -> max profile number is 3
+      maxProfile = 3;
     }
-    if (
-      !AppStorage.getSetting("wheelName_p2").equals(
-        Storage.getValue("profile2Name")
-      )
-    ) {
-      Storage.deleteValue("profile2Sr");
+    for (var i = 1; i < maxProfile; i++) {
+      if (
+        !AppStorage.getSetting("wheelName_p" + i).equals(
+          Storage.getValue("profile" + i + "Name")
+        )
+      ) {
+        Storage.deleteValue("profile" + i + "Sr");
+      }
     }
-    if (
-      !AppStorage.getSetting("wheelName_p3").equals(
-        Storage.getValue("profile3Name")
-      )
-    ) {
-      Storage.deleteValue("profile3Sr");
-    }
+
     // If a footprint doesn't exist, return true, else return false
-    if (profileNb == 1 && Storage.getValue("profile1Sr") == null) {
-      return true;
-    } else if (profileNb == 2 && Storage.getValue("profile2Sr") == null) {
-      return true;
-    } else if (profileNb == 3 && Storage.getValue("profile3Sr") == null) {
+    if (Storage.getValue("profile" + profileNb + "Sr") == null) {
       return true;
     } else {
       return false;
@@ -347,26 +339,18 @@ class eucBLEDelegate extends Ble.BleDelegate {
 
   // This function is used to store the footprint and the EUC name on the persistant storage
   function storeSR(sr) {
-    if (profileNb == 1) {
-      Storage.setValue("profile1Sr", sr);
-      Storage.setValue("profile1Name", AppStorage.getSetting("wheelName_p1"));
-    } else if (profileNb == 2) {
-      Storage.setValue("profile2Sr", sr);
-      Storage.setValue("profile2Name", AppStorage.getSetting("wheelName_p2"));
-    } else if (profileNb == 3) {
-      Storage.setValue("profile3Sr", sr);
-      Storage.setValue("profile3Name", AppStorage.getSetting("wheelName_p3"));
-    }
+    Storage.setValue("profile" + profileNb + "Sr", sr);
+    Storage.setValue(
+      "profile" + profileNb + "Name",
+      AppStorage.getSetting("wheelName_p" + profileNb)
+    );
   }
 
   // This function is used to load the footprint from the persistant storage
   function loadSR() {
-    if (profileNb == 1) {
-      return Storage.getValue("profile1Sr");
-    } else if (profileNb == 2) {
-      return Storage.getValue("profile2Sr");
-    } else if (profileNb == 3) {
-      return Storage.getValue("profile3Sr");
+    var profileSR = Storage.getValue("profile" + profileNb + "Sr");
+    if (profileSR != null) {
+      return profileSR;
     } else {
       return false;
     }
@@ -587,7 +571,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
 
     eucData.engoCfgUpdate =
       ((cfgPacketsCount * 100) / cfgPacketsTotal).toString() + "%";
-    if (cfgPacketsCount >= cfgPacketsTotal) {
+    if (cfgPacketsCount >= cfgPacketsTotal - 1) {
       cfgPacketsTotal = null;
       eucData.engoCfgUpdate = "Loading";
     }
@@ -666,30 +650,31 @@ class eucBLEDelegate extends Ble.BleDelegate {
     if (char.equals(engo_tx)) {
       //System.println(value);
       //System.println("EngoCharChanged");
+      if (value[0] == 0xff) {
+        // If frame command ID matches the version/firmware frame
+        if (value[1] == 0x06 && value.size() > 9) {
+          //firmware vers
 
-      // If frame command ID matches the version/firmware frame
-      if (value[1] == 0x06) {
-        //firmware vers
-        if (value.size() > 9) {
           // store firmware version
           var firm = value.slice(4, 8);
           //System.println("firm: " + firm);
-        }
 
-        //send the command to get the list of configurations stored on the smartglasses
-        sendRawCmd(engo_rx, [0xff, 0xd3, 0x00, 0x05, 0xaa]b);
+          //send the command to get the list of configurations stored on the smartglasses
+          sendRawCmd(engo_rx, [0xff, 0xd3, 0x00, 0x05, 0xaa]b);
+        }
+        //Checking if the received frame matches the frame with the battery % of the smartglasses
+        if (value[1] == 0x05) {
+          eucData.engoBattery = value[4];
+        }
+        //Checking if the received frame matches the frame containing the list of configuration stored on the smartglasses
+        if (value[1] == 0xd3 && value[value.size() - 1] != 0xaa) {
+          cfgReadFlag = true;
+          //check if WheelDash config for engo exists in the cfg list
+          checkCfgName(value);
+          return;
+        }
       }
-      //Checking if the received frame matches the frame with the battery % of the smartglasses
-      if (value[0] == 0xff && value[1] == 0x05) {
-        eucData.engoBattery = value[4];
-      }
-      //Checking if the received frame matches the frame containing the list of configuration stored on the smartglasses
-      if (value[1] == 0xd3 && value[value.size() - 1] != 0xaa) {
-        cfgReadFlag = true;
-        //check if WheelDash config for engo exists in the cfg list
-        checkCfgName(value);
-        return;
-      }
+
       // As config list can be sent on more than one frame checking for every frame if it contains WheelDash config name.
       if (cfgReadFlag == true && value[value.size() - 1] != 0xaa) {
         checkCfgName(value);
@@ -705,6 +690,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
           engoCfgOK = false;
         }
       }
+
       // if no config found or update needed (see checkCfgName function), uploading config.
       if (engoCfgOK == false) {
         clearScreen();
@@ -715,15 +701,28 @@ class eucBLEDelegate extends Ble.BleDelegate {
         cfgPacketsTotal = 0;
         // Engo config is stored in Resources.xml as a json object to avoid OOM error if stored in a ByteArray(splitted in two because otherwise it's too big)
         for (var i = 0; i < getJson(:EngoCfg1).size(); i++) {
-          var charNb = getJson(:EngoCfg1)[i].length();
+          var currentLine = getJson(:EngoCfg1)[i];
+          if (eucData.useMiles == true) {
+            currentLine = milesCfg(currentLine);
+          }
+          // OK plus simple : créer un deuxième profil au vol nommé wheeldashm pour les miles -> checker le nombre de lignes à changer dans la conf, les modifier et modifier également la fonciton checkname
+          var charNb = currentLine.length();
           cfgPacketsTotal = cfgPacketsTotal + Math.ceil(charNb / 40);
-          var cmd = arrayToRawCmd(getJson(:EngoCfg1)[i]);
+
+          // swaping units :
+
+          var cmd = arrayToRawCmd(currentLine);
+
           sendRawCmd(engo_rx, cmd);
         }
         for (var i = 0; i < getJson(:EngoCfg2).size(); i++) {
-          var charNb = getJson(:EngoCfg2)[i].length();
+          var currentLine = getJson(:EngoCfg2)[i];
+          if (eucData.useMiles == true) {
+            currentLine = milesCfg(currentLine);
+          }
+          var charNb = currentLine.length();
           cfgPacketsTotal = cfgPacketsTotal + Math.ceil(charNb / 40);
-          var cmd = arrayToRawCmd(getJson(:EngoCfg2)[i]);
+          var cmd = arrayToRawCmd(currentLine);
           sendRawCmd(engo_rx, cmd);
         }
         //eucData.engoCfgUpdate = null;
@@ -745,16 +744,26 @@ class eucBLEDelegate extends Ble.BleDelegate {
         //If cfg was updated, clearing percentage progression status:
         eucData.engoCfgUpdate = null;
         //  System.println("select cfg");
-        sendRawCmd(
-          engo_rx,
-          [
-            0xff, 0xd2, 0x00, 0x0f, 0x77, 0x68, 0x65, 0x65, 0x6c, 0x64, 0x61,
-            0x73, 0x68, 0x00, 0xaa,
-          ]b
-        );
-        //
+        if (eucData.useMiles == true) {
+          sendRawCmd(
+            engo_rx,
+            [
+              0xff, 0xd2, 0x00, 0x10, 0x77, 0x68, 0x65, 0x65, 0x6c, 0x64, 0x61,
+              0x73, 0x68, 0x6d, 0x00, 0xaa,
+            ]b
+          );
+        } else {
+          sendRawCmd(
+            engo_rx,
+            [
+              0xff, 0xd2, 0x00, 0x0f, 0x77, 0x68, 0x65, 0x65, 0x6c, 0x64, 0x61,
+              0x73, 0x68, 0x00, 0xaa,
+            ]b
+          );
+        }
 
         clearScreen();
+
         //System.println("displaying page 1");
 
         /*
@@ -807,6 +816,10 @@ class eucBLEDelegate extends Ble.BleDelegate {
   }
   // checkCfgName function parse the received config list packet to check if wheeldash config is present in the config list.
   function checkCfgName(value) {
+    var configName = "wheeldash";
+    if (eucData.useMiles == true) {
+      configName = "wheeldashm";
+    }
     cfgList.addAll(value);
     //System.println(cfgList);
     if (cfgList[1] == 0xd3 && cfgList[cfgList.size() - 1] == 0xaa) {
@@ -830,7 +843,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
                 .REPRESENTATION_BYTE_ARRAY,
               :toRepresentation => Toybox.StringUtil
                 .REPRESENTATION_STRING_PLAIN_TEXT,
-            }).equals("wheeldash")
+            }).equals(configName)
           ) {
             //checking version
             var cfgEngoVer = cfgList.slice(i + 5, i + 9);
@@ -854,6 +867,28 @@ class eucBLEDelegate extends Ble.BleDelegate {
       }
       //System.println("config packet: " + cfgList);
     }
+  }
+  function milesCfg(line) {
+    if (
+      line.equals(
+        "FF600022060C007A4B0096670A00030100964B040104010900370032046B6D2F68AA"
+      )
+    ) {
+      //replace km/h unit with mph (fixed label)
+      line =
+        "FF600021060B007A4B0096670A00030100964B040104010900370032036D7068AA";
+    }
+    if (line.substring(2, 4).equals("D0")) {
+      //replace config name (keeping version from ressource) wheeldash is european cfg, wheeldashm is USA cfg (miles)
+      var ver = line.substring(-18, -10);
+      line = "FFD00018776865656C646173686D00" + ver + "00000000AA";
+    }
+    if (line.substring(2, 4).equals("D2")) {
+      //replace config name
+      line = "FFD20010776865656C646173686D00AA";
+    }
+
+    return line;
   }
 
   // enableGesture enables notifications on the user_input characteristic

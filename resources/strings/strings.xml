@@ -44,6 +44,12 @@
     <string id="DFViewButtonMap_p1">Button mapping to datafield like view (Profile 1)</string>
     <string id="DFViewButtonMap_p2">Button mapping to datafield like view (Profile 2)</string>
     <string id="DFViewButtonMap_p3">Button mapping to datafield like view (Profile 3)</string>
+
+     <string id="engoNextButtonMap_p1">Button mapping to Engo glasses next view (Profile 1)</string>
+    <string id="engoNextButtonMap_p2">Button mapping to Engo glasses next view (Profile 2)</string>
+    <string id="engoNextButtonMap_p3">Button mapping to Engo glasses next view (Profile 3)</string>
+
+    
     <string id="lockButtonMap_p1">DONOTUSE Button mapping to wheel lock/unlock (Profile 1)</string>
 
     <string id="none">None</string>
