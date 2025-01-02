@@ -3,7 +3,7 @@ import Toybox.Lang;
 using Toybox.System;
 module profileSelector {
   function createPSMenu() {
-    System.println("createPSMenu profileNB:" + eucData.profilesNb);
+    //System.println("createPSMenu profileNB:" + eucData.profilesNb);
     if (eucData.profilesNb < 4) {
       return createMenu(
         [

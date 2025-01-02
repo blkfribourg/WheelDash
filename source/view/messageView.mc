@@ -13,7 +13,6 @@ class messageView extends WatchUi.View {
   var messageType;
   private var cStrings = {}; // and also cached strings
   function initialize(_BleDelegate, _profileNb, _psDelegate, _messageType) {
-    System.println("messageInit");
     BleDelegate = _BleDelegate;
     profileNb = _profileNb;
     psDelegate = _psDelegate;
@@ -43,7 +42,6 @@ class messageView extends WatchUi.View {
       });
     }
     if (messageType.equals("ECProfiles")) {
-      System.println("ECProfiles");
       cStrings[:WaitMsg] = WatchUi.loadResource(Rez.Strings.ECProfilesStr);
       textToDisplay = new WatchUi.Text({
         :text => cStrings[:WaitMsg],
