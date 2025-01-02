@@ -32,6 +32,12 @@ class WebSettings {
 
   function startFetchTimer() {
     eucData.PSlock = true; // stop profile selector 10 sec timer
+
+    WatchUi.pushView(
+      new messageView(null, null, null, "ECProfilesStr"),
+      null,
+      WatchUi.SLIDE_IMMEDIATE
+    );
     fetchTimer.start(method(:fetch), 1000, false);
   }
 
@@ -95,19 +101,42 @@ class WebSettings {
     // checking if a stored JSON exists :
     var storedJSON = Storage.getValue("JSONSettings") as Dictionary;
     //if stored JSON exists and is the same as the new one, return false
+
+    //System.print(settings);
+
     if (storedJSON != null) {
       if (compareJSON(storedJSON, json) == true) {
         System.println("localJSON is identical");
+        //to rewrite :
+        var settings = storedJSON.get("settings") as Dictionary;
+        var keys = settings.keys() as Array;
+        for (var i = 0; i < keys.size(); i++) {
+          //System.println(keys[i]);
+          var currentKey = settings.get(keys[i]) as Dictionary;
 
+          //checking if additionnal profiles:
+          var pStrIdx = keys[i].find("_p");
+          if (pStrIdx != null) {
+            var pStr = keys[i].substring(pStrIdx + 2, null);
+            if (pStr != null) {
+              if (pStr.toNumber() > eucData.profilesNb) {
+                //     System.println("new profile detected:" + pStr);
+                eucData.profilesNb = pStr.toNumber(); // updating last profile id
+              }
+            }
+          }
+        }
         return false;
       }
     } else {
       System.println("no localJSON detected");
       Storage.setValue("JSONSettings", json);
     }
-
+    // if additionnal profiles detected and JSON isn't exisiting on local storage, return true:
+    if (eucData.profilesNb > 3 && storedJSON == null) {
+      return true;
+    }
     var settings = json.get("settings") as Dictionary;
-    //System.print(settings);
     var keys = settings.keys() as Array;
     for (var i = 0; i < keys.size(); i++) {
       //System.println(keys[i]);
@@ -126,10 +155,6 @@ class WebSettings {
           }
         }
       }
-      // if additionnal profiles detected and JSON isn't exisiting on local storage, return true:
-      if (eucData.profilesNb > 3 && storedJSON == null) {
-        return true;
-      }
       if (type.equals("f")) {
         value = value.toFloat();
         // System.println(value);
@@ -141,7 +166,7 @@ class WebSettings {
         var IQVal = AppStorage.getSetting(keys[i] as String);
         if (IQVal != null) {
           if (!IQVal.equals(value)) {
-            //AppStorage.setSetting(keys[i] as String, value);
+            AppStorage.setSetting(keys[i] as String, value);
             return true;
             //eucData.settingsChanged = true;
           }
@@ -171,18 +196,28 @@ class WebSettings {
     if (responseCode == 200 && data != null) {
       fetchTimer.stop();
 
-      if (settingsChanged(data) == true) {
+      if (settingsChanged(data as Dictionary) == true) {
         confirmUpdate(data);
         return;
       } else {
+        if (eucData.profilesNb > 3) {
+          setSettings(data);
+        }
         eucData.PSlock = false;
       }
     } else {
       if (fetchCnt < 3) {
         startFetchTimer();
       } else {
-        eucData.PSlock = false;
+        var localJSON = Storage.getValue("JSONSettings");
+        if (localJSON != null) {
+          settingsChanged(localJSON as Dictionary);
+          if (eucData.profilesNb > 3) {
+            setSettings(localJSON as Dictionary);
+          }
+        }
       }
+      eucData.PSlock = false;
     }
   }
   function compareJSON(json1 as Dictionary, json2 as Dictionary) {
@@ -193,7 +228,7 @@ class WebSettings {
     if (keys1.size() != keys2.size()) {
       return false;
     }
-    System.println(keys1.size());
+    //System.println(keys1.size());
     for (var i = 0; i < keys1.size(); i++) {
       var firstLvl = json1.get(keys1[i]) as Dictionary;
       if (firstLvl instanceof Dictionary) {

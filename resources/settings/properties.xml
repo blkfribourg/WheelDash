@@ -1,6 +1,6 @@
 <properties>
 <!-- Global settings-->
-    <property id="settingsUrl" type="string"></property>
+    <property id="settingsUrl" type="string">https://wheeldash.mywire.org/uid/ak0WQcIbzz</property>
     <property id="updateDelay" type="number">200</property>
     <property id="activityRecordingOnStartup" type="boolean">false</property>
     <property id="activitySavingOnExit" type="boolean">false</property>
@@ -55,6 +55,8 @@
     <property id="cycleLightButtonMap_p1" type="number">0</property>
     <property id="beepButtonMap_p1" type="number">0</property>
     <property id="DFViewButtonMap_p1" type="number">0</property>
+    <property id="engoNextButtonMap_p1" type="number">0</property>
+    <property id="engoLumaButtonMap_p1" type="number">0</property>
     <property id="lockButtonMap_p1" type="number">0</property>
     <property id="cmdQueueDelay_p1" type="number">200</property>
     <property id="mainNumber_p1" type="number">0</property>
@@ -85,6 +87,8 @@
     <property id="cycleLightButtonMap_p2" type="number">0</property>
     <property id="beepButtonMap_p2" type="number">4</property>
     <property id="DFViewButtonMap_p2" type="number">0</property>
+    <property id="engoNextButtonMap_p2" type="number">0</property>
+    <property id="engoLumaButtonMap_p2" type="number">0</property>
     <property id="cmdQueueDelay_p2" type="number">200</property>
     <property id="mainNumber_p2" type="number">0</property>
     <property id="topBar_p2" type="number">0</property>     
@@ -113,6 +117,8 @@
     <property id="recordActivityButtonMap_p3" type="number">0</property>
     <property id="cycleLightButtonMap_p3" type="number">0</property>
     <property id="beepButtonMap_p3" type="number">0</property>
+    <property id="engoNextButtonMap_p3" type="number">0</property>
+    <property id="engoLumaButtonMap_p3" type="number">0</property>
     <property id="DFViewButtonMap_p3" type="number">0</property>
     <property id="cmdQueueDelay_p3" type="number">200</property>
     <property id="mainNumber_p3" type="number">0</property>
@@ -135,5 +141,13 @@
     <property id="begodeCF_p3" type="boolean">false</property>
     <property id ="convertToMiles_p3" type="boolean">false</property>
     
+    
+    <property id="wheelName_p4" type="string">Profile 4</property>
+    <property id="wheelName_p5" type="string">Profile 5</property>
+    <property id="wheelName_p6" type="string">Profile 6</property>
+    <property id="wheelName_p7" type="string">Profile 7</property>
+    <property id="wheelName_p8" type="string">Profile 8</property>
+    <property id="wheelName_p9" type="string">Profile 9</property>
+    <property id="wheelName_p10" type="string">Profile 10</property>
     
 </properties>

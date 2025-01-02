@@ -4,6 +4,7 @@
     <string id="firstConnStr">Profile $1$ 1st connection\nPlease turn on your wheel\n and wait for connection\n\nensure only one wheel is ON!\n\nIf you enjoy this app :\n ko-fi.com/wheeldash</string>
     <string id="connectedStr">Profile $1$ connected !\n\nSaving wheel unique identifier</string>
     <string id="spdLimiterStr">Speed limiter feature\n is enabled!\n\nPlease ensure your tiltback\nis working properly with\nlimiter on or off!</string>
+    <string id="ECProfilesStr">Loading Easy Config\nProfiles\nPlease Wait...</string>
     <!-- Strings, that are used in Connect IQ Settings menu, like 
         one you see in Garmin Express or Garmin Connect Mobile -->
     <string id="defaultProfile">Profile to use by default</string>
@@ -44,6 +45,16 @@
     <string id="DFViewButtonMap_p1">Button mapping to datafield like view (Profile 1)</string>
     <string id="DFViewButtonMap_p2">Button mapping to datafield like view (Profile 2)</string>
     <string id="DFViewButtonMap_p3">Button mapping to datafield like view (Profile 3)</string>
+
+     <string id="engoNextButtonMap_p1">Button mapping to Engo glasses next view (Profile 1)</string>
+    <string id="engoNextButtonMap_p2">Button mapping to Engo glasses next view (Profile 2)</string>
+    <string id="engoNextButtonMap_p3">Button mapping to Engo glasses next view (Profile 3)</string>
+
+    <string id="engoLumaButtonMap_p1">Button mapping to cycle Engo glasses brightness (Profile 1)</string>
+    <string id="engoLumaButtonMap_p2">Button mapping to cycle Engo glasses brightness (Profile 2)</string>
+    <string id="engoLumaButtonMap_p3">Button mapping to cycle Engo glasses brightness (Profile 3)</string>
+
+    
     <string id="lockButtonMap_p1">DONOTUSE Button mapping to wheel lock/unlock (Profile 1)</string>
 
     <string id="none">None</string>
@@ -168,7 +179,7 @@
     <string id="alarmThreshold_temp_p1">Temperature that trigger an alarm (Profile 1)</string>
     <string id="alarmThreshold_temp_p2">Temperature that trigger an alarm (Profile 2)</string>
     <string id="alarmThreshold_temp_p3">Temperature that trigger an alarm (Profile 3)</string>
-   
+   <!--
     <string id="UIsettings">App UI settings</string>
     <string id="UIsettingsDescription">UI settings, please be aware that watch battery usage will be impacted by refresh rate (battery usage / accuracy trade-off)</string>
 
@@ -180,7 +191,7 @@
 
    <string id="activity">Activity recording settings</string>
    <string id="activityDescription">Automatic activity recording will automatically start and save an activity when launching/exiting the app. Activity save on exit will allow manually started activities to be automatically saved when the app is exited.</string>
-    
+    -->
     <string id="activityRecordingOnStartup">Automatic activity recording</string>
     <string id="activitySavingOnExit">Activity save on exit</string>
 

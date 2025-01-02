@@ -206,10 +206,13 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
   }
 
   function setSettings(profileName) {
+    // add return false if profileName not found
     var profiles = getProfileList();
-    System.println(profileName);
-    System.println(profiles.indexOf(profileName) + 1);
+
     profileNb = profiles.indexOf(profileName) + 1;
+    if (profileNb == 0) {
+      return false;
+    }
 
     eucData.maxDisplayedSpeed = AppStorage.getSetting("maxSpeed_p" + profileNb);
     eucData.mainNumber = AppStorage.getSetting("mainNumber_p" + profileNb);
@@ -275,6 +278,12 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
     actionButtonTrigger.beepButton = AppStorage.getSetting(
       "beepButtonMap_p" + profileNb
     );
+    actionButtonTrigger.engoNextButton = AppStorage.getSetting(
+      "engoNextButtonMap_p" + profileNb
+    );
+    actionButtonTrigger.engoLumaButton = AppStorage.getSetting(
+      "engoLumaButtonMap_p" + profileNb
+    );
     eucData.BLECmdDelay = AppStorage.getSetting("cmdQueueDelay_p" + profileNb);
 
     eucData.wheelName = AppStorage.getSetting("wheelName_p" + profileNb);
@@ -287,7 +296,7 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
 }
 
 class JSONPSMenuDelegate extends PSMenuDelegate {
-  // should add some fallback to PSMenuDelegate if JSONSettings is not available!
+  // Todo : remove/clean unecessary functions
   private var queue;
   private var eucBleDelegate;
   private var mainView;
@@ -489,138 +498,205 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
   function setSettings(profileName) {
     var profiles = profileSelector.getJSONProfileList();
     profileNb = profiles.indexOf(profileName) + 1;
+
+    if (profileNb == 0) {
+      return false;
+    }
     //System.println("profileNb: " + profileNb);
     //System.println("maxSpeed_p" + profileNb);
     //  System.println(JSONSettings);
-    eucData.maxDisplayedSpeed = (
-      (JSONSettings.get("maxSpeed_p" + profileNb) as Dictionary).get("v") as
-        String
-    ).toNumber();
-    eucData.mainNumber = (
-      (JSONSettings.get("mainNumber_p" + profileNb) as Dictionary).get("v") as
-        String
-    ).toNumber();
-    eucData.topBar = (
-      (JSONSettings.get("topBar_p" + profileNb) as Dictionary).get("v") as
-        String
-    ).toNumber();
-    eucData.gothPWM = (
-      JSONSettings.get("begodeCF_p" + profileNb) as Dictionary
-    ).get("v");
-
-    eucData.orangeColoringThreshold = (
-      (
-        JSONSettings.get("orangeColoringThreshold_p" + profileNb) as Dictionary
-      ).get("v") as String
-    ).toNumber();
-
-    eucData.redColoringThreshold = (
-      (
-        JSONSettings.get("redColoringThreshold_p" + profileNb) as Dictionary
-      ).get("v") as String
-    ).toNumber();
-
-    eucData.currentCorrection = (
-      (JSONSettings.get("currentCorrection_p" + profileNb) as Dictionary).get(
-        "v"
-      ) as String
-    ).toNumber();
-    eucData.maxDisplayedTemperature = (
-      (JSONSettings.get("maxTemperature_p" + profileNb) as Dictionary).get(
-        "v"
-      ) as String
-    ).toNumber();
-
-    eucData.rotationSpeed = (
-      (JSONSettings.get("rotationSpeed_PWM_p" + profileNb) as Dictionary).get(
-        "v"
-      ) as String
-    ).toFloat();
-    eucData.rotationVoltage = (
-      (JSONSettings.get("rotationVoltage_PWM_p" + profileNb) as Dictionary).get(
-        "v"
-      ) as String
-    ).toFloat();
-    eucData.powerFactor = (
-      (JSONSettings.get("powerFactor_PWM_p" + profileNb) as Dictionary).get(
-        "v"
-      ) as String
-    ).toFloat();
-    eucData.voltage_scaling = (
-      (
-        JSONSettings.get("voltageCorrectionFactor_p" + profileNb) as Dictionary
-      ).get("v") as String
-    ).toFloat();
-    eucData.sagThreshold = (
-      (
-        JSONSettings.get("voltageSagIndicatorThresh_p" + profileNb) as
-          Dictionary
-      ).get("v") as String
-    ).toFloat();
-    eucData.speedCorrectionFactor = (
-      (
-        JSONSettings.get("speedCorrectionFactor_p" + profileNb) as Dictionary
-      ).get("v") as String
-    ).toFloat();
-
-    eucData.alarmThreshold_PWM = (
-      (JSONSettings.get("alarmThreshold_PWM_p" + profileNb) as Dictionary).get(
-        "v"
-      ) as String
-    ).toNumber();
-    eucData.alarmThreshold2_PWM = (
-      (JSONSettings.get("alarmThreshold2_PWM_p" + profileNb) as Dictionary).get(
-        "v"
-      ) as String
-    ).toNumber();
-    eucData.alarmThreshold_speed = (
-      (
-        JSONSettings.get("alarmThreshold_speed_p" + profileNb) as Dictionary
-      ).get("v") as String
-    ).toNumber();
-    eucData.alarmThreshold_temp = (
-      (JSONSettings.get("alarmThreshold_temp_p" + profileNb) as Dictionary).get(
-        "v"
-      ) as String
-    ).toNumber();
-    eucData.wheelBrand = (
-      (JSONSettings.get("wheelBrand_p" + profileNb) as Dictionary).get("v") as
-        String
-    ).toNumber();
-
-    actionButtonTrigger.recordActivityButton = (
-      (
-        JSONSettings.get("recordActivityButtonMap_p" + profileNb) as Dictionary
-      ).get("v") as String
-    ).toNumber();
-    actionButtonTrigger.cycleLightButton = (
-      (JSONSettings.get("cycleLightButtonMap_p" + profileNb) as Dictionary).get(
-        "v"
-      ) as String
-    ).toNumber();
-    actionButtonTrigger.DFViewButton = (
-      (JSONSettings.get("DFViewButtonMap_p" + profileNb) as Dictionary).get(
-        "v"
-      ) as String
-    ).toNumber();
-    actionButtonTrigger.beepButton = (
-      (JSONSettings.get("beepButtonMap_p" + profileNb) as Dictionary).get(
-        "v"
-      ) as String
-    ).toNumber();
-    eucData.BLECmdDelay = (
-      (JSONSettings.get("cmdQueueDelay_p" + profileNb) as Dictionary).get(
-        "v"
-      ) as String
-    ).toNumber();
-
-    eucData.wheelName = (
-      JSONSettings.get("wheelName_p" + profileNb) as Dictionary
-    ).get("v");
-    eucData.convertToMiles = (
-      JSONSettings.get("convertToMiles_p" + profileNb) as Dictionary
-    ).get("v");
+    if (JSONSettings.get("maxSpeed_p" + profileNb) != null) {
+      eucData.maxDisplayedSpeed = (
+        (JSONSettings.get("maxSpeed_p" + profileNb) as Dictionary).get("v") as
+          String
+      ).toNumber();
+    }
+    if (JSONSettings.get("mainNumber_p" + profileNb) != null) {
+      eucData.mainNumber = (
+        (JSONSettings.get("mainNumber_p" + profileNb) as Dictionary).get("v") as
+          String
+      ).toNumber();
+    }
+    if (JSONSettings.get("topBar_p" + profileNb) != null) {
+      eucData.topBar = (
+        (JSONSettings.get("topBar_p" + profileNb) as Dictionary).get("v") as
+          String
+      ).toNumber();
+    }
+    if (JSONSettings.get("begodeCF_p" + profileNb) != null) {
+      eucData.gothPWM = (
+        JSONSettings.get("begodeCF_p" + profileNb) as Dictionary
+      ).get("v");
+    }
+    if (JSONSettings.get("orangeColoringThreshold_p" + profileNb) != null) {
+      eucData.orangeColoringThreshold = (
+        (
+          JSONSettings.get("orangeColoringThreshold_p" + profileNb) as
+            Dictionary
+        ).get("v") as String
+      ).toNumber();
+    }
+    if (JSONSettings.get("redColoringThreshold_p" + profileNb) != null) {
+      eucData.redColoringThreshold = (
+        (
+          JSONSettings.get("redColoringThreshold_p" + profileNb) as Dictionary
+        ).get("v") as String
+      ).toNumber();
+    }
+    if (JSONSettings.get("currentCorrection_p" + profileNb) != null) {
+      eucData.currentCorrection = (
+        (JSONSettings.get("currentCorrection_p" + profileNb) as Dictionary).get(
+          "v"
+        ) as String
+      ).toNumber();
+    }
+    if (JSONSettings.get("maxTemperature_p" + profileNb) != null) {
+      eucData.maxDisplayedTemperature = (
+        (JSONSettings.get("maxTemperature_p" + profileNb) as Dictionary).get(
+          "v"
+        ) as String
+      ).toNumber();
+    }
+    if (JSONSettings.get("rotationSpeed_PWM_p" + profileNb) != null) {
+      eucData.rotationSpeed = (
+        (JSONSettings.get("rotationSpeed_PWM_p" + profileNb) as Dictionary).get(
+          "v"
+        ) as String
+      ).toFloat();
+    }
+    if (JSONSettings.get("rotationVoltage_PWM_p" + profileNb) != null) {
+      eucData.rotationVoltage = (
+        (
+          JSONSettings.get("rotationVoltage_PWM_p" + profileNb) as Dictionary
+        ).get("v") as String
+      ).toFloat();
+    }
+    if (JSONSettings.get("powerFactor_PWM_p" + profileNb) != null) {
+      eucData.powerFactor = (
+        (JSONSettings.get("powerFactor_PWM_p" + profileNb) as Dictionary).get(
+          "v"
+        ) as String
+      ).toFloat();
+    }
+    if (JSONSettings.get("voltageCorrectionFactor_p" + profileNb) != null) {
+      eucData.voltage_scaling = (
+        (
+          JSONSettings.get("voltageCorrectionFactor_p" + profileNb) as
+            Dictionary
+        ).get("v") as String
+      ).toFloat();
+    }
+    if (JSONSettings.get("voltageSagIndicatorThresh_p" + profileNb) != null) {
+      eucData.sagThreshold = (
+        (
+          JSONSettings.get("voltageSagIndicatorThresh_p" + profileNb) as
+            Dictionary
+        ).get("v") as String
+      ).toFloat();
+    }
+    if (JSONSettings.get("speedCorrectionFactor_p" + profileNb) != null) {
+      eucData.speedCorrectionFactor = (
+        (
+          JSONSettings.get("speedCorrectionFactor_p" + profileNb) as Dictionary
+        ).get("v") as String
+      ).toFloat();
+    }
+    if (JSONSettings.get("alarmThreshold_PWM_p" + profileNb) != null) {
+      eucData.alarmThreshold_PWM = (
+        (
+          JSONSettings.get("alarmThreshold_PWM_p" + profileNb) as Dictionary
+        ).get("v") as String
+      ).toNumber();
+    }
+    if (JSONSettings.get("alarmThreshold2_PWM_p" + profileNb) != null) {
+      eucData.alarmThreshold2_PWM = (
+        (
+          JSONSettings.get("alarmThreshold2_PWM_p" + profileNb) as Dictionary
+        ).get("v") as String
+      ).toNumber();
+    }
+    if (JSONSettings.get("alarmThreshold_speed_p" + profileNb) != null) {
+      eucData.alarmThreshold_speed = (
+        (
+          JSONSettings.get("alarmThreshold_speed_p" + profileNb) as Dictionary
+        ).get("v") as String
+      ).toNumber();
+    }
+    if (JSONSettings.get("alarmThreshold_temp_p" + profileNb) != null) {
+      eucData.alarmThreshold_temp = (
+        (
+          JSONSettings.get("alarmThreshold_temp_p" + profileNb) as Dictionary
+        ).get("v") as String
+      ).toNumber();
+    }
+    if (JSONSettings.get("wheelBrand_p" + profileNb) != null) {
+      eucData.wheelBrand = (
+        (JSONSettings.get("wheelBrand_p" + profileNb) as Dictionary).get("v") as
+          String
+      ).toNumber();
+    }
+    if (JSONSettings.get("recordActivityButtonMap_p" + profileNb) != null) {
+      actionButtonTrigger.recordActivityButton = (
+        (
+          JSONSettings.get("recordActivityButtonMap_p" + profileNb) as
+            Dictionary
+        ).get("v") as String
+      ).toNumber();
+    }
+    if (JSONSettings.get("cycleLightButtonMap_p" + profileNb) != null) {
+      actionButtonTrigger.cycleLightButton = (
+        (
+          JSONSettings.get("cycleLightButtonMap_p" + profileNb) as Dictionary
+        ).get("v") as String
+      ).toNumber();
+    }
+    if (JSONSettings.get("DFViewButtonMap_p" + profileNb) != null) {
+      actionButtonTrigger.DFViewButton = (
+        (JSONSettings.get("DFViewButtonMap_p" + profileNb) as Dictionary).get(
+          "v"
+        ) as String
+      ).toNumber();
+    }
+    if (JSONSettings.get("beepButtonMap_p" + profileNb) != null) {
+      actionButtonTrigger.beepButton = (
+        (JSONSettings.get("beepButtonMap_p" + profileNb) as Dictionary).get(
+          "v"
+        ) as String
+      ).toNumber();
+    }
+    if (JSONSettings.get("engoNextButtonMap_p" + profileNb) != null) {
+      actionButtonTrigger.engoNextButton = (
+        (JSONSettings.get("engoNextButtonMap_p" + profileNb) as Dictionary).get(
+          "v"
+        ) as String
+      ).toNumber();
+    }
+    if (JSONSettings.get("engoLumaButtonMap_p" + profileNb) != null) {
+      actionButtonTrigger.engoLumaButton = (
+        (JSONSettings.get("engoLumaButtonMap_p" + profileNb) as Dictionary).get(
+          "v"
+        ) as String
+      ).toNumber();
+    }
+    if (JSONSettings.get("cmdQueueDelay_p" + profileNb) != null) {
+      eucData.BLECmdDelay = (
+        (JSONSettings.get("cmdQueueDelay_p" + profileNb) as Dictionary).get(
+          "v"
+        ) as String
+      ).toNumber();
+    }
+    if (JSONSettings.get("wheelName_p" + profileNb) != null) {
+      eucData.wheelName = (
+        JSONSettings.get("wheelName_p" + profileNb) as Dictionary
+      ).get("v");
+    }
+    if (JSONSettings.get("convertToMiles_p" + profileNb) != null) {
+      eucData.convertToMiles = (
+        JSONSettings.get("convertToMiles_p" + profileNb) as Dictionary
+      ).get("v");
+    }
     Storage.setValue("lastProfile", profileName);
+
     return true;
   }
 }

@@ -40,8 +40,10 @@ class messageView extends WatchUi.View {
         :justification => Graphics.TEXT_JUSTIFY_CENTER |
         Graphics.TEXT_JUSTIFY_VCENTER,
       });
-    } else {
-      cStrings[:spdLimiter] = WatchUi.loadResource(Rez.Strings.spdLimiterStr);
+    }
+    if (messageType.equals("ECProfiles")) {
+      System.println("ECProfiles");
+      cStrings[:WaitMsg] = WatchUi.loadResource(Rez.Strings.ECProfilesStr);
       textToDisplay = new WatchUi.Text({
         :text => Lang.format(cStrings[:spdLimiter], [profileNb]),
         :color => Graphics.COLOR_WHITE,
@@ -65,7 +67,7 @@ class messageView extends WatchUi.View {
       if (messageType.equals("1stConn")) {
         textToDisplay.setText(Lang.format(cStrings[:connected], [profileNb]));
       } else {
-        textToDisplay.setText(cStrings[:spdLimiter]);
+        textToDisplay.setText(cStrings[:WaitMsg]);
       }
       /*
       textToDisplay =

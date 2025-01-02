@@ -302,6 +302,26 @@
                      <listEntry value="8">@Strings.downButton</listEntry>
                 </settingConfig>
             </setting>
+             <setting
+                propertyKey="@Properties.engoNextButtonMap_p1"
+                title="@Strings.engoNextButtonMap_p1">
+                <settingConfig type="list">
+                    <listEntry value="0">@Strings.none</listEntry>
+                    <listEntry value="4">@Strings.startStopButton</listEntry>
+                     <listEntry value="13">@Strings.middleButton</listEntry>
+                     <listEntry value="8">@Strings.downButton</listEntry>
+                </settingConfig>
+            </setting>
+              <setting
+                propertyKey="@Properties.engoLumaButtonMap_p1"
+                title="@Strings.engoLumaButtonMap_p1">
+                <settingConfig type="list">
+                    <listEntry value="0">@Strings.none</listEntry>
+                    <listEntry value="4">@Strings.startStopButton</listEntry>
+                     <listEntry value="13">@Strings.middleButton</listEntry>
+                     <listEntry value="8">@Strings.downButton</listEntry>
+                </settingConfig>
+            </setting>
             <setting
                     propertyKey="@Properties.cmdQueueDelay_p1"
                     title="@Strings.cmdQueueDelay_p1">
@@ -577,6 +597,26 @@
                      <listEntry value="8">@Strings.downButton</listEntry>
                 </settingConfig>
             </setting>
+             <setting
+                propertyKey="@Properties.engoNextButtonMap_p2"
+                title="@Strings.engoNextButtonMap_p2">
+                <settingConfig type="list">
+                    <listEntry value="0">@Strings.none</listEntry>
+                    <listEntry value="4">@Strings.startStopButton</listEntry>
+                     <listEntry value="13">@Strings.middleButton</listEntry>
+                     <listEntry value="8">@Strings.downButton</listEntry>
+                </settingConfig>
+            </setting>
+              <setting
+                propertyKey="@Properties.engoLumaButtonMap_p2"
+                title="@Strings.engoLumaButtonMap_p2">
+                <settingConfig type="list">
+                    <listEntry value="0">@Strings.none</listEntry>
+                    <listEntry value="4">@Strings.startStopButton</listEntry>
+                     <listEntry value="13">@Strings.middleButton</listEntry>
+                     <listEntry value="8">@Strings.downButton</listEntry>
+                </settingConfig>
+            </setting>
             <setting
                     propertyKey="@Properties.cmdQueueDelay_p2"
                     title="@Strings.cmdQueueDelay_p2">
@@ -844,6 +884,26 @@
             <setting
                 propertyKey="@Properties.DFViewButtonMap_p3"
                 title="@Strings.DFViewButtonMap_p3">
+                <settingConfig type="list">
+                    <listEntry value="0">@Strings.none</listEntry>
+                    <listEntry value="4">@Strings.startStopButton</listEntry>
+                     <listEntry value="13">@Strings.middleButton</listEntry>
+                     <listEntry value="8">@Strings.downButton</listEntry>
+                </settingConfig>
+            </setting>
+             <setting
+                propertyKey="@Properties.engoNextButtonMap_p3"
+                title="@Strings.engoNextButtonMap_p3">
+                <settingConfig type="list">
+                    <listEntry value="0">@Strings.none</listEntry>
+                    <listEntry value="4">@Strings.startStopButton</listEntry>
+                     <listEntry value="13">@Strings.middleButton</listEntry>
+                     <listEntry value="8">@Strings.downButton</listEntry>
+                </settingConfig>
+            </setting>
+              <setting
+                propertyKey="@Properties.engoLumaButtonMap_p3"
+                title="@Strings.engoLumaButtonMap_p3">
                 <settingConfig type="list">
                     <listEntry value="0">@Strings.none</listEntry>
                     <listEntry value="4">@Strings.startStopButton</listEntry>
