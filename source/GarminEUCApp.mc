@@ -13,6 +13,7 @@ class GarminEUCApp extends Application.AppBase {
   private var engoNextUpdate = null;
   private var tiltBackInit = null;
   private var EUCWorld;
+  private var JSONFetchMessage = null;
   var timeOut = 10000;
   var activityRecordingDelay = 3000;
   var usePS;
@@ -93,6 +94,23 @@ class GarminEUCApp extends Application.AppBase {
   }
   // Timer callback for various alarms & update UI
   function onUpdateTimer() {
+    if (eucData.JSONFetch.length() > 0) {
+      if (!eucData.JSONFetch.equals("done") && JSONFetchMessage == null) {
+        JSONFetchMessage = new messageView(null, null, null, "ECProfiles");
+        WatchUi.pushView(JSONFetchMessage, null, WatchUi.SLIDE_IMMEDIATE);
+      }
+
+      if (eucData.JSONFetch.equals("done")) {
+        WatchUi.popView(WatchUi.SLIDE_IMMEDIATE); // pop default PSmenu
+        eucData.JSONFetch = "";
+        timeOut = 10000;
+        // initialize(); //req?
+        onStart(null);
+        getInitialView();
+        WatchUi.switchToView(view, delegate, WatchUi.SLIDE_IMMEDIATE);
+      }
+    }
+    /*
     if (eucData.settingsChanged == true) {
       // System.println("settingsChanged!");
 
@@ -104,6 +122,7 @@ class GarminEUCApp extends Application.AppBase {
       WatchUi.switchToView(view, delegate, WatchUi.SLIDE_IMMEDIATE);
       eucData.settingsChanged = false;
     }
+    */
     // compatibility with EUC World. Requires multiple webRequests. As timer number are limited, I use this one. It's not the nicest approach but for for now it's the one I choosed :)
 
     if (eucData.wheelBrand == 6) {

@@ -13,6 +13,7 @@ class messageView extends WatchUi.View {
   var messageType;
   private var cStrings = {}; // and also cached strings
   function initialize(_BleDelegate, _profileNb, _psDelegate, _messageType) {
+    System.println("messageInit");
     BleDelegate = _BleDelegate;
     profileNb = _profileNb;
     psDelegate = _psDelegate;
@@ -45,7 +46,7 @@ class messageView extends WatchUi.View {
       System.println("ECProfiles");
       cStrings[:WaitMsg] = WatchUi.loadResource(Rez.Strings.ECProfilesStr);
       textToDisplay = new WatchUi.Text({
-        :text => Lang.format(cStrings[:spdLimiter], [profileNb]),
+        :text => cStrings[:WaitMsg],
         :color => Graphics.COLOR_WHITE,
         :font => Graphics.FONT_XTINY,
         :locX => dc.getWidth() / 2,
@@ -62,12 +63,12 @@ class messageView extends WatchUi.View {
 
   // Update the view
   function onUpdate(dc) {
-    //System.println("first");
+    if (messageType.equals("ECProfiles")) {
+      textToDisplay.setText(cStrings[:WaitMsg]);
+    }
     if (eucData.paired == true) {
       if (messageType.equals("1stConn")) {
         textToDisplay.setText(Lang.format(cStrings[:connected], [profileNb]));
-      } else {
-        textToDisplay.setText(cStrings[:WaitMsg]);
       }
       /*
       textToDisplay =

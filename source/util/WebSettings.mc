@@ -9,11 +9,16 @@ function checkSettingsURL() {
   var settingsUrl = AppStorage.getSetting("settingsUrl");
   var uidsize = 10;
   if (settingsUrl.length() > uidsize) {
+    eucData.JSONFetch = "started";
     var web = new WebSettings();
     var url = settingsUrl.substring(0, settingsUrl.length() - uidsize);
     var uid = settingsUrl.substring(-uidsize, null);
     web.setParams(uid, url);
     web.startFetchTimer();
+  }
+  if (settingsUrl.length() == 0) {
+    // delete local JSON if no URL is set
+    Storage.deleteValue("JSONSettings");
   }
 }
 class WebSettings {
@@ -32,12 +37,6 @@ class WebSettings {
 
   function startFetchTimer() {
     eucData.PSlock = true; // stop profile selector 10 sec timer
-
-    WatchUi.pushView(
-      new messageView(null, null, null, "ECProfilesStr"),
-      null,
-      WatchUi.SLIDE_IMMEDIATE
-    );
     fetchTimer.start(method(:fetch), 1000, false);
   }
 
@@ -204,6 +203,7 @@ class WebSettings {
           setSettings(data);
         }
         eucData.PSlock = false;
+        eucData.JSONFetch = "done";
       }
     } else {
       if (fetchCnt < 3) {
@@ -289,10 +289,10 @@ class SettingConfirmationDelegate extends WatchUi.ConfirmationDelegate {
     if (response == WatchUi.CONFIRM_YES) {
       //deleting last profile id on storage (to avoid a non existing profile to be loaded) :
       Storage.deleteValue("lastProfile");
-
       parent.setSettings(data);
     }
     eucData.PSlock = false;
+    eucData.JSONFetch = "done";
 
     return true;
   }

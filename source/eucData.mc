@@ -2,6 +2,7 @@ using Toybox.System;
 
 module eucData {
   var settingsChanged = false;
+  var JSONFetch = "";
   var PSlock = false;
   var profilesNb = 0; // number of profiles
   var wheelBrand;
