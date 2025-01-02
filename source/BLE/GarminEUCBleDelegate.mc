@@ -315,9 +315,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
   // This BLE footprint (which is simply a ScanResult object) will allow connecting ony to one specific EUC (the footprint is supposed to be unique))
   function isFirstConnection() {
     // resetting profileScanResult if wheelName changed (deleting associated footprint):
-
     var maxProfile = eucData.profilesNb;
-    System.println("maxProf" + maxProfile);
     if (maxProfile == 0) {
       // not using Easy config -> max profile number is 3
       maxProfile = 3;
