@@ -1,10 +1,12 @@
 <settings>
-<!-- Global settings-->
+
         <setting
                 propertyKey="@Properties.settingsUrl"
                 title="@Strings.settingsUrl">
                 <settingConfig type="alphaNumeric"/>
         </setting>
+        <!-- propertyKey:@Properties.updateDelay:Global settings -->
+
         <setting
             propertyKey="@Properties.updateDelay"
             title="@Strings.updateDelay">
@@ -23,6 +25,7 @@
                 max="100"
             />
         </setting>
+       
         <setting
             propertyKey="@Properties.motorbikeHeadset"
             title="@Strings.motorbikeHeadset">
@@ -51,7 +54,7 @@
                 type="boolean"
             />
         </setting>
-    
+    <!-- propertyKey:@Properties.averageMovingSpeedStatistic:Stats to display on the bottom part of the UI-->
          <setting
             propertyKey="@Properties.averageMovingSpeedStatistic"
             title="@Strings.averageMovingSpeedStatistic">
@@ -108,6 +111,8 @@
                 type="boolean"
             />
         </setting>
+        <!-- propertyKey:@Properties.defaultProfile:Other to reorganize-->
+       
         <setting
             propertyKey="@Properties.defaultProfile"
             title="@Strings.defaultProfile">  
@@ -148,17 +153,9 @@
                 type="boolean"
             />
         </setting>
-        <!--
-        <setting
-            propertyKey="@Properties.KSVoiceModeVal"
-            title="@Strings.KSVoiceModeVal">
-            <settingConfig
-                type="numeric"
-                min="0"
-                max="4"
-            />
-        </setting>
-        -->
+        
+          <!-- propertyKey:@Properties.useMiles:Units & Conversions-->
+       
          <setting
             propertyKey="@Properties.useMiles"
             title="@Strings.useMiles">
@@ -180,6 +177,8 @@
                 type="boolean"
             />
         </setting>
+        <!-- propertyKey:@Properties.useRadar:Tail Radar-->
+       
           <setting
             propertyKey="@Properties.useRadar"
             title="@Strings.useRadar">
@@ -205,6 +204,7 @@
                 max="150"
             />
         </setting>
+       <!-- propertyKey:@Properties.useEngo:Engo Smartglasses-->
            <setting
             propertyKey="@Properties.useEngo"
             title="@Strings.useEngo">
@@ -220,6 +220,7 @@
                     <listEntry value="1">@Strings.engoTouch1</listEntry>                    
                 </settingConfig>
          </setting>
+         <!-- propertyKey:@Properties.useEUCWorldAPI:Third Party Applications-->
            <setting
             propertyKey="@Properties.useEUCWorldAPI"
             title="@Strings.useEUCWorldAPI">
