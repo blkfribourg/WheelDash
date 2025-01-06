@@ -1,6 +1,6 @@
 <properties>
 <!-- Global settings-->
-    <property id="settingsUrl" type="string">https://wheeldash.mywire.org/uid/ak0WQcIbzz</property>
+    <property id="settingsUrl" type="string">https://wheeldash.mywire.org/uid/DxlMRlaKr_</property>
     <property id="updateDelay" type="number">200</property>
     <property id="activityRecordingOnStartup" type="boolean">false</property>
     <property id="activitySavingOnExit" type="boolean">false</property>

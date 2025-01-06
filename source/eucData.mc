@@ -1,13 +1,14 @@
 using Toybox.System;
 
 module eucData {
+  var useProfileSelector = true;
   var settingsChanged = false;
   var JSONFetch = "";
   var PSlock = false;
   var profilesNb = 0; // number of profiles
   var wheelBrand;
   var wheelName;
-  var paired = false;
+  var paired = true;
   var limitedMemory = false;
   // Calculated PWM variables :
   // PLEASE UPDATE WITH YOU OWN VALUES BEFORE USE !
@@ -167,6 +168,11 @@ module eucData {
   // EUCWorldCompat
   var useEUCWorldAPI = false;
   var fVal = -1;
+
+  // Datafield like view
+  var fieldIDs = null;
+  var fieldNB = 8;
+
   function getBatteryPercentage() {
     if (voltage != null) {
       // using better battery formula from wheellog

@@ -4,7 +4,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 using Toybox.BluetoothLowEnergy as Ble;
-using Toybox.System as Sys;
+using Toybox.System;
 
 module eucPM {
   var EUC_SERVICE;
@@ -63,12 +63,7 @@ module eucPM {
     };
   }
   function registerProfiles() {
-    //System.println(eucProfileDef.toString());
-    try {
-      Ble.registerProfile(eucProfileDef);
-    } catch (e) {
-      //System.println("e=" + e.getErrorMessage());
-    }
+    Ble.registerProfile(eucProfileDef);
   }
 
   function setGotwayOrVeteran() {

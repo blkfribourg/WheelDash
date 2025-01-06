@@ -77,11 +77,9 @@ module engoPM {
   }
 
   function registerProfiles() {
-    try {
+    if (engoProfileDef != null) {
       Ble.registerProfile(engoProfileDef);
       // System.println("Engo profile OK");
-    } catch (e) {
-      System.println("e=" + e.getErrorMessage());
     }
   }
 }

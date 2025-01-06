@@ -4,7 +4,7 @@ using Toybox.System;
 module profileSelector {
   function createPSMenu() {
     //System.println("createPSMenu profileNB:" + eucData.profilesNb);
-    if (eucData.profilesNb < 4) {
+    if (!eucData.JSONFetch.equals("done")) {
       return createMenu(
         [
           AppStorage.getSetting("wheelName_p1"),
@@ -19,7 +19,7 @@ module profileSelector {
   }
 
   function createPSDelegate() {
-    if (eucData.profilesNb < 4) {
+    if (eucData.JSONFetch.equals("")) {
       return new PSMenuDelegate();
     } else {
       return new JSONPSMenuDelegate();
@@ -29,7 +29,8 @@ module profileSelector {
     var JSONSettingsDict = Storage.getValue("JSONSettings") as Dictionary;
     var JSONSettings = JSONSettingsDict.get("settings") as Dictionary;
     var JSONProfiles = JSONSettingsDict.get("profiles") as Dictionary;
-    var profileList = new [0];
+
+    var profileList = new [eucData.profilesNb] as Array;
     var keys = JSONSettings.keys() as Array;
     for (var i = 0; i < keys.size(); i++) {
       //checking if additionnal profiles:
@@ -40,7 +41,14 @@ module profileSelector {
           if (
             (JSONProfiles.get("p" + pStr) as Dictionary).get("v").equals(true)
           ) {
-            profileList.add((JSONSettings.get(keys[i]) as Dictionary).get("v"));
+            var p = pStr.toNumber();
+
+            if (p - 1 < eucData.profilesNb) {
+              profileList[p - 1] = (
+                JSONSettings.get(keys[i]) as Dictionary
+              ).get("v");
+            } else {
+            }
           }
         }
       }

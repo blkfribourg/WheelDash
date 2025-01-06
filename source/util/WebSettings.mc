@@ -19,6 +19,7 @@ function checkSettingsURL() {
   if (settingsUrl.length() == 0) {
     // delete local JSON if no URL is set
     Storage.deleteValue("JSONSettings");
+    eucData.useProfileSelector = AppStorage.getSetting("useProfileSelector");
   }
 }
 class WebSettings {
@@ -62,38 +63,12 @@ class WebSettings {
       fetchCnt++;
     }
   }
-  function setSettings(json as Dictionary) {
-    if (eucData.profilesNb > 3) {
+  function setSettings(json) {
+    if (json != null) {
       Storage.setValue("JSONSettings", json);
       System.println("writing json to local storage"); // saving json to appstorage:
-    } else {
-      var settings = json.get("settings") as Dictionary;
-      var keys = settings.keys() as Array;
-      for (var i = 0; i < keys.size(); i++) {
-        //System.println(keys[i]);
-        var currentKey = settings.get(keys[i]) as Dictionary;
-        var type = currentKey.get("t") as String;
-        var value = currentKey.get("v") as String;
-
-        if (type.equals("f")) {
-          value = value.toFloat();
-          // System.println(value);
-        }
-        if (type.equals("i")) {
-          value = value.toNumber();
-        }
-        try {
-          var IQVal = AppStorage.getSetting(keys[i] as String);
-          if (IQVal != null) {
-            if (!IQVal.equals(value)) {
-              AppStorage.setSetting(keys[i] as String, value);
-            }
-          }
-        } catch (e) {
-          // System.println(e);
-        }
-      }
     }
+
     eucData.settingsChanged = true;
   }
   function settingsChanged(json as Dictionary) {
@@ -104,37 +79,31 @@ class WebSettings {
     //System.print(settings);
 
     if (storedJSON != null) {
+      System.println("Existing localJSON");
+      var settings = storedJSON.get("settings") as Dictionary;
+      eucData.useProfileSelector = (
+        settings.get("useProfileSelector") as Dictionary
+      ).get("v");
+      setProfilesNb(settings);
       if (compareJSON(storedJSON, json) == true) {
-        System.println("localJSON is identical");
-        //to rewrite :
-        var settings = storedJSON.get("settings") as Dictionary;
-        var keys = settings.keys() as Array;
-        for (var i = 0; i < keys.size(); i++) {
-          //System.println(keys[i]);
-          var currentKey = settings.get(keys[i]) as Dictionary;
-
-          //checking if additionnal profiles:
-          var pStrIdx = keys[i].find("_p");
-          if (pStrIdx != null) {
-            var pStr = keys[i].substring(pStrIdx + 2, null);
-            if (pStr != null) {
-              if (pStr.toNumber() > eucData.profilesNb) {
-                //     System.println("new profile detected:" + pStr);
-                eucData.profilesNb = pStr.toNumber(); // updating last profile id
-              }
-            }
-          }
-        }
+        System.println("same");
         return false;
+      } else {
+        // Storage.setValue("JSONSettings", json);
+        System.println("diff");
+        return true;
       }
     } else {
       System.println("no localJSON detected");
       Storage.setValue("JSONSettings", json);
+      var settings = json.get("settings") as Dictionary;
+      eucData.useProfileSelector = (
+        settings.get("useProfileSelector") as Dictionary
+      ).get("v");
+      setProfilesNb(settings);
+      return false;
     }
-    // if additionnal profiles detected and JSON isn't exisiting on local storage, return true:
-    if (eucData.profilesNb > 3 && storedJSON == null) {
-      return true;
-    }
+    /*
     var settings = json.get("settings") as Dictionary;
     var keys = settings.keys() as Array;
     for (var i = 0; i < keys.size(); i++) {
@@ -154,6 +123,7 @@ class WebSettings {
           }
         }
       }
+    
       if (type.equals("f")) {
         value = value.toFloat();
         // System.println(value);
@@ -173,9 +143,7 @@ class WebSettings {
       } catch (e) {
         // System.println(e);
       }
-    }
-
-    return false;
+    }*/
   }
   function confirmUpdate(data) {
     var message = "Settings conflict detected!\nUpdate local?";
@@ -199,11 +167,11 @@ class WebSettings {
         confirmUpdate(data);
         return;
       } else {
-        if (eucData.profilesNb > 3) {
-          setSettings(data);
-        }
+        //  if (eucData.profilesNb > 3) {
+        setSettings(data);
+        //}
         eucData.PSlock = false;
-        eucData.JSONFetch = "done";
+        eucData.JSONFetch = "fetched";
       }
     } else {
       if (fetchCnt < 3) {
@@ -211,13 +179,38 @@ class WebSettings {
       } else {
         var localJSON = Storage.getValue("JSONSettings");
         if (localJSON != null) {
-          settingsChanged(localJSON as Dictionary);
-          if (eucData.profilesNb > 3) {
-            setSettings(localJSON as Dictionary);
+          if (settingsChanged(data as Dictionary) == true) {
+            confirmUpdate(localJSON);
+            return;
+          } else {
+            //  if (eucData.profilesNb > 3) {
+            setSettings(localJSON);
+            //}
+            eucData.PSlock = false;
+            eucData.JSONFetch = "fetched";
           }
         }
       }
       eucData.PSlock = false;
+    }
+  }
+  function setProfilesNb(json) {
+    var keys = json.keys() as Array;
+    for (var i = 0; i < keys.size(); i++) {
+      //System.println(keys[i]);
+      var currentKey = json.get(keys[i]) as Dictionary;
+
+      //checking if additionnal profiles:
+      var pStrIdx = keys[i].find("_p");
+      if (pStrIdx != null) {
+        var pStr = keys[i].substring(pStrIdx + 2, null);
+        if (pStr != null) {
+          if (pStr.toNumber() > eucData.profilesNb) {
+            //     System.println("new profile detected:" + pStr);
+            eucData.profilesNb = pStr.toNumber(); // updating last profile id
+          }
+        }
+      }
     }
   }
   function compareJSON(json1 as Dictionary, json2 as Dictionary) {
@@ -290,9 +283,11 @@ class SettingConfirmationDelegate extends WatchUi.ConfirmationDelegate {
       //deleting last profile id on storage (to avoid a non existing profile to be loaded) :
       Storage.deleteValue("lastProfile");
       parent.setSettings(data);
+    } else {
+      parent.setSettings(null);
     }
     eucData.PSlock = false;
-    eucData.JSONFetch = "done";
+    eucData.JSONFetch = "fetched";
 
     return true;
   }

@@ -103,7 +103,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
     Ble.setScanState(Ble.SCAN_STATE_SCANNING);
     //checking if EUC Footprint already exist (see IsFirsConnection function description)
     isFirst = isFirstConnection();
-    // isFirst = false;
+    isFirst = false;
 
     if (eucData.useEngo == true) {
       deviceNb = deviceNb + 1;
@@ -396,8 +396,12 @@ class eucBLEDelegate extends Ble.BleDelegate {
                 wheelFound = true;
               }
             } else {
-              //System.println("no name");
-              wheelFound = true; // S16Pro
+              //S16Pro and likely other models
+              wheelFound = contains(
+                result.getServiceUuids(),
+                eucPM.EUC_SERVICE,
+                result
+              );
             }
           }
           // Using BLE adversiting name for Inmotion.

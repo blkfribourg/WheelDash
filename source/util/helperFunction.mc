@@ -61,7 +61,9 @@ function createMenu(labels, title) {
 
   if (labels != null) {
     for (var i = 0; i < labels.size(); i++) {
-      menu.addItem(new MenuItem(labels[i], "", labels[i], {}));
+      if (labels[i] != null) {
+        menu.addItem(new MenuItem(labels[i], "", labels[i], {}));
+      }
     }
     return menu;
   }

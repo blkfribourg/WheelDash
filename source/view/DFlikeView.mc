@@ -11,8 +11,7 @@ class DFView extends WatchUi.View {
   hidden var hasWX = null;
   hidden var reqPos = false;
   hidden var reqWX = false;
-  hidden var fieldIDs = null;
-  hidden var fieldNB = 8;
+
   hidden var current_position = null;
   hidden var current_weather = null;
   hidden var hourly_weather = null;
@@ -37,42 +36,30 @@ class DFView extends WatchUi.View {
       hasWX = Weather has :getCurrentConditions;
     }
 
-    fieldIDs = [
-      AppStorage.getSetting("field1"),
-      AppStorage.getSetting("field2"),
-      AppStorage.getSetting("field3"),
-      AppStorage.getSetting("field4"),
-      AppStorage.getSetting("field5"),
-      AppStorage.getSetting("field6"),
-      AppStorage.getSetting("field7"),
-      AppStorage.getSetting("field8"),
-    ];
-    fieldNB = AppStorage.getSetting("fieldNB");
-
-    fieldNames = new [fieldNB];
-    fieldValues = new [fieldNB];
+    fieldNames = new [eucData.fieldNB];
+    fieldValues = new [eucData.fieldNB];
     if (
-      fieldIDs.slice(0, fieldNB).indexOf(21) != -1 ||
-      fieldIDs.slice(0, fieldNB).indexOf(22) != -1 ||
+      eucData.fieldIDs.slice(0, eucData.fieldNB).indexOf(21) != -1 ||
+      eucData.fieldIDs.slice(0, eucData.fieldNB).indexOf(22) != -1 ||
       eucData.displayNorth == true ||
       eucData.displayWind == true
     ) {
       reqPos = true;
       enableGPS();
     }
-    if (fieldIDs.slice(0, fieldNB).indexOf(28) != -1) {
+    if (eucData.fieldIDs.slice(0, eucData.fieldNB).indexOf(28) != -1) {
       //System.println("load temp font");
       weatherFont = WatchUi.loadResource(Rez.Fonts.Weather);
       initWeatherChar();
     }
 
     if (
-      fieldIDs.slice(0, fieldNB).indexOf(26) != -1 ||
-      fieldIDs.slice(0, fieldNB).indexOf(27) != -1 ||
-      fieldIDs.slice(0, fieldNB).indexOf(28) != -1 ||
-      fieldIDs.slice(0, fieldNB).indexOf(29) != -1 ||
-      fieldIDs.slice(0, fieldNB).indexOf(30) != -1 ||
-      fieldIDs.slice(0, fieldNB).indexOf(31) != -1 ||
+      eucData.fieldIDs.slice(0, eucData.fieldNB).indexOf(26) != -1 ||
+      eucData.fieldIDs.slice(0, eucData.fieldNB).indexOf(27) != -1 ||
+      eucData.fieldIDs.slice(0, eucData.fieldNB).indexOf(28) != -1 ||
+      eucData.fieldIDs.slice(0, eucData.fieldNB).indexOf(29) != -1 ||
+      eucData.fieldIDs.slice(0, eucData.fieldNB).indexOf(30) != -1 ||
+      eucData.fieldIDs.slice(0, eucData.fieldNB).indexOf(31) != -1 ||
       eucData.displayWind == true
     ) {
       reqWX = true;
@@ -82,49 +69,49 @@ class DFView extends WatchUi.View {
   }
 
   function setReqVars() {
-    if (fieldIDs.slice(0, fieldNB).indexOf(8) != -1) {
+    if (eucData.fieldIDs.slice(0, eucData.fieldNB).indexOf(8) != -1) {
       rideStats.computeBatteryUsagePerc = true;
     }
-    if (fieldIDs.slice(0, fieldNB).indexOf(9) != -1) {
+    if (eucData.fieldIDs.slice(0, eucData.fieldNB).indexOf(9) != -1) {
       rideStats.computeMaxTemperature = true;
     }
-    if (fieldIDs.slice(0, fieldNB).indexOf(10) != -1) {
+    if (eucData.fieldIDs.slice(0, eucData.fieldNB).indexOf(10) != -1) {
       rideStats.computeTopSpeed = true;
     }
-    if (fieldIDs.slice(0, fieldNB).indexOf(11) != -1) {
+    if (eucData.fieldIDs.slice(0, eucData.fieldNB).indexOf(11) != -1) {
       rideStats.computeAvgMovingSpeed = true;
     }
-    if (fieldIDs.slice(0, fieldNB).indexOf(12) != -1) {
+    if (eucData.fieldIDs.slice(0, eucData.fieldNB).indexOf(12) != -1) {
       rideStats.computeMinVoltage = true;
     }
-    if (fieldIDs.slice(0, fieldNB).indexOf(13) != -1) {
+    if (eucData.fieldIDs.slice(0, eucData.fieldNB).indexOf(13) != -1) {
       rideStats.computeMaxVoltage = true;
     }
-    if (fieldIDs.slice(0, fieldNB).indexOf(14) != -1) {
+    if (eucData.fieldIDs.slice(0, eucData.fieldNB).indexOf(14) != -1) {
       rideStats.computeMaxCurrent = true;
     }
-    if (fieldIDs.slice(0, fieldNB).indexOf(15) != -1) {
+    if (eucData.fieldIDs.slice(0, eucData.fieldNB).indexOf(15) != -1) {
       rideStats.computeAvgCurrent = true;
     }
-    if (fieldIDs.slice(0, fieldNB).indexOf(16) != -1) {
+    if (eucData.fieldIDs.slice(0, eucData.fieldNB).indexOf(16) != -1) {
       rideStats.computeMinBatteryPerc = true;
     }
-    if (fieldIDs.slice(0, fieldNB).indexOf(17) != -1) {
+    if (eucData.fieldIDs.slice(0, eucData.fieldNB).indexOf(17) != -1) {
       rideStats.computeMaxBatteryPerc = true;
     }
-    if (fieldIDs.slice(0, fieldNB).indexOf(18) != -1) {
+    if (eucData.fieldIDs.slice(0, eucData.fieldNB).indexOf(18) != -1) {
       rideStats.computeAvgPower = true;
     }
-    if (fieldIDs.slice(0, fieldNB).indexOf(19) != -1) {
+    if (eucData.fieldIDs.slice(0, eucData.fieldNB).indexOf(19) != -1) {
       rideStats.computeMaxPower = true;
     }
-    if (fieldIDs.slice(0, fieldNB).indexOf(20) != -1) {
+    if (eucData.fieldIDs.slice(0, eucData.fieldNB).indexOf(20) != -1) {
       rideStats.computeMaxPWM = true;
     }
-    if (fieldIDs.slice(0, fieldNB).indexOf(25) != -1) {
+    if (eucData.fieldIDs.slice(0, eucData.fieldNB).indexOf(25) != -1) {
       rideStats.computeWatchBatteryUsage = true;
     }
-    if (fieldIDs.slice(0, fieldNB).indexOf(32) != -1) {
+    if (eucData.fieldIDs.slice(0, eucData.fieldNB).indexOf(32) != -1) {
       rideStats.computeBatteryUsage = true;
     }
   }
@@ -149,108 +136,108 @@ class DFView extends WatchUi.View {
       }
     }
 
-    for (var field_id = 0; field_id < fieldNB; field_id++) {
-      if (fieldIDs[field_id] == 0) {
+    for (var field_id = 0; field_id < eucData.fieldNB; field_id++) {
+      if (eucData.fieldIDs[field_id] == 0) {
         fieldNames[field_id] = "SPEED";
         fieldValues[field_id] = valueRound(eucData.correctedSpeed, "%.1f");
       }
-      if (fieldIDs[field_id] == 1) {
+      if (eucData.fieldIDs[field_id] == 1) {
         fieldNames[field_id] = "VOLTAGE";
         fieldValues[field_id] = valueRound(eucData.getVoltage(), "%.2f");
       }
-      if (fieldIDs[field_id] == 2) {
+      if (eucData.fieldIDs[field_id] == 2) {
         fieldNames[field_id] = "TRP DIST";
         fieldValues[field_id] = valueRound(
           eucData.correctedTripDistance,
           "%.1f"
         );
       }
-      if (fieldIDs[field_id] == 3) {
+      if (eucData.fieldIDs[field_id] == 3) {
         fieldNames[field_id] = "CURR";
         fieldValues[field_id] = valueRound(eucData.getCurrent(), "%.1f");
       }
-      if (fieldIDs[field_id] == 4) {
+      if (eucData.fieldIDs[field_id] == 4) {
         fieldNames[field_id] = "TEMP";
         fieldValues[field_id] = valueRound(
           eucData.DisplayedTemperature,
           "%.1f"
         );
       }
-      if (fieldIDs[field_id] == 5) {
+      if (eucData.fieldIDs[field_id] == 5) {
         fieldNames[field_id] = "TT DIST";
         fieldValues[field_id] = valueRound(
           eucData.correctedTotalDistance,
           "%.1f"
         );
       }
-      if (fieldIDs[field_id] == 6) {
+      if (eucData.fieldIDs[field_id] == 6) {
         fieldNames[field_id] = "PWM";
         fieldValues[field_id] = valueRound(eucData.PWM, "%.1f");
       }
-      if (fieldIDs[field_id] == 7) {
+      if (eucData.fieldIDs[field_id] == 7) {
         fieldNames[field_id] = "BATT %";
         fieldValues[field_id] = valueRound(
           eucData.getBatteryPercentage(),
           "%.1f"
         );
       }
-      if (fieldIDs[field_id] == 8) {
+      if (eucData.fieldIDs[field_id] == 8) {
         fieldNames[field_id] = "BATT USG%"; //TODO
         fieldValues[field_id] = valueRound(eucData.batteryUsagePerc, "%.1f");
       }
-      if (fieldIDs[field_id] == 9) {
+      if (eucData.fieldIDs[field_id] == 9) {
         fieldNames[field_id] = "MAX TEMP";
         fieldValues[field_id] = valueRound(eucData.maxTemperature, "%.1f");
       }
-      if (fieldIDs[field_id] == 10) {
+      if (eucData.fieldIDs[field_id] == 10) {
         fieldNames[field_id] = "TOP SPD";
         fieldValues[field_id] = valueRound(eucData.topSpeed, "%.1f");
       }
-      if (fieldIDs[field_id] == 11) {
+      if (eucData.fieldIDs[field_id] == 11) {
         fieldNames[field_id] = "AVG SPD";
         fieldValues[field_id] = valueRound(eucData.avgMovingSpeed, "%.1f");
       }
-      if (fieldIDs[field_id] == 12) {
+      if (eucData.fieldIDs[field_id] == 12) {
         fieldNames[field_id] = "MIN VOLT";
         fieldValues[field_id] = valueRound(eucData.minVoltage, "%.2f");
       }
-      if (fieldIDs[field_id] == 13) {
+      if (eucData.fieldIDs[field_id] == 13) {
         fieldNames[field_id] = "MAX VOLT";
         fieldValues[field_id] = valueRound(eucData.maxVoltage, "%.2f");
       }
-      if (fieldIDs[field_id] == 14) {
+      if (eucData.fieldIDs[field_id] == 14) {
         fieldNames[field_id] = "MAX CURR";
         fieldValues[field_id] = valueRound(eucData.maxCurrent, "%.1f");
       }
-      if (fieldIDs[field_id] == 15) {
+      if (eucData.fieldIDs[field_id] == 15) {
         fieldNames[field_id] = "AVG CURR";
         fieldValues[field_id] = valueRound(eucData.avgCurrent, "%.1f");
       }
-      if (fieldIDs[field_id] == 16) {
+      if (eucData.fieldIDs[field_id] == 16) {
         fieldNames[field_id] = "MIN BATT %";
         fieldValues[field_id] = valueRound(
           eucData.lowestBatteryPercentage,
           "%.1f"
         );
       }
-      if (fieldIDs[field_id] == 17) {
+      if (eucData.fieldIDs[field_id] == 17) {
         fieldNames[field_id] = "MAX BATT %";
         fieldValues[field_id] = valueRound(eucData.maxBatteryPerc, "%.1f");
       }
-      if (fieldIDs[field_id] == 18) {
+      if (eucData.fieldIDs[field_id] == 18) {
         fieldNames[field_id] = "AVG PWR";
         fieldValues[field_id] = valueRound(eucData.avgPower, "%.1f");
       }
-      if (fieldIDs[field_id] == 19) {
+      if (eucData.fieldIDs[field_id] == 19) {
         fieldNames[field_id] = "MAX PWR";
         fieldValues[field_id] = valueRound(eucData.maxPower, "%.1f");
       }
-      if (fieldIDs[field_id] == 20) {
+      if (eucData.fieldIDs[field_id] == 20) {
         fieldNames[field_id] = "MAX PWM";
         fieldValues[field_id] = valueRound(eucData.maxPWM, "%.1f");
       }
       // GPS
-      if (fieldIDs[field_id] == 21) {
+      if (eucData.fieldIDs[field_id] == 21) {
         fieldNames[field_id] = "GPS ALT";
         if (current_position != null && current_position.accuracy >= 2) {
           fieldValues[field_id] = valueRound(current_position.altitude, "%.1f");
@@ -258,7 +245,7 @@ class DFView extends WatchUi.View {
           fieldValues[field_id] = "--";
         }
       }
-      if (fieldIDs[field_id] == 22) {
+      if (eucData.fieldIDs[field_id] == 22) {
         fieldNames[field_id] = "GPS SPD";
         if (current_position != null && current_position.accuracy >= 2) {
           var GPSSpeed = current_position.speed * 3.6;
@@ -271,23 +258,23 @@ class DFView extends WatchUi.View {
         }
       }
       //WATCH SENSOR
-      if (fieldIDs[field_id] == 23) {
+      if (eucData.fieldIDs[field_id] == 23) {
         fieldNames[field_id] = "HRATE";
         fieldValues[field_id] = getHR();
       }
-      if (fieldIDs[field_id] == 24) {
+      if (eucData.fieldIDs[field_id] == 24) {
         fieldNames[field_id] = "WTCH BAT";
         fieldValues[field_id] = valueRound(
           System.getSystemStats().battery,
           "%d"
         );
       }
-      if (fieldIDs[field_id] == 25) {
+      if (eucData.fieldIDs[field_id] == 25) {
         fieldNames[field_id] = "WTCH USG";
         fieldValues[field_id] = valueRound(eucData.watchBatteryUsage, "%.1f");
       }
       //WATCH WEATHER
-      if (fieldIDs[field_id] == 26) {
+      if (eucData.fieldIDs[field_id] == 26) {
         fieldNames[field_id] = "WX TEMP";
         if (current_weather != null && current_weather.temperature != null) {
           fieldValues[field_id] = valueRound(
@@ -306,7 +293,7 @@ class DFView extends WatchUi.View {
         }
       }
 
-      if (fieldIDs[field_id] == 27) {
+      if (eucData.fieldIDs[field_id] == 27) {
         fieldNames[field_id] = "RF TEMP";
         if (
           current_weather != null &&
@@ -320,7 +307,7 @@ class DFView extends WatchUi.View {
           fieldValues[field_id] = "--";
         }
       }
-      if (fieldIDs[field_id] == 28) {
+      if (eucData.fieldIDs[field_id] == 28) {
         fieldNames[field_id] = "WX COND";
         if (current_weather != null && current_weather.condition != null) {
           fieldValues[field_id] = current_weather.condition;
@@ -332,7 +319,7 @@ class DFView extends WatchUi.View {
           }
         }
       }
-      if (fieldIDs[field_id] == 29) {
+      if (eucData.fieldIDs[field_id] == 29) {
         fieldNames[field_id] = "RAIN %";
         if (
           current_weather != null &&
@@ -356,7 +343,7 @@ class DFView extends WatchUi.View {
           }
         }
       }
-      if (fieldIDs[field_id] == 30) {
+      if (eucData.fieldIDs[field_id] == 30) {
         fieldNames[field_id] = "HUM %";
         if (current_weather != null) {
           fieldValues[field_id] = valueRound(
@@ -374,7 +361,7 @@ class DFView extends WatchUi.View {
           }
         }
       }
-      if (fieldIDs[field_id] == 31) {
+      if (eucData.fieldIDs[field_id] == 31) {
         fieldNames[field_id] = "WIND SPD";
         var windSpeed = null;
         if (current_weather != null && current_weather.windSpeed != null) {
@@ -394,18 +381,18 @@ class DFView extends WatchUi.View {
           fieldValues[field_id] = "--";
         }
       }
-      if (fieldIDs[field_id] == 32) {
+      if (eucData.fieldIDs[field_id] == 32) {
         fieldNames[field_id] = "BATT USG";
         fieldValues[field_id] = valueRound(eucData.batteryUsage, "%.1f");
       }
-      if (fieldIDs[field_id] == 33) {
+      if (eucData.fieldIDs[field_id] == 33) {
         fieldNames[field_id] = "TIME";
         var CurrentTime = System.getClockTime();
 
         fieldValues[field_id] =
           CurrentTime.hour.format("%d") + ":" + CurrentTime.min.format("%02d");
       }
-      if (fieldIDs[field_id] == 34) {
+      if (eucData.fieldIDs[field_id] == 34) {
         fieldNames[field_id] = "VEH SPD";
         var targetSpeed = eucData.variaTargetSpeed;
         if (targetSpeed != null) {
@@ -416,15 +403,15 @@ class DFView extends WatchUi.View {
         }
         fieldValues[field_id] = valueRound(targetSpeed, "%.1f");
       }
-      if (fieldIDs[field_id] == 35) {
+      if (eucData.fieldIDs[field_id] == 35) {
         fieldNames[field_id] = "VEH DST";
         fieldValues[field_id] = valueRound(eucData.variaTargetDist, "%.1f");
       }
-      if (fieldIDs[field_id] == 36) {
+      if (eucData.fieldIDs[field_id] == 36) {
         fieldNames[field_id] = "VEH NB";
         fieldValues[field_id] = valueRound(eucData.variaTargetNb, "%1d");
       }
-      if (fieldIDs[field_id] == 37) {
+      if (eucData.fieldIDs[field_id] == 37) {
         fieldNames[field_id] = "RD V";
         fieldValues[field_id] = valueRound(Varia.getVariaVoltage(), "%1d");
       }
@@ -452,7 +439,7 @@ class DFView extends WatchUi.View {
     dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
     dc.clear();
     dc.setPenWidth(2);
-    if (fieldNB == 8) {
+    if (eucData.fieldNB == 8) {
       fieldNameFont = Graphics.FONT_XTINY;
       if (eucData.alternativeFont == true && eucData.limitedMemory == false) {
         fieldValueFont = WatchUi.loadResource(Rez.Fonts.Rajdhani);
@@ -598,7 +585,7 @@ class DFView extends WatchUi.View {
         7
       );
     }
-    if (fieldNB == 6) {
+    if (eucData.fieldNB == 6) {
       paddingCorrection = 0.85;
       fieldNameFont = Graphics.FONT_XTINY;
       if (eucData.alternativeFont == true && eucData.limitedMemory == false) {
@@ -721,7 +708,7 @@ class DFView extends WatchUi.View {
       );
       drawDFTextValue(dc, scr_width / 2, scr_width - fieldValueFontHeight, 5);
     }
-    if (fieldNB == 4) {
+    if (eucData.fieldNB == 4) {
       fieldNameFont = Graphics.FONT_TINY;
       if (eucData.alternativeFont == true && eucData.limitedMemory == false) {
         fieldValueFont = WatchUi.loadResource(Rez.Fonts.Rajdhani);

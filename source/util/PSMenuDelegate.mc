@@ -18,18 +18,30 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
   private var mainViewdelegate;
   private var profileNb;
   private var connView;
-
   private var activityRecordView;
+
   function initialize() {
     actionButtonTrigger = new ActionButton();
     Menu2InputDelegate.initialize();
     queue = new BleQueue();
     //activityRecordDelegate = new ActivityRecordDelegate();
+
+    /*
+ if (!usePS) {
+      var profile = AppStorage.getSetting("defaultProfile");
+      //System.println(profile);
+      delegate.getDefaultSettings(profile);
+      view = delegate.getView();
+      delegate = delegate.getDelegate();
+    }
+    */
   }
 
   function onSelect(item) {
     setSettings(item.getId());
     connInit();
+    DFViewInit();
+    rideStatsInit();
   }
   function onDone() {
     WatchUi.popView(WatchUi.SLIDE_DOWN);
@@ -129,7 +141,7 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       WatchUi.pushView(mainView, mainViewdelegate, WatchUi.SLIDE_IMMEDIATE);
     } else {
       if (eucBleDelegate.isFirst == false) {
-        //System.println("not first");
+        System.println("not first");
         /*
       if (
         eucData.spdLimFeatEnabled == true &&
@@ -143,12 +155,60 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
         WatchUi.pushView(mainView, mainViewdelegate, WatchUi.SLIDE_IMMEDIATE);
         // }
       } else {
-        //  System.println("first");
+        System.println("first");
         connView = new messageView(eucBleDelegate, profileNb, self, "1stConn");
         WatchUi.pushView(connView, null, WatchUi.SLIDE_IMMEDIATE);
       }
     }
   }
+
+  function DFViewInit() {
+    System.println("initializing DFView");
+    if (
+      !eucData.limitedMemory &&
+      (eucData.dfViewBtn != 0 ||
+        eucData.slideToDFView == true ||
+        eucData.dfViewOnly == true)
+    ) {
+      if (getDFlikeView() == null) {
+        // init DFlikeView
+        var DFlikeView = new DFView();
+        setDFlikeView(DFlikeView);
+      }
+    }
+  }
+
+  function rideStatsInit() {
+    rideStats.movingmsec = 0;
+    rideStats.statsTimerReset();
+
+    if (rideStats.showAverageMovingSpeedStatistic) {
+      rideStats.statsNumberToDiplay++;
+    }
+    if (rideStats.showTopSpeedStatistic) {
+      rideStats.statsNumberToDiplay++;
+    }
+    if (rideStats.showWatchBatteryConsumptionStatistic) {
+      rideStats.statsNumberToDiplay++;
+    }
+    if (rideStats.showTotalDistance) {
+      rideStats.statsNumberToDiplay++;
+    }
+    if (rideStats.showTripDistance) {
+      rideStats.statsNumberToDiplay++;
+    }
+    if (rideStats.showVoltage) {
+      rideStats.statsNumberToDiplay++;
+    }
+    if (rideStats.showWatchBatteryStatistic) {
+      rideStats.statsNumberToDiplay++;
+    }
+    if (rideStats.showProfileName) {
+      rideStats.statsNumberToDiplay++;
+    }
+    rideStats.statsArray = new [rideStats.statsNumberToDiplay];
+  }
+
   function unpair() {
     try {
       // eucBleDelegate.manualUnpair();
@@ -170,6 +230,7 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
   }
 
   function getDFlikeView() {
+    System.println(mainViewdelegate);
     return mainViewdelegate.getDFlikeView();
   }
 
@@ -180,7 +241,7 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
     return mainViewdelegate.getBleDelegate();
   }
 
-  function getDefaultSettings(profileIdx) {
+  function getDefaultSettings() {
     //load last used if exist or default profile if doesn't
     var lastProfile = Storage.getValue("lastProfile");
 
@@ -189,12 +250,18 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
         // to avoid infinite loop if user change lastprofile profile name charge profile 1.
         setSettings(getProfileList()[0]);
       }
+
       connInit();
+      DFViewInit();
+      rideStatsInit();
     } else {
       setSettings(
         getProfileList()[AppStorage.getSetting("defaultProfile") - 1]
       );
+
       connInit();
+      DFViewInit();
+      rideStatsInit();
     }
   }
   function getProfileList() {
@@ -206,6 +273,73 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
   }
 
   function setSettings(profileName) {
+    // Global settings (not associated with a specific profileName) :
+
+    eucData.useEngo = AppStorage.getSetting("useEngo");
+    eucData.engoTouch = AppStorage.getSetting("engoTouch");
+    eucData.useRadar = AppStorage.getSetting("useRadar");
+    eucData.variaCloseAlarmDistThr = AppStorage.getSetting(
+      "variaCloseAlarmDistThr"
+    );
+    eucData.variaFarAlarmDistThr = AppStorage.getSetting(
+      "variaFarAlarmDistThr"
+    );
+    eucData.ESP32Horn = AppStorage.getSetting("ESP32Horn");
+    eucData.motorbikeHeadset = AppStorage.getSetting("motorbikeHeadset");
+    eucData.vibeIntensity = AppStorage.getSetting("vibeIntensity");
+    eucData.alternativeFont = AppStorage.getSetting("alternativeFont");
+    eucData.slideToDFView = AppStorage.getSetting("slideToDFView");
+    eucData.dfViewOnly = AppStorage.getSetting("dfViewOnly");
+    eucData.displayWind = AppStorage.getSetting("displayWind");
+    eucData.displayNorth = AppStorage.getSetting("displayNorth");
+    eucData.useMiles = AppStorage.getSetting("useMiles");
+    eucData.useFahrenheit = AppStorage.getSetting("useFahrenheit");
+    eucData.useEUCWorldAPI = AppStorage.getSetting("useEUCWorldAPI");
+    eucData.convertToFahrenheit = AppStorage.getSetting("convertToFahrenheit");
+    //Im Horn experimental
+    eucData.imHornSound = AppStorage.getSetting("imHornSound");
+    eucData.KSVoiceMode = AppStorage.getSetting("KSVoiceMode");
+    eucData.updateDelay = AppStorage.getSetting("updateDelay");
+    eucData.debug = AppStorage.getSetting("debugMode");
+    eucData.activityAutorecording = AppStorage.getSetting(
+      "activityRecordingOnStartup"
+    );
+    eucData.activityAutosave = AppStorage.getSetting("activitySavingOnExit");
+
+    rideStats.showAverageMovingSpeedStatistic = AppStorage.getSetting(
+      "averageMovingSpeedStatistic"
+    );
+    rideStats.showTopSpeedStatistic =
+      AppStorage.getSetting("topSpeedStatistic");
+
+    rideStats.showWatchBatteryConsumptionStatistic = AppStorage.getSetting(
+      "watchBatteryConsumptionStatistic"
+    );
+    rideStats.showTripDistance = AppStorage.getSetting("tripDistanceStatistic");
+    rideStats.showTotalDistance = AppStorage.getSetting(
+      "totalDistanceStatistic"
+    );
+
+    rideStats.showVoltage = AppStorage.getSetting("voltageStatistic");
+    rideStats.showWatchBatteryStatistic = AppStorage.getSetting(
+      "watchBatteryStatistic"
+    );
+    rideStats.showProfileName = AppStorage.getSetting("profileName");
+
+    eucData.fieldIDs = [
+      AppStorage.getSetting("field1"),
+      AppStorage.getSetting("field2"),
+      AppStorage.getSetting("field3"),
+      AppStorage.getSetting("field4"),
+      AppStorage.getSetting("field5"),
+      AppStorage.getSetting("field6"),
+      AppStorage.getSetting("field7"),
+      AppStorage.getSetting("field8"),
+    ];
+    eucData.fieldNB = AppStorage.getSetting("fieldNB");
+
+    // End of Global Settings
+
     // add return false if profileName not found
     var profiles = getProfileList();
 
@@ -309,8 +443,8 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
   private var connView;
   private var JSONSettingsDict;
   private var JSONSettings;
-
   private var activityRecordView;
+
   function initialize() {
     actionButtonTrigger = new ActionButton();
     Menu2InputDelegate.initialize();
@@ -321,10 +455,11 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
     }
     //activityRecordDelegate = new ActivityRecordDelegate();
   }
-
   function onSelect(item) {
     setSettings(item.getId());
     connInit();
+    DFViewInit();
+    rideStatsInit();
   }
   function onDone() {
     WatchUi.popView(WatchUi.SLIDE_DOWN);
@@ -350,6 +485,11 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
         if (eucData.useEngo == true) {
           engoPM.init();
           engoPM.registerProfiles();
+          if (eucData.useMiles == true) {
+            eucData.engoDistUnit = "mi";
+            eucData.engoSpdUnit = "mph";
+            eucData.engoTempUnit = "F";
+          }
         }
       } else {
         if (eucData.ESP32Horn == true || eucData.useEngo == true) {
@@ -419,7 +559,7 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
       WatchUi.pushView(mainView, mainViewdelegate, WatchUi.SLIDE_IMMEDIATE);
     } else {
       if (eucBleDelegate.isFirst == false) {
-        //System.println("not first");
+        System.println("not first");
         /*
       if (
         eucData.spdLimFeatEnabled == true &&
@@ -433,12 +573,60 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
         WatchUi.pushView(mainView, mainViewdelegate, WatchUi.SLIDE_IMMEDIATE);
         // }
       } else {
-        //  System.println("first");
+        System.println("first");
         connView = new messageView(eucBleDelegate, profileNb, self, "1stConn");
         WatchUi.pushView(connView, null, WatchUi.SLIDE_IMMEDIATE);
       }
     }
   }
+
+  function DFViewInit() {
+    System.println("initializing DFView");
+    if (
+      !eucData.limitedMemory &&
+      (eucData.dfViewBtn != 0 ||
+        eucData.slideToDFView == true ||
+        eucData.dfViewOnly == true)
+    ) {
+      if (getDFlikeView() == null) {
+        // init DFlikeView
+        var DFlikeView = new DFView();
+        setDFlikeView(DFlikeView);
+      }
+    }
+  }
+
+  function rideStatsInit() {
+    rideStats.movingmsec = 0;
+    rideStats.statsTimerReset();
+
+    if (rideStats.showAverageMovingSpeedStatistic) {
+      rideStats.statsNumberToDiplay++;
+    }
+    if (rideStats.showTopSpeedStatistic) {
+      rideStats.statsNumberToDiplay++;
+    }
+    if (rideStats.showWatchBatteryConsumptionStatistic) {
+      rideStats.statsNumberToDiplay++;
+    }
+    if (rideStats.showTotalDistance) {
+      rideStats.statsNumberToDiplay++;
+    }
+    if (rideStats.showTripDistance) {
+      rideStats.statsNumberToDiplay++;
+    }
+    if (rideStats.showVoltage) {
+      rideStats.statsNumberToDiplay++;
+    }
+    if (rideStats.showWatchBatteryStatistic) {
+      rideStats.statsNumberToDiplay++;
+    }
+    if (rideStats.showProfileName) {
+      rideStats.statsNumberToDiplay++;
+    }
+    rideStats.statsArray = new [rideStats.statsNumberToDiplay];
+  }
+
   function unpair() {
     try {
       // eucBleDelegate.manualUnpair();
@@ -460,6 +648,7 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
   }
 
   function getDFlikeView() {
+    System.println(mainViewdelegate);
     return mainViewdelegate.getDFlikeView();
   }
 
@@ -469,10 +658,7 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
   function getBleDelegate() {
     return mainViewdelegate.getBleDelegate();
   }
-
-  function getDefaultSettings(profileIdx) {
-    System.println("loading: " + profileIdx);
-
+  function getDefaultSettings() {
     //load last used if exist or profile 1 if doesn't
     var lastProfile = Storage.getValue("lastProfile");
 
@@ -481,7 +667,10 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
         // to avoid infinite loop if user change lastprofile profile name charge profile 1.
         setSettings(profileSelector.getJSONProfileList()[0]);
       }
+
       connInit();
+      DFViewInit();
+      rideStatsInit();
     } else {
       setSettings(
         profileSelector.getJSONProfileList()[
@@ -491,11 +680,217 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
           ).toNumber() - 1
         ]
       );
+
       connInit();
+      DFViewInit();
+      rideStatsInit();
     }
   }
 
   function setSettings(profileName) {
+    // Global Settings (not associated with a specific ProfileName) :
+    if (JSONSettings.get("useEngo") != null) {
+      eucData.useEngo = (JSONSettings.get("useEngo") as Dictionary).get("v");
+    }
+
+    if (JSONSettings.get("engoTouch") != null) {
+      eucData.engoTouch = (
+        (JSONSettings.get("engoTouch") as Dictionary).get("v") as String
+      ).toNumber();
+    }
+    if (JSONSettings.get("useRadar") != null) {
+      eucData.useRadar = (JSONSettings.get("useRadar") as Dictionary).get("v");
+    }
+
+    if (JSONSettings.get("variaCloseAlarmDistThr") != null) {
+      eucData.variaCloseAlarmDistThr = (
+        (JSONSettings.get("variaCloseAlarmDistThr") as Dictionary).get("v") as
+          String
+      ).toNumber();
+    }
+
+    if (JSONSettings.get("variaFarAlarmDistThr") != null) {
+      eucData.variaFarAlarmDistThr = (
+        (JSONSettings.get("variaFarAlarmDistThr") as Dictionary).get("v") as
+          String
+      ).toNumber();
+    }
+
+    if (JSONSettings.get("ESP32Horn") != null) {
+      eucData.ESP32Horn = (JSONSettings.get("ESP32Horn") as Dictionary).get(
+        "v"
+      );
+    }
+
+    if (JSONSettings.get("motorbikeHeadset") != null) {
+      eucData.motorbikeHeadset = (
+        JSONSettings.get("motorbikeHeadset") as Dictionary
+      ).get("v");
+    }
+
+    if (JSONSettings.get("vibeIntensity") != null) {
+      eucData.vibeIntensity = (
+        (JSONSettings.get("vibeIntensity") as Dictionary).get("v") as String
+      ).toNumber();
+    }
+
+    if (JSONSettings.get("alternativeFont") != null) {
+      eucData.alternativeFont = (
+        JSONSettings.get("alternativeFont") as Dictionary
+      ).get("v");
+    }
+
+    if (JSONSettings.get("slideToDFView") != null) {
+      eucData.slideToDFView = (
+        JSONSettings.get("slideToDFView") as Dictionary
+      ).get("v");
+    }
+
+    if (JSONSettings.get("dfViewOnly") != null) {
+      eucData.dfViewOnly = (JSONSettings.get("dfViewOnly") as Dictionary).get(
+        "v"
+      );
+    }
+    if (JSONSettings.get("displayWind") != null) {
+      eucData.displayWind = (JSONSettings.get("displayWind") as Dictionary).get(
+        "v"
+      );
+    }
+
+    if (JSONSettings.get("displayNorth") != null) {
+      eucData.displayNorth = (
+        JSONSettings.get("displayNorth") as Dictionary
+      ).get("v");
+    }
+    if (JSONSettings.get("useMiles") != null) {
+      eucData.useMiles = (JSONSettings.get("useMiles") as Dictionary).get("v");
+    }
+    if (JSONSettings.get("useFahrenheit") != null) {
+      eucData.useFahrenheit = (
+        JSONSettings.get("useFahrenheit") as Dictionary
+      ).get("v");
+    }
+
+    if (JSONSettings.get("useEUCWorldAPI") != null) {
+      eucData.useEUCWorldAPI = (
+        JSONSettings.get("useEUCWorldAPI") as Dictionary
+      ).get("v");
+    }
+    if (JSONSettings.get("convertToFahrenheit") != null) {
+      eucData.convertToFahrenheit = (
+        JSONSettings.get("convertToFahrenheit") as Dictionary
+      ).get("v");
+    }
+
+    //Im Horn experimental
+    if (JSONSettings.get("imHornSound") != null) {
+      eucData.imHornSound = (
+        (JSONSettings.get("imHornSound") as Dictionary).get("v") as String
+      ).toNumber();
+    }
+
+    if (JSONSettings.get("KSVoiceMode") != null) {
+      eucData.KSVoiceMode = (JSONSettings.get("KSVoiceMode") as Dictionary).get(
+        "v"
+      );
+    }
+    if (JSONSettings.get("updateDelay") != null) {
+      eucData.updateDelay = (
+        (JSONSettings.get("updateDelay") as Dictionary).get("v") as String
+      ).toNumber();
+    }
+    if (JSONSettings.get("debugMode") != null) {
+      eucData.debug = (JSONSettings.get("debugMode") as Dictionary).get("v");
+    }
+
+    if (JSONSettings.get("activityRecordingOnStartup") != null) {
+      eucData.activityAutorecording = (
+        JSONSettings.get("activityRecordingOnStartup") as Dictionary
+      ).get("v");
+    }
+    if (JSONSettings.get("activitySavingOnExit") != null) {
+      eucData.activityAutosave = (
+        JSONSettings.get("activitySavingOnExit") as Dictionary
+      ).get("v");
+    }
+
+    if (JSONSettings.get("averageMovingSpeedStatistic") != null) {
+      rideStats.showAverageMovingSpeedStatistic = (
+        JSONSettings.get("averageMovingSpeedStatistic") as Dictionary
+      ).get("v");
+    }
+    if (JSONSettings.get("topSpeedStatistic") != null) {
+      rideStats.showTopSpeedStatistic = (
+        JSONSettings.get("topSpeedStatistic") as Dictionary
+      ).get("v");
+    }
+    if (JSONSettings.get("watchBatteryConsumptionStatistic") != null) {
+      rideStats.showWatchBatteryConsumptionStatistic = (
+        JSONSettings.get("watchBatteryConsumptionStatistic") as Dictionary
+      ).get("v");
+    }
+    if (JSONSettings.get("tripDistanceStatistic") != null) {
+      rideStats.showTripDistance = (
+        JSONSettings.get("tripDistanceStatistic") as Dictionary
+      ).get("v");
+    }
+
+    if (JSONSettings.get("totalDistanceStatistic") != null) {
+      rideStats.showTotalDistance = (
+        JSONSettings.get("totalDistanceStatistic") as Dictionary
+      ).get("v");
+    }
+
+    if (JSONSettings.get("voltageStatistic") != null) {
+      rideStats.showVoltage = (
+        JSONSettings.get("voltageStatistic") as Dictionary
+      ).get("v");
+    }
+    if (JSONSettings.get("watchBatteryStatistic") != null) {
+      rideStats.showWatchBatteryStatistic = (
+        JSONSettings.get("watchBatteryStatistic") as Dictionary
+      ).get("v");
+    }
+
+    if (JSONSettings.get("profileName") != null) {
+      rideStats.showProfileName = (
+        JSONSettings.get("profileName") as Dictionary
+      ).get("v");
+    }
+
+    if (JSONSettings.get("fieldNB") != null) {
+      eucData.fieldNB = (
+        (JSONSettings.get("fieldNB") as Dictionary).get("v") as String
+      ).toNumber();
+    }
+    if (eucData.fieldNB != null) {
+      eucData.fieldIDs = new [eucData.fieldNB];
+      for (var i = 0; i < eucData.fieldNB; i++) {
+        if (JSONSettings.get("field" + (i + 1)) != null) {
+          eucData.fieldIDs[i] = (
+            (JSONSettings.get("field" + (i + 1)) as Dictionary).get("v") as
+              String
+          ).toNumber();
+        } else {
+          System.println("fallback to default settings for DF-view");
+          //fallback to default
+          eucData.fieldIDs = [
+            AppStorage.getSetting("field1"),
+            AppStorage.getSetting("field2"),
+            AppStorage.getSetting("field3"),
+            AppStorage.getSetting("field4"),
+            AppStorage.getSetting("field5"),
+            AppStorage.getSetting("field6"),
+            AppStorage.getSetting("field7"),
+            AppStorage.getSetting("field8"),
+          ];
+          eucData.fieldNB = AppStorage.getSetting("fieldNB");
+          break;
+        }
+      }
+    }
+    // end of global Setting
+
     var profiles = profileSelector.getJSONProfileList();
     profileNb = profiles.indexOf(profileName) + 1;
 
