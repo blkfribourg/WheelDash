@@ -27,6 +27,7 @@ module profileSelector {
   }
   function getJSONProfileList() {
     var JSONSettingsDict = Storage.getValue("JSONSettings") as Dictionary;
+
     var JSONSettings = JSONSettingsDict.get("settings") as Dictionary;
     var JSONProfiles = JSONSettingsDict.get("profiles") as Dictionary;
 

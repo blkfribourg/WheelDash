@@ -210,7 +210,7 @@
    <string id="voltageStatistic">Display voltage</string>
    <string id="watchBatteryStatistic">Display watch battery</string>
    <string id="profileName">Display profile name</string>
-   <string id="debugMode">Enable Debug Mode (view)</string>
+   <string id="debugView">Enable Debug Mode (view)</string>
    <string id="useEngo">ActiveView Engo support</string>
     <string id="engoTouch">Switch view mode</string>    
     <string id="engoTouch0">Gesture (proximity sensor)</string>

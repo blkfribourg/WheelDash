@@ -300,7 +300,7 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
     eucData.imHornSound = AppStorage.getSetting("imHornSound");
     eucData.KSVoiceMode = AppStorage.getSetting("KSVoiceMode");
     eucData.updateDelay = AppStorage.getSetting("updateDelay");
-    eucData.debug = AppStorage.getSetting("debugMode");
+    eucData.debug = AppStorage.getSetting("debugView");
     eucData.activityAutorecording = AppStorage.getSetting(
       "activityRecordingOnStartup"
     );
@@ -672,6 +672,9 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
       DFViewInit();
       rideStatsInit();
     } else {
+      System.println(
+        (JSONSettings.get("defaultProfile") as Dictionary).get("v") as String
+      );
       setSettings(
         profileSelector.getJSONProfileList()[
           (
@@ -799,8 +802,8 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
         (JSONSettings.get("updateDelay") as Dictionary).get("v") as String
       ).toNumber();
     }
-    if (JSONSettings.get("debugMode") != null) {
-      eucData.debug = (JSONSettings.get("debugMode") as Dictionary).get("v");
+    if (JSONSettings.get("debugView") != null) {
+      eucData.debug = (JSONSettings.get("debugView") as Dictionary).get("v");
     }
 
     if (JSONSettings.get("activityRecordingOnStartup") != null) {

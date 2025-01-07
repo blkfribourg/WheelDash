@@ -1,6 +1,6 @@
 <properties>
 <!-- Global settings-->
-    <property id="settingsUrl" type="string">https://wheeldash.mywire.org/uid/DxlMRlaKr_</property>
+    <property id="settingsUrl" type="string"></property>
     <property id="updateDelay" type="number">200</property>
     <property id="activityRecordingOnStartup" type="boolean">false</property>
     <property id="activitySavingOnExit" type="boolean">false</property>
@@ -14,7 +14,7 @@
     <property id="profileName" type="boolean">false</property>
     <property id="defaultProfile" type="number">1</property>
     <property id="useProfileSelector" type="boolean">true</property>
-    <property id="debugMode" type="boolean">false</property>
+    <property id="debugView" type="boolean">false</property>
     <property id ="imHornSound" type="number">0</property>
     <property id ="KSVoiceMode" type="boolean">false</property>
     <!--<property id ="KSVoiceModeVal" type="number">0</property>-->

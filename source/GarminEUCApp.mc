@@ -79,9 +79,17 @@ class GarminEUCApp extends Application.AppBase {
         WatchUi.pushView(JSONFetchMessage, null, WatchUi.SLIDE_IMMEDIATE);
       }
 
-      if (eucData.JSONFetch.equals("fetched")) {
+      if (
+        eucData.JSONFetch.equals("fetched") ||
+        eucData.JSONFetch.equals("failed")
+      ) {
         WatchUi.popView(WatchUi.SLIDE_IMMEDIATE); // pop default PSmenu
-        eucData.JSONFetch = "done";
+
+        if (eucData.JSONFetch.equals("failed")) {
+          eucData.JSONFetch = "";
+        } else {
+          eucData.JSONFetch = "done";
+        }
         timeOut = 10000;
         // initialize(); //req?
         onStart(null);

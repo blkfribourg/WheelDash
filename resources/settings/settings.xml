@@ -131,8 +131,8 @@
             />
         </setting>
          <setting
-            propertyKey="@Properties.debugMode"
-            title="@Strings.debugMode">
+            propertyKey="@Properties.debugView"
+            title="@Strings.debugView">
             <settingConfig
                 type="boolean"
             />

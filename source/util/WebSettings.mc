@@ -177,18 +177,15 @@ class WebSettings {
       if (fetchCnt < 3) {
         startFetchTimer();
       } else {
-        var localJSON = Storage.getValue("JSONSettings");
+        var localJSON = Storage.getValue("JSONSettings") as Dictionary;
         if (localJSON != null) {
-          if (settingsChanged(data as Dictionary) == true) {
-            confirmUpdate(localJSON);
-            return;
-          } else {
-            //  if (eucData.profilesNb > 3) {
-            setSettings(localJSON);
-            //}
-            eucData.PSlock = false;
-            eucData.JSONFetch = "fetched";
-          }
+          setProfilesNb(localJSON.get("settings") as Dictionary);
+          setSettings(localJSON);
+          eucData.JSONFetch = "fetched";
+        } else {
+          System.println("failed");
+          eucData.settingsChanged = true;
+          eucData.JSONFetch = "failed";
         }
       }
       eucData.PSlock = false;
