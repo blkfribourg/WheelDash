@@ -230,7 +230,6 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
   }
 
   function getDFlikeView() {
-    System.println(mainViewdelegate);
     return mainViewdelegate.getDFlikeView();
   }
 

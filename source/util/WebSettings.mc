@@ -65,8 +65,14 @@ class WebSettings {
   }
   function setSettings(json) {
     if (json != null) {
+      System.println("writing json to local storage"); // saving json to appstorage
       Storage.setValue("JSONSettings", json);
-      System.println("writing json to local storage"); // saving json to appstorage:
+      var settings = json.get("settings") as Dictionary;
+      eucData.useProfileSelector = (
+        settings.get("useProfileSelector") as Dictionary
+      ).get("v");
+      setProfilesNb(settings);
+      eucData.JSONFetch = "fetched";
     }
 
     eucData.settingsChanged = true;
@@ -80,11 +86,7 @@ class WebSettings {
 
     if (storedJSON != null) {
       System.println("Existing localJSON");
-      var settings = storedJSON.get("settings") as Dictionary;
-      eucData.useProfileSelector = (
-        settings.get("useProfileSelector") as Dictionary
-      ).get("v");
-      setProfilesNb(settings);
+
       if (compareJSON(storedJSON, json) == true) {
         System.println("same");
         return false;
@@ -171,7 +173,6 @@ class WebSettings {
         setSettings(data);
         //}
         eucData.PSlock = false;
-        eucData.JSONFetch = "fetched";
       }
     } else {
       if (fetchCnt < 3) {
@@ -181,7 +182,6 @@ class WebSettings {
         if (localJSON != null) {
           setProfilesNb(localJSON.get("settings") as Dictionary);
           setSettings(localJSON);
-          eucData.JSONFetch = "fetched";
         } else {
           System.println("failed");
           eucData.settingsChanged = true;
@@ -212,9 +212,10 @@ class WebSettings {
   }
   function compareJSON(json1 as Dictionary, json2 as Dictionary) {
     // if jsons are identical returns true, else returns false
-
+    // Poorly coded, needs a rewrite
     var keys1 = json1.keys() as Array;
     var keys2 = json2.keys() as Array;
+
     if (keys1.size() != keys2.size()) {
       return false;
     }
@@ -223,6 +224,13 @@ class WebSettings {
       var firstLvl = json1.get(keys1[i]) as Dictionary;
       if (firstLvl instanceof Dictionary) {
         var secondLvlKeys = firstLvl.keys();
+
+        var secKeys1 = (json1.get(keys1[i]) as Dictionary).keys();
+        var secKeys2 = (json2.get(keys2[i]) as Dictionary).keys();
+        if (secKeys1.size() != secKeys2.size()) {
+          return false;
+        }
+
         for (var j = 0; j < secondLvlKeys.size(); j++) {
           // System.println(secondLvlKeys);
           if (secondLvlKeys instanceof Array) {
@@ -237,7 +245,7 @@ class WebSettings {
                       Dictionary
                   ).get(thirdLvlKeys[k]);
                   var value2 = (
-                    (json2.get(keys1[i]) as Dictionary).get(secondLvlKeys[j]) as
+                    (json2.get(keys2[i]) as Dictionary).get(secondLvlKeys[j]) as
                       Dictionary
                   ).get(thirdLvlKeys[k]);
 
@@ -284,7 +292,6 @@ class SettingConfirmationDelegate extends WatchUi.ConfirmationDelegate {
       parent.setSettings(null);
     }
     eucData.PSlock = false;
-    eucData.JSONFetch = "fetched";
 
     return true;
   }

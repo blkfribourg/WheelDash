@@ -103,7 +103,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
     Ble.setScanState(Ble.SCAN_STATE_SCANNING);
     //checking if EUC Footprint already exist (see IsFirsConnection function description)
     isFirst = isFirstConnection();
-    isFirst = false;
+    //isFirst = false;
 
     if (eucData.useEngo == true) {
       deviceNb = deviceNb + 1;
@@ -717,18 +717,34 @@ class eucBLEDelegate extends Ble.BleDelegate {
           if (eucData.useMiles == true) {
             currentLine = milesCfg(currentLine);
           }
-          // OK plus simple : créer un deuxième profil au vol nommé wheeldashm pour les miles -> checker le nombre de lignes à changer dans la conf, les modifier et modifier également la fonciton checkname
           var charNb = currentLine.length();
           cfgPacketsTotal = cfgPacketsTotal + Math.ceil(charNb / 40);
-
           // swaping units :
-
           var cmd = arrayToRawCmd(currentLine);
-
           sendRawCmd(engo_rx, cmd);
         }
         for (var i = 0; i < getJson(:EngoCfg2).size(); i++) {
           var currentLine = getJson(:EngoCfg2)[i];
+          if (eucData.useMiles == true) {
+            currentLine = milesCfg(currentLine);
+          }
+          var charNb = currentLine.length();
+          cfgPacketsTotal = cfgPacketsTotal + Math.ceil(charNb / 40);
+          var cmd = arrayToRawCmd(currentLine);
+          sendRawCmd(engo_rx, cmd);
+        }
+        for (var i = 0; i < getJson(:EngoCfg3).size(); i++) {
+          var currentLine = getJson(:EngoCfg3)[i];
+          if (eucData.useMiles == true) {
+            currentLine = milesCfg(currentLine);
+          }
+          var charNb = currentLine.length();
+          cfgPacketsTotal = cfgPacketsTotal + Math.ceil(charNb / 40);
+          var cmd = arrayToRawCmd(currentLine);
+          sendRawCmd(engo_rx, cmd);
+        }
+        for (var i = 0; i < getJson(:EngoCfg4).size(); i++) {
+          var currentLine = getJson(:EngoCfg4)[i];
           if (eucData.useMiles == true) {
             currentLine = milesCfg(currentLine);
           }
@@ -760,16 +776,16 @@ class eucBLEDelegate extends Ble.BleDelegate {
           sendRawCmd(
             engo_rx,
             [
-              0xff, 0xd2, 0x00, 0x10, 0x77, 0x68, 0x65, 0x65, 0x6c, 0x64, 0x61,
-              0x73, 0x68, 0x6d, 0x00, 0xaa,
+              0xff, 0xd2, 0x00, 0x11, 0x77, 0x68, 0x6c, 0x64, 0x73, 0x68, 0x5f,
+              0x61, 0x70, 0x70, 0x6d, 0x00, 0xaa,
             ]b
           );
         } else {
           sendRawCmd(
             engo_rx,
             [
-              0xff, 0xd2, 0x00, 0x0f, 0x77, 0x68, 0x65, 0x65, 0x6c, 0x64, 0x61,
-              0x73, 0x68, 0x00, 0xaa,
+              0xff, 0xd2, 0x00, 0x10, 0x77, 0x68, 0x6c, 0x64, 0x73, 0x68, 0x5f,
+              0x61, 0x70, 0x70, 0x00, 0xaa,
             ]b
           );
         }
@@ -831,9 +847,9 @@ class eucBLEDelegate extends Ble.BleDelegate {
   }
   // checkCfgName function parse the received config list packet to check if wheeldash config is present in the config list.
   function checkCfgName(value) {
-    var configName = "wheeldash";
+    var configName = "whldsh_app";
     if (eucData.useMiles == true) {
-      configName = "wheeldashm";
+      configName = "whldsh_appm";
     }
     cfgList.addAll(value);
     //System.println(cfgList);
@@ -860,15 +876,17 @@ class eucBLEDelegate extends Ble.BleDelegate {
                 .REPRESENTATION_STRING_PLAIN_TEXT,
             }).equals(configName)
           ) {
+            System.println("config found!");
             //checking version
             var cfgEngoVer = cfgList.slice(i + 5, i + 9);
+            // manual offset: not ideal
             var cfgVer = arrayToRawCmd(
-              getJson(:EngoCfg2)[getJson(:EngoCfg2).size() - 2]
-            ).slice(14, 18);
-            //System.println(cfgVer);
-            //System.println(cfgEngoVer);
+              getJson(:EngoCfg4)[getJson(:EngoCfg4).size() - 2]
+            ).slice(15, 19);
+            System.println(cfgVer);
+            System.println(cfgEngoVer);
             if (cfgEngoVer.equals(cfgVer)) {
-              //    System.println("version is up to date");
+              System.println("version is up to date");
               engoCfgOK = true;
             }
           }
@@ -896,11 +914,11 @@ class eucBLEDelegate extends Ble.BleDelegate {
     if (line.substring(2, 4).equals("D0")) {
       //replace config name (keeping version from ressource) wheeldash is european cfg, wheeldashm is USA cfg (miles)
       var ver = line.substring(-18, -10);
-      line = "FFD00018776865656C646173686D00" + ver + "00000000AA";
+      line = "FFD0001977686C6473685F6170706D00" + ver + "00000000AA";
     }
     if (line.substring(2, 4).equals("D2")) {
       //replace config name
-      line = "FFD20010776865656C646173686D00AA";
+      line = "FFD2001177686C6473685F6170706D00AA";
     }
 
     return line;
