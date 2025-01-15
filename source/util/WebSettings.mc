@@ -6,10 +6,11 @@ using Toybox.WatchUi;
 using Toybox.Application.Storage;
 
 function checkSettingsURL() {
+  eucData.fetchCnt = 0;
   var settingsUrl = AppStorage.getSetting("settingsUrl");
   var uidsize = 10;
   if (settingsUrl.length() > uidsize) {
-    eucData.JSONFetch = "started";
+    eucData.JSONFetch = "Fetching";
     var web = new WebSettings();
     var url = settingsUrl.substring(0, settingsUrl.length() - uidsize);
     var uid = settingsUrl.substring(-uidsize, null);
@@ -24,7 +25,7 @@ function checkSettingsURL() {
 }
 class WebSettings {
   var confirm = false;
-  var fetchCnt = 0;
+
   var fetchTimer = new Timer.Timer();
   var jsonSettings;
   var uid;
@@ -38,6 +39,7 @@ class WebSettings {
 
   function startFetchTimer() {
     eucData.PSlock = true; // stop profile selector 10 sec timer
+
     fetchTimer.start(method(:fetch), 1000, false);
   }
 
@@ -55,12 +57,12 @@ class WebSettings {
     if (Communications has :makeWebRequest) {
       //  System.println(url);
       Communications.makeWebRequest(
-        url,
+        url as Lang.String,
         { "uid" => uid },
         options,
         method(:onReceive)
       );
-      fetchCnt++;
+      eucData.fetchCnt++;
     }
   }
   function setSettings(json) {
@@ -72,7 +74,12 @@ class WebSettings {
         settings.get("useProfileSelector") as Dictionary
       ).get("v");
       setProfilesNb(settings);
-      eucData.JSONFetch = "fetched";
+      eucData.JSONFetch = "started";
+    } else {
+      var localJSON = Storage.getValue("JSONSettings") as Dictionary;
+      if (localJSON != null) {
+        setProfilesNb(localJSON.get("settings") as Dictionary);
+      }
     }
 
     eucData.settingsChanged = true;
@@ -156,9 +163,10 @@ class WebSettings {
       WatchUi.SLIDE_IMMEDIATE
     );
   }
+
   public function onReceive(
     responseCode as Number,
-    data as Dictionary<String, Object?> or String or Null
+    data as Dictionary or String or Null
   ) as Void {
     System.println(responseCode);
     // System.println(data);
@@ -167,26 +175,34 @@ class WebSettings {
 
       if (settingsChanged(data as Dictionary) == true) {
         confirmUpdate(data);
+
         return;
       } else {
         //  if (eucData.profilesNb > 3) {
         setSettings(data);
         //}
         eucData.PSlock = false;
+        eucData.JSONFetch = "done";
+        Application.getApp().resetApp();
       }
     } else {
-      if (fetchCnt < 3) {
+      WatchUi.requestUpdate();
+      if (eucData.fetchCnt < 3) {
         startFetchTimer();
       } else {
         var localJSON = Storage.getValue("JSONSettings") as Dictionary;
         if (localJSON != null) {
-          setProfilesNb(localJSON.get("settings") as Dictionary);
-          setSettings(localJSON);
+          //  setProfilesNb(localJSON.get("settings") as Dictionary);
+          setSettings(null);
+          eucData.JSONFetch = "local";
+          WatchUi.requestUpdate();
         } else {
           System.println("failed");
-          eucData.settingsChanged = true;
           eucData.JSONFetch = "failed";
+          eucData.settingsChanged = true;
+          WatchUi.requestUpdate();
         }
+        Application.getApp().resetApp();
       }
       eucData.PSlock = false;
     }
@@ -292,7 +308,8 @@ class SettingConfirmationDelegate extends WatchUi.ConfirmationDelegate {
       parent.setSettings(null);
     }
     eucData.PSlock = false;
-
+    eucData.JSONFetch = "done";
+    Application.getApp().resetApp();
     return true;
   }
 }

@@ -3,8 +3,11 @@ import Toybox.Lang;
 using Toybox.System;
 module profileSelector {
   function createPSMenu() {
-    //System.println("createPSMenu profileNB:" + eucData.profilesNb);
-    if (!eucData.JSONFetch.equals("done")) {
+    System.println(eucData.JSONFetch);
+    if (
+      !eucData.JSONFetch.equals("done") &&
+      !eucData.JSONFetch.equals("local")
+    ) {
       return createMenu(
         [
           AppStorage.getSetting("wheelName_p1"),
@@ -14,20 +17,22 @@ module profileSelector {
         "Profile Selection"
       );
     } else {
+      System.println(getJSONProfileList());
       return createMenu(getJSONProfileList(), "Profile Selection");
     }
   }
 
   function createPSDelegate() {
-    if (eucData.JSONFetch.equals("")) {
+    if (eucData.JSONFetch.equals("") || eucData.JSONFetch.equals("failed")) {
+      System.println("Legacy");
       return new PSMenuDelegate();
     } else {
+      System.println("JSON");
       return new JSONPSMenuDelegate();
     }
   }
   function getJSONProfileList() {
     var JSONSettingsDict = Storage.getValue("JSONSettings") as Dictionary;
-
     var JSONSettings = JSONSettingsDict.get("settings") as Dictionary;
     var JSONProfiles = JSONSettingsDict.get("profiles") as Dictionary;
 
@@ -38,6 +43,7 @@ module profileSelector {
       var pStrIdx = keys[i].find("wheelName_p");
       if (pStrIdx != null) {
         var pStr = keys[i].substring(pStrIdx + 11, null);
+
         if (pStr != null) {
           if (
             (JSONProfiles.get("p" + pStr) as Dictionary).get("v").equals(true)

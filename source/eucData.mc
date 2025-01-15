@@ -6,6 +6,7 @@ module eucData {
   var JSONFetch = "";
   var PSlock = false;
   var profilesNb = 0; // number of profiles
+  var fetchCnt;
   var wheelBrand;
   var wheelName;
   var paired = false;
@@ -159,7 +160,7 @@ module eucData {
   var engoBattery = null;
   var engoTouch = 0;
   var engoBattReq = 300;
-  var engoPageNb = 3;
+  var engoPageNb = 4;
   var engoCfgUpdate = null;
   var engoDistUnit = "km";
   var engoSpdUnit = "km/h";

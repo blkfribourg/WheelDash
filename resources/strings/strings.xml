@@ -1,10 +1,11 @@
 <strings>
-    <string id="AppName">WheelDash(USA)</string>
+    <string id="AppName">WheelDash(Test)</string>
     <string id="settingsUrl">Settings JSON Url (experimental)</string>
     <string id="firstConnStr">Profile $1$ 1st connection\nPlease turn on your wheel\n and wait for connection\n\nensure only one wheel is ON!\n\nIf you enjoy this app :\n ko-fi.com/wheeldash</string>
     <string id="connectedStr">Profile $1$ connected !\n\nSaving wheel unique identifier</string>
     <string id="spdLimiterStr">Speed limiter feature\n is enabled!\n\nPlease ensure your tiltback\nis working properly with\nlimiter on or off!</string>
-    <string id="ECProfilesStr">Loading Easy Config\nProfiles\nPlease Wait...</string>
+    <string id="ECProfilesStr">Loading Easy Config\nProfiles\ntry $1$ /3\nPlease Wait...</string>
+    <string id="ECFailedStr">Failed loading\nEasy Config\nProfiles\n $1$ </string>
     <!-- Strings, that are used in Connect IQ Settings menu, like 
         one you see in Garmin Express or Garmin Connect Mobile -->
     <string id="defaultProfile">Profile to use by default</string>

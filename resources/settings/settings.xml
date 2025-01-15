@@ -22,7 +22,7 @@
             <settingConfig
                 type="numeric"
                 min="0"
-                max="100"
+                max="200"
             />
         </setting>
        

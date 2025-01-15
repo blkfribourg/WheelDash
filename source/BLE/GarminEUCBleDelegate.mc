@@ -15,7 +15,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
   var horn_char_w = null;
   var queue;
   var decoder = null;
-  var isFirst = false;
+  var eucFirst = false;
   private var profileNb;
   var message1 = "";
   var message2 = "";
@@ -91,7 +91,6 @@ class eucBLEDelegate extends Ble.BleDelegate {
 
   // Upon initialisation start scanning for supported devices
   function initialize(_profileNb, q, _decoder) {
-    //System.println("init");
     message1 = "initializeBle";
     BleDelegate.initialize();
 
@@ -102,8 +101,8 @@ class eucBLEDelegate extends Ble.BleDelegate {
 
     Ble.setScanState(Ble.SCAN_STATE_SCANNING);
     //checking if EUC Footprint already exist (see IsFirsConnection function description)
-    isFirst = isFirstConnection();
-    //isFirst = false;
+    eucFirst = eucFirstConnection();
+    //eucFirst = false;
 
     if (eucData.useEngo == true) {
       deviceNb = deviceNb + 1;
@@ -311,9 +310,9 @@ class eucBLEDelegate extends Ble.BleDelegate {
     connNb = connNb - 1;
   }
 
-  // function isFirstConnection() is used to determine if a given profile was never connected to an EUC (in order to store a BLE Footprint in the watch local storage.
+  // function eucFirstConnection() is used to determine if a given profile was never connected to an EUC (in order to store a BLE Footprint in the watch local storage.
   // This BLE footprint (which is simply a ScanResult object) will allow connecting ony to one specific EUC (the footprint is supposed to be unique))
-  function isFirstConnection() {
+  function eucFirstConnection() {
     // resetting profileScanResult if wheelName changed (deleting associated footprint):
     var maxProfile = eucData.profilesNb;
     if (maxProfile == 0) {
@@ -332,6 +331,15 @@ class eucBLEDelegate extends Ble.BleDelegate {
 
     // If a footprint doesn't exist, return true, else return false
     if (Storage.getValue("profile" + profileNb + "Sr") == null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  function engocFirstConnection() {
+    // If a footprint doesn't exist, return true, else return false
+    if (Storage.getValue("EngoSr") == null) {
       return true;
     } else {
       return false;
@@ -357,13 +365,28 @@ class eucBLEDelegate extends Ble.BleDelegate {
     }
   }
 
+  // This function is used to store the footprint of the Engo on the persistant storage
+  function storeEngoSR(sr) {
+    Storage.setValue("engoSr", sr);
+  }
+
+  // This function is used to load the footprint of the Engo  from the persistant storage
+  function loadEngoSR() {
+    var engoSR = Storage.getValue("engoSr");
+    if (engoSR != null) {
+      return engoSR;
+    } else {
+      return false;
+    }
+  }
+
   // onScanResults callback is called periodically (no idea of the frequency) when BLE Status is : scanning
   //! @param scanResults An iterator of new scan results
   function onScanResults(scanResults as Ble.Iterator) {
     // System.println("scanning");
     // Checking if scanResults match an EUC given the brand selected in the associated profile. When possible EUCs are identified by their BLE SERVICE UUID. But some time this data
     // is not available (Garmin truncate the BLE Advertising packet). When SERVICE UUID is not available the device BLE advertising name is used instead.
-    if (isFirst) {
+    if (eucFirst) {
       var wheelFound = false;
       for (
         var result = scanResults.next();
@@ -685,24 +708,23 @@ class eucBLEDelegate extends Ble.BleDelegate {
         if (value[1] == 0x0a) {
           engoLuma = value[6];
         }
-      }
-
-      // As config list can be sent on more than one frame checking for every frame if it contains WheelDash config name.
-      if (cfgReadFlag == true && value[value.size() - 1] != 0xaa) {
-        checkCfgName(value);
-        return;
-      }
-      // if the last packet of the config list arrived (0xAA is the footer byte), checking again if WheelDash config name is in the config list.
-      if (cfgReadFlag == true && value[value.size() - 1] == 0xaa) {
-        checkCfgName(value);
-        // As the last packet of the config list frame was received set cfgReadFlag as false
-        cfgReadFlag = false;
-        // if no config found the engoCfg variable is null, set it to false
-        if (engoCfgOK != true) {
-          engoCfgOK = false;
+      } else {
+        // As config list can be sent on more than one frame checking for every frame if it contains WheelDash config name.
+        if (cfgReadFlag == true && value[value.size() - 1] != 0xaa) {
+          checkCfgName(value);
+          return;
+        }
+        // if the last packet of the config list arrived (0xAA is the footer byte), checking again if WheelDash config name is in the config list.
+        if (cfgReadFlag == true && value[value.size() - 1] == 0xaa) {
+          checkCfgName(value);
+          // As the last packet of the config list frame was received set cfgReadFlag as false
+          cfgReadFlag = false;
+          // if no config found the engoCfg variable is null, set it to false
+          if (engoCfgOK != true) {
+            engoCfgOK = false;
+          }
         }
       }
-
       // if no config found or update needed (see checkCfgName function), uploading config.
       if (engoCfgOK == false) {
         clearScreen();
@@ -996,6 +1018,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
       }
       sendRawCmd(engo_rx, [0xff, 0x10, 0x00, 0x06, newLuma, 0xaa]b);
       engoLuma = newLuma; // should confirm but extra cost ...
+      System.println(newLuma);
     }
   }
 

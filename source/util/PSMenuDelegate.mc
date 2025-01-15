@@ -21,25 +21,18 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
   private var activityRecordView;
 
   function initialize() {
+    System.println("InitialiseProfileSelectorDelegate");
     actionButtonTrigger = new ActionButton();
     Menu2InputDelegate.initialize();
     queue = new BleQueue();
-    //activityRecordDelegate = new ActivityRecordDelegate();
-
-    /*
- if (!usePS) {
-      var profile = AppStorage.getSetting("defaultProfile");
-      //System.println(profile);
-      delegate.getDefaultSettings(profile);
-      view = delegate.getView();
-      delegate = delegate.getDelegate();
-    }
-    */
+    setGlobalSettings();
   }
 
   function onSelect(item) {
     setSettings(item.getId());
+
     connInit();
+    Varia.initVaria();
     DFViewInit();
     rideStatsInit();
   }
@@ -140,7 +133,7 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
     if (eucData.wheelBrand == 6) {
       WatchUi.pushView(mainView, mainViewdelegate, WatchUi.SLIDE_IMMEDIATE);
     } else {
-      if (eucBleDelegate.isFirst == false) {
+      if (eucBleDelegate.eucFirst == false) {
         System.println("not first");
         /*
       if (
@@ -157,7 +150,7 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       } else {
         System.println("first");
         connView = new messageView(eucBleDelegate, profileNb, self, "1stConn");
-        WatchUi.pushView(connView, null, WatchUi.SLIDE_IMMEDIATE);
+        WatchUi.switchToView(connView, null, WatchUi.SLIDE_IMMEDIATE);
       }
     }
   }
@@ -217,7 +210,7 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
     }
   }
   function getView() {
-    return mainView;
+    return mainView as View;
   }
   function getDelegate() {
     return mainViewdelegate;
@@ -226,18 +219,31 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
     return menu2Delegate;
   }
   function getActivityView() {
-    return mainViewdelegate.getActivityView();
+    if (mainViewdelegate != null) {
+      return mainViewdelegate.getActivityView();
+    } else {
+      return null;
+    }
   }
 
   function getDFlikeView() {
-    return mainViewdelegate.getDFlikeView();
+    if (mainViewdelegate != null) {
+      return mainViewdelegate.getDFlikeView();
+    } else {
+      return null;
+    }
   }
 
   function setDFlikeView(_DFLikeView) {
     mainViewdelegate.setDFlikeView(_DFLikeView);
   }
   function getBleDelegate() {
-    return mainViewdelegate.getBleDelegate();
+    if (mainViewdelegate != null) {
+      return mainViewdelegate.getBleDelegate();
+    } else {
+      // System.println("bleNull");
+      return null;
+    }
   }
 
   function getDefaultSettings() {
@@ -271,7 +277,7 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
     ];
   }
 
-  function setSettings(profileName) {
+  function setGlobalSettings() {
     // Global settings (not associated with a specific profileName) :
 
     eucData.useEngo = AppStorage.getSetting("useEngo");
@@ -338,7 +344,9 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
     eucData.fieldNB = AppStorage.getSetting("fieldNB");
 
     // End of Global Settings
+  }
 
+  function setSettings(profileName) {
     // add return false if profileName not found
     var profiles = getProfileList();
 
@@ -452,11 +460,15 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
     if (JSONSettingsDict != null) {
       JSONSettings = JSONSettingsDict.get("settings");
     }
+
+    setGlobalSettings();
     //activityRecordDelegate = new ActivityRecordDelegate();
   }
   function onSelect(item) {
     setSettings(item.getId());
+
     connInit();
+    Varia.initVaria();
     DFViewInit();
     rideStatsInit();
   }
@@ -475,7 +487,7 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
           queue,
           frameDecoder.init()
         );
-
+        System.println("BLEInit");
         BluetoothLowEnergy.setDelegate(eucBleDelegate);
         eucPM.registerProfiles();
         if (eucData.ESP32Horn == true) {
@@ -557,7 +569,7 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
     if (eucData.wheelBrand == 6) {
       WatchUi.pushView(mainView, mainViewdelegate, WatchUi.SLIDE_IMMEDIATE);
     } else {
-      if (eucBleDelegate.isFirst == false) {
+      if (eucBleDelegate.eucFirst == false) {
         System.println("not first");
         /*
       if (
@@ -574,7 +586,7 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
       } else {
         System.println("first");
         connView = new messageView(eucBleDelegate, profileNb, self, "1stConn");
-        WatchUi.pushView(connView, null, WatchUi.SLIDE_IMMEDIATE);
+        WatchUi.switchToView(connView, null, WatchUi.SLIDE_IMMEDIATE);
       }
     }
   }
@@ -634,7 +646,7 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
     }
   }
   function getView() {
-    return mainView;
+    return mainView as View;
   }
   function getDelegate() {
     return mainViewdelegate;
@@ -643,19 +655,31 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
     return menu2Delegate;
   }
   function getActivityView() {
-    return mainViewdelegate.getActivityView();
+    if (mainViewdelegate != null) {
+      return mainViewdelegate.getActivityView();
+    } else {
+      return null;
+    }
   }
 
   function getDFlikeView() {
-    System.println(mainViewdelegate);
-    return mainViewdelegate.getDFlikeView();
+    if (mainViewdelegate != null) {
+      return mainViewdelegate.getDFlikeView();
+    } else {
+      return null;
+    }
   }
 
   function setDFlikeView(_DFLikeView) {
     mainViewdelegate.setDFlikeView(_DFLikeView);
   }
   function getBleDelegate() {
-    return mainViewdelegate.getBleDelegate();
+    if (mainViewdelegate != null) {
+      return mainViewdelegate.getBleDelegate();
+    } else {
+      //   System.println("bleNull");
+      return null;
+    }
   }
   function getDefaultSettings() {
     //load last used if exist or profile 1 if doesn't
@@ -688,8 +712,7 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
       rideStatsInit();
     }
   }
-
-  function setSettings(profileName) {
+  function setGlobalSettings() {
     // Global Settings (not associated with a specific ProfileName) :
     if (JSONSettings.get("useEngo") != null) {
       eucData.useEngo = (JSONSettings.get("useEngo") as Dictionary).get("v");
@@ -892,7 +915,9 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
       }
     }
     // end of global Setting
+  }
 
+  function setSettings(profileName) {
     var profiles = profileSelector.getJSONProfileList();
     profileNb = profiles.indexOf(profileName) + 1;
 
@@ -1004,6 +1029,7 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
           JSONSettings.get("alarmThreshold_PWM_p" + profileNb) as Dictionary
         ).get("v") as String
       ).toNumber();
+      System.println(eucData.alarmThreshold_PWM);
     }
     if (JSONSettings.get("alarmThreshold2_PWM_p" + profileNb) != null) {
       eucData.alarmThreshold2_PWM = (

@@ -7,7 +7,7 @@ class messageView extends WatchUi.View {
   var BleDelegate;
   var textToDisplay;
   var profileNb;
-  var popViewDelay = 2000;
+  var popViewDelay;
   var isDone = false;
   var psDelegate;
   var messageType;
@@ -24,6 +24,7 @@ class messageView extends WatchUi.View {
       " 1st connection\nPlease turn on your wheel\n and wait for connection\n\n(please ensure only one wheel is ON!)\n\nIf you enjoy this app :\n ko-fi.com/blkfri ;)";
       */
     // }
+    popViewDelay = 2000;
     View.initialize();
   }
 
@@ -41,19 +42,8 @@ class messageView extends WatchUi.View {
         Graphics.TEXT_JUSTIFY_VCENTER,
       });
     }
-    if (messageType.equals("ECProfiles")) {
-      cStrings[:WaitMsg] = WatchUi.loadResource(Rez.Strings.ECProfilesStr);
-      textToDisplay = new WatchUi.Text({
-        :text => cStrings[:WaitMsg],
-        :color => Graphics.COLOR_WHITE,
-        :font => Graphics.FONT_XTINY,
-        :locX => dc.getWidth() / 2,
-        :locY => dc.getHeight() / 2,
-        :justification => Graphics.TEXT_JUSTIFY_CENTER |
-        Graphics.TEXT_JUSTIFY_VCENTER,
-      });
-    }
   }
+
   // Called when this View is brought to the foreground. Restore
   // the state of this View and prepare it to be shown. This includes
   // loading resources into memory.
@@ -61,9 +51,6 @@ class messageView extends WatchUi.View {
 
   // Update the view
   function onUpdate(dc) {
-    if (messageType.equals("ECProfiles")) {
-      textToDisplay.setText(cStrings[:WaitMsg]);
-    }
     if (eucData.paired == true) {
       if (messageType.equals("1stConn")) {
         textToDisplay.setText(Lang.format(cStrings[:connected], [profileNb]));
@@ -86,6 +73,89 @@ class messageView extends WatchUi.View {
             WatchUi.SLIDE_IMMEDIATE
           );
         }
+      }
+    }
+    dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_BLACK);
+    dc.clear();
+    textToDisplay.draw(dc);
+  }
+}
+
+class ECMessageView extends WatchUi.View {
+  var textToDisplay;
+
+  var popViewDelay;
+
+  var psDelegate;
+  var messageType;
+  private var cStrings = {}; // and also cached strings
+  function initialize(_psDelegate) {
+    psDelegate = _psDelegate;
+
+    popViewDelay = 2000;
+    View.initialize();
+  }
+
+  function onLayout(dc) {
+    cStrings[:WaitMsg] = WatchUi.loadResource(Rez.Strings.ECProfilesStr);
+    textToDisplay = new WatchUi.Text({
+      :text => Lang.format(cStrings[:WaitMsg], [eucData.fetchCnt + 1]),
+      :color => Graphics.COLOR_WHITE,
+      :font => Graphics.FONT_XTINY,
+      :locX => dc.getWidth() / 2,
+      :locY => dc.getHeight() / 2,
+      :justification => Graphics.TEXT_JUSTIFY_CENTER |
+      Graphics.TEXT_JUSTIFY_VCENTER,
+    });
+  }
+  // Called when this View is brought to the foreground. Restore
+  // the state of this View and prepare it to be shown. This includes
+  // loading resources into memory.
+  function onShow() {}
+
+  // Update the view
+  function onUpdate(dc) {
+    if (
+      eucData.JSONFetch.equals("local") ||
+      eucData.JSONFetch.equals("failed")
+    ) {
+      if (eucData.JSONFetch.equals("local")) {
+        textToDisplay.setText(
+          "Failed to retrieve\nEasy Config Settings\nLoading\nlocal JSON"
+        );
+        popViewDelay = popViewDelay - eucData.updateDelay;
+        if (popViewDelay < 0) {
+          WatchUi.switchToView(
+            Application.getApp().getPSView(),
+            Application.getApp().getPSDelegate(),
+            WatchUi.SLIDE_IMMEDIATE
+          );
+        }
+      }
+      if (eucData.JSONFetch.equals("failed")) {
+        textToDisplay.setText(
+          "Failed to retrieve\nEasy Config Settings\nLoading\nIQ configuration"
+        );
+        popViewDelay = popViewDelay - eucData.updateDelay;
+        if (popViewDelay < 0) {
+          WatchUi.switchToView(
+            Application.getApp().getPSView(),
+            Application.getApp().getPSDelegate(),
+            WatchUi.SLIDE_IMMEDIATE
+          );
+        }
+      }
+    } else {
+      textToDisplay.setText(
+        Lang.format(cStrings[:WaitMsg], [eucData.fetchCnt + 1])
+      );
+
+      if (eucData.JSONFetch.equals("done")) {
+        WatchUi.switchToView(
+          Application.getApp().getPSView(),
+          Application.getApp().getPSDelegate(),
+          WatchUi.SLIDE_IMMEDIATE
+        );
       }
     }
 
