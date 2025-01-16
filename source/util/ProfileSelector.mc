@@ -3,7 +3,7 @@ import Toybox.Lang;
 using Toybox.System;
 module profileSelector {
   function createPSMenu() {
-    System.println(eucData.JSONFetch);
+    // System.println(eucData.JSONFetch);
     if (
       !eucData.JSONFetch.equals("done") &&
       !eucData.JSONFetch.equals("local")
@@ -17,17 +17,17 @@ module profileSelector {
         "Profile Selection"
       );
     } else {
-      System.println(getJSONProfileList());
+      //     System.println(getJSONProfileList());
       return createMenu(getJSONProfileList(), "Profile Selection");
     }
   }
 
   function createPSDelegate() {
     if (eucData.JSONFetch.equals("") || eucData.JSONFetch.equals("failed")) {
-      System.println("Legacy");
+      //      System.println("Legacy");
       return new PSMenuDelegate();
     } else {
-      System.println("JSON");
+      //     System.println("JSON");
       return new JSONPSMenuDelegate();
     }
   }

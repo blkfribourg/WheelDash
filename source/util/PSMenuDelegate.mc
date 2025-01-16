@@ -21,7 +21,7 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
   private var activityRecordView;
 
   function initialize() {
-    System.println("InitialiseProfileSelectorDelegate");
+    // System.println("InitialiseProfileSelectorDelegate");
     actionButtonTrigger = new ActionButton();
     Menu2InputDelegate.initialize();
     queue = new BleQueue();
@@ -75,7 +75,7 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
           );
 
           BluetoothLowEnergy.setDelegate(eucBleDelegate);
-          eucPM.registerProfiles();
+
           if (eucData.ESP32Horn == true) {
             hornPM.registerProfiles();
           }
@@ -134,7 +134,7 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       WatchUi.pushView(mainView, mainViewdelegate, WatchUi.SLIDE_IMMEDIATE);
     } else {
       if (eucBleDelegate.eucFirst == false) {
-        System.println("not first");
+        //   System.println("not first");
         /*
       if (
         eucData.spdLimFeatEnabled == true &&
@@ -148,7 +148,7 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
         WatchUi.pushView(mainView, mainViewdelegate, WatchUi.SLIDE_IMMEDIATE);
         // }
       } else {
-        System.println("first");
+        //       System.println("first");
         connView = new messageView(eucBleDelegate, profileNb, self, "1stConn");
         WatchUi.switchToView(connView, null, WatchUi.SLIDE_IMMEDIATE);
       }
@@ -156,7 +156,7 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
   }
 
   function DFViewInit() {
-    System.println("initializing DFView");
+    // System.println("initializing DFView");
     if (
       !eucData.limitedMemory &&
       (eucData.dfViewBtn != 0 ||
@@ -487,7 +487,7 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
           queue,
           frameDecoder.init()
         );
-        System.println("BLEInit");
+        //   System.println("BLEInit");
         BluetoothLowEnergy.setDelegate(eucBleDelegate);
         eucPM.registerProfiles();
         if (eucData.ESP32Horn == true) {
@@ -511,7 +511,7 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
           );
 
           BluetoothLowEnergy.setDelegate(eucBleDelegate);
-          eucPM.registerProfiles();
+
           if (eucData.ESP32Horn == true) {
             hornPM.registerProfiles();
           }
@@ -570,7 +570,7 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
       WatchUi.pushView(mainView, mainViewdelegate, WatchUi.SLIDE_IMMEDIATE);
     } else {
       if (eucBleDelegate.eucFirst == false) {
-        System.println("not first");
+        //  System.println("not first");
         /*
       if (
         eucData.spdLimFeatEnabled == true &&
@@ -584,7 +584,7 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
         WatchUi.pushView(mainView, mainViewdelegate, WatchUi.SLIDE_IMMEDIATE);
         // }
       } else {
-        System.println("first");
+        //  System.println("first");
         connView = new messageView(eucBleDelegate, profileNb, self, "1stConn");
         WatchUi.switchToView(connView, null, WatchUi.SLIDE_IMMEDIATE);
       }
@@ -592,7 +592,7 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
   }
 
   function DFViewInit() {
-    System.println("initializing DFView");
+    //  System.println("initializing DFView");
     if (
       !eucData.limitedMemory &&
       (eucData.dfViewBtn != 0 ||
@@ -1029,7 +1029,7 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
           JSONSettings.get("alarmThreshold_PWM_p" + profileNb) as Dictionary
         ).get("v") as String
       ).toNumber();
-      System.println(eucData.alarmThreshold_PWM);
+      //  System.println(eucData.alarmThreshold_PWM);
     }
     if (JSONSettings.get("alarmThreshold2_PWM_p" + profileNb) != null) {
       eucData.alarmThreshold2_PWM = (

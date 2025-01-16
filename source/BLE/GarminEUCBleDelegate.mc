@@ -102,7 +102,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
     Ble.setScanState(Ble.SCAN_STATE_SCANNING);
     //checking if EUC Footprint already exist (see IsFirsConnection function description)
     eucFirst = eucFirstConnection();
-    //eucFirst = false;
+    // eucFirst = false;
 
     if (eucData.useEngo == true) {
       deviceNb = deviceNb + 1;
@@ -119,37 +119,38 @@ class eucBLEDelegate extends Ble.BleDelegate {
   function onConnectedStateChanged(device, state) {
     if (state == Ble.CONNECTION_STATE_CONNECTED) {
       // Checking we are dealing with an EUC and not another kind of supported device (horn, smartglasses)
-      if (device.getService(eucPM.EUC_SERVICE) != null) {
-        //System.println("EUC connected");
-        euc_service = device.getService(eucPM.EUC_SERVICE);
-        var cccd;
-        //Getting characteristic as a Characteristic object to enable notifications later
-        euc_char =
-          euc_service != null
-            ? euc_service.getCharacteristic(eucPM.EUC_CHAR)
-            : null;
+      if (eucData.wheelBrand < 6) {
+        if (device.getService(eucPM.EUC_SERVICE) != null) {
+          //System.println("EUC connected");
+          euc_service = device.getService(eucPM.EUC_SERVICE);
+          var cccd;
+          //Getting characteristic as a Characteristic object to enable notifications later
+          euc_char =
+            euc_service != null
+              ? euc_service.getCharacteristic(eucPM.EUC_CHAR)
+              : null;
 
-        if (euc_service != null && euc_char != null) {
-          // KS EUC specific ///////////////////////////////////////////////////////////////////////////////////////////////////////
-          // Need to send a model request frame to initiate the communication with the EUC (using queue for that)
-          if (eucData.wheelBrand == 2 || eucData.wheelBrand == 3) {
-            var reqModel = [
-              0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-              0x00, 0x00, 0x00, 0x00, 0x00, 0x9b, 0x14, 0x5a, 0x5a,
-            ]b;
-            queue.add([euc_char, reqModel]);
-          }
-          //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+          if (euc_service != null && euc_char != null) {
+            // KS EUC specific ///////////////////////////////////////////////////////////////////////////////////////////////////////
+            // Need to send a model request frame to initiate the communication with the EUC (using queue for that)
+            if (eucData.wheelBrand == 2 || eucData.wheelBrand == 3) {
+              var reqModel = [
+                0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x9b, 0x14, 0x5a, 0x5a,
+              ]b;
+              queue.add([euc_char, reqModel]);
+            }
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-          // Inmotion EUC specific /////////////////////////////////////////////////////////////////////////////////////////////////
-          if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
-            // Inmotion EUCs have a separate characteritic with a write property -> that's the characteristic used when sending BLE requests
-            euc_char_w = euc_service.getCharacteristic(eucPM.EUC_CHAR_W);
+            // Inmotion EUC specific /////////////////////////////////////////////////////////////////////////////////////////////////
+            if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
+              // Inmotion EUCs have a separate characteritic with a write property -> that's the characteristic used when sending BLE requests
+              euc_char_w = euc_service.getCharacteristic(eucPM.EUC_CHAR_W);
 
-            // Untested code if speed limiter is enabled, use a request to get settings frame and read the current tiltback speed value
-            // (to restore correct tiltback speed when disabling speed limiter)
+              // Untested code if speed limiter is enabled, use a request to get settings frame and read the current tiltback speed value
+              // (to restore correct tiltback speed when disabling speed limiter)
 
-            /* DISABLED IN DEV -- Speed limiter code ---
+              /* DISABLED IN DEV -- Speed limiter code ---
             if (eucData.speedLimit != 0) {
               //request settings
               var getSettings = [0xaa, 0xaa, 0x14, 0x02, 0x20, 0x20, 0x16]b;
@@ -158,44 +159,44 @@ class eucBLEDelegate extends Ble.BleDelegate {
             }
             */
 
-            // Storing inmotion periodic request directly in variables from the queue class :
-            // inmotion v2 request live:
-            queue.reqLiveData = [
-              euc_char_w,
-              [0xaa, 0xaa, 0x14, 0x01, 0x04, 0x11]b,
-            ];
-            // inmotion v2 request stats :
-            queue.reqStats = [
-              euc_char_w,
-              [0xaa, 0xaa, 0x14, 0x01, 0x11, 0x04]b,
-            ];
-          }
+              // Storing inmotion periodic request directly in variables from the queue class :
+              // inmotion v2 request live:
+              queue.reqLiveData = [
+                euc_char_w,
+                [0xaa, 0xaa, 0x14, 0x01, 0x04, 0x11]b,
+              ];
+              // inmotion v2 request stats :
+              queue.reqStats = [
+                euc_char_w,
+                [0xaa, 0xaa, 0x14, 0x01, 0x11, 0x04]b,
+              ];
+            }
 
-          //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-          // Enabling notification on characteristic (Begode and Leaperkim will start sending data right aways, KS requires one BLE request, and Inmotion requires periodic BLE request)
-          cccd = euc_char.getDescriptor(Ble.cccdUuid());
-          // Enabling notification is done by writing 0x01 0x00 to the descriptor of the characteristic. That also trigger the onDescriptorWrite() callback -> that's where I send
-          // the required requests for KS and Inmotion EUCs
-          cccd.requestWrite([0x01, 0x00]b);
-          message3 = "char notify enabled";
-          eucData.paired = true;
-          message2 = "EUC connected";
-          eucData.timeWhenConnected = new Time.Moment(Time.now().value());
-          // At this point the EUC is considered as connected.
-        } else {
-          //System.println("unable to pair EUC");
-          message2 = "EUC not connected";
-          try {
-            unpair(device);
-            eucData.paired = false;
-            firstChar = false;
-          } catch (e instanceof Lang.Exception) {
-            // System.println(e.getErrorMessage());
+            // Enabling notification on characteristic (Begode and Leaperkim will start sending data right aways, KS requires one BLE request, and Inmotion requires periodic BLE request)
+            cccd = euc_char.getDescriptor(Ble.cccdUuid());
+            // Enabling notification is done by writing 0x01 0x00 to the descriptor of the characteristic. That also trigger the onDescriptorWrite() callback -> that's where I send
+            // the required requests for KS and Inmotion EUCs
+            cccd.requestWrite([0x01, 0x00]b);
+            message3 = "char notify enabled";
+            eucData.paired = true;
+            message2 = "EUC connected";
+            eucData.timeWhenConnected = new Time.Moment(Time.now().value());
+            // At this point the EUC is considered as connected.
+          } else {
+            //System.println("unable to pair EUC");
+            message2 = "EUC not connected";
+            try {
+              unpair(device);
+              eucData.paired = false;
+              firstChar = false;
+            } catch (e instanceof Lang.Exception) {
+              // System.println(e.getErrorMessage());
+            }
           }
         }
       }
-
       // if the paired device is a DIY Bluetooth Horn (WheelHorn)
       if (eucData.ESP32Horn == true) {
         if (device.getService(hornPM.WH_SERVICE) != null) {
@@ -975,6 +976,8 @@ class eucBLEDelegate extends Ble.BleDelegate {
   // function sendCommands is only used for commands related to display (it's just a way to ensure the engo are properly initialized to avoid sending unecessary commands while
   // the engo are initialising)
   function sendCommands(cmds) {
+    // System.println("engoCmd: " + cmds);
+    // System.println("engoCmdLength: " + cmds.size());
     if (engoCfgOK == true && engoDisplayInit == true) {
       sendRawCmd(engo_rx, cmds);
       // System.println(cmds[i]);
@@ -1018,7 +1021,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
       }
       sendRawCmd(engo_rx, [0xff, 0x10, 0x00, 0x06, newLuma, 0xaa]b);
       engoLuma = newLuma; // should confirm but extra cost ...
-      System.println(newLuma);
+      //  System.println(newLuma);
     }
   }
 

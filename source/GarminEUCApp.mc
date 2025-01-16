@@ -55,7 +55,7 @@ class GarminEUCApp extends Application.AppBase {
 
   // Return the initial view of your application here
   function getInitialView() {
-    System.println("initView :" + eucData.JSONFetch);
+    // System.println("initView :" + eucData.JSONFetch);
     if (!eucData.JSONFetch.equals("")) {
       psMenuView = new ECMessageView(null);
       return [psMenuView];
@@ -68,7 +68,7 @@ class GarminEUCApp extends Application.AppBase {
     }
   } // Timer callback for various alarms & update UI
   function resetApp() {
-    System.println("reset");
+    //   System.println("reset");
 
     psMenuView = profileSelector.createPSMenu();
     psMenuDelegate = profileSelector.createPSDelegate();
