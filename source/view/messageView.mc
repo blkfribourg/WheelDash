@@ -66,7 +66,7 @@ class messageView extends WatchUi.View {
       if (popViewDelay < 0) {
         // eucData.spdLimFeatEnabled
         if (psDelegate != null) {
-          WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
+          // WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
           WatchUi.pushView(
             psDelegate.getView(),
             psDelegate.getDelegate(),

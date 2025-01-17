@@ -160,7 +160,7 @@ module eucData {
   var engoBattery = null;
   var engoTouch = 0;
   var engoBattReq = 300;
-  var engoPageNb = 4;
+  var engoPageNb = 3;
   var engoCfgUpdate = null;
   var engoDistUnit = "km";
   var engoSpdUnit = "km/h";
