@@ -27,8 +27,8 @@ module eucData {
   var alarmThreshold2_PWM;
   var alarmThreshold_speed;
   var alarmThreshold_temp;
-  var activityAutorecording = true; // remove true
-  var activityAutosave;
+  var activityAutorecording = false; // remove true
+  var activityAutosave = false;
   var activityRecording = false;
   var debug;
   var BLEReadInterval = 0;

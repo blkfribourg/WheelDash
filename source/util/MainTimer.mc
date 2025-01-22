@@ -67,16 +67,21 @@ class MainTimer {
       }
       // automatic recording ------------------
       // a bit hacky maybe ...
+
       if (eucData.activityAutorecording == true && eucData.paired == true) {
         if (delegate != null && activityRecordView == null) {
           // System.println("initialize autorecording");
           activityRecordView = delegate.getActivityView();
+          activityRecordingRequired = true;
         }
+
         if (
           activityRecordView != null &&
           !activityRecordView.isSessionRecording() &&
           activityRecordingRequired == true
         ) {
+          //System.println("starting recording");
+
           //enable sensor first ?
           activityRecordView.enableGPS();
           eucData.GPS_requested = true;
@@ -85,8 +90,8 @@ class MainTimer {
           activityRecordView.initialize();
           if (activityRecordingDelay <= 0) {
             //System.println("record");
-            activityRecordView.startRecording();
             activityRecordingRequired = false;
+            activityRecordView.startRecording();
           }
 
           //System.println("autorecord started");

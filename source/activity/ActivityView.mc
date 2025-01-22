@@ -58,7 +58,7 @@ class ActivityRecordView extends WatchUi.View {
     "Good GPS fix",
   ];
   private var accuracy_msg = "";
-
+  private var GPSEnabled = false;
   private var fitTimer;
   private var _session as Session?;
   private var startingMoment as Time.Moment?;
@@ -148,10 +148,14 @@ class ActivityRecordView extends WatchUi.View {
     enableGPS();
   }
   function enableGPS() {
-    Position.enableLocationEvents(
-      Position.LOCATION_CONTINUOUS,
-      method(:onPosition)
-    );
+    if (!GPSEnabled) {
+      //System.println("enablingGPS");
+      Position.enableLocationEvents(
+        Position.LOCATION_CONTINUOUS,
+        method(:onPosition)
+      );
+      GPSEnabled = true;
+    }
   }
   function onPosition(info as Info) as Void {}
 

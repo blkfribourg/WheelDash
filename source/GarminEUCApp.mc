@@ -37,20 +37,17 @@ class GarminEUCApp extends Application.AppBase {
 
   // onStop() is called when your application is exiting
   function onStop(state as Dictionary?) as Void {
-    if (eucData.activityAutorecording == true) {
-      if (psMenuDelegate != null && activityRecordView != null) {
-        if (activityRecordView.isSessionRecording()) {
-          activityRecordView.stopRecording();
+    if (psMenuDelegate != null) {
+      if (eucData.activityAutorecording == true) {
+        var activityRecordView = psMenuDelegate.getActivityView();
+        if (activityRecordView != null) {
+          if (activityRecordView.isSessionRecording()) {
+            activityRecordView.stopRecording();
+          }
         }
       }
+      psMenuDelegate.unpair();
     }
-    if (eucData.activityAutosave == true && psMenuDelegate != null) {
-      activityRecordView = psMenuDelegate.getActivityView();
-      if (activityRecordView.isSessionRecording()) {
-        activityRecordView.stopRecording();
-      }
-    }
-    psMenuDelegate.unpair();
   }
 
   // Return the initial view of your application here
