@@ -156,7 +156,7 @@ class fakeVariaTarget {
 
   function assign() {
     range = random(0, 100);
-    speed = random(0, 25);
+    speed = random(5, 25);
     threat = 1;
     threatSide = 0;
   }
@@ -332,6 +332,27 @@ function pagePayload(textArray) {
   //System.println("payload: " + payload);
   return payload;
 }
+
+function getClearRectCmd(x0, y0, x1, y1, int) {
+  var cmd = [0xff, 0x30, 0x00, 6, int]b;
+  cmd.add(0xaa);
+  cmd.addAll([0xff, 0x34, 0x00, 13]b);
+  cmd.addAll(encodeint16(x0));
+  cmd.addAll(encodeint16(y0));
+  cmd.addAll(encodeint16(x1));
+  cmd.addAll(encodeint16(y1));
+  cmd.add(0xaa);
+  return cmd;
+}
+
+function concatCmd(cmds) {
+  var cmd = []b;
+  for (var i = 0; i < cmds.size(); i++) {
+    cmd.addAll(cmds[i]);
+  }
+  return cmd;
+}
+
 function getJson(symbol) {
   return WatchUi.loadResource(Rez.JsonData[symbol]);
 }

@@ -45,6 +45,14 @@ class GwDecoder {
           //System.println("Frame B detected");
           processFrameB(frame);
         }
+        /* future update begode pwm
+        else if (frame[18].toNumber()==7){
+        processPWMFrame(frame);
+        }else if (frame[18].toNumber()==1){
+        processBatFrame(frame);
+        }
+
+        */
       }
     }
   }
@@ -61,8 +69,10 @@ class GwDecoder {
       var size = frame.size();
 
       if (
-        (size == 20 && c.toNumber() != 24) ||
-        (size > 20 && size <= 24 && c.toNumber() != 90)
+        //    (size == 20 && c.toNumber() != 24) ||
+        size > 20 &&
+        size <= 24 &&
+        c.toNumber() != 90
       ) {
         state = "unknown";
         return false;
@@ -123,10 +133,13 @@ class GwDecoder {
       }
     }
     */
-    eucData.voltage = shortFromBytesBE(value, 2) / 100.0;
+    if (eucData.trueVoltage != true) {
+      eucData.voltage = shortFromBytesBE(value, 2) / 100.0;
+    }
     eucData.speed = (signedShortFromBytesBE(value, 4).abs() * 3.6) / 100.0;
     eucData.tripDistance = shortFromBytesBE(value, 8) / 1000.0; //in km
     eucData.Phcurrent = signedShortFromBytesBE(value, 10) / 100.0;
+
     if (eucData.useFahrenheit == 1) {
       eucData.temperature =
         (signedShortFromBytesBE(value, 12) / 340.0 + 36.53) * 1.8 + 32.0;
@@ -134,6 +147,19 @@ class GwDecoder {
       eucData.temperature = signedShortFromBytesBE(value, 12) / 340.0 + 36.53;
     }
     eucData.hPWM = signedShortFromBytesBE(value, 14) / 100.0;
+  }
+  function processPWMFrame(value) {
+    var pwm = signedShortFromBytesBE(value, 8) / 100.0;
+    if (pwm > 0) {
+      if (eucData.gothPWM == false) {
+        eucData.gothPWM = true;
+      }
+      eucData.hPWM = pwm;
+    }
+  }
+  function processBatFrame(value) {
+    eucData.trueVoltage = true;
+    eucData.voltage = shortFromBytesBE(value, 6) / 100.0;
   }
 }
 

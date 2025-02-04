@@ -10,25 +10,49 @@ module Varia {
   var nextVariaTrigger;
   var triggerDelay;
   var targetObject;
+  var listener;
+
   function initVaria() {
     if (eucData.useRadar == true) {
+      // listener = new variaListener();
+      //   System.println("init varia");
       eucData.radar = new AntPlus.BikeRadar(null);
+      //  System.println("eucData.radar :" + eucData.radar);
     }
   }
   function checkVehicule() {
+    //  System.println("checkingVehicule");
     if (eucData.useRadar == true && eucData.radar != null) {
       try {
-        // targetObject = eucData.radar.getRadarInfo();
-        //        Varia.processTarget(targetObject); // surrounding by try because varia may disconnect (unexpected crashes were observed)
+        targetObject = eucData.radar.getRadarInfo();
+        Varia.processTarget(targetObject); // surrounding by try because varia may disconnect (unexpected crashes were observed)
       } catch (e instanceof Lang.Exception) {
-        // System.println(e.getErrorMessage());
+        //    System.println("varia error:" + e.getErrorMessage());
+      }
+    }
+  }
+
+  function checkStatus() {
+    if (eucData.useRadar == true && eucData.radar != null) {
+      if (eucData.radar.getDeviceState().state > 2) {
+        eucData.radarPaired = true;
+      } else {
+        eucData.radarPaired = false;
       }
     }
   }
 
   function processTarget(_target) {
+    //to remove :
+
+    targetObject = _target;
+
+    //System.println(_target);
+
     if (_target != null) {
+      // System.println("processing target");
       if (_target.size != 0) {
+        //System.println("threat: " + _target[0].threat);
         if (_target[0].threat != 0) {
           if (_target[0].threat == 1) {
             triggerDelay = new Time.Duration(1);
@@ -38,6 +62,8 @@ module Varia {
           }
           eucData.variaTargetDist = _target[0].range;
           eucData.variaTargetSpeed = _target[0].speed;
+
+          // System.println(eucData.variaTargetDist);
           soundAlert(_target[0].range);
         }
 
@@ -72,6 +98,7 @@ module Varia {
     if (nextVariaTrigger != null && nextVariaTrigger.compare(variaNow) >= 0) {
       triggerVariaAlarm = false;
     }
+    //System.println("tva: " + triggerVariaAlarm);
     if (
       eucData.variaFarAlarmDistThr != 0 &&
       distance < eucData.variaFarAlarmDistThr &&
@@ -79,10 +106,12 @@ module Varia {
     ) {
       // far car
       if (Attention has :playTone && triggerVariaAlarm == true) {
-        //   System.println("triggerFar");
+        //System.println("triggerFar");
+        //Attention.playTone({ :toneProfile => toneProfile });
         Attention.playTone(Attention.TONE_DISTANCE_ALERT);
         nextVariaTrigger = new Time.Moment(Time.now().value());
         nextVariaTrigger.add(triggerDelay);
+        return;
       }
     }
     if (
@@ -91,10 +120,12 @@ module Varia {
     ) {
       // close car
       if (Attention has :playTone && triggerVariaAlarm == true) {
-        //  System.println("triggerclose");
+        // System.println("triggerclose");
+        //Attention.playTone({ :toneProfile => toneProfile });
         Attention.playTone(Attention.TONE_ALARM);
         nextVariaTrigger = new Time.Moment(Time.now().value());
         nextVariaTrigger.add(triggerDelay);
+        return;
       }
     }
   }
@@ -124,3 +155,10 @@ module Varia {
 //close car : TONE_ALARM
 //no more cars: TONE_SUCCESS
 //speed : TONE_CANARY
+class variaListener extends AntPlus.BikeRadarListener {
+  function initialize() {}
+
+  function onBikeRadarUpdate(data as Lang.Array<AntPlus.RadarTarget>) as Void {
+    Varia.processTarget(data);
+  }
+}

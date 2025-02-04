@@ -14,8 +14,13 @@ class MainTimer {
   private var activityRecordingRequired;
   private var activityRecordingDelay = 3000;
   private var engoNextUpdate;
+  private var variaNextUpdate;
   private var mainTimer;
   private var configMessage;
+
+  // varia sim
+  // var fakeVariaObj;
+
   function initialize(_delegate) {
     delegate = _delegate;
     mainTimer = new Timer.Timer();
@@ -53,7 +58,7 @@ class MainTimer {
       }
     }
     if (eucData.useRadar == true) {
-      Varia.checkVehicule();
+      variaUpdate();
     }
     // ensure a profile was loaded
     if (eucData.wheelName != null && bleDelegate != null) {
@@ -228,6 +233,37 @@ class MainTimer {
     }
     WatchUi.requestUpdate();
   }
+  function variaUpdate() {
+    var now = new Time.Moment(Time.now().value());
+    /*
+    if (fakeVariaObj == null) {
+      if (variaNextUpdate != null && variaNextUpdate.compare(now) <= 0) {
+        fakeVariaObj = fakeVaria(3);
+      }
+    } else {
+      fakeVariaObj = variaMove(fakeVariaObj);
+
+      Varia.processTarget(fakeVariaObj);
+    }*/
+    Varia.checkVehicule();
+
+    if (variaNextUpdate == null || variaNextUpdate.compare(now) <= 0) {
+      variaNextUpdate = now.add(new Time.Duration(5));
+      // VARIA SIM
+
+      Varia.checkStatus();
+    }
+  }
+  function engoVariaAlert() {
+    var vehNb = getHexText(eucData.variaTargetNb.toString(), 2, 0);
+    bleDelegate.sendCommands(
+      concatCmd([[0xff, 0x69, 0x00, vehNb.size() + 6, 0x28]b, vehNb, [0xaa]b])
+    );
+  }
+  function clearVariaAlert() {
+    bleDelegate.sendCommands(getClearRectCmd(30, 85, 70, 157, 0));
+  }
+
   function engoScreenUpdate() {
     var now = new Time.Moment(Time.now().value());
 
@@ -258,6 +294,15 @@ class MainTimer {
       //bleDelegate.sendCommands(gaugeCmd);
       bleDelegate.sendCommands(pageCmd);
     } else {
+      if (eucData.variaTargetNb != 0) {
+        engoVariaAlert();
+        eucData.engoVariaAlert = true;
+      } else {
+        if (eucData.engoVariaAlert == true) {
+          clearVariaAlert();
+          eucData.engoVariaAlert = false;
+        }
+      }
       if (engoNextUpdate == null || engoNextUpdate.compare(now) <= 0) {
         engoNextUpdate = now.add(new Time.Duration(1));
         //  eucData.speed = eucData.speed + 0.1;

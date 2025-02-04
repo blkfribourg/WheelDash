@@ -94,6 +94,7 @@
             palette to update permissions.
         -->
         <iq:permissions>
+            <iq:uses-permission id="Ant"/>
             <iq:uses-permission id="BluetoothLowEnergy"/>
             <iq:uses-permission id="Communications"/>
             <iq:uses-permission id="Fit"/>

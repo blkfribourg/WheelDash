@@ -28,6 +28,63 @@ class RecordIndicatorRenderer extends WatchUi.Drawable {
     }
   }
 }
+class VariaConnectRenderer extends WatchUi.Drawable {
+  private var mMainColor;
+  private var screenWidth = System.getDeviceSettings().screenWidth;
+  function initialize(params) {
+    Drawable.initialize(params);
+    mMainColor = params.get(:mainColor);
+  }
+  function draw(dc) {
+    if (eucData.useRadar == true) {
+      //System.println(pause);
+      var foregroundColor;
+      if (eucData.radarPaired == true) {
+        foregroundColor = mMainColor;
+      } else {
+        foregroundColor = 0x545454;
+      }
+      var oriX = screenWidth * 0.3;
+      var oriY = screenWidth * 0.27;
+      var w = 0.014;
+      var h = 0.024;
+
+      dc.setPenWidth(2);
+      dc.setColor(foregroundColor, 0x000000);
+
+      dc.setColor(foregroundColor, 0x000000);
+      dc.fillCircle(oriX, oriY, screenWidth / 70);
+
+      dc.setPenWidth(2);
+      dc.drawArc(
+        oriX,
+        oriY,
+        screenWidth * 0.025,
+        Graphics.ARC_COUNTER_CLOCKWISE,
+        0,
+        75
+      );
+      dc.drawArc(
+        oriX,
+        oriY,
+        screenWidth * 0.04,
+        Graphics.ARC_COUNTER_CLOCKWISE,
+        0,
+        75
+      );
+      dc.drawArc(
+        oriX,
+        oriY,
+        screenWidth * 0.055,
+        Graphics.ARC_COUNTER_CLOCKWISE,
+        0,
+        75
+      );
+      // dc.drawCircle(screenWidth / 2, screenWidth * 0.715, screenWidth / 40);
+      // dc.fillPolygon(hornIcon);
+    }
+  }
+}
 
 class HornIndicatorRenderer extends WatchUi.Drawable {
   private var mMainColor;
@@ -150,8 +207,8 @@ class VariaIndicatorRenderer extends WatchUi.Drawable {
               barLength * 0.04 +
               (distance.toFloat() / maxDistance.toFloat()) * (barLength * 0.92);
             //xPos = Math.round(xPos / roadSpace) * roadSpace;
-            System.println("drawcars: " + xPos + ";" + yStart);
-            System.println("TGNB: " + eucData.variaTargetNb);
+            //System.println("drawcars: " + xPos + ";" + yStart);
+            //System.println("TGNB: " + eucData.variaTargetNb);
             if (threat == 1) {
               dc.setColor(mMainColor, Graphics.COLOR_TRANSPARENT);
             }

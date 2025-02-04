@@ -233,7 +233,7 @@ class ActionButton {
               0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
               0x00, 0x00, 0x00, 0x00, 0x00, 0x88, 0x14, 0x5a, 0x5a,
             ]b;
-
+            // change to select in settings and enable this only if val = 1 (0 = off, 1 horn only, 2 always on)
             if (eucData.KSVoiceMode == true) {
               // voice mode ON
               queue.add([

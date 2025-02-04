@@ -29,6 +29,7 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
   }
 
   function onSelect(item) {
+    System.println("useRadar:" + eucData.useRadar);
     setSettings(item.getId());
 
     connInit();
@@ -257,6 +258,7 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       }
 
       connInit();
+      Varia.initVaria();
       DFViewInit();
       rideStatsInit();
     } else {
@@ -265,6 +267,7 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       );
 
       connInit();
+      Varia.initVaria();
       DFViewInit();
       rideStatsInit();
     }
@@ -692,6 +695,7 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
       }
 
       connInit();
+      Varia.initVaria();
       DFViewInit();
       rideStatsInit();
     } else {
@@ -708,6 +712,7 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
       );
 
       connInit();
+      Varia.initVaria();
       DFViewInit();
       rideStatsInit();
     }

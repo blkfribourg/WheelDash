@@ -102,7 +102,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
     Ble.setScanState(Ble.SCAN_STATE_SCANNING);
     //checking if EUC Footprint already exist (see IsFirsConnection function description)
     eucFirst = eucFirstConnection();
-    // eucFirst = false;
+    //eucFirst = false;
 
     if (eucData.useEngo == true) {
       deviceNb = deviceNb + 1;
@@ -140,6 +140,18 @@ class eucBLEDelegate extends Ble.BleDelegate {
               ]b;
               queue.add([euc_char, reqModel]);
             }
+
+            // if Voice mode is set on always on, send the activation packet here :
+            /*
+             queue.add([
+                euc_char,
+                [
+                  0xaa, 0x55, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x73, 0x14, 0x5a, 0x5a,
+                ]b,
+              ]);
+*/
+
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
             // Inmotion EUC specific /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -583,9 +595,11 @@ class eucBLEDelegate extends Ble.BleDelegate {
         // If the smartglasses pairing was successful and notifications are already enabled on the user input (button or gesture), start the smartglasses init procedure -> requesting fw version
         if (currentChar.equals(engo_userInput) && engoGestureNotif == true) {
           try {
+            sendRawCmd(engo_rx, [0xff, 0x06, 0x00, 0x05, 0xaa]b);
+            /*
             engo_rx.requestWrite([0xff, 0x06, 0x00, 0x05, 0xaa]b, {
               :writeType => Ble.WRITE_TYPE_DEFAULT,
-            });
+            });*/
           } catch (e instanceof Lang.Exception) {
             // System.println(e.getErrorMessage());
           }

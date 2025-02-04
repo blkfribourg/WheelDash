@@ -94,7 +94,7 @@ class WebSettings {
     if (storedJSON != null) {
       System.println("Existing localJSON");
 
-      if (compareJSON(storedJSON, json) == true) {
+      if (compareJSON2(storedJSON, json) == true) {
         System.println("same");
         return false;
       } else {
@@ -287,6 +287,40 @@ class WebSettings {
     }
     return true;
   }
+}
+function compareJSON2(json1 as Dictionary, json2 as Dictionary) {
+  // If both are not dictionaries, compare directly
+  if (!(json1 instanceof Dictionary) || !(json2 instanceof Dictionary)) {
+    return json1.equals(json2);
+  }
+
+  // Get keys and compare their sizes
+  var keys1 = json1.keys() as Array;
+  var keys2 = json2.keys() as Array;
+  if (keys1.size() != keys2.size()) {
+    return false;
+  }
+
+  for (var i = 0; i < keys1.size(); i++) {
+    var key = keys1[i];
+    if (!json2.hasKey(key)) {
+      return false;
+    }
+
+    var value1 = json1.get(key);
+    var value2 = json2.get(key);
+
+    // If both values are dictionaries, recurse
+    if (value1 instanceof Dictionary && value2 instanceof Dictionary) {
+      if (!compareJSON2(value1, value2)) {
+        return false;
+      }
+    } else if (!value1.equals(value2)) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 class SettingConfirmationDelegate extends WatchUi.ConfirmationDelegate {

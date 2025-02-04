@@ -25,6 +25,9 @@ class GarminEUCView extends WatchUi.View {
     cDrawables[:TemperatureArc] = View.findDrawableById("TemperatureArc");
     cDrawables[:RecordingIndicator] =
       View.findDrawableById("RecordingIndicator");
+    if (eucData.useRadar == true) {
+      cDrawables[:VariaIndicator] = View.findDrawableById("VariaIndicator");
+    }
   }
 
   // Called when this View is brought to the foreground. Restore
@@ -126,7 +129,9 @@ class GarminEUCView extends WatchUi.View {
     cDrawables[:BatteryNumber].setColor(Graphics.COLOR_WHITE);
     cDrawables[:TemperatureNumber].setColor(Graphics.COLOR_WHITE);
     cDrawables[:BottomSubtitle].setColor(Graphics.COLOR_WHITE);
-
+    if (eucData.useRadar == true) {
+      cDrawables[:VariaIndicator].setValues(Varia.targetObject);
+    }
     // Call the parent onUpdate function to redraw the layout
     View.onUpdate(dc);
   }

@@ -47,6 +47,7 @@ module eucData {
   var convertToFahrenheit = false;
   var deviceName = null;
   var voltage_scaling = 1;
+  var trueVoltage = false;
   var speed = 0.0;
   var correctedSpeed = 0.0;
   var voltage = null;
@@ -145,6 +146,7 @@ module eucData {
   var variaCloseAlarmDistThr = 15;
   var variaFarAlarmDistThr = 50;
   var useRadar = false;
+  var radarPaired = false;
 
   //speedLimiter
   var speedLimitOn = false;
@@ -165,6 +167,7 @@ module eucData {
   var engoDistUnit = "km";
   var engoSpdUnit = "km/h";
   var engoTempUnit = "C";
+  var engoVariaAlert = false;
 
   // EUCWorldCompat
   var useEUCWorldAPI = false;
@@ -205,7 +208,7 @@ module eucData {
             battery = 0.0;
           }
         }
-        if (version > 4 && version < 5) {
+        if ((version > 4 && version < 5) || version == 7) {
           // Patton
           if (voltage > 125.25) {
             battery = 100.0;
@@ -217,7 +220,7 @@ module eucData {
             battery = 0.0;
           }
         }
-        if (version > 5) {
+        if (version > 5 && version != 7) {
           // Lynx
           if (voltage > 150.3) {
             battery = 100.0;
@@ -447,7 +450,11 @@ module eucData {
   function getVoltage() {
     if (wheelBrand == 0 && voltage != null) {
       // gotway
-      return voltage * voltage_scaling;
+      if (trueVoltage == true) {
+        return voltage;
+      } else {
+        return voltage * voltage_scaling;
+      }
     } else {
       return voltage;
     }
