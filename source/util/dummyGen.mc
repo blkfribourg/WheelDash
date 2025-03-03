@@ -20,7 +20,25 @@ function dummyGen() {
   } else {
     eucData.temperature = 63.2;
   }
-  if (eucData.hPWM > 100) {
+  if (eucData.hPWM >= 100) {
     eucData.hPWM = 0;
+  }
+
+  if (eucData.variaTargetNb < 12) {
+    eucData.variaTargetNb = eucData.variaTargetNb + 1;
+  } else {
+    eucData.variaTargetNb = 0;
+  }
+
+  if (eucData.variaTargetDist < 140) {
+    eucData.variaTargetDist = eucData.variaTargetDist + 1;
+  } else {
+    eucData.variaTargetDist = 0;
+  }
+
+  if (eucData.variaTargetSpeed < 70) {
+    eucData.variaTargetSpeed = eucData.variaTargetSpeed + 1;
+  } else {
+    eucData.variaTargetSpeed = 0;
   }
 }

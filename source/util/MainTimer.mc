@@ -41,7 +41,7 @@ class MainTimer {
       EUCWorldCompat();
     } //EUC World
 
-    //dummyGen();
+    // dummyGen();
 
     //Only starts if no profile selected
     if (eucData.wheelName == null && delegate != null) {
@@ -255,13 +255,38 @@ class MainTimer {
     }
   }
   function engoVariaAlert() {
-    var vehNb = getHexText(eucData.variaTargetNb.toString(), 2, 0);
-    bleDelegate.sendCommands(
-      concatCmd([[0xff, 0x69, 0x00, vehNb.size() + 6, 0x28]b, vehNb, [0xaa]b])
-    );
+    var vehData = getHexText(engoVariaData(), 3, 1);
+    if (vehData != null) {
+      bleDelegate.sendCommands(
+        concatCmd([
+          [0xff, 0x69, 0x00, vehData.size() + 6, 0x28]b,
+          vehData,
+          [0xaa]b,
+        ])
+      );
+    }
+  }
+  function engoVariaData() {
+    if (eucData.engoVaria == 0) {
+      return eucData.variaTargetNb.toString();
+    }
+    if (eucData.engoVaria == 1) {
+      var variaVehSpd = eucData.variaTargetSpeed;
+      if (eucData.useMiles == true) {
+        variaVehSpd = kmToMiles(eucData.variaTargetSpeed);
+      }
+      return valueRound(variaVehSpd, "%1d").toString();
+    }
+    if (eucData.engoVaria == 2) {
+      return valueRound(eucData.variaTargetDist, "%1d").toString();
+    }
+    return null;
   }
   function clearVariaAlert() {
-    bleDelegate.sendCommands(getClearRectCmd(30, 85, 70, 157, 0));
+    bleDelegate.sendCommands(getClearRectCmd(12, 85, 61, 157, 0));
+  }
+  function clearVariaAlertHR() {
+    bleDelegate.sendCommands(getClearRectCmd(12, 154, 61, 226, 0)); // tester y0:154 -> y1:226
   }
 
   function engoScreenUpdate() {
@@ -272,26 +297,27 @@ class MainTimer {
       var speed_rd = Math.round(eucData.correctedSpeed).toNumber();
 
       var HRRPArray = new [2]; // High Refresh Rate Page
-      if (eucData.engoPage == 4) {
+      if (eucData.variaTargetNb != 0) {
+        eucData.engoVariaAlert = true;
+        eucData.engoPage = 4;
         HRRPArray = new [3];
+        HRRPArray[2] = getHexText(engoVariaData(), 3, 1);
+      } else {
+        if (eucData.engoVariaAlert == true) {
+          clearVariaAlertHR();
+          eucData.engoVariaAlert = false;
+        }
+        eucData.engoPage = 3;
       }
       HRRPArray[0] = getHexText(PWM_rd.toString(), 2, 0);
       HRRPArray[1] = getHexText(speed_rd.toString(), 3, 1);
-      if (eucData.engoPage == 4) {
-        var currentTime = System.getClockTime();
-        HRRPArray[2] = getHexText(
-          currentTime.hour.format("%02d") +
-            ":" +
-            currentTime.min.format("%02d"),
-          0,
-          1
-        );
-      }
+
       var gaugeCmd = [0xff, 0x70, 0x00, 0x07, 0x01, PWM_rd, 0xaa]b;
       var pageCmd = getPageCmd(pagePayload(HRRPArray), eucData.engoPage);
       //gaugeCmd.addAll(pageCmd);
       // pageCmd.addAll(gaugeCmd);
       //bleDelegate.sendCommands(gaugeCmd);
+      //System.println("cmd size: " + pageCmd.size());
       bleDelegate.sendCommands(pageCmd);
     } else {
       if (eucData.variaTargetNb != 0) {
@@ -412,6 +438,7 @@ class MainTimer {
           var data = pagePayload(textArray);
 
           // System.println("sendCmd");
+          bleDelegate.flushCmdStackingIfSup(200);
           bleDelegate.sendCommands(getPageCmd(data, eucData.engoPage));
           //    bleDelegate.sendCommands(cmdTime);
         }

@@ -220,6 +220,15 @@
                     <listEntry value="1">@Strings.engoTouch1</listEntry>                    
                 </settingConfig>
          </setting>
+         <setting
+                propertyKey="@Properties.engoVaria"
+                title="@Strings.engoVaria">
+                <settingConfig type="list">
+                    <listEntry value="0">@Strings.engoVaria0</listEntry>
+                    <listEntry value="1">@Strings.engoVaria1</listEntry>  
+                    <listEntry value="2">@Strings.engoVaria2</listEntry>                    
+                </settingConfig>
+         </setting>
          <!-- propertyKey:@Properties.useEUCWorldAPI:Third Party Applications-->
            <setting
             propertyKey="@Properties.useEUCWorldAPI"

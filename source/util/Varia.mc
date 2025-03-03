@@ -11,6 +11,15 @@ module Varia {
   var triggerDelay;
   var targetObject;
   var listener;
+  var highFreq = 3135;
+  var lowFreq = 1046;
+  var successTone = [
+    new Attention.ToneProfile(1760, 200),
+    new Attention.ToneProfile(0, 50),
+    new Attention.ToneProfile(1760, 150),
+    new Attention.ToneProfile(1568, 150),
+    new Attention.ToneProfile(2349, 400),
+  ];
 
   function initVaria() {
     if (eucData.useRadar == true) {
@@ -55,13 +64,13 @@ module Varia {
         //System.println("threat: " + _target[0].threat);
         if (_target[0].threat != 0) {
           if (_target[0].threat == 1) {
-            triggerDelay = new Time.Duration(1);
+            triggerDelay = 1000;
           }
           if (_target[0].threat == 2) {
-            triggerDelay = (new Time.Duration(1)).divide(2);
+            triggerDelay = 500;
           }
           eucData.variaTargetDist = _target[0].range;
-          eucData.variaTargetSpeed = _target[0].speed;
+          eucData.variaTargetSpeed = _target[0].speed * 3.6; // conversion in km/h
 
           // System.println(eucData.variaTargetDist);
           soundAlert(_target[0].range);
@@ -93,9 +102,9 @@ module Varia {
 
   function soundAlert(distance) {
     triggerVariaAlarm = true;
-    var variaNow = new Time.Moment(Time.now().value());
+    var variaNow = System.getTimer();
 
-    if (nextVariaTrigger != null && nextVariaTrigger.compare(variaNow) >= 0) {
+    if (nextVariaTrigger != null && nextVariaTrigger - variaNow >= 0) {
       triggerVariaAlarm = false;
     }
     //System.println("tva: " + triggerVariaAlarm);
@@ -107,13 +116,28 @@ module Varia {
       // far car
       if (Attention has :playTone && triggerVariaAlarm == true) {
         //System.println("triggerFar");
-        //Attention.playTone({ :toneProfile => toneProfile });
-        Attention.playTone(Attention.TONE_DISTANCE_ALERT);
-        nextVariaTrigger = new Time.Moment(Time.now().value());
-        nextVariaTrigger.add(triggerDelay);
-        return;
+        // EUCAlarms.playSound({ :toneProfile => toneProfile });
+        if (eucData.motorbikeHeadset == true) {
+          EUCAlarms.playSound(Attention.TONE_DISTANCE_ALERT);
+        } else {
+          EUCAlarms.playSound([
+            new Attention.ToneProfile(
+              roundFreq(
+                highFreq -
+                  ((highFreq - lowFreq) / eucData.variaFarAlarmDistThr) *
+                    distance
+              ),
+              250
+            ),
+          ]);
+        }
       }
+
+      nextVariaTrigger = System.getTimer() + triggerDelay;
+
+      return;
     }
+
     if (
       eucData.variaCloseAlarmDistThr != 0 &&
       distance <= eucData.variaCloseAlarmDistThr
@@ -121,18 +145,40 @@ module Varia {
       // close car
       if (Attention has :playTone && triggerVariaAlarm == true) {
         // System.println("triggerclose");
-        //Attention.playTone({ :toneProfile => toneProfile });
-        Attention.playTone(Attention.TONE_ALARM);
-        nextVariaTrigger = new Time.Moment(Time.now().value());
-        nextVariaTrigger.add(triggerDelay);
-        return;
+        // EUCAlarms.playSound({ :toneProfile => toneProfile });
+        if (eucData.motorbikeHeadset == true) {
+          EUCAlarms.playSound(Attention.TONE_ALARM);
+        } else {
+          EUCAlarms.playSound([
+            new Attention.ToneProfile(
+              roundFreq(
+                highFreq -
+                  ((highFreq - lowFreq) / eucData.variaFarAlarmDistThr) *
+                    distance
+              ),
+              250
+            ),
+          ]);
+        }
       }
+      nextVariaTrigger = System.getTimer() + triggerDelay;
+
+      return;
     }
   }
 
   function soundClear() {
     if (Attention has :playTone) {
-      Attention.playTone(Attention.TONE_SUCCESS);
+      if (
+        eucData.variaFarAlarmDistThr != 0 ||
+        eucData.variaCloseAlarmDistThr != 0
+      ) {
+        if (eucData.motorbikeHeadset == true) {
+          EUCAlarms.playSound(Attention.TONE_SUCCESS);
+        } else {
+          EUCAlarms.playSound(successTone);
+        }
+      }
     }
   }
   function getVariaVoltage() {

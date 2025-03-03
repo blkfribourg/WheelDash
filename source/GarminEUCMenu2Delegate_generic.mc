@@ -276,7 +276,7 @@ class GarminEUCMenu2Delegate_generic extends WatchUi.Menu2InputDelegate {
       cmd_frame[17] = 21;
       //System.println("pedal_frame: " + cmd_frame.toString());
     }
-    eucBleDelegate.sendRawCmd(cmd_frame);
+    eucBleDelegate.sendRawCmd(eucBleDelegate.getChar(), cmd_frame);
   }
 
   function inmotionMenuCmd(parentMenu, cmd) {

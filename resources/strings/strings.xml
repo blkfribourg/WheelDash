@@ -1,5 +1,5 @@
 <strings>
-    <string id="AppName">WheelDash (Varia)</string>
+    <string id="AppName">WheelDash (IBeta)</string>
     <string id="settingsUrl">Settings JSON Url (experimental)</string>
     <string id="firstConnStr">Profile $1$ 1st connection\nPlease turn on your wheel\n and wait for connection\n\nensure only one wheel is ON!\n\nIf you enjoy this app :\n ko-fi.com/wheeldash</string>
     <string id="connectedStr">Profile $1$ connected !\n\nSaving wheel unique identifier</string>
@@ -216,6 +216,11 @@
     <string id="engoTouch">Switch view mode</string>    
     <string id="engoTouch0">Gesture (proximity sensor)</string>
     <string id="engoTouch1">Capacitive Button</string>
+    <string id="engoVaria">Engo Varia radar indicator</string>
+    <string id="engoVaria0">Vehicle number</string>
+    <string id="engoVaria1">Vehicle speed</string>
+    <string id="engoVaria2">Vehicle distance</string>
+
 
    <!-- DF view Strings-->
    

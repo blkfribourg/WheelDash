@@ -356,3 +356,18 @@ function concatCmd(cmds) {
 function getJson(symbol) {
   return WatchUi.loadResource(Rez.JsonData[symbol]);
 }
+
+function roundFreq(toneFreq) {
+  var A4_FREQ = 440.0;
+  var A4_INDEX = 69;
+
+  return (
+    A4_FREQ *
+    Math.pow(
+      2,
+      (Math.round((12 * Math.ln(toneFreq / A4_FREQ)) / Math.ln(2) + A4_INDEX) -
+        A4_INDEX) /
+        12.0
+    )
+  );
+}

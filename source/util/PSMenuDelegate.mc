@@ -31,9 +31,9 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
   function onSelect(item) {
     System.println("useRadar:" + eucData.useRadar);
     setSettings(item.getId());
-
-    connInit();
     Varia.initVaria();
+    connInit();
+
     DFViewInit();
     rideStatsInit();
   }
@@ -132,7 +132,7 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
     */
     //   System.println(eucData.spdLimFeatEnabled);
     if (eucData.wheelBrand == 6) {
-      WatchUi.pushView(mainView, mainViewdelegate, WatchUi.SLIDE_IMMEDIATE);
+      WatchUi.switchToView(mainView, mainViewdelegate, WatchUi.SLIDE_IMMEDIATE);
     } else {
       if (eucBleDelegate.eucFirst == false) {
         //   System.println("not first");
@@ -143,10 +143,14 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       ) {
         connView = new messageView(eucBleDelegate, profileNb, self, "spdLimOn");
         connView.popViewDelay = 5000;
-        WatchUi.pushView(connView, null, WatchUi.SLIDE_IMMEDIATE);
+        WatchUi.switchToView(connView, null, WatchUi.SLIDE_IMMEDIATE);
         Storage.setValue("spdLimDisclDone", true);
       } else {*/
-        WatchUi.pushView(mainView, mainViewdelegate, WatchUi.SLIDE_IMMEDIATE);
+        WatchUi.switchToView(
+          mainView,
+          mainViewdelegate,
+          WatchUi.SLIDE_IMMEDIATE
+        );
         // }
       } else {
         //       System.println("first");
@@ -256,18 +260,18 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
         // to avoid infinite loop if user change lastprofile profile name charge profile 1.
         setSettings(getProfileList()[0]);
       }
-
-      connInit();
       Varia.initVaria();
+      connInit();
+
       DFViewInit();
       rideStatsInit();
     } else {
       setSettings(
         getProfileList()[AppStorage.getSetting("defaultProfile") - 1]
       );
-
-      connInit();
       Varia.initVaria();
+      connInit();
+
       DFViewInit();
       rideStatsInit();
     }
@@ -285,6 +289,7 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
 
     eucData.useEngo = AppStorage.getSetting("useEngo");
     eucData.engoTouch = AppStorage.getSetting("engoTouch");
+    eucData.engoVaria = AppStorage.getSetting("engoVaria");
     eucData.useRadar = AppStorage.getSetting("useRadar");
     eucData.variaCloseAlarmDistThr = AppStorage.getSetting(
       "variaCloseAlarmDistThr"
@@ -570,7 +575,7 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
     */
     //   System.println(eucData.spdLimFeatEnabled);
     if (eucData.wheelBrand == 6) {
-      WatchUi.pushView(mainView, mainViewdelegate, WatchUi.SLIDE_IMMEDIATE);
+      WatchUi.switchToView(mainView, mainViewdelegate, WatchUi.SLIDE_IMMEDIATE);
     } else {
       if (eucBleDelegate.eucFirst == false) {
         //  System.println("not first");
@@ -581,10 +586,14 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
       ) {
         connView = new messageView(eucBleDelegate, profileNb, self, "spdLimOn");
         connView.popViewDelay = 5000;
-        WatchUi.pushView(connView, null, WatchUi.SLIDE_IMMEDIATE);
+        WatchUi.switchToView(connView, null, WatchUi.SLIDE_IMMEDIATE);
         Storage.setValue("spdLimDisclDone", true);
       } else {*/
-        WatchUi.pushView(mainView, mainViewdelegate, WatchUi.SLIDE_IMMEDIATE);
+        WatchUi.switchToView(
+          mainView,
+          mainViewdelegate,
+          WatchUi.SLIDE_IMMEDIATE
+        );
         // }
       } else {
         //  System.println("first");
@@ -726,6 +735,11 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
     if (JSONSettings.get("engoTouch") != null) {
       eucData.engoTouch = (
         (JSONSettings.get("engoTouch") as Dictionary).get("v") as String
+      ).toNumber();
+    }
+    if (JSONSettings.get("engoVaria") != null) {
+      eucData.engoVaria = (
+        (JSONSettings.get("engoVaria") as Dictionary).get("v") as String
       ).toNumber();
     }
     if (JSONSettings.get("useRadar") != null) {

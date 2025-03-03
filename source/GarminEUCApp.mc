@@ -21,6 +21,7 @@ class GarminEUCApp extends Application.AppBase {
   function onStart(state as Dictionary?) as Void {
     //if setting change was detected it means checkSettingsURL was already called
     checkSettingsURL();
+   
 
     // REMINDER !!! --------------------------------------------------------------------------
     //eucData.useProfileSelector is set inside checkSettingsURL even if not using json config !!

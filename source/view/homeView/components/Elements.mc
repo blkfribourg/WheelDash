@@ -176,7 +176,7 @@ class SpeedLimiterRenderer extends WatchUi.Drawable {
 }
 
 class VariaIndicatorRenderer extends WatchUi.Drawable {
-  private var maxDistance = 100;
+  private var maxDistance = 150;
   private var screenWidth = System.getDeviceSettings().screenWidth;
   private var barLength = screenWidth * 0.55;
   private var xStart = screenWidth / 2 - barLength / 2;
@@ -191,6 +191,11 @@ class VariaIndicatorRenderer extends WatchUi.Drawable {
     Drawable.initialize(params);
     mMainColor = params.get(:mainColor);
     mDangerColor = params.get(:dangerColor);
+    if (eucData.variaFarAlarmDistThr == 0) {
+      maxDistance = 150;
+    } else {
+      maxDistance = eucData.variaFarAlarmDistThr;
+    }
   }
   function draw(dc) {
     if (target != null) {

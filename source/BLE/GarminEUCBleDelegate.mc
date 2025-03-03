@@ -30,8 +30,11 @@ class eucBLEDelegate extends Ble.BleDelegate {
   var timeWhenConnected;
 
   var EUCDevice = null;
+  var EUCSR = null;
   var hornDevice = null;
   var horn_service = null;
+  var scanEngo = false;
+  var engoSR = null;
   var engo_service = null;
   var engo_tx = null;
   var engo_rx = null;
@@ -44,7 +47,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
   var engoLuma = -1;
   var _cbCharacteristicWrite = null;
   var rawcmd = null;
-  var rawcmdError = null;
+  var cmdStacking = null;
   var engoDisplayInit = false;
   var cfgList = new [0]b;
   // var isUpdatingBleParams as Toybox.Lang.Boolean = false;
@@ -102,7 +105,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
     Ble.setScanState(Ble.SCAN_STATE_SCANNING);
     //checking if EUC Footprint already exist (see IsFirsConnection function description)
     eucFirst = eucFirstConnection();
-    //eucFirst = false;
+    // eucFirst = false;
 
     if (eucData.useEngo == true) {
       deviceNb = deviceNb + 1;
@@ -350,15 +353,6 @@ class eucBLEDelegate extends Ble.BleDelegate {
     }
   }
 
-  function engocFirstConnection() {
-    // If a footprint doesn't exist, return true, else return false
-    if (Storage.getValue("EngoSr") == null) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   // This function is used to store the footprint and the EUC name on the persistant storage
   function storeSR(sr) {
     Storage.setValue("profile" + profileNb + "Sr", sr);
@@ -380,11 +374,18 @@ class eucBLEDelegate extends Ble.BleDelegate {
 
   // This function is used to store the footprint of the Engo on the persistant storage
   function storeEngoSR(sr) {
+    //  System.println("EngoSRStored");
     Storage.setValue("engoSr", sr);
+  }
+  // This function is used to reset the footprint of the Engo on the persistant storage
+  function resetEngoSR() {
+    // System.println("EngoSRSReset");
+    Storage.deleteValue("engoSr");
   }
 
   // This function is used to load the footprint of the Engo  from the persistant storage
   function loadEngoSR() {
+    //  System.println("EngoSRLoaded");
     var engoSR = Storage.getValue("engoSr");
     if (engoSR != null) {
       return engoSR;
@@ -472,6 +473,29 @@ class eucBLEDelegate extends Ble.BleDelegate {
     } else {
       // Pairing to other devices is done after the first connection was done.
       // I'll probably have to implement footprint saving for other devices (otherwise the app will pair to any device with corresponding UUID).
+      // Engo persistant footprint check:
+
+      if (engoSR == null) {
+        engoSR = loadEngoSR();
+      }
+      if (eucData.useEngo == true) {
+        if (eucData.engoPaired == false) {
+          if (engoSR != false) {
+            try {
+              engoDevice = pair(engoSR as Ble.ScanResult);
+            } catch (e instanceof Lang.Exception) {
+              System.println("engoError: " + e.getErrorMessage());
+            }
+          } else {
+            scanEngo = true;
+          }
+        }
+      } else if (engoSR != false && eucData.useEngo == false) {
+        // reset footprint if Engo support is disabled
+        resetEngoSR();
+        engoSR = loadEngoSR();
+      }
+
       for (
         var result = scanResults.next();
         result != null;
@@ -479,7 +503,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
       ) {
         if (result instanceof Ble.ScanResult) {
           //System.println(result.getServiceUuids().next());
-          if (eucData.useEngo == true) {
+          if (eucData.useEngo == true && scanEngo == true) {
             if (eucData.engoPaired == false) {
               if (
                 contains(
@@ -488,10 +512,11 @@ class eucBLEDelegate extends Ble.BleDelegate {
                   result
                 ) == true
               ) {
-                //  System.println("EngoFound!");
+                System.println("EngoFound!");
                 //  Ble.setScanState(Ble.SCAN_STATE_OFF);
                 try {
-                  // Do something here
+                  //saving Engo footprint for future connections
+                  storeEngoSR(result);
                   engoDevice = pair(result as Ble.ScanResult);
                 } catch (e instanceof Lang.Exception) {
                   System.println("engoError: " + e.getErrorMessage());
@@ -522,12 +547,14 @@ class eucBLEDelegate extends Ble.BleDelegate {
         }
       }
     }
+    if (EUCSR == null) {
+      EUCSR = loadSR(); // Load the saved EUC footprint (ScanResult object);
+    }
 
-    var result = loadSR(); // Load the saved EUC footprint (ScanResult object);
-    if (result != false) {
+    if (EUCSR != false) {
       // If Inmotion get the model name from the advertising packet (used for battery % computation)
       if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
-        var advName = result.getDeviceName();
+        var advName = EUCSR.getDeviceName();
         if (advName != null) {
           var advModel = advName.substring(0, 3);
           if (
@@ -542,7 +569,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
       }
       // Pairing surrounded by try catch to avoid app crash in case of failure
       try {
-        EUCDevice = pair(result as Ble.ScanResult);
+        EUCDevice = pair(EUCSR as Ble.ScanResult);
       } catch (e instanceof Lang.Exception) {
         // System.println("EUCError: " + e.getErrorMessage());
       }
@@ -742,8 +769,16 @@ class eucBLEDelegate extends Ble.BleDelegate {
       }
       // if no config found or update needed (see checkCfgName function), uploading config.
       if (engoCfgOK == false) {
+        if (eucData.engoBattery != null && eucData.engoBattery <= 5) {
+          eucData.engoCfgUpdate = "Err Low Bat";
+          return;
+        }
         clearScreen();
-
+        // unpairing EUC :
+        Ble.setScanState(Ble.SCAN_STATE_OFF);
+        if (eucData.paired == true) {
+          manualUnpair();
+        }
         //System.println("uploading config");
         sendRawCmd(engo_rx, getWriteCmd("updating config", 195, 110, 4, 5, 16));
         sendRawCmd(engo_rx, getWriteCmd("please wait...", 195, 70, 4, 5, 16));
@@ -806,6 +841,8 @@ class eucBLEDelegate extends Ble.BleDelegate {
       }
       // If config was successfuly uploaded set the current config to wheeldash config and clear screen
       if (engoCfgOK == true && engoDisplayInit == false) {
+        // reactivating scanning (in case EUC was connected before config upload)
+        Ble.setScanState(Ble.SCAN_STATE_SCANNING);
         //If cfg was updated, clearing percentage progression status:
         eucData.engoCfgUpdate = null;
         //  System.println("select cfg");
@@ -920,8 +957,8 @@ class eucBLEDelegate extends Ble.BleDelegate {
             var cfgVer = arrayToRawCmd(
               getJson(:EngoCfg4)[getJson(:EngoCfg4).size() - 2]
             ).slice(15, 19);
-            System.println(cfgVer);
-            System.println(cfgEngoVer);
+            //System.println(cfgVer);
+            //System.println(cfgEngoVer);
             if (cfgEngoVer.equals(cfgVer)) {
               System.println("version is up to date");
               engoCfgOK = true;
@@ -1001,15 +1038,15 @@ class eucBLEDelegate extends Ble.BleDelegate {
   // sendRawCmd split commands into packet of 20 bytes and sent a write request on the specified characteristic.
   function sendRawCmd(char, buffer) {
     var bufferToSend = []b;
-    if (rawcmdError != null) {
-      bufferToSend.addAll(rawcmdError);
-      rawcmdError = null;
+    if (cmdStacking != null) {
+      bufferToSend.addAll(cmdStacking);
+      cmdStacking = null;
     }
     bufferToSend.addAll(buffer);
     try {
       if (bufferToSend.size() > 20) {
         var sendNow = bufferToSend.slice(0, 20);
-        rawcmdError = bufferToSend.slice(20, null);
+        cmdStacking = bufferToSend.slice(20, null);
         _cbCharacteristicWrite = self.method(:__onWrite_finishPayload);
         char.requestWrite(sendNow, {
           :writeType => BluetoothLowEnergy.WRITE_TYPE_WITH_RESPONSE,
@@ -1020,10 +1057,63 @@ class eucBLEDelegate extends Ble.BleDelegate {
         });
       }
     } catch (e) {
-      rawcmdError = bufferToSend;
-      rawcmd = null;
+      cmdStacking = bufferToSend;
+      // rawcmd = null;
       // onBleError(e);
     }
+  }
+
+  function flushCmdStacking() {
+    //  _log("flushCmdStacking",[cmdStacking == null ? 0 : cmdStacking.size()]);
+    var indexIncompleteCmd = indexIncompleteCmd() as Toybox.Lang.Number;
+    cmdStacking =
+      indexIncompleteCmd != 0
+        ? cmdStacking.slice(null, indexIncompleteCmd)
+        : null;
+    self.resetGraphicEngine();
+    //  _log("flushCmdStacking",[cmdStacking == null ? 0 : arrayToHex(cmdStacking)]);
+  }
+
+  function flushCmdStackingIfSup(value as Toybox.Lang.Number) {
+    if (cmdStacking != null && engoCfgOK == true && engoDisplayInit == true) {
+      //added engoCfgOK & engoDisplayInit to avoid flushing conf
+      if (cmdStacking.size() > value) {
+        //   _log("flushCmdStackingIfSup",[value,cmdStacking == null ? 0 : cmdStacking.size()]);
+        flushCmdStacking();
+      }
+    }
+  }
+
+  function indexIncompleteCmd() {
+    if (cmdStacking) {
+      //  _log("indexIncompleteCmd",[arrayToHex(cmdStacking)]);
+      for (var i = 0; i < cmdStacking.size(); i++) {
+        if (cmdStacking[i] == 0xaa) {
+          if (cmdStacking.size() > i + 1) {
+            if (cmdStacking[i + 1] == 0xff) {
+              return i + 1;
+            }
+          }
+        }
+      }
+    }
+    return 0;
+  }
+  function resetGraphicEngine() {
+    //   _log("resetGraphicEngine", []);
+    holdAndFlush(0xff);
+  }
+
+  function holdAndFlush(value) {
+    sendRawCmd(engo_rx, commandBuffer(0x39, [value]b));
+  }
+  function commandBuffer(id, data) {
+    var buffer = new [0]b;
+    buffer.addAll([0xff, id, 0x00, 0x05 + data.size()]b);
+    buffer.addAll(data);
+    buffer.add(0xaa);
+    //_log("buffer",[buffer]);
+    return buffer;
   }
 
   function incEngoLuma() {
@@ -1071,6 +1161,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
   function manualUnpair() {
     if (EUCDevice != null) {
       Ble.unpairDevice(EUCDevice);
+      eucData.paired = false;
     }
   }
 

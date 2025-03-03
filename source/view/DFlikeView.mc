@@ -395,11 +395,9 @@ class DFView extends WatchUi.View {
       if (eucData.fieldIDs[field_id] == 34) {
         fieldNames[field_id] = "VEH SPD";
         var targetSpeed = eucData.variaTargetSpeed;
-        if (targetSpeed != null) {
-          targetSpeed = targetSpeed * 3.6; //Km/h only here, should implement mph when adding imperial unit support
-          if (eucData.useMiles == true) {
-            targetSpeed = kmToMiles(targetSpeed);
-          }
+        if (targetSpeed != null && eucData.useMiles == true) {
+          // targetSpeed is natively expressed in m/s, but is converted in km/h in the varia module (varia.mc)
+          targetSpeed = kmToMiles(targetSpeed);
         }
         fieldValues[field_id] = valueRound(targetSpeed, "%.1f");
       }
@@ -413,7 +411,7 @@ class DFView extends WatchUi.View {
       }
       if (eucData.fieldIDs[field_id] == 37) {
         fieldNames[field_id] = "RD V";
-        fieldValues[field_id] = valueRound(Varia.getVariaVoltage(), "%1d");
+        fieldValues[field_id] = valueRound(Varia.getVariaVoltage(), "%1f");
       }
     }
   }
