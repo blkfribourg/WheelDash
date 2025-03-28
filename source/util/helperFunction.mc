@@ -27,12 +27,20 @@ function string_to_byte_array(plain_text) {
 
 //Just a round function with formating
 function valueRound(value, format) {
-  if (value == null) {
-    return "--";
-  } else {
+  if (value != null) {
     var rounded;
-    rounded = Math.round(value * 100) / 100;
+    if (format.equals("%1d")) {
+      rounded = Math.round(value);
+    } else if (format.equals("%.1f")) {
+      rounded = Math.round(value * 10) / 10.0;
+    } else if (format.equals("%.2f")) {
+      rounded = Math.round(value * 100) / 100.0;
+    } else {
+      return "--"; // Unsupported format
+    }
     return rounded.format(format);
+  } else {
+    return "--";
   }
 }
 
@@ -353,8 +361,8 @@ function concatCmd(cmds) {
   return cmd;
 }
 
-function getJson(symbol) {
-  return WatchUi.loadResource(Rez.JsonData[symbol]);
+function getJson(symbol as Lang.Symbol) as Lang.Array {
+  return WatchUi.loadResource(Rez.JsonData[symbol]) as Lang.Array;
 }
 
 function roundFreq(toneFreq) {

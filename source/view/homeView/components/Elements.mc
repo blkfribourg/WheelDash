@@ -44,7 +44,7 @@ class VariaConnectRenderer extends WatchUi.Drawable {
       } else {
         foregroundColor = 0x545454;
       }
-      var oriX = screenWidth * 0.3;
+      var oriX = screenWidth * 0.28;
       var oriY = screenWidth * 0.27;
       var w = 0.014;
       var h = 0.024;
@@ -96,6 +96,7 @@ class HornIndicatorRenderer extends WatchUi.Drawable {
   function draw(dc) {
     if (eucData.ESP32Horn == true) {
       //System.println(pause);
+      /*
       var foregroundColor;
       if (eucData.ESP32HornPaired == true) {
         foregroundColor = mMainColor;
@@ -133,6 +134,48 @@ class HornIndicatorRenderer extends WatchUi.Drawable {
         Graphics.ARC_COUNTER_CLOCKWISE,
         -screenWidth / 10,
         screenWidth / 10
+      );
+      // dc.drawCircle(screenWidth / 2, screenWidth * 0.715, screenWidth / 40);
+      // dc.fillPolygon(hornIcon);
+      */
+
+      var foregroundColor;
+      if (eucData.ESP32HornPaired == true) {
+        foregroundColor = mMainColor;
+      } else {
+        foregroundColor = 0x545454;
+      }
+      var oriX = screenWidth * 0.665;
+      var oriY = screenWidth * 0.24;
+      var w = screenWidth * 0.014;
+      var h = screenWidth * 0.024;
+
+      dc.setPenWidth(2);
+      dc.setColor(foregroundColor, 0x000000);
+      dc.fillRoundedRectangle(oriX, oriY, w, h, 2);
+      var polyTriangle = [
+        [oriX + w * 1.14, oriY + h * 0.083],
+        [oriX + w * 2.14, oriY - h * 0.542],
+        [oriX + w * 2.14, oriY + h * 1.375],
+        [oriX + w * 1.14, oriY + h * 0.833],
+      ];
+      dc.fillPolygon(polyTriangle);
+      dc.setPenWidth(3);
+      dc.drawArc(
+        oriX + w * 2.285,
+        oriY + h * 0.5,
+        w * 1.428,
+        Graphics.ARC_COUNTER_CLOCKWISE,
+        -w * 7.143,
+        w * 7.143
+      );
+      dc.drawArc(
+        oriX + w * 2.285,
+        oriY + h * 0.5,
+        w * 2.5,
+        Graphics.ARC_COUNTER_CLOCKWISE,
+        -w * 7.143,
+        w * 7.143
       );
       // dc.drawCircle(screenWidth / 2, screenWidth * 0.715, screenWidth / 40);
       // dc.fillPolygon(hornIcon);

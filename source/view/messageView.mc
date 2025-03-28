@@ -1,5 +1,6 @@
 import Toybox.Graphics;
 import Toybox.WatchUi;
+import Toybox.Lang;
 using Toybox.Timer;
 
 using Toybox.System;
@@ -11,7 +12,7 @@ class messageView extends WatchUi.View {
   var isDone = false;
   var psDelegate;
   var messageType;
-  private var cStrings = {}; // and also cached strings
+  private var cStrings = ({}) as Dictionary<Lang.Symbol, Lang.String>; // and also cached strings
   function initialize(_BleDelegate, _profileNb, _psDelegate, _messageType) {
     BleDelegate = _BleDelegate;
     profileNb = _profileNb;
@@ -30,7 +31,8 @@ class messageView extends WatchUi.View {
 
   function onLayout(dc) {
     if (messageType.equals("1stConn")) {
-      cStrings[:firstConn] = WatchUi.loadResource(Rez.Strings.firstConnStr);
+      cStrings[:firstConn as Lang.Symbol] =
+        WatchUi.loadResource(Rez.Strings.firstConnStr) as Lang.String;
       cStrings[:connected] = WatchUi.loadResource(Rez.Strings.connectedStr);
       textToDisplay = new WatchUi.Text({
         :text => Lang.format(cStrings[:firstConn], [profileNb]),
@@ -88,7 +90,7 @@ class ECMessageView extends WatchUi.View {
 
   var psDelegate;
   var messageType;
-  private var cStrings = {}; // and also cached strings
+  var WaitMsg;
   function initialize(_psDelegate) {
     psDelegate = _psDelegate;
 
@@ -97,9 +99,9 @@ class ECMessageView extends WatchUi.View {
   }
 
   function onLayout(dc) {
-    cStrings[:WaitMsg] = WatchUi.loadResource(Rez.Strings.ECProfilesStr);
+    WaitMsg = WatchUi.loadResource(Rez.Strings.ECProfilesStr);
     textToDisplay = new WatchUi.Text({
-      :text => Lang.format(cStrings[:WaitMsg], [eucData.fetchCnt + 1]),
+      :text => Lang.format(WaitMsg, [eucData.fetchCnt + 1]),
       :color => Graphics.COLOR_WHITE,
       :font => Graphics.FONT_XTINY,
       :locX => dc.getWidth() / 2,
@@ -147,7 +149,7 @@ class ECMessageView extends WatchUi.View {
       }
     } else {
       textToDisplay.setText(
-        Lang.format(cStrings[:WaitMsg], [eucData.fetchCnt + 1])
+        Lang.format(WaitMsg, [eucData.fetchCnt + 1]) as Lang.String
       );
 
       if (eucData.JSONFetch.equals("done")) {

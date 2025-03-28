@@ -411,7 +411,7 @@ class DFView extends WatchUi.View {
       }
       if (eucData.fieldIDs[field_id] == 37) {
         fieldNames[field_id] = "RD V";
-        fieldValues[field_id] = valueRound(Varia.getVariaVoltage(), "%1f");
+        fieldValues[field_id] = valueRound(Varia.getVariaVoltage(), "%.1f");
       }
     }
   }

@@ -90,6 +90,25 @@ class eucBLEDelegate extends Ble.BleDelegate {
     0xf0, 0x0f, 0xf0, 0x0f, 0xea, 0x0f, 0xef, 0x0f,
   ];
   var frame5 = [0xef, 0x0f, 0xef, 0xda, 0xb2, 0x25, 0x18];
+
+  
+ // Apex packet
+  var frame1 = [
+    0xdc, 0x5a, 0x5c, 0x49, 0x39, 0x63, 0x00, 0x00, 0x3C, 0x55, 0x00, 0x00,
+    0x02, 0x07, 0x00, 0x01, 0x00, 0x00, 0x0D, 0x55,
+  ];
+  var frame2 = [
+    0x01, 0x48, 0x00, 0x00, 0x02, 0x30, 0x02, 0xD0, 0xA5, 0x0F, 0x07, 0x9E,
+    0x1B, 0x60, 0x00, 0x00, 0x80, 0xc8, 0x00, 0x00,
+  ];
+  var frame3 = [
+    0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x04, 0x00, 0x03, 0xFC, 0xFF, 0xFF,
+    0xff, 0xFf, 0xFF, 0x32, 0x80, 0x01, 0x46, 0x09,
+  ];
+  var frame4 = [
+    0XA2, 0x12, 0x0E, 0x02,0x32, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x01, 0x86, 0xA8, 0xBF, 0x25];
+  
   */
 
   // Upon initialisation start scanning for supported devices
@@ -105,7 +124,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
     Ble.setScanState(Ble.SCAN_STATE_SCANNING);
     //checking if EUC Footprint already exist (see IsFirsConnection function description)
     eucFirst = eucFirstConnection();
-    // eucFirst = false;
+    //  eucFirst = false;
 
     if (eucData.useEngo == true) {
       deviceNb = deviceNb + 1;
@@ -123,7 +142,10 @@ class eucBLEDelegate extends Ble.BleDelegate {
     if (state == Ble.CONNECTION_STATE_CONNECTED) {
       // Checking we are dealing with an EUC and not another kind of supported device (horn, smartglasses)
       if (eucData.wheelBrand < 6) {
-        if (device.getService(eucPM.EUC_SERVICE) != null) {
+        if (
+          eucPM.EUC_SERVICE != null &&
+          device.getService(eucPM.EUC_SERVICE as Ble.Uuid) != null
+        ) {
           //System.println("EUC connected");
           euc_service = device.getService(eucPM.EUC_SERVICE);
           var cccd;
@@ -214,10 +236,13 @@ class eucBLEDelegate extends Ble.BleDelegate {
       }
       // if the paired device is a DIY Bluetooth Horn (WheelHorn)
       if (eucData.ESP32Horn == true) {
-        if (device.getService(hornPM.WH_SERVICE) != null) {
+        if (
+          hornPM.WH_SERVICE != null &&
+          device.getService(hornPM.WH_SERVICE as Ble.Uuid) != null
+        ) {
           //System.println("Horn connected");
 
-          horn_service = device.getService(hornPM.WH_SERVICE);
+          horn_service = device.getService(hornPM.WH_SERVICE as Ble.Uuid);
 
           horn_char_w =
             horn_service != null
@@ -236,10 +261,15 @@ class eucBLEDelegate extends Ble.BleDelegate {
 
       // if the paired device is Engo smarglasses from Activelook
       if (eucData.useEngo == true) {
-        if (device.getService(engoPM.BLE_SERV_ACTIVELOOK) != null) {
+        if (
+          engoPM.BLE_SERV_ACTIVELOOK != null &&
+          device.getService(engoPM.BLE_SERV_ACTIVELOOK as Ble.Uuid) != null
+        ) {
           // System.println("Engo connected");
 
-          engo_service = device.getService(engoPM.BLE_SERV_ACTIVELOOK);
+          engo_service = device.getService(
+            engoPM.BLE_SERV_ACTIVELOOK as Ble.Uuid
+          );
 
           engo_tx =
             engo_service != null
@@ -662,23 +692,25 @@ class eucBLEDelegate extends Ble.BleDelegate {
       }
       BLE_RX_startTime = System.getTimer();
     }
-    if (characteristic.equals(engo_rx) && cfgPacketsTotal != null) {
-      cfgUpdateStatus();
-    }
-    // _log("onCharacteristicWrite", [characteristic, status]);
-    //not using this:
-    /*
+    if (characteristic.equals(engo_rx)) {
+      if (engo_rx != null && cfgPacketsTotal != null) {
+        cfgUpdateStatus();
+      }
+      // _log("onCharacteristicWrite", [characteristic, status]);
+      //not using this:
+      /*
     if (isUpdatingBleParams && !isBleParamsUpdated) {
       isUpdatingBleParams = false;
       if (status == Toybox.BluetoothLowEnergy.STATUS_SUCCESS) {
         isBleParamsUpdated = true;
       }
     } else {**/
-    // TODO: Refactor to avoid callback like this
-    var _cb = _cbCharacteristicWrite;
-    if (_cb != null) {
-      _cb.invoke(characteristic, status);
-      // }
+      // TODO: Refactor to avoid callback like this
+      var _cb = _cbCharacteristicWrite;
+      if (_cb != null) {
+        _cb.invoke(characteristic, status);
+        // }
+      }
     }
   }
 
@@ -1079,6 +1111,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
       //added engoCfgOK & engoDisplayInit to avoid flushing conf
       if (cmdStacking.size() > value) {
         //   _log("flushCmdStackingIfSup",[value,cmdStacking == null ? 0 : cmdStacking.size()]);
+        System.println("flushing");
         flushCmdStacking();
       }
     }

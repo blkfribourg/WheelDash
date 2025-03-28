@@ -41,7 +41,7 @@ class MainTimer {
       EUCWorldCompat();
     } //EUC World
 
-    // dummyGen();
+    //dummyGen();
 
     //Only starts if no profile selected
     if (eucData.wheelName == null && delegate != null) {
@@ -438,8 +438,9 @@ class MainTimer {
           var data = pagePayload(textArray);
 
           // System.println("sendCmd");
-          bleDelegate.flushCmdStackingIfSup(200);
+          // bleDelegate.flushCmdStackingIfSup(200);
           bleDelegate.sendCommands(getPageCmd(data, eucData.engoPage));
+
           //    bleDelegate.sendCommands(cmdTime);
         }
       }

@@ -12,7 +12,7 @@
 using Toybox.System as Sys;
 using Toybox.BluetoothLowEnergy as Ble;
 using Toybox.WatchUi as Ui;
-
+import Toybox.Lang;
 class BleQueue {
   var delayTimer = null; // queue will be executer every delayTimer
   var run_id = 0; // debug variable
@@ -36,7 +36,7 @@ class BleQueue {
     delayTimer = new Timer.Timer();
   }
 
-  function add(data) {
+  function add(data as Lang.Array) {
     if (data[0] != null) {
       queue.add(data);
       //Sys.println("add OK ? Data = " + data);
@@ -93,7 +93,7 @@ class BleQueue {
     }
 
     isRunning = true;
-    var char = queue[0][0];
+    var char = queue[0][0] as Ble.Characteristic;
     //writing BLE request
     // System.println(queue[0][1]);
     try {

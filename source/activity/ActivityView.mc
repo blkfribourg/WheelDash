@@ -64,6 +64,92 @@ class ActivityRecordView extends WatchUi.View {
   private var startingMoment as Time.Moment?;
   private var startingEUCTripDistance;
 
+  var maxSpeed = 0.0;
+  var maxPWM = 0.0;
+  var maxCurrent = 0.0;
+  var maxPower = 0.0;
+  var maxTemp = 0.0;
+  var minTemp = 0.0;
+  var currentPWM = 0.0;
+  var correctedSpeed = 0.0;
+  var currentCurrent = 0.0;
+  var currentVoltage = 0.0;
+  var currentBatteryPerc = 0.0;
+  var sumCurrent = 0.0;
+  var callNb = 0.0;
+  var currentPower = 0.0;
+  var sumPower = 0.0;
+  var sessionDistance = 0.0;
+  var minVoltage = 255.0;
+  var maxVoltage = 0.0;
+  var minBatteryPerc = 0.0;
+  var maxBatteryPerc = 0.0;
+  var avgSpeed = 0.0;
+  var avgCurrent = 0.0;
+  var avgPower = 0.0;
+
+  // Field ID from resources.
+  const SPEED_FIELD_ID = 0;
+  const PWM_FIELD_ID = 1;
+  const VOLTAGE_FIELD_ID = 2;
+  const CURRENT_FIELD_ID = 3;
+  const POWER_FIELD_ID = 4;
+  const TEMP_FIELD_ID = 5;
+  const TRIPDISTANCE_FIELD_ID = 6;
+  const MAXSPEED_FIELD_ID = 7;
+  const MAXPWM_FIELD_ID = 8;
+  const MAXCURRENT_FIELD_ID = 9;
+  const MAXPOWER_FIELD_ID = 10;
+  const MAXTEMP_FIELD_ID = 11;
+  const AVGSPEED_FIELD_ID = 12;
+  const AVGCURRENT_FIELD_ID = 13;
+  const AVGPOWER_FIELD_ID = 14;
+  const EORBATTERY_FIELD_ID = 15;
+
+  const MINVOLTAGE_FIELD_ID = 16;
+  const MAXVOLTAGE_FIELD_ID = 17;
+  const MINBATTERY_FIELD_ID = 18;
+  const MAXBATTERY_FIELD_ID = 19;
+  const MINTEMP_FIELD_ID = 20;
+  const WHEELNAME_FIELD_ID = 21;
+
+  const SPEED_FIELD_ID_MILES = 22;
+  const TRIPDISTANCE_FIELD_ID_MILES = 23;
+  const MAXSPEED_FIELD_ID_MILES = 24;
+  const AVGSPEED_FIELD_ID_MILES = 25;
+
+  const TEMP_FIELD_ID_K = 26;
+  const MINTEMP_FIELD_ID_K = 27;
+  const MAXTEMP_FIELD_ID_K = 28;
+
+  const VEH_RELATIVE_SPD_ID = 29;
+  const VEH_TOTAL_CNT_ID = 30;
+
+  hidden var mSpeedField;
+  hidden var mPWMField;
+  hidden var mVoltageField;
+  hidden var mCurrentField;
+  hidden var mPowerField;
+  hidden var mTempField;
+  hidden var mTripDistField;
+  hidden var mMaxSpeedField;
+  hidden var mMaxPWMField;
+  hidden var mMaxCurrentField;
+  hidden var mMaxPowerField;
+  hidden var mMaxTempField;
+  hidden var mMinTempField;
+  hidden var mAvgSpeedField;
+  hidden var mAvgCurrentField;
+  hidden var mAvgPowerField;
+  hidden var mEORBatteryField;
+  hidden var mMinVoltageField;
+  hidden var mMaxVoltageField;
+  hidden var mMinBatteryField;
+  hidden var mMaxBatteryField;
+  hidden var mWheelName;
+  hidden var mVehRelativeSpdField = null;
+  hidden var mVehTotalCntField = null;
+
   //! Constructor
   public function initialize() {
     View.initialize();
@@ -110,7 +196,7 @@ class ActivityRecordView extends WatchUi.View {
 
     _session = ActivityRecording.createSession({
       :name => "EUC riding",
-      :sport => ActivityRecording.SPORT_GENERIC,
+      :sport => Activity.SPORT_GENERIC,
     });
     setupFields();
     _session.start();
@@ -120,11 +206,11 @@ class ActivityRecordView extends WatchUi.View {
       //System.println("FITtimerStarted");
       fitTimer.start(method(:updateFitData), 1000, true);
     }
-    WatchUi.requestUpdate();
+    // WatchUi.requestUpdate();
   }
   function initSessionVar() {
     startingMoment = new Time.Moment(Time.now().value());
-    startingEUCTripDistance = eucData.correctedTotalDistance;
+    // startingEUCTripDistance = eucData.correctedTotalDistance;
     minBatteryPerc = eucData.getBatteryPercentage();
     maxBatteryPerc = minBatteryPerc;
   }
@@ -228,68 +314,6 @@ class ActivityRecordView extends WatchUi.View {
     }
     return false;
   }
-
-  // Field ID from resources.
-  const SPEED_FIELD_ID = 0;
-  const PWM_FIELD_ID = 1;
-  const VOLTAGE_FIELD_ID = 2;
-  const CURRENT_FIELD_ID = 3;
-  const POWER_FIELD_ID = 4;
-  const TEMP_FIELD_ID = 5;
-  const TRIPDISTANCE_FIELD_ID = 6;
-  const MAXSPEED_FIELD_ID = 7;
-  const MAXPWM_FIELD_ID = 8;
-  const MAXCURRENT_FIELD_ID = 9;
-  const MAXPOWER_FIELD_ID = 10;
-  const MAXTEMP_FIELD_ID = 11;
-  const AVGSPEED_FIELD_ID = 12;
-  const AVGCURRENT_FIELD_ID = 13;
-  const AVGPOWER_FIELD_ID = 14;
-  const EORBATTERY_FIELD_ID = 15;
-
-  const MINVOLTAGE_FIELD_ID = 16;
-  const MAXVOLTAGE_FIELD_ID = 17;
-  const MINBATTERY_FIELD_ID = 18;
-  const MAXBATTERY_FIELD_ID = 19;
-  const MINTEMP_FIELD_ID = 20;
-  const WHEELNAME_FIELD_ID = 21;
-
-  const SPEED_FIELD_ID_MILES = 22;
-  const TRIPDISTANCE_FIELD_ID_MILES = 23;
-  const MAXSPEED_FIELD_ID_MILES = 24;
-  const AVGSPEED_FIELD_ID_MILES = 25;
-
-  const TEMP_FIELD_ID_K = 26;
-  const MINTEMP_FIELD_ID_K = 27;
-  const MAXTEMP_FIELD_ID_K = 28;
-
-  const VEH_RELATIVE_SPD_ID = 29;
-  const VEH_TOTAL_CNT_ID = 30;
-
-  hidden var mSpeedField;
-  hidden var mPWMField;
-  hidden var mVoltageField;
-  hidden var mCurrentField;
-  hidden var mPowerField;
-  hidden var mTempField;
-  hidden var mTripDistField;
-  hidden var mMaxSpeedField;
-  hidden var mMaxPWMField;
-  hidden var mMaxCurrentField;
-  hidden var mMaxPowerField;
-  hidden var mMaxTempField;
-  hidden var mMinTempField;
-  hidden var mAvgSpeedField;
-  hidden var mAvgCurrentField;
-  hidden var mAvgPowerField;
-  hidden var mEORBatteryField;
-  hidden var mMinVoltageField;
-  hidden var mMaxVoltageField;
-  hidden var mMinBatteryField;
-  hidden var mMaxBatteryField;
-  hidden var mWheelName;
-  hidden var mVehRelativeSpdField = null;
-  hidden var mVehTotalCntField = null;
 
   // Initializes the new fields in the activity file
   function setupFields() {
@@ -501,29 +525,6 @@ class ActivityRecordView extends WatchUi.View {
       }
     }
   }
-  var maxSpeed = 0.0;
-  var maxPWM = 0.0;
-  var maxCurrent = 0.0;
-  var maxPower = 0.0;
-  var maxTemp = 0.0;
-  var minTemp = 0.0;
-  var currentPWM = 0.0;
-  var correctedSpeed = 0.0;
-  var currentCurrent = 0.0;
-  var currentVoltage = 0.0;
-  var currentBatteryPerc = 0.0;
-  var sumCurrent = 0.0;
-  var callNb = 0.0;
-  var currentPower = 0.0;
-  var sumPower = 0.0;
-  var sessionDistance = 0.0;
-  var minVoltage = 255.0;
-  var maxVoltage = 0.0;
-  var minBatteryPerc = 0.0;
-  var maxBatteryPerc = 0.0;
-  var avgSpeed = 0.0;
-  var avgCurrent = 0.0;
-  var avgPower = 0.0;
 
   function updateFitData() {
     if (eucData.paired == true) {
@@ -534,7 +535,7 @@ class ActivityRecordView extends WatchUi.View {
       currentPWM = eucData.PWM.abs();
       correctedSpeed = eucData.correctedSpeed;
       currentCurrent = eucData.getCurrent();
-      if (currentVoltage != null) {
+      if (currentVoltage != null && currentVoltage > 40) {
         currentPower = currentCurrent * currentVoltage;
         mVoltageField.setData(currentVoltage); // id 2
         mPowerField.setData(currentPower); // id 4
@@ -619,7 +620,17 @@ class ActivityRecordView extends WatchUi.View {
 
       //mRunningTimeDebugField.setData(elapsedTime.value());
       mWheelName.setData(eucData.wheelName);
-      // add Trip distance from EUC
+
+      // add varia related data:
+      if (
+        eucData.useRadar == true &&
+        eucData.radar != null &&
+        mVehRelativeSpdField != null &&
+        mVehTotalCntField != null
+      ) {
+        mVehRelativeSpdField.setData(eucData.variaTargetSpeed);
+        mVehTotalCntField.setData(eucData.totalVehCount);
+      }
     }
     WatchUi.requestUpdate();
   }

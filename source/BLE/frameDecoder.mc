@@ -242,10 +242,10 @@ class VeteranDecoder {
   function checkChar(c) {
     if (state.equals("collecting") && frame != null) {
       var size = frame.size();
-
       if (
-        ((size == 22 || size == 30) && c.toNumber() != 0) ||
-        (size == 23 && (c & 0xfe).toNumber() != 0)
+        (size == 22 && c != 0x00) ||
+        (size == 30 && !(c == 0x00 || c == 0x07)) ||
+        (size == 23 && (c & 0xfe) != 0x00)
       ) {
         state = "done";
         reset();

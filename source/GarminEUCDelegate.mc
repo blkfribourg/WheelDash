@@ -119,6 +119,7 @@ class ExitConfirmationDelegate extends WatchUi.ConfirmationDelegate {
     if (response == WatchUi.CONFIRM_YES) {
       System.exit();
     }
+
     return true;
   }
 }
