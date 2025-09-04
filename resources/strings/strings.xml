@@ -1,5 +1,5 @@
 <strings>
-    <string id="AppName">WheelDash (S8)</string>
+    <string id="AppName">WheelDash (Beta)</string>
     <string id="settingsUrl">Settings JSON Url (experimental)</string>
     <string id="firstConnStr">Profile $1$ 1st connection\nPlease turn on your wheel\n and wait for connection\n\nensure only one wheel is ON!\n\nIf you enjoy this app :\n ko-fi.com/wheeldash</string>
     <string id="connectedStr">Profile $1$ connected !\n\nSaving wheel unique identifier</string>
@@ -22,11 +22,11 @@
     <string id="wheelBrand_p2">Wheel brand (Profile 2)</string>
     <string id="wheelBrand_p3">Wheel brand (Profile 3)</string>
     <string id="wheelBrand0">Gotway/Begode</string>
-    <string id="wheelBrand1">Leaperkim</string>
+    <string id="wheelBrand1">Leaperkim/NOSFET</string>
     <string id="wheelBrand2">Kingsong</string>
     <string id="wheelBrand3">Kingsong (old)</string>
     <string id="wheelBrand4">InMotion V11 (fw1.4)/V12 (experimental)</string>
-    <string id="wheelBrand5">InMotion V11Y/V13/V14 (experimental)</string>
+    <string id="wheelBrand5">InMotion V11Y/V13/V14/V9 (experimental)</string>
     <string id="wheelBrand6">EUC World (experimental)</string>
    
     

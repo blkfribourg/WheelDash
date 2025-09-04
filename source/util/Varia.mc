@@ -13,13 +13,7 @@ module Varia {
   var listener;
   var highFreq = 3135;
   var lowFreq = 1046;
-  var successTone = [
-    new Attention.ToneProfile(1760, 200),
-    new Attention.ToneProfile(0, 50),
-    new Attention.ToneProfile(1760, 150),
-    new Attention.ToneProfile(1568, 150),
-    new Attention.ToneProfile(2349, 400),
-  ];
+  var successTone = null;
 
   function initVaria() {
     if (eucData.useRadar == true) {
@@ -27,6 +21,17 @@ module Varia {
       //   System.println("init varia");
       eucData.radar = new AntPlus.BikeRadar(null);
       //  System.println("eucData.radar :" + eucData.radar);
+    }
+    
+    // Initialize successTone only if ToneProfile is available
+    if (Attention has :ToneProfile) {
+      successTone = [
+        new Attention.ToneProfile(1760, 200),
+        new Attention.ToneProfile(0, 50),
+        new Attention.ToneProfile(1760, 150),
+        new Attention.ToneProfile(1568, 150),
+        new Attention.ToneProfile(2349, 400),
+      ];
     }
   }
   function checkVehicule() {
@@ -119,7 +124,7 @@ module Varia {
         // EUCAlarms.playSound({ :toneProfile => toneProfile });
         if (eucData.motorbikeHeadset == true) {
           EUCAlarms.playSound(Attention.TONE_DISTANCE_ALERT);
-        } else {
+        } else if (Attention has :ToneProfile) {
           EUCAlarms.playSound([
             new Attention.ToneProfile(
               roundFreq(
@@ -148,7 +153,7 @@ module Varia {
         // EUCAlarms.playSound({ :toneProfile => toneProfile });
         if (eucData.motorbikeHeadset == true) {
           EUCAlarms.playSound(Attention.TONE_ALARM);
-        } else {
+        } else if (Attention has :ToneProfile) {
           EUCAlarms.playSound([
             new Attention.ToneProfile(
               roundFreq(
@@ -175,7 +180,7 @@ module Varia {
       ) {
         if (eucData.motorbikeHeadset == true) {
           EUCAlarms.playSound(Attention.TONE_SUCCESS);
-        } else {
+        } else if (Attention has :ToneProfile && successTone != null) {
           EUCAlarms.playSound(successTone);
         }
       }

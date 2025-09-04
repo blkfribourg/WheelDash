@@ -196,8 +196,9 @@ module eucData {
       // ----------------------------------------------------------
       // VETERAN ------------------------------------------------
       if (wheelBrand == 1) {
+        System.println(version);
         if (version < 4) {
-          // models before Patton
+          // Models before Patton
           if (voltage > 100.2) {
             battery = 100.0;
           } else if (voltage > 81.6) {
@@ -207,8 +208,11 @@ module eucData {
           } else {
             battery = 0.0;
           }
-        }
-        if ((version > 4 && version < 5) || version == 7) {
+        } else if (
+          (version >= 4 && version < 5) ||
+          version == 7 ||
+          version == 43 // Aero
+        ) {
           // Patton
           if (voltage > 125.25) {
             battery = 100.0;
@@ -219,8 +223,7 @@ module eucData {
           } else {
             battery = 0.0;
           }
-        }
-        if (version > 5 && version != 7) {
+        } else if ((version >= 5 || version == 42) && version != 7) {
           // Lynx
           if (voltage > 150.3) {
             battery = 100.0;

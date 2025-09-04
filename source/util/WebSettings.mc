@@ -9,18 +9,20 @@ function checkSettingsURL() {
   eucData.fetchCnt = 0;
   var settingsUrl = AppStorage.getSetting("settingsUrl");
   var uidsize = 10;
-  if (settingsUrl.length() > uidsize) {
+  
+  if (settingsUrl != null && settingsUrl.length() > uidsize) {
     eucData.JSONFetch = "Fetching";
     var web = new WebSettings();
     var url = settingsUrl.substring(0, settingsUrl.length() - uidsize);
-    var uid = settingsUrl.substring(-uidsize, null);
+    var uid = settingsUrl.substring(settingsUrl.length() - uidsize, settingsUrl.length());
     web.setParams(uid, url);
     web.startFetchTimer();
   }
-  if (settingsUrl.length() == 0) {
+  if (settingsUrl == null || settingsUrl.length() == 0) {
     // delete local JSON if no URL is set
     Storage.deleteValue("JSONSettings");
-    eucData.useProfileSelector = AppStorage.getSetting("useProfileSelector");
+    var useProfileSelector = AppStorage.getSetting("useProfileSelector");
+    eucData.useProfileSelector = (useProfileSelector != null) ? useProfileSelector : true;
   }
 }
 class WebSettings {

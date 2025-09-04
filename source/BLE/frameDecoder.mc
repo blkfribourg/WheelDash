@@ -359,11 +359,12 @@ class VeteranDecoder {
     }
 
     // implement chargeMode/speedAlert/speedTiltback later
-    eucData.version =
-      value.decodeNumber(Lang.NUMBER_FORMAT_SINT16, {
+    eucData.version = Math.floor(
+      value.decodeNumber(Lang.NUMBER_FORMAT_UINT16, {
         :offset => 28,
         :endianness => Lang.ENDIAN_BIG,
-      }) / 1000.0;
+      }) / 1000.0
+    );
     eucData.hPWM =
       value.decodeNumber(Lang.NUMBER_FORMAT_SINT16, {
         :offset => 34,
@@ -587,7 +588,7 @@ class IMV2Decoder {
             :endianness => Lang.ENDIAN_LITTLE,
           }) / 100.0;
       }
-      // V11Y V13 V14
+      // V11Y V13 V14 V9
       if (eucData.wheelBrand == 5) {
         eucData.voltage =
           transmittedFrame

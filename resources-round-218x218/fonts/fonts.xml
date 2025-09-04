@@ -1,0 +1,6 @@
+<fonts>
+    <font id="GorgaBig" filename="Roboto_Bold60.fnt" antialias="true"/>
+    <font id="Gorga" filename="Roboto_Regular19.fnt" antialias="true" />
+    <font id="Rajdhani" filename="Rajdhani36.fnt" antialias="true" />
+    <font id="Weather" filename="Weather30.fnt" antialias="true"/>
+</fonts>
