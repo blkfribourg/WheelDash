@@ -48,6 +48,10 @@
             <iq:product id="fenix7x"/>
             <iq:product id="fenix7xpro"/>
             <iq:product id="fenix7xpronowifi"/>
+            <iq:product id="fenix843mm"/>
+            <iq:product id="fenix847mm"/>
+            <iq:product id="fenix8solar47mm"/>
+            <iq:product id="fenix8solar51mm"/>
             <iq:product id="fr245"/>
             <iq:product id="fr245m"/>
             <iq:product id="fr255"/>
@@ -70,9 +74,14 @@
             <iq:product id="marqdriver"/>
             <iq:product id="marqexpedition"/>
             <iq:product id="marqgolfer"/>
+            <iq:product id="quatix847mm"/>
+            <iq:product id="quatix851mm"/>
+            <iq:product id="tactix847mm"/>
+            <iq:product id="tactix851mm"/>
             <iq:product id="venu"/>
             <iq:product id="venu2"/>
             <iq:product id="venu2plus"/>
+            <iq:product id="venu2s"/>
             <iq:product id="venu3"/>
             <iq:product id="venu3s"/>
             <iq:product id="venud"/>
