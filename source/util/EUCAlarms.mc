@@ -38,8 +38,18 @@ module EUCAlarms {
     }
   }
 
+  (:fullMemory)
   function initVibes(intensity) {
     if (Attention has :vibrate) {
+      if (intensity == 0) {
+        PWMVibe = null;
+        PWMDangerVibe = null;
+        speedVibe = null;
+        tempVibe = null;
+        killVibe = null;
+        return;
+      }
+
       PWMVibe = [
         new Attention.VibeProfile(intensity, 250),
         new Attention.VibeProfile(0, 250),
@@ -74,6 +84,18 @@ module EUCAlarms {
     }
   }
 
+  (:lowMemory)
+  function initVibes(intensity) {
+    // Allocate no VibeProfile while the profile selector is still resident.
+    // A single shared pulse is created lazily when an alarm actually fires.
+    PWMVibe = null;
+    PWMDangerVibe = null;
+    speedVibe = null;
+    tempVibe = null;
+    killVibe = null;
+  }
+
+  (:fullMemory)
   function initTones() {
     if (Attention has :ToneProfile) {
       if (eucData.motorbikeHeadset == true) {
@@ -117,6 +139,39 @@ module EUCAlarms {
         ];
         killTone = [new Attention.ToneProfile(10000, 1)];
       }
+    }
+  }
+
+  (:lowMemory)
+  function initTones() {
+    // Some Instinct firmware does not expose tone support. Do not resolve its
+    // tone constants unless the capability is present.
+    if (Attention has :ToneProfile) {
+      // Built-in tones require no custom ToneProfile arrays.
+      PWMTone = Attention.TONE_INTERVAL_ALERT;
+      PWMDangerTone = Attention.TONE_TIME_ALERT;
+      speedTone = Attention.TONE_CANARY;
+      tempTone = Attention.TONE_ALERT_HI;
+    } else {
+      PWMTone = null;
+      PWMDangerTone = null;
+      speedTone = null;
+      tempTone = null;
+    }
+    killTone = null;
+  }
+
+  (:fullMemory)
+  function ensureVibes() {}
+
+  (:lowMemory)
+  function ensureVibes() {
+    if (PWMVibe == null && eucData.vibeIntensity != 0 &&
+        Attention has :vibrate) {
+      PWMVibe = [new Attention.VibeProfile(eucData.vibeIntensity, 250)];
+      PWMDangerVibe = PWMVibe;
+      speedVibe = PWMVibe;
+      tempVibe = PWMVibe;
     }
   }
 
@@ -169,6 +224,7 @@ module EUCAlarms {
         ) {
           nextTrigger = new Time.Moment(Time.now().value());
           nextTrigger.add(new Time.Duration(1));
+          ensureVibes();
           if (PWMVibe != null && eucData.vibeIntensity != 0) {
             Attention.vibrate(PWMVibe);
             vibeKilled = false;
@@ -180,6 +236,7 @@ module EUCAlarms {
           PWMAlarm = true;
         }
         if (currentPWM > PWM2_thr && triggerAlarm == true && PWM2_thr != 0) {
+          ensureVibes();
           if (PWMDangerVibe != null && eucData.vibeIntensity != 0) {
             Attention.vibrate(PWMDangerVibe);
             vibeKilled = false;
@@ -196,6 +253,7 @@ module EUCAlarms {
         if (currentPWM > PWM1_thr && triggerAlarm == true) {
           nextTrigger = new Time.Moment(Time.now().value());
           nextTrigger.add(new Time.Duration(1));
+          ensureVibes();
           if (PWMVibe != null && eucData.vibeIntensity != 0) {
             Attention.vibrate(PWMVibe);
             vibeKilled = false;
@@ -225,6 +283,7 @@ module EUCAlarms {
         // PWM alarm have priority over temperature alarm
         nextTrigger = new Time.Moment(Time.now().value());
         nextTrigger.add(new Time.Duration(1));
+        ensureVibes();
         if (tempVibe != null && eucData.vibeIntensity != 0) {
           Attention.vibrate(tempVibe);
           vibeKilled = false;
@@ -253,6 +312,7 @@ module EUCAlarms {
         nextTrigger = new Time.Moment(Time.now().value());
         nextTrigger.add(new Time.Duration(1));
         // PWM alarm and temperature alarm have priority over speed alarm
+        ensureVibes();
         if (speedVibe != null && eucData.vibeIntensity != 0) {
           Attention.vibrate(speedVibe);
           vibeKilled = false;

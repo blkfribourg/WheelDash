@@ -1,12 +1,13 @@
 using Toybox.System;
 
 module eucData {
+  var currentProfile = 0; // current profile, 0 if no profile or profile selector disabled
   var useProfileSelector = true;
   var settingsChanged = false;
   var JSONFetch = "";
   var PSlock = false;
   var profilesNb = 0; // number of profiles
-  var fetchCnt;
+  var fetchCnt = 0;
   var wheelBrand;
   var wheelName;
   var paired = false;
@@ -152,7 +153,7 @@ module eucData {
   var speedLimitOn = false;
   var speedLimit = 0;
   var tiltBackSpeed = null;
-  var WDtiltBackSpd = 0;
+  var WDtiltBackSpd = -1;
   var spdLimFeatEnabled = false;
 
   // Engo
@@ -196,7 +197,7 @@ module eucData {
       // ----------------------------------------------------------
       // VETERAN ------------------------------------------------
       if (wheelBrand == 1) {
-        System.println(version);
+        //  System.println(version);
         if (version < 4) {
           // Models before Patton
           if (voltage > 100.2) {
@@ -209,11 +210,12 @@ module eucData {
             battery = 0.0;
           }
         } else if (
-          (version >= 4 && version < 5) ||
+          version == 4 ||
           version == 7 ||
-          version == 43 // Aero
+          version == 43 ||
+          version == 45
         ) {
-          // Patton
+          // Patton, Patton S, Nosfet Aero, Nosfet Xeno (30S)
           if (voltage > 125.25) {
             battery = 100.0;
           } else if (voltage > 102.0) {
@@ -223,8 +225,14 @@ module eucData {
           } else {
             battery = 0.0;
           }
-        } else if ((version >= 5 || version == 42) && version != 7) {
-          // Lynx
+        } else if (
+          version == 5 ||
+          version == 6 ||
+          version == 9 ||
+          version == 42 ||
+          version == 44
+        ) {
+          // Lynx, Lynx S, Sherman L, Nosfet Apex, Nosfet Aeon
           if (voltage > 150.3) {
             battery = 100.0;
           } else if (voltage > 122.4) {
@@ -234,6 +242,19 @@ module eucData {
           } else {
             battery = 0.0;
           }
+        } else if (version == 8) {
+          // Oryx
+          if (voltage > 175.35) {
+            battery = 100.0;
+          } else if (voltage > 142.8) {
+            battery = (voltage - 141.23) / 0.34125;
+          } else if (voltage > 138.86) {
+            battery = (voltage - 138.86) / 0.853125;
+          } else {
+            battery = 0.0;
+          }
+        } else {
+          battery = 1.0;
         }
       }
 
@@ -254,6 +275,8 @@ module eucData {
         ];
         var KSwheels100v = ["KS-S19"];
         var KSwheels126v = ["KS-S20", "KS-S22"];
+        var KSwheels151v = ["KS-F18P"];
+        var KSwheels176v = ["KS-F22P"];
 
         if (KSwheels84v.indexOf(model) != -1) {
           if (voltage > 83.5) {
@@ -282,6 +305,26 @@ module eucData {
             battery = (voltage - 99.75) / 0.255;
           } else if (voltage > 96.0) {
             battery = (voltage - 96.0) / 0.675;
+          } else {
+            battery = 0.0;
+          }
+        } else if (KSwheels151v.indexOf(model) != -1) {
+          if (voltage > 150.3) {
+            battery = 100.0;
+          } else if (voltage > 122.4) {
+            battery = (voltage - 119.7) / 0.306;
+          } else if (voltage > 115.2) {
+            battery = (voltage - 115.2) / 0.81;
+          } else {
+            battery = 0.0;
+          }
+        } else if (KSwheels176v.indexOf(model) != -1) {
+          if (voltage > 175.35) {
+            battery = 100.0;
+          } else if (voltage > 142.8) {
+            battery = (voltage - 139.65) / 0.357;
+          } else if (voltage > 134.4) {
+            battery = (voltage - 134.4) / 0.945;
           } else {
             battery = 0.0;
           }
@@ -325,7 +368,7 @@ module eucData {
         }
       }
       if (wheelBrand == 5) {
-        if (model.equals("V11")) {
+        if (model.equals("V11") || model.equals("V9")) {
           if (voltage > 83.5) {
             battery = 100.0;
           } else if (voltage > 68.0) {

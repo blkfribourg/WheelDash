@@ -6,6 +6,7 @@
 using Toybox.BluetoothLowEnergy as Ble;
 using Toybox.System;
 
+(:fullMemory)
 module engoPM {
   var BLE_ENGO_MAIN as Toybox.BluetoothLowEnergy.Uuid =
     Toybox.BluetoothLowEnergy.longToUuid(
@@ -82,4 +83,16 @@ module engoPM {
       // System.println("Engo profile OK");
     }
   }
+}
+
+(:lowMemory)
+module engoPM {
+  var BLE_ENGO_MAIN = null;
+  var BLE_SERV_ACTIVELOOK = null;
+  var BLE_CHAR_TX = null;
+  var BLE_CHAR_RX = null;
+  var BLE_CHAR_USERINPUT = null;
+
+  function init() {}
+  function registerProfiles() {}
 }

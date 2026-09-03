@@ -11,22 +11,16 @@ class GarminEUCApp extends Application.AppBase {
   private var psMenuDelegate;
   private var activityRecordView;
   private var mainTimer;
+  private var startupTimer;
   function initialize() {
-    eucData.limitedMemory = System.getSystemStats().totalMemory < 128000;
+    // Garmin reports a nominal 128 KiB heap as 131072 bytes.
+    eucData.limitedMemory = System.getSystemStats().totalMemory <= 131072;
     AppBase.initialize();
     // alarmsTimer = new Timer.Timer();
   }
 
   // onStart() is called on application start up
   function onStart(state as Dictionary?) as Void {
-    //if setting change was detected it means checkSettingsURL was already called
-    checkSettingsURL();
-   
-
-    // REMINDER !!! --------------------------------------------------------------------------
-    //eucData.useProfileSelector is set inside checkSettingsURL even if not using json config !!
-    // ---------------------------------------------------------------------------------------
-
     // Sandbox zone
     // Varia.targetObject = fakeVaria(3);
     // end of sandbox
@@ -53,18 +47,35 @@ class GarminEUCApp extends Application.AppBase {
 
   // Return the initial view of your application here
   function getInitialView() {
-    // System.println("initView :" + eucData.JSONFetch);
-    if (!eucData.JSONFetch.equals("")) {
-      psMenuView = new ECMessageView(null);
-      return [psMenuView];
-    } else {
-      psMenuView = profileSelector.createPSMenu();
-      psMenuDelegate = profileSelector.createPSDelegate();
-      mainTimer = new MainTimer(psMenuDelegate);
-      mainTimer.startTimer();
-      return [psMenuView, psMenuDelegate];
-    }
+    // Instinct 3 can throw if Application.Properties is read before the first
+    // view is active. Show the existing loading view, then initialize once the
+    // UI event loop is running.
+    psMenuView = new ECMessageView(null);
+    startupTimer = new Timer.Timer();
+    startupTimer.start(method(:finishStartup), 500, false);
+    return [psMenuView];
   } // Timer callback for various alarms & update UI
+
+  function finishStartup() as Void {
+    if (startupTimer != null) {
+      startupTimer.stop();
+      startupTimer = null;
+    }
+
+    // Instinct 3 firmware can fail inside Application.Properties.getValue().
+    // Load and use AppBase's compatible property interface instead.
+    Application.getApp().loadProperties();
+    checkSettingsURL();
+    if (eucData.JSONFetch.equals("")) {
+      resetApp();
+      WatchUi.switchToView(
+        psMenuView,
+        psMenuDelegate,
+        WatchUi.SLIDE_IMMEDIATE
+      );
+    }
+  }
+
   function resetApp() {
     //   System.println("reset");
 

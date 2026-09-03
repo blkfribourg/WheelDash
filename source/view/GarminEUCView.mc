@@ -110,7 +110,10 @@ class GarminEUCView extends WatchUi.View {
     }
     cDrawables[:SpeedNumber].setText(speedNumberStr);
     //cDrawables[:topArc].setValues(WheelData.currentSpeed.toFloat(), WheelData.speedLimit);
-    if (eucData.topBar == 0) {
+    // The 176px semi-octagonal layout is a duty-cycle dashboard: its main
+    // perimeter gauge always shows PWM, independently of the round-layout
+    // top-bar preference.
+    if (dc.getWidth() == 176 || eucData.topBar == 0) {
       cDrawables[:topArc].setValues(eucData.PWM.toFloat(), 100);
     } else {
       cDrawables[:topArc].setValues(

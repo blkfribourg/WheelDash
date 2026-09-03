@@ -5,26 +5,46 @@ import Toybox.Timer;
 using Toybox.WatchUi;
 using Toybox.Application.Storage;
 
+(:fullMemory)
 function checkSettingsURL() {
   eucData.fetchCnt = 0;
   var settingsUrl = AppStorage.getSetting("settingsUrl");
   var uidsize = 10;
-  
-  if (settingsUrl != null && settingsUrl.length() > uidsize) {
+
+  if (
+    settingsUrl != null &&
+    settingsUrl instanceof Lang.String &&
+    settingsUrl.length() > uidsize
+  ) {
     eucData.JSONFetch = "Fetching";
     var web = new WebSettings();
     var url = settingsUrl.substring(0, settingsUrl.length() - uidsize);
-    var uid = settingsUrl.substring(settingsUrl.length() - uidsize, settingsUrl.length());
+    var uid = settingsUrl.substring(
+      settingsUrl.length() - uidsize,
+      settingsUrl.length()
+    );
     web.setParams(uid, url);
     web.startFetchTimer();
-  }
-  if (settingsUrl == null || settingsUrl.length() == 0) {
-    // delete local JSON if no URL is set
+  } else {
+    // No valid remote URL: use the watch settings and discard stale web data.
     Storage.deleteValue("JSONSettings");
     var useProfileSelector = AppStorage.getSetting("useProfileSelector");
-    eucData.useProfileSelector = (useProfileSelector != null) ? useProfileSelector : true;
+    eucData.useProfileSelector =
+      useProfileSelector != null ? useProfileSelector : true;
   }
 }
+
+(:lowMemory)
+function checkSettingsURL() {
+  eucData.fetchCnt = 0;
+  eucData.JSONFetch = "";
+  Storage.deleteValue("JSONSettings");
+  var useProfileSelector = AppStorage.getSetting("useProfileSelector");
+  eucData.useProfileSelector =
+    useProfileSelector != null ? useProfileSelector : true;
+}
+
+(:fullMemory)
 class WebSettings {
   var confirm = false;
 
@@ -218,7 +238,7 @@ class WebSettings {
       //checking if additionnal profiles:
       var pStrIdx = keys[i].find("_p");
       if (pStrIdx != null) {
-        var pStr = keys[i].substring(pStrIdx + 2, null);
+        var pStr = keys[i].substring(pStrIdx + 2, keys[i].length());
         if (pStr != null) {
           if (pStr.toNumber() > eucData.profilesNb) {
             //     System.println("new profile detected:" + pStr);
@@ -290,6 +310,7 @@ class WebSettings {
     return true;
   }
 }
+(:fullMemory)
 function compareJSON2(json1 as Dictionary, json2 as Dictionary) {
   // If both are not dictionaries, compare directly
   if (!(json1 instanceof Dictionary) || !(json2 instanceof Dictionary)) {
@@ -325,6 +346,7 @@ function compareJSON2(json1 as Dictionary, json2 as Dictionary) {
   return true;
 }
 
+(:fullMemory)
 class SettingConfirmationDelegate extends WatchUi.ConfirmationDelegate {
   var parent;
   var data;

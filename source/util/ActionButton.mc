@@ -6,6 +6,7 @@ class ActionButton {
   var lightToggleIndex = 0;
   //var lockStatus = 0;
   var recordActivityButton;
+  var speedLimiterButton;
   var DFViewButton;
   var cycleLightButton;
   var beepButton;
@@ -14,11 +15,15 @@ class ActionButton {
   //var lockButton;
   var queue;
   var queueRequired;
-  function setEUCDict() {
-    eucDict = getEUCSettingsDict();
+  function setEUCDict(dict) {
+    eucDict = dict;
   }
   function triggerAction(bleDelegate, keyNumber, _mainDelegate, _queue) {
-    if (DFViewButton == keyNumber && eucData.dfViewOnly == false) {
+    if (
+      BuildFeatures.DFLIKE_ENABLED &&
+      DFViewButton == keyNumber &&
+      eucData.dfViewOnly == false
+    ) {
       _mainDelegate.goToDFView();
     }
     //  ESP32 Horn triggers even if EUCs disconnected
@@ -36,7 +41,7 @@ class ActionButton {
     }
     //engo related actions
     if (eucData.engoPaired == true) {
-      if (engoNextButton == keyNumber) {
+      if (BuildFeatures.ENGO_ENABLED && engoNextButton == keyNumber) {
         eucData.engoPage = eucData.engoPage + 1;
         if (eucData.engoPage > eucData.engoPageNb) {
           eucData.engoPage = 1;
@@ -44,7 +49,7 @@ class ActionButton {
         bleDelegate.clearScreen();
       }
 
-      if (engoLumaButton == keyNumber) {
+      if (BuildFeatures.ENGO_ENABLED && engoLumaButton == keyNumber) {
         bleDelegate.incEngoLuma();
       }
     }
@@ -57,17 +62,17 @@ class ActionButton {
         _mainDelegate.goToActivityView();
       }
 
-      /* DISABLED IN DEV -- Speed limiter code ---
+      // DISABLED IN DEV -- Speed limiter code ---
       if (
         speedLimiterButton == keyNumber &&
         eucData.correctedSpeed < 3 &&
         eucData.speedLimit > 0
       ) {
         queueRequired = true;
-        // Action = cycle light modes
+
         if (eucData.wheelBrand == 0) {
           // gotway/begode
-          var data;
+
           var limit;
           if (eucData.speedLimitOn == true) {
             if (eucData.WDtiltBackSpd != 0) {
@@ -80,14 +85,12 @@ class ActionButton {
             limit = eucData.speedLimit;
             // eucData.speedLimitOn = true;
           }
-          //  System.println("tiltb " + eucData.tiltBackSpeed);
-          //  System.println("currentLimit " + limit);
+          // System.println("tiltb " + eucData.tiltBackSpeed);
+          // System.println("currentLimit " + limit);
           speedLimiter(queue, bleDelegate, limit);
         }
-        if (eucData.wheelBrand == 1) {
-          // Implement speed limiter based on PWM tiltback ?
-        }
         if (
+          eucData.wheelBrand == 1 ||
           eucData.wheelBrand == 2 ||
           eucData.wheelBrand == 3 ||
           eucData.wheelBrand == 4 ||
@@ -96,17 +99,36 @@ class ActionButton {
           var limit;
 
           if (eucData.speedLimitOn == false) {
-            limit = eucData.speedLimit;
+            // For KS, don't allow enabling before alarm speeds are received
+            // from the wheel — null values would be sent as 0, zeroing alarms.
+            if (
+              (eucData.wheelBrand == 2 || eucData.wheelBrand == 3) &&
+              (eucData.KSAlarm1Speed == null ||
+                eucData.KSAlarm2Speed == null ||
+                eucData.KSAlarm3Speed == null)
+            ) {
+              // Alarm speeds not yet received — request them from the wheel.
+              var getAlarms = [
+                0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x98, 0x14, 0x5a, 0x5a,
+              ]b;
+              queue.add([bleDelegate.getChar(), getAlarms]);
+            } else {
+              limit = eucData.speedLimit;
+              speedLimiter(queue, bleDelegate, limit);
+            }
           } else {
             limit = eucData.WDtiltBackSpd;
+            speedLimiter(queue, bleDelegate, limit);
           }
-
-          speedLimiter(queue, bleDelegate, limit);
         }
       }
-      */
+
       //if (bleDelegate != null && eucData.paired == true) {
       if (cycleLightButton == keyNumber) {
+        if (eucDict == null) {
+          eucDict = getEUCSettingsDict();
+        }
         queueRequired = true;
         // Action = cycle light modes
         if (eucData.wheelBrand == 0) {

@@ -31,6 +31,18 @@ class GarminEUCDelegate extends WatchUi.BehaviorDelegate {
   }
 
   function onMenu() as Boolean {
+    if (menu == null || menu2Delegate == null) {
+      var settingsDict = getEUCSettingsDict();
+      actionButtonTrigger.setEUCDict(settingsDict);
+      menu = createMenu(settingsDict.getConfigLabels(), "Settings");
+      menu2Delegate = new GarminEUCMenu2Delegate_generic(
+        menu,
+        eucBleDelegate,
+        queue,
+        mainView,
+        settingsDict
+      );
+    }
     WatchUi.pushView(menu, menu2Delegate, WatchUi.SLIDE_UP);
     return true;
   }
@@ -40,6 +52,7 @@ class GarminEUCDelegate extends WatchUi.BehaviorDelegate {
     }
     if (
       swipeEvent.getDirection() == WatchUi.SWIPE_LEFT &&
+      BuildFeatures.DFLIKE_ENABLED &&
       eucData.slideToDFView == true
     ) {
       goToDFView();
@@ -70,6 +83,9 @@ class GarminEUCDelegate extends WatchUi.BehaviorDelegate {
   }
 
   function getActivityView() {
+    if (activityView == null) {
+      activityView = new ActivityRecordView();
+    }
     return activityView;
   }
 
@@ -85,9 +101,10 @@ class GarminEUCDelegate extends WatchUi.BehaviorDelegate {
   }
   function goToActivityView() {
     //System.println("bringing activity view");
+    var currentActivityView = getActivityView();
     WatchUi.pushView(
-      activityView,
-      new ActivityRecordDelegate(activityView),
+      currentActivityView,
+      new ActivityRecordDelegate(currentActivityView),
       WatchUi.SLIDE_UP
     ); // Switch to activity view
   }
@@ -95,7 +112,7 @@ class GarminEUCDelegate extends WatchUi.BehaviorDelegate {
     DFlikeView = _DFLikeView;
   }
   function goToDFView() {
-    if (DFlikeView != null) {
+    if (BuildFeatures.DFLIKE_ENABLED && DFlikeView != null) {
       if (DFViewOn == true) {
         WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
         DFViewOn = false;

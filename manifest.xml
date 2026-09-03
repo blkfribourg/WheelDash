@@ -24,6 +24,7 @@
             <iq:product id="d2air"/>
             <iq:product id="d2airx10"/>
             <iq:product id="d2mach1"/>
+            <iq:product id="descentg1"/>
             <iq:product id="descentmk2"/>
             <iq:product id="descentmk2s"/>
             <iq:product id="descentmk343mm"/>
@@ -44,7 +45,6 @@
             <iq:product id="fenix6"/>
             <iq:product id="fenix6pro"/>
             <iq:product id="fenix6s"/>
-            <iq:product id="fenix6spro"/>
             <iq:product id="fenix6xpro"/>
             <iq:product id="fenix7"/>
             <iq:product id="fenix7pro"/>
@@ -56,8 +56,16 @@
             <iq:product id="fenix7xpronowifi"/>
             <iq:product id="fenix843mm"/>
             <iq:product id="fenix847mm"/>
+            <iq:product id="fenix8pro47mm"/>
             <iq:product id="fenix8solar47mm"/>
             <iq:product id="fenix8solar51mm"/>
+            <iq:product id="fenix943mm"/>
+            <iq:product id="fenix947mm"/>
+            <iq:product id="fenix9pro43mm"/>
+            <iq:product id="fenix9pro47mm"/>
+            <iq:product id="fenix9pro51mm"/>
+            <iq:product id="fenix9prosolar47mm"/>
+            <iq:product id="fenix9prosolar51mm"/>
             <iq:product id="fenixe"/>
             <iq:product id="fr245"/>
             <iq:product id="fr245m"/>
@@ -69,6 +77,12 @@
             <iq:product id="fr945lte"/>
             <iq:product id="fr955"/>
             <iq:product id="fr965"/>
+            <iq:product id="fr970"/>
+            <iq:product id="instinct2"/>
+            <iq:product id="instinct2x"/>
+            <iq:product id="instinct3solar45mm"/>
+            <iq:product id="instinctcrossover"/>
+            <iq:product id="instincte45mm"/>
             <iq:product id="legacyherofirstavenger"/>
             <iq:product id="legacysagadarthvader"/>
             <iq:product id="marq2"/>
@@ -86,12 +100,15 @@
             <iq:product id="venu2plus"/>
             <iq:product id="venu3"/>
             <iq:product id="venu3s"/>
+            <iq:product id="venu441mm"/>
+            <iq:product id="venu445mm"/>
             <iq:product id="venud"/>
             <iq:product id="vivoactive3m"/>
             <iq:product id="vivoactive3mlte"/>
             <iq:product id="vivoactive4"/>
             <iq:product id="vivoactive4s"/>
             <iq:product id="vivoactive5"/>
+            <iq:product id="vivoactive6"/>
         </iq:products>
         <!--
             Use "Monkey C: Edit Permissions" from the Visual Studio Code command

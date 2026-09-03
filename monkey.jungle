@@ -1,1 +1,6 @@
 project.manifest = manifest.xml
+
+# Full builds keep Easy Config web/JSON support. Semi-octagonal, constrained
+# devices compile it out and include the local-settings implementation instead.
+base.excludeAnnotations = lowMemory
+semioctagon.excludeAnnotations = fullMemory

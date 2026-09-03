@@ -1,0 +1,9 @@
+<resources>
+    <!-- Engo support is excluded from low-memory semi-octagonal builds. These
+         overrides replace the large base configuration payloads while keeping
+         their resource identifiers available during compilation. -->
+    <jsonData id="EngoCfg1">[]</jsonData>
+    <jsonData id="EngoCfg2">[]</jsonData>
+    <jsonData id="EngoCfg3">[]</jsonData>
+    <jsonData id="EngoCfg4">[]</jsonData>
+</resources>

@@ -6,12 +6,14 @@ using Toybox.Timer;
 using Toybox.System;
 class messageView extends WatchUi.View {
   var BleDelegate;
+  (:fullMemory)
   var textToDisplay;
   var profileNb;
   var popViewDelay;
   var isDone = false;
   var psDelegate;
   var messageType;
+  (:fullMemory)
   private var cStrings = ({}) as Dictionary<Lang.Symbol, Lang.String>; // and also cached strings
   function initialize(_BleDelegate, _profileNb, _psDelegate, _messageType) {
     BleDelegate = _BleDelegate;
@@ -29,8 +31,15 @@ class messageView extends WatchUi.View {
     View.initialize();
   }
 
+  (:fullMemory)
   function onLayout(dc) {
     if (messageType.equals("1stConn")) {
+      var messageX = dc.getWidth() / 2;
+      var messageY = dc.getHeight() / 2;
+      if (WatchUi has :getSubscreen && WatchUi.getSubscreen() != null) {
+        messageX = 68;
+        messageY = 98;
+      }
       cStrings[:firstConn as Lang.Symbol] =
         WatchUi.loadResource(Rez.Strings.firstConnStr) as Lang.String;
       cStrings[:connected] = WatchUi.loadResource(Rez.Strings.connectedStr);
@@ -38,20 +47,28 @@ class messageView extends WatchUi.View {
         :text => Lang.format(cStrings[:firstConn], [profileNb]),
         :color => Graphics.COLOR_WHITE,
         :font => Graphics.FONT_XTINY,
-        :locX => dc.getWidth() / 2,
-        :locY => dc.getHeight() / 2,
+        :locX => messageX,
+        :locY => messageY,
         :justification => Graphics.TEXT_JUSTIFY_CENTER |
         Graphics.TEXT_JUSTIFY_VCENTER,
       });
     }
   }
 
+  (:lowMemory)
+  function onLayout(dc) {
+    // Avoid loading the long localized strings and allocating WatchUi.Text
+    // while the profile selector is still being released.
+  }
+
   // Called when this View is brought to the foreground. Restore
   // the state of this View and prepare it to be shown. This includes
   // loading resources into memory.
-  function onShow() {}
+  function onShow() {
+  }
 
   // Update the view
+  (:fullMemory)
   function onUpdate(dc) {
     if (eucData.paired == true) {
       if (messageType.equals("1stConn")) {
@@ -81,6 +98,40 @@ class messageView extends WatchUi.View {
     dc.clear();
     textToDisplay.draw(dc);
   }
+
+  (:lowMemory)
+  function onUpdate(dc) {
+    dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_BLACK);
+    dc.clear();
+    dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
+
+    var centerX = dc.getWidth() / 2;
+    if (eucData.paired == true) {
+      dc.drawText(
+        centerX,
+        dc.getHeight() / 2,
+        Graphics.FONT_XTINY,
+        "Wheel connected",
+        Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+      );
+      popViewDelay = popViewDelay - eucData.updateDelay;
+      if (popViewDelay < 0 && psDelegate != null) {
+        WatchUi.pushView(
+          psDelegate.getView(),
+          psDelegate.getDelegate(),
+          WatchUi.SLIDE_IMMEDIATE
+        );
+      }
+    } else {
+      var centerY = dc.getHeight() / 2;
+      dc.drawText(centerX, centerY - 22, Graphics.FONT_XTINY,
+        "First connection", Graphics.TEXT_JUSTIFY_CENTER);
+      dc.drawText(centerX, centerY - 7, Graphics.FONT_XTINY,
+        "Turn wheel on", Graphics.TEXT_JUSTIFY_CENTER);
+      dc.drawText(centerX, centerY + 8, Graphics.FONT_XTINY,
+        "Only one wheel", Graphics.TEXT_JUSTIFY_CENTER);
+    }
+  }
 }
 
 class ECMessageView extends WatchUi.View {
@@ -99,13 +150,19 @@ class ECMessageView extends WatchUi.View {
   }
 
   function onLayout(dc) {
+    var messageX = dc.getWidth() / 2;
+    var messageY = dc.getHeight() / 2;
+    if (WatchUi has :getSubscreen && WatchUi.getSubscreen() != null) {
+      messageX = 68;
+      messageY = 98;
+    }
     WaitMsg = WatchUi.loadResource(Rez.Strings.ECProfilesStr);
     textToDisplay = new WatchUi.Text({
       :text => Lang.format(WaitMsg, [eucData.fetchCnt + 1]),
       :color => Graphics.COLOR_WHITE,
       :font => Graphics.FONT_XTINY,
-      :locX => dc.getWidth() / 2,
-      :locY => dc.getHeight() / 2,
+      :locX => messageX,
+      :locY => messageY,
       :justification => Graphics.TEXT_JUSTIFY_CENTER |
       Graphics.TEXT_JUSTIFY_VCENTER,
     });

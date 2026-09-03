@@ -3,9 +3,7 @@
     <string id="settingsUrl">Settings JSON Url (experimental)</string>
     <string id="firstConnStr">Profile $1$ 1st connection\nPlease turn on your wheel\n and wait for connection\n\nensure only one wheel is ON!\n\nIf you enjoy this app :\n ko-fi.com/wheeldash</string>
     <string id="connectedStr">Profile $1$ connected !\n\nSaving wheel unique identifier</string>
-    <string id="spdLimiterStr">Speed limiter feature\n is enabled!\n\nPlease ensure your tiltback\nis working properly with\nlimiter on or off!</string>
     <string id="ECProfilesStr">Loading Easy Config\nProfiles\ntry $1$ /3\nPlease Wait...</string>
-    <string id="ECFailedStr">Failed loading\nEasy Config\nProfiles\n $1$ </string>
     <!-- Strings, that are used in Connect IQ Settings menu, like 
         one you see in Garmin Express or Garmin Connect Mobile -->
     <string id="defaultProfile">Profile to use by default</string>
@@ -55,9 +53,13 @@
     <string id="engoLumaButtonMap_p2">Button mapping to cycle Engo glasses brightness (Profile 2)</string>
     <string id="engoLumaButtonMap_p3">Button mapping to cycle Engo glasses brightness (Profile 3)</string>
 
-    
-    <string id="lockButtonMap_p1">DONOTUSE Button mapping to wheel lock/unlock (Profile 1)</string>
+    <string id="spdLimitButtonMap_p1">Button mapping to speed limiter (Profile 1)</string>
+    <string id="spdLimitButtonMap_p2">Button mapping to speed limiter (Profile 2)</string>
+    <string id="spdLimitButtonMap_p3">Button mapping to speed limiter (Profile 3)</string>
 
+    
+
+    
     <string id="none">None</string>
     <string id="startStopButton">Start/Stop button</string>
     <string id="middleButton">Middle button</string>
@@ -180,6 +182,19 @@
     <string id="alarmThreshold_temp_p1">Temperature that trigger an alarm (Profile 1)</string>
     <string id="alarmThreshold_temp_p2">Temperature that trigger an alarm (Profile 2)</string>
     <string id="alarmThreshold_temp_p3">Temperature that trigger an alarm (Profile 3)</string>
+
+    <string id="speedLimit_p1">Speed limit when limiter ON (Profile 1)</string>
+    <string id="speedLimit_p2">Speed limit when limiter ON (Profile 2)</string>
+    <string id="speedLimit_p3">Speed limit when limiter ON (Profile 3)</string>
+
+    <string id="tiltbackSpeed_p1">Tiltback speed (0 to disable) (Profile 1)</string>
+    <string id="tiltbackSpeed_p2">Tiltback speed (0 to disable) (Profile 2)</string>
+    <string id="tiltbackSpeed_p3">Tiltback speed (0 to disable) (Profile 3)</string>
+
+
+
+
+    
    <!--
     <string id="UIsettings">App UI settings</string>
     <string id="UIsettingsDescription">UI settings, please be aware that watch battery usage will be impacted by refresh rate (battery usage / accuracy trade-off)</string>
@@ -196,12 +211,6 @@
     <string id="activityRecordingOnStartup">Automatic activity recording</string>
     <string id="activitySavingOnExit">Activity save on exit</string>
 
-   <string id="wheelSettings">Wheels settings</string>
-   <string id="wheelSettingsDescription">Adjust voltage correction for your wheel (mandatory for the reported values to be accurate).</string>
-
-   <string id="rideStats">Ride info displayed on the bottom</string>
-   <string id="rideStatsDescription">Select the ride info to be displayed, if more than one selected, selected info will be diplayed in a loop every 2 sec </string>
-
    <string id="averageMovingSpeedStatistic">Display average moving speed (when speed >3 km/h or 2 mph)</string>
    <string id="topSpeedStatistic">Display top speed</string>
    <string id="watchBatteryConsumptionStatistic">Display watch battery consumption (%/h)</string>
@@ -212,7 +221,7 @@
    <string id="watchBatteryStatistic">Display watch battery</string>
    <string id="profileName">Display profile name</string>
    <string id="debugView">Enable Debug Mode (view)</string>
-   <string id="useEngo">ActiveView Engo support</string>
+   <string id="useEngo">ActiveLook Engo support</string>
     <string id="engoTouch">Switch view mode</string>    
     <string id="engoTouch0">Gesture (proximity sensor)</string>
     <string id="engoTouch1">Capacitive Button</string>
@@ -290,7 +299,6 @@
     <string id="speed_unit_mph">mph</string>
     <string id="pwm_graph_label">PWM</string>
     <string id="pwm_label">PWM</string>
-    <string id="pwm_unit"></string>
     <string id="voltage_graph_label">Voltage</string>
     <string id="voltage_label">Voltage</string>
     <string id="voltage_unit">V</string>
@@ -322,9 +330,7 @@
     <string id="avgSpeed_label">Session average speed</string>
     
     <string id="avgCurrent_label">Session average current</string>
-    <string id="avgCurrent_unit">A</string>
     <string id="avgPower_label">Session average power</string>
-    <string id="avgPower_unit">W</string>
     <string id="EORBattery_label">End of ride battery %</string>
 
     <string id="minVoltage_label">Session min voltage</string>

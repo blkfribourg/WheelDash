@@ -2,10 +2,10 @@ import Toybox.Graphics;
 import Toybox.WatchUi;
 using Toybox.Timer;
 using Toybox.ActivityMonitor;
-import Toybox.Weather;
 using Toybox.System;
 using Toybox.Time.Gregorian;
 import Toybox.Position;
+(:fullMemory)
 class DFView extends WatchUi.View {
   hidden var hasHr = null;
   hidden var hasWX = null;
@@ -33,7 +33,7 @@ class DFView extends WatchUi.View {
     }
 
     if (Toybox has :Weather) {
-      hasWX = Weather has :getCurrentConditions;
+      hasWX = Toybox.Weather has :getCurrentConditions;
     }
 
     fieldNames = new [eucData.fieldNB];
@@ -126,10 +126,10 @@ class DFView extends WatchUi.View {
       if (weatherReqTimer == null || weatherReqTimer < 0) {
         //System.println("weather refresh");
         weatherReqTimer = weatherReqTiming;
-        current_weather = Weather.getCurrentConditions();
+        current_weather = Toybox.Weather.getCurrentConditions();
 
         if (current_weather == null) {
-          hourly_weather = getWXFromHourly(Weather.getHourlyForecast());
+          hourly_weather = getWXFromHourly(Toybox.Weather.getHourlyForecast());
         }
       } else {
         weatherReqTimer = weatherReqTimer - eucData.updateDelay;
@@ -840,6 +840,7 @@ class DFView extends WatchUi.View {
       //  renderVariaLateralIndicator(dc);
     }
   }
+
   function drawDFTextValue(dc, xpos, ypos, valueID) {
     var font;
     if (fieldNames[valueID].equals("WX COND") == true && weatherChar != null) {
@@ -1023,5 +1024,12 @@ class DFView extends WatchUi.View {
       61442,
       61563,
     ];
+  }
+}
+
+(:lowMemory)
+class DFView extends WatchUi.View {
+  function initialize() {
+    View.initialize();
   }
 }

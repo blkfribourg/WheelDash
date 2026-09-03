@@ -2,6 +2,7 @@ using Toybox.Application.Storage;
 import Toybox.Lang;
 using Toybox.System;
 module profileSelector {
+  (:fullMemory)
   function createPSMenu() {
     // System.println(eucData.JSONFetch);
     if (
@@ -22,6 +23,19 @@ module profileSelector {
     }
   }
 
+  (:lowMemory)
+  function createPSMenu() {
+    return createMenu(
+      [
+        AppStorage.getSetting("wheelName_p1"),
+        AppStorage.getSetting("wheelName_p2"),
+        AppStorage.getSetting("wheelName_p3"),
+      ],
+      "Profile Selection"
+    );
+  }
+
+  (:fullMemory)
   function createPSDelegate() {
     if (eucData.JSONFetch.equals("") || eucData.JSONFetch.equals("failed")) {
       //      System.println("Legacy");
@@ -31,6 +45,13 @@ module profileSelector {
       return new JSONPSMenuDelegate();
     }
   }
+
+  (:lowMemory)
+  function createPSDelegate() {
+    return new PSMenuDelegate();
+  }
+
+  (:fullMemory)
   function getJSONProfileList() {
     var JSONSettingsDict = Storage.getValue("JSONSettings") as Dictionary;
     var JSONSettings = JSONSettingsDict.get("settings") as Dictionary;
@@ -42,7 +63,7 @@ module profileSelector {
       //checking if additionnal profiles:
       var pStrIdx = keys[i].find("wheelName_p");
       if (pStrIdx != null) {
-        var pStr = keys[i].substring(pStrIdx + 11, null);
+        var pStr = keys[i].substring(pStrIdx + 11, keys[i].length());
 
         if (pStr != null) {
           if (

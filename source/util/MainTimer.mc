@@ -5,6 +5,7 @@ import Toybox.System;
 import Toybox.Communications;
 using Toybox.Timer;
 import Toybox.Position;
+import Toybox.Time;
 class MainTimer {
   private var JSONFetchMessage;
   private var PSTimeout = 10000; // PSTimeout for profile selector
@@ -13,10 +14,12 @@ class MainTimer {
   private var activityRecordView;
   private var activityRecordingRequired;
   private var activityRecordingDelay = 3000;
-  private var engoNextUpdate;
-  private var variaNextUpdate;
+  (:fullMemory)
+  private var engoNextUpdate = new Time.Moment(Time.now().value());
+  private var variaNextUpdate = new Time.Moment(Time.now().value());
   private var mainTimer;
   private var configMessage;
+  private var tiltBackInit;
 
   // varia sim
   // var fakeVariaObj;
@@ -53,6 +56,9 @@ class MainTimer {
         PSTimeout = PSTimeout - eucData.updateDelay;
         if (PSTimeout <= 0) {
           System.println("loadingdef");
+          // Avoid retrying profile construction on every timer tick if the
+          // platform aborts a selection callback. Give the UI time to recover.
+          PSTimeout = 10000;
           delegate.getDefaultSettings();
         }
       }
@@ -62,7 +68,7 @@ class MainTimer {
     }
     // ensure a profile was loaded
     if (eucData.wheelName != null && bleDelegate != null) {
-      if (eucData.useEngo == true) {
+      if (BuildFeatures.ENGO_ENABLED && eucData.useEngo == true) {
         engoScreenUpdate();
       }
     }
@@ -119,7 +125,7 @@ class MainTimer {
           }
         }
       }
-      /* DISABLED IN DEV -- Speed limiter code ---
+      // DISABLED IN DEV -- Speed limiter code ---
 
       if (eucData.WDtiltBackSpd == -1 && eucData.tiltBackSpeed != null) {
         setWDTiltBackVal(eucData.tiltBackSpeed);
@@ -131,12 +137,24 @@ class MainTimer {
         ) {
           if (eucData.tiltBackSpeed != null) {
             if (eucData.tiltBackSpeed != eucData.speedLimit) {
-              speedLimiter(
-                bleDelegate.getQueue(),
-                bleDelegate,
-                eucData.WDtiltBackSpd
-              );
-              tiltBackInit = true;
+              // For KS wheels, wait until alarm speeds have been received from
+              // the wheel (0xa4/0xb5 frame) before sending the speed limiter
+              // command; otherwise null alarm values get written as 0.
+              if (
+                (eucData.wheelBrand == 2 || eucData.wheelBrand == 3) &&
+                (eucData.KSAlarm1Speed == null ||
+                  eucData.KSAlarm2Speed == null ||
+                  eucData.KSAlarm3Speed == null)
+              ) {
+                // not ready yet — will retry next tick
+              } else {
+                speedLimiter(
+                  bleDelegate.getQueue(),
+                  bleDelegate,
+                  eucData.WDtiltBackSpd
+                );
+                tiltBackInit = true;
+              }
             }
           }
         }
@@ -149,7 +167,7 @@ class MainTimer {
           eucData.speedLimitOn = false;
         }
       }
-      */
+
       // -------------------------
       //attributing here to avoid multiple calls
       eucData.correctedSpeed = eucData.getCorrectedSpeed();
@@ -223,6 +241,7 @@ class MainTimer {
         }
       }
       if (
+        BuildFeatures.DFLIKE_ENABLED &&
         !eucData.limitedMemory &&
         (eucData.dfViewBtn != 0 ||
           eucData.slideToDFView == true ||
@@ -247,13 +266,14 @@ class MainTimer {
     }*/
     Varia.checkVehicule();
 
-    if (variaNextUpdate == null || variaNextUpdate.compare(now) <= 0) {
+    if ((variaNextUpdate as Time.Moment).compare(now as Time.Moment) <= 0) {
       variaNextUpdate = now.add(new Time.Duration(5));
       // VARIA SIM
 
       Varia.checkStatus();
     }
   }
+  (:fullMemory)
   function engoVariaAlert() {
     var vehData = getHexText(engoVariaData(), 3, 1);
     if (vehData != null) {
@@ -266,6 +286,7 @@ class MainTimer {
       );
     }
   }
+  (:fullMemory)
   function engoVariaData() {
     if (eucData.engoVaria == 0) {
       return eucData.variaTargetNb.toString();
@@ -282,13 +303,16 @@ class MainTimer {
     }
     return null;
   }
+  (:fullMemory)
   function clearVariaAlert() {
     bleDelegate.sendCommands(getClearRectCmd(12, 85, 61, 157, 0));
   }
+  (:fullMemory)
   function clearVariaAlertHR() {
     bleDelegate.sendCommands(getClearRectCmd(12, 154, 61, 226, 0)); // tester y0:154 -> y1:226
   }
 
+  (:fullMemory)
   function engoScreenUpdate() {
     var now = new Time.Moment(Time.now().value());
 
@@ -329,11 +353,15 @@ class MainTimer {
           eucData.engoVariaAlert = false;
         }
       }
-      if (engoNextUpdate == null || engoNextUpdate.compare(now) <= 0) {
+      if (
+        //   engoNextUpdate == null ||
+        (engoNextUpdate as Time.Moment).compare(now as Time.Moment) <= 0
+      ) {
         engoNextUpdate = now.add(new Time.Duration(1));
         //  eucData.speed = eucData.speed + 0.1;
 
         if (
+          BuildFeatures.ENGO_ENABLED &&
           eucData.useEngo == true &&
           eucData.engoPaired == true &&
           bleDelegate.engoDisplayInit == true
@@ -446,6 +474,9 @@ class MainTimer {
       }
     }
   }
+
+  (:lowMemory)
+  function engoScreenUpdate() {}
 
   function onPosition(info as Info) as Void {}
 }

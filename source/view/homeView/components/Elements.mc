@@ -199,7 +199,7 @@ class SpeedLimiterRenderer extends WatchUi.Drawable {
       } else {
         foregroundColor = 0x545454;
       }
-      var oriX = screenWidth * 0.28;
+      var oriX = screenWidth * 0.275;
       var oriY = screenWidth * 0.2;
 
       dc.setColor(foregroundColor, Graphics.COLOR_TRANSPARENT);

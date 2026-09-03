@@ -217,13 +217,16 @@ function random(min, max) {
   return (Math.rand() % max) + 1;
 }
 
-/*
 //Speed limiter
 function setWDTiltBackVal(speed) {
-  eucData.WDtiltBackSpd = speed;
+  var speedNum = speed.toNumber();
+  if (speedNum == null) {
+    return;
+  }
+  eucData.WDtiltBackSpd = speedNum;
   if (eucData.currentProfile != null) {
     var settingName = "tiltbackSpeed_p" + eucData.currentProfile;
-    AppStorage.setSetting(settingName, speed);
+    AppStorage.setSetting(settingName, speedNum);
   }
 }
 function speedLimiter(queue, bleDelegate, limit) {
@@ -243,6 +246,27 @@ function speedLimiter(queue, bleDelegate, limit) {
       queue.add([bleDelegate.getChar(), string_to_byte_array("b" as String)]);
     }
   }
+  if (eucData.wheelBrand == 1) {
+    // Leaperkim/NOSFET tiltback command:
+    // 4C 64 41 70 11 01 02 80 80 80 80 80 <km/h> <CRC32 big-endian>.
+    // The wheel uses 120 as the no-tiltback sentinel.
+    var limitInt = limit.toNumber();
+    if (limitInt == 0) {
+      limitInt = 120;
+    } else if (limitInt < 10 || limitInt > 119) {
+      return;
+    }
+    var data = [
+      0x4c, 0x64, 0x41, 0x70, 0x11, 0x01, 0x02, 0x80, 0x80, 0x80, 0x80, 0x80,
+      limitInt,
+    ]b;
+    var crc = bleDelegate.getDecoder().calculateCRC32(data, 0, data.size());
+    data.add((crc >> 24) & 0xff);
+    data.add((crc >> 16) & 0xff);
+    data.add((crc >> 8) & 0xff);
+    data.add(crc & 0xff);
+    queue.add([bleDelegate.getChar(), data]);
+  }
   if (eucData.wheelBrand == 2 || eucData.wheelBrand == 3) {
     var data = [
       0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x31, 0x32,
@@ -258,21 +282,22 @@ function speedLimiter(queue, bleDelegate, limit) {
       data[6] = eucData.KSAlarm3Speed;
     }
 
-    data[8] = limit;
+    data[8] = limit.toNumber();
 
     queue.add([bleDelegate.getChar(), data]);
   }
   if (eucData.wheelBrand == 4 || eucData.wheelBrand == 5) {
     var data = [0xaa, 0xaa, 0x14, 0x04, 0x60, 0x21, 0x00, 0x00, 0x00]b;
-    data[6] = (limit * 100) & 0xff;
-    data[7] = ((limit * 100) >> 8) & 0xff;
+    var limitInt = limit.toNumber();
+    data[6] = (limitInt * 100) & 0xff;
+    data[7] = ((limitInt * 100) >> 8) & 0xff;
     data[8] = xorChkSum(data.slice(0, data.size() - 1));
     queue.flush();
     queue.add([bleDelegate.getCharW(), data]);
   }
   eucData.tiltBackSpeed = limit;
 }
-*/
+
 //engo
 
 function arrayToRawCmd(str_bytes) {

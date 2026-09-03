@@ -11,12 +11,10 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
   private var queue;
   private var eucBleDelegate;
   private var mainView;
-  private var EUCSettingsDict;
   private var actionButtonTrigger;
-  private var menu;
-  private var menu2Delegate;
   private var mainViewdelegate;
   private var profileNb;
+  (:fullMemory)
   private var connView;
   private var activityRecordView;
 
@@ -58,7 +56,7 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
         if (eucData.ESP32Horn == true) {
           hornPM.registerProfiles();
         }
-        if (eucData.useEngo == true) {
+        if (BuildFeatures.ENGO_ENABLED && eucData.useEngo == true) {
           engoPM.init();
           engoPM.registerProfiles();
           if (eucData.useMiles == true) {
@@ -68,7 +66,10 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
           }
         }
       } else {
-        if (eucData.ESP32Horn == true || eucData.useEngo == true) {
+        if (
+          eucData.ESP32Horn == true ||
+          (BuildFeatures.ENGO_ENABLED && eucData.useEngo == true)
+        ) {
           eucBleDelegate = new eucBLEDelegate(
             profileNb,
             queue,
@@ -80,7 +81,7 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
           if (eucData.ESP32Horn == true) {
             hornPM.registerProfiles();
           }
-          if (eucData.useEngo == true) {
+          if (BuildFeatures.ENGO_ENABLED && eucData.useEngo == true) {
             engoPM.init();
             engoPM.registerProfiles();
           }
@@ -94,29 +95,19 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
       mainView = new GarminEUCDebugView();
       mainView.setBleDelegate(eucBleDelegate);
     } else {
-      if (eucData.dfViewOnly == true) {
+      if (BuildFeatures.DFLIKE_ENABLED && eucData.dfViewOnly == true) {
         mainView = new DFView();
       } else {
         mainView = new GarminEUCView();
       }
     }
     eucData.dfViewBtn = actionButtonTrigger.DFViewButton;
-    EUCSettingsDict = getEUCSettingsDict(); // in helper function
-    actionButtonTrigger.setEUCDict();
-    menu = createMenu(EUCSettingsDict.getConfigLabels(), "Settings");
-    menu2Delegate = new GarminEUCMenu2Delegate_generic(
-      menu,
-      eucBleDelegate,
-      queue,
-      mainView,
-      EUCSettingsDict
-    );
-    activityRecordView = new ActivityRecordView();
+    activityRecordView = createActivityRecordView();
     //    activityRecordDelegate.setView(activityRecordView);
     mainViewdelegate = new GarminEUCDelegate(
       mainView,
-      menu,
-      menu2Delegate,
+      null,
+      null,
       eucBleDelegate,
       queue,
       activityRecordView,
@@ -153,16 +144,44 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
         );
         // }
       } else {
-        //       System.println("first");
-        connView = new messageView(eucBleDelegate, profileNb, self, "1stConn");
-        WatchUi.switchToView(connView, null, WatchUi.SLIDE_IMMEDIATE);
+        showFirstConnection();
       }
     }
+  }
+
+  (:fullMemory)
+  function showFirstConnection() {
+    connView = new messageView(eucBleDelegate, profileNb, self, "1stConn");
+    WatchUi.switchToView(connView, null, WatchUi.SLIDE_IMMEDIATE);
+  }
+
+  (:lowMemory)
+  function showFirstConnection() {
+    // Avoid retaining the prepared dashboard behind a temporary connection
+    // view. The dashboard already renders its disconnected state while BLE
+    // scans and saves the first wheel footprint.
+    WatchUi.switchToView(
+      mainView,
+      mainViewdelegate,
+      WatchUi.SLIDE_IMMEDIATE
+    );
+  }
+
+  (:fullMemory)
+  function createActivityRecordView() {
+    return new ActivityRecordView();
+  }
+
+  (:lowMemory)
+  function createActivityRecordView() {
+    // Constructed on first recording/swipe after the profile menu is gone.
+    return null;
   }
 
   function DFViewInit() {
     // System.println("initializing DFView");
     if (
+      BuildFeatures.DFLIKE_ENABLED &&
       !eucData.limitedMemory &&
       (eucData.dfViewBtn != 0 ||
         eucData.slideToDFView == true ||
@@ -221,7 +240,9 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
     return mainViewdelegate;
   }
   function getMenu2Delegate() {
-    return menu2Delegate;
+    return mainViewdelegate != null
+      ? mainViewdelegate.getMenu2Delegate()
+      : null;
   }
   function getActivityView() {
     if (mainViewdelegate != null) {
@@ -287,7 +308,9 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
   function setGlobalSettings() {
     // Global settings (not associated with a specific profileName) :
 
-    eucData.useEngo = AppStorage.getSetting("useEngo");
+    eucData.useEngo = BuildFeatures.ENGO_ENABLED
+      ? AppStorage.getSetting("useEngo")
+      : false;
     eucData.engoTouch = AppStorage.getSetting("engoTouch");
     eucData.engoVaria = AppStorage.getSetting("engoVaria");
     eucData.useRadar = AppStorage.getSetting("useRadar");
@@ -301,9 +324,15 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
     eucData.motorbikeHeadset = AppStorage.getSetting("motorbikeHeadset");
     eucData.vibeIntensity = AppStorage.getSetting("vibeIntensity");
     eucData.alternativeFont = AppStorage.getSetting("alternativeFont");
-    eucData.slideToDFView = AppStorage.getSetting("slideToDFView");
-    eucData.dfViewOnly = AppStorage.getSetting("dfViewOnly");
-    eucData.displayWind = AppStorage.getSetting("displayWind");
+    eucData.slideToDFView = BuildFeatures.DFLIKE_ENABLED
+      ? AppStorage.getSetting("slideToDFView")
+      : false;
+    eucData.dfViewOnly = BuildFeatures.DFLIKE_ENABLED
+      ? AppStorage.getSetting("dfViewOnly")
+      : false;
+    eucData.displayWind = BuildFeatures.DFLIKE_ENABLED
+      ? AppStorage.getSetting("displayWind")
+      : false;
     eucData.displayNorth = AppStorage.getSetting("displayNorth");
     eucData.useMiles = AppStorage.getSetting("useMiles");
     eucData.useFahrenheit = AppStorage.getSetting("useFahrenheit");
@@ -421,9 +450,9 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
     actionButtonTrigger.cycleLightButton = AppStorage.getSetting(
       "cycleLightButtonMap_p" + profileNb
     );
-    actionButtonTrigger.DFViewButton = AppStorage.getSetting(
-      "DFViewButtonMap_p" + profileNb
-    );
+    actionButtonTrigger.DFViewButton = BuildFeatures.DFLIKE_ENABLED
+      ? AppStorage.getSetting("DFViewButtonMap_p" + profileNb)
+      : 0;
     actionButtonTrigger.beepButton = AppStorage.getSetting(
       "beepButtonMap_p" + profileNb
     );
@@ -433,8 +462,14 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
     actionButtonTrigger.engoLumaButton = AppStorage.getSetting(
       "engoLumaButtonMap_p" + profileNb
     );
+    actionButtonTrigger.speedLimiterButton = AppStorage.getSetting(
+      "spdLimitButtonMap_p" + profileNb
+    );
     eucData.BLECmdDelay = AppStorage.getSetting("cmdQueueDelay_p" + profileNb);
-
+    var rawSpeedLimit = AppStorage.getSetting("speedLimit_p" + profileNb);
+    eucData.speedLimit = rawSpeedLimit != null ? rawSpeedLimit.toNumber() : 0;
+    var rawTiltBack = AppStorage.getSetting("tiltbackSpeed_p" + profileNb);
+    eucData.tiltBackSpeed = rawTiltBack != null ? rawTiltBack.toNumber() : null;
     eucData.wheelName = AppStorage.getSetting("wheelName_p" + profileNb);
     eucData.convertToMiles = AppStorage.getSetting(
       "convertToMiles_p" + profileNb
@@ -444,15 +479,13 @@ class PSMenuDelegate extends WatchUi.Menu2InputDelegate {
   }
 }
 
+(:fullMemory)
 class JSONPSMenuDelegate extends PSMenuDelegate {
   // Todo : remove/clean unecessary functions
   private var queue;
   private var eucBleDelegate;
   private var mainView;
-  private var EUCSettingsDict;
   private var actionButtonTrigger;
-  private var menu;
-  private var menu2Delegate;
   private var mainViewdelegate;
   private var profileNb;
   private var connView;
@@ -464,7 +497,7 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
     actionButtonTrigger = new ActionButton();
     Menu2InputDelegate.initialize();
     queue = new BleQueue();
-    JSONSettingsDict = Storage.getValue("JSONSettings");
+    JSONSettingsDict = Storage.getValue("JSONSettings") as Dictionary;
     if (JSONSettingsDict != null) {
       JSONSettings = JSONSettingsDict.get("settings");
     }
@@ -501,7 +534,7 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
         if (eucData.ESP32Horn == true) {
           hornPM.registerProfiles();
         }
-        if (eucData.useEngo == true) {
+        if (BuildFeatures.ENGO_ENABLED && eucData.useEngo == true) {
           engoPM.init();
           engoPM.registerProfiles();
           if (eucData.useMiles == true) {
@@ -511,7 +544,10 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
           }
         }
       } else {
-        if (eucData.ESP32Horn == true || eucData.useEngo == true) {
+        if (
+          eucData.ESP32Horn == true ||
+          (BuildFeatures.ENGO_ENABLED && eucData.useEngo == true)
+        ) {
           eucBleDelegate = new eucBLEDelegate(
             profileNb,
             queue,
@@ -523,7 +559,7 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
           if (eucData.ESP32Horn == true) {
             hornPM.registerProfiles();
           }
-          if (eucData.useEngo == true) {
+          if (BuildFeatures.ENGO_ENABLED && eucData.useEngo == true) {
             engoPM.init();
             engoPM.registerProfiles();
           }
@@ -537,29 +573,19 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
       mainView = new GarminEUCDebugView();
       mainView.setBleDelegate(eucBleDelegate);
     } else {
-      if (eucData.dfViewOnly == true) {
+      if (BuildFeatures.DFLIKE_ENABLED && eucData.dfViewOnly == true) {
         mainView = new DFView();
       } else {
         mainView = new GarminEUCView();
       }
     }
     eucData.dfViewBtn = actionButtonTrigger.DFViewButton;
-    EUCSettingsDict = getEUCSettingsDict(); // in helper function
-    actionButtonTrigger.setEUCDict();
-    menu = createMenu(EUCSettingsDict.getConfigLabels(), "Settings");
-    menu2Delegate = new GarminEUCMenu2Delegate_generic(
-      menu,
-      eucBleDelegate,
-      queue,
-      mainView,
-      EUCSettingsDict
-    );
     activityRecordView = new ActivityRecordView();
     //    activityRecordDelegate.setView(activityRecordView);
     mainViewdelegate = new GarminEUCDelegate(
       mainView,
-      menu,
-      menu2Delegate,
+      null,
+      null,
       eucBleDelegate,
       queue,
       activityRecordView,
@@ -606,6 +632,7 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
   function DFViewInit() {
     //  System.println("initializing DFView");
     if (
+      BuildFeatures.DFLIKE_ENABLED &&
       !eucData.limitedMemory &&
       (eucData.dfViewBtn != 0 ||
         eucData.slideToDFView == true ||
@@ -664,7 +691,9 @@ class JSONPSMenuDelegate extends PSMenuDelegate {
     return mainViewdelegate;
   }
   function getMenu2Delegate() {
-    return menu2Delegate;
+    return mainViewdelegate != null
+      ? mainViewdelegate.getMenu2Delegate()
+      : null;
   }
   function getActivityView() {
     if (mainViewdelegate != null) {

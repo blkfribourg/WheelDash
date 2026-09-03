@@ -33,30 +33,34 @@ class eucBLEDelegate extends Ble.BleDelegate {
   var EUCSR = null;
   var hornDevice = null;
   var horn_service = null;
-  var scanEngo = false;
-  var engoSR = null;
-  var engo_service = null;
-  var engo_tx = null;
-  var engo_rx = null;
-  var engo_userInput = null;
-  var engoDevice = null;
-  var engoCfgOK;
-  var cfgReadFlag = false;
-  var engoGestureOK = false;
-  var engoGestureNotif = false;
-  var engoLuma = -1;
+  (:fullMemory) var scanEngo = false;
+  (:fullMemory) var engoSR = null;
+  (:fullMemory) var engo_service = null;
+  (:fullMemory) var engo_tx = null;
+  (:fullMemory) var engo_rx = null;
+  (:fullMemory) var engo_userInput = null;
+  (:fullMemory) var engoDevice = null;
+  (:fullMemory) var engoCfgOK;
+  (:fullMemory) var cfgReadFlag = false;
+  (:fullMemory) var engoGestureOK = false;
+  (:fullMemory) var engoGestureNotif = false;
+  (:fullMemory) var engoLuma = -1;
   var _cbCharacteristicWrite = null;
   var rawcmd = null;
   var cmdStacking = null;
-  var engoDisplayInit = false;
-  var cfgList = new [0]b;
+  (:fullMemory) var engoDisplayInit = false;
+  (:fullMemory) var cfgList = new [0]b;
   // var isUpdatingBleParams as Toybox.Lang.Boolean = false;
   //var isBleParamsUpdated as Toybox.Lang.Boolean = false;
   var firstChar;
   var deviceNb = 1;
   var connNb = 0;
-  var cfgPacketsTotal = null;
-  var cfgPacketsCount = 0;
+  // A fenix 8 keeps delivering scan results while its connection confirmation
+  // dialog is open. Guard the EUC pairing attempt so those queued results do
+  // not call pairDevice() again and crash with "Device Already Paired".
+  private var eucPairing = false;
+  (:fullMemory) var cfgPacketsTotal = null;
+  (:fullMemory) var cfgPacketsCount = 0;
 
   var euc_BLE_TX_startTime;
   var BLE_RX_startTime;
@@ -117,6 +121,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
     BleDelegate.initialize();
 
     profileNb = _profileNb;
+    eucData.currentProfile = profileNb;
     //char = profileManager.EUC_CHAR;
     queue = q;
     decoder = _decoder;
@@ -124,9 +129,9 @@ class eucBLEDelegate extends Ble.BleDelegate {
     Ble.setScanState(Ble.SCAN_STATE_SCANNING);
     //checking if EUC Footprint already exist (see IsFirsConnection function description)
     eucFirst = eucFirstConnection();
-    //  eucFirst = false;
+    //eucFirst = false;
 
-    if (eucData.useEngo == true) {
+    if (BuildFeatures.ENGO_ENABLED && eucData.useEngo == true) {
       deviceNb = deviceNb + 1;
     }
     if (eucData.ESP32Horn == true) {
@@ -139,6 +144,9 @@ class eucBLEDelegate extends Ble.BleDelegate {
   // If a device with a registred BLE profile is paired, it trigger the onConnectedStateChanged callback.
   // This is where I initiate the communication procedure by enabling notifications on a the characteristic that supports the notify property
   function onConnectedStateChanged(device, state) {
+    if (EUCDevice != null && EUCDevice.equals(device)) {
+      eucPairing = false;
+    }
     if (state == Ble.CONNECTION_STATE_CONNECTED) {
       // Checking we are dealing with an EUC and not another kind of supported device (horn, smartglasses)
       if (eucData.wheelBrand < 6) {
@@ -164,6 +172,13 @@ class eucBLEDelegate extends Ble.BleDelegate {
                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x9b, 0x14, 0x5a, 0x5a,
               ]b;
               queue.add([euc_char, reqModel]);
+              // Request alarm/tiltback settings so KSAlarm1/2/3Speed are
+              // populated before the speed limiter auto-init can fire.
+              var getAlarms = [
+                0xaa, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x98, 0x14, 0x5a, 0x5a,
+              ]b;
+              queue.add([euc_char, getAlarms]);
             }
 
             // if Voice mode is set on always on, send the activation packet here :
@@ -187,14 +202,11 @@ class eucBLEDelegate extends Ble.BleDelegate {
               // Untested code if speed limiter is enabled, use a request to get settings frame and read the current tiltback speed value
               // (to restore correct tiltback speed when disabling speed limiter)
 
-              /* DISABLED IN DEV -- Speed limiter code ---
-            if (eucData.speedLimit != 0) {
-              //request settings
-              var getSettings = [0xaa, 0xaa, 0x14, 0x02, 0x20, 0x20, 0x16]b;
-              queue.add([euc_char_w, getSettings]);
-              queue.lastPacketType = "settings";
-            }
-            */
+              if (eucData.speedLimit != 0) {
+                var getSettings = [0xaa, 0xaa, 0x14, 0x02, 0x20, 0x20, 0x16]b;
+                queue.add([euc_char_w, getSettings]);
+                queue.lastPacketType = "settings";
+              }
 
               // Storing inmotion periodic request directly in variables from the queue class :
               // inmotion v2 request live:
@@ -226,6 +238,8 @@ class eucBLEDelegate extends Ble.BleDelegate {
             message2 = "EUC not connected";
             try {
               unpair(device);
+              EUCDevice = null;
+              eucPairing = false;
               eucData.paired = false;
               firstChar = false;
             } catch (e instanceof Lang.Exception) {
@@ -259,58 +273,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
         }
       }
 
-      // if the paired device is Engo smarglasses from Activelook
-      if (eucData.useEngo == true) {
-        if (
-          engoPM.BLE_SERV_ACTIVELOOK != null &&
-          device.getService(engoPM.BLE_SERV_ACTIVELOOK as Ble.Uuid) != null
-        ) {
-          // System.println("Engo connected");
-
-          engo_service = device.getService(
-            engoPM.BLE_SERV_ACTIVELOOK as Ble.Uuid
-          );
-
-          engo_tx =
-            engo_service != null
-              ? engo_service.getCharacteristic(engoPM.BLE_CHAR_TX)
-              : null;
-
-          engo_rx =
-            engo_service != null
-              ? engo_service.getCharacteristic(engoPM.BLE_CHAR_RX)
-              : null;
-
-          engo_userInput =
-            engo_service != null
-              ? engo_service.getCharacteristic(engoPM.BLE_CHAR_USERINPUT)
-              : null;
-
-          if (
-            engo_service != null &&
-            engo_tx != null &&
-            engo_rx != null &&
-            engo_userInput != null
-          ) {
-            // System.println("EngoNotifOn");
-            var cccd = engo_tx.getDescriptor(Ble.cccdUuid());
-            try {
-              cccd.requestWrite([0x01, 0x00]b);
-            } catch (e instanceof Lang.Exception) {
-              // System.println(e.getErrorMessage());
-            }
-            eucData.engoPaired = true;
-          } else {
-            System.print("notif fail");
-            try {
-              unpair(device);
-              eucData.engoPaired = false;
-            } catch (e instanceof Lang.Exception) {
-              // System.println(e.getErrorMessage());
-            }
-          }
-        }
-      }
+      handleEngoConnected(device);
     } else {
       // If a disconnection occurs, check what has been disconnected and restat a device scanning
       if (hornDevice != null && hornDevice.equals(device)) {
@@ -323,19 +286,11 @@ class eucBLEDelegate extends Ble.BleDelegate {
         eucData.paired = false;
         //   message3 = "EUC disconnected";
         unpair(device);
+        EUCDevice = null;
+        eucPairing = false;
         Ble.setScanState(Ble.SCAN_STATE_SCANNING);
       }
-      if (engoDevice != null && engoDevice.equals(device)) {
-        eucData.engoPaired = false;
-        //System.println("Engo Disconnected");
-        resetEngo();
-        try {
-          unpair(device);
-        } catch (e instanceof Lang.Exception) {
-          // System.println(e.getErrorMessage());
-        }
-        Ble.setScanState(Ble.SCAN_STATE_SCANNING);
-      }
+      handleEngoDisconnected(device);
       //BLE Disconnected
     }
   }
@@ -349,11 +304,84 @@ class eucBLEDelegate extends Ble.BleDelegate {
     }
     return dev;
   }
+
+  (:fullMemory)
+  function handleEngoConnected(device) {
+    if (eucData.useEngo != true || engoPM.BLE_SERV_ACTIVELOOK == null ||
+        device.getService(engoPM.BLE_SERV_ACTIVELOOK as Ble.Uuid) == null) {
+      return;
+    }
+    engo_service = device.getService(engoPM.BLE_SERV_ACTIVELOOK as Ble.Uuid);
+    engo_tx = engo_service.getCharacteristic(engoPM.BLE_CHAR_TX);
+    engo_rx = engo_service.getCharacteristic(engoPM.BLE_CHAR_RX);
+    engo_userInput = engo_service.getCharacteristic(engoPM.BLE_CHAR_USERINPUT);
+    if (engo_tx != null && engo_rx != null && engo_userInput != null) {
+      var cccd = engo_tx.getDescriptor(Ble.cccdUuid());
+      try {
+        cccd.requestWrite([0x01, 0x00]b);
+      } catch (e instanceof Lang.Exception) {}
+      eucData.engoPaired = true;
+    } else {
+      try {
+        unpair(device);
+        eucData.engoPaired = false;
+      } catch (e instanceof Lang.Exception) {}
+    }
+  }
+
+  (:lowMemory)
+  function handleEngoConnected(device) {}
+
+  (:fullMemory)
+  function handleEngoDisconnected(device) {
+    if (engoDevice != null && engoDevice.equals(device)) {
+      eucData.engoPaired = false;
+      resetEngo();
+      try {
+        unpair(device);
+      } catch (e instanceof Lang.Exception) {}
+      Ble.setScanState(Ble.SCAN_STATE_SCANNING);
+    }
+  }
+
+  (:lowMemory)
+  function handleEngoDisconnected(device) {}
+
+  // Pair the wheel at most once until Garmin reports a connection-state
+  // change. This is deliberately EUC-specific so optional Engo/horn devices
+  // can still connect concurrently.
+  private function pairEUC(result as Ble.ScanResult) {
+    if (eucPairing || EUCDevice != null) {
+      return EUCDevice;
+    }
+    eucPairing = true;
+    Ble.setScanState(Ble.SCAN_STATE_OFF);
+    try {
+      EUCDevice = pair(result);
+    } catch (e instanceof Lang.Exception) {
+      message2 = e.getErrorMessage();
+      // The system may already own the pairing after the fenix 8 confirmation.
+      EUCDevice = Ble.getPairedDevices().next();
+    }
+    if (EUCDevice == null) {
+      eucPairing = false;
+      Ble.setScanState(Ble.SCAN_STATE_SCANNING);
+    }
+    return EUCDevice;
+  }
   // Unpair the device and decrement connNb (number of connected BLE devices)
   // Note : connNb is used to know if all expected devices are connected, if it is the case I will stop scanning for supported devices.
   function unpair(device) {
-    Ble.unpairDevice(device);
-    connNb = connNb - 1;
+    if (device != null) {
+      try {
+        Ble.unpairDevice(device);
+      } catch (e instanceof Lang.Exception) {
+        message2 = e.getErrorMessage();
+      }
+    }
+    if (connNb > 0) {
+      connNb = connNb - 1;
+    }
   }
 
   // function eucFirstConnection() is used to determine if a given profile was never connected to an EUC (in order to store a BLE Footprint in the watch local storage.
@@ -403,17 +431,20 @@ class eucBLEDelegate extends Ble.BleDelegate {
   }
 
   // This function is used to store the footprint of the Engo on the persistant storage
+  (:fullMemory)
   function storeEngoSR(sr) {
     //  System.println("EngoSRStored");
     Storage.setValue("engoSr", sr);
   }
   // This function is used to reset the footprint of the Engo on the persistant storage
+  (:fullMemory)
   function resetEngoSR() {
     // System.println("EngoSRSReset");
     Storage.deleteValue("engoSr");
   }
 
   // This function is used to load the footprint of the Engo  from the persistant storage
+  (:fullMemory)
   function loadEngoSR() {
     //  System.println("EngoSRLoaded");
     var engoSR = Storage.getValue("engoSr");
@@ -430,6 +461,9 @@ class eucBLEDelegate extends Ble.BleDelegate {
     // System.println("scanning");
     // Checking if scanResults match an EUC given the brand selected in the associated profile. When possible EUCs are identified by their BLE SERVICE UUID. But some time this data
     // is not available (Garmin truncate the BLE Advertising packet). When SERVICE UUID is not available the device BLE advertising name is used instead.
+    if (eucPairing) {
+      return;
+    }
     if (eucFirst) {
       var wheelFound = false;
       for (
@@ -440,11 +474,11 @@ class eucBLEDelegate extends Ble.BleDelegate {
         if (result instanceof Ble.ScanResult) {
           if (eucData.wheelBrand == 0 || eucData.wheelBrand == 1) {
             // Begode/Leaperkim
-            wheelFound = contains(
+            wheelFound = true;/*contains(
               result.getServiceUuids(),
               eucPM.EUC_SERVICE,
               result
-            );
+            );*/
           }
           // For some unknown reason (aka Garmin BLE implementation, advertising packet is truncated, data loss, usual business), another BLE service is shown instead of the expected one (with notify characteristic) for KS.
           // This BLE service is only used for EUC identification.
@@ -493,40 +527,15 @@ class eucBLEDelegate extends Ble.BleDelegate {
           if (wheelFound == true) {
             // If a device matched expected UUID or Name, storing the footprint and stopping the BLE scanning.
             storeSR(result);
-            Ble.setScanState(Ble.SCAN_STATE_OFF);
-            try {
-              EUCDevice = pair(result as Ble.ScanResult);
-            } catch (e instanceof Lang.Exception) {
-              System.println("EUCError: " + e.getErrorMessage());
-            }
+            pairEUC(result as Ble.ScanResult);
+            break;
           }
         }
       }
     } else {
       // Pairing to other devices is done after the first connection was done.
       // I'll probably have to implement footprint saving for other devices (otherwise the app will pair to any device with corresponding UUID).
-      // Engo persistant footprint check:
-
-      if (engoSR == null) {
-        engoSR = loadEngoSR();
-      }
-      if (eucData.useEngo == true) {
-        if (eucData.engoPaired == false) {
-          if (engoSR != false) {
-            try {
-              engoDevice = pair(engoSR as Ble.ScanResult);
-            } catch (e instanceof Lang.Exception) {
-              System.println("engoError: " + e.getErrorMessage());
-            }
-          } else {
-            scanEngo = true;
-          }
-        }
-      } else if (engoSR != false && eucData.useEngo == false) {
-        // reset footprint if Engo support is disabled
-        resetEngoSR();
-        engoSR = loadEngoSR();
-      }
+      prepareEngoScan();
 
       for (
         var result = scanResults.next();
@@ -535,28 +544,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
       ) {
         if (result instanceof Ble.ScanResult) {
           //System.println(result.getServiceUuids().next());
-          if (eucData.useEngo == true && scanEngo == true) {
-            if (eucData.engoPaired == false) {
-              if (
-                contains(
-                  result.getServiceUuids(),
-                  engoPM.BLE_ENGO_MAIN,
-                  result
-                ) == true
-              ) {
-                System.println("EngoFound!");
-                //  Ble.setScanState(Ble.SCAN_STATE_OFF);
-                try {
-                  //saving Engo footprint for future connections
-                  storeEngoSR(result);
-                  engoDevice = pair(result as Ble.ScanResult);
-                } catch (e instanceof Lang.Exception) {
-                  System.println("engoError: " + e.getErrorMessage());
-                }
-                //System.println("ConnectedToHorn?");
-              }
-            }
-          }
+          handleEngoScanResult(result);
 
           if (eucData.ESP32Horn == true) {
             if (eucData.ESP32HornPaired == false) {
@@ -600,11 +588,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
         }
       }
       // Pairing surrounded by try catch to avoid app crash in case of failure
-      try {
-        EUCDevice = pair(EUCSR as Ble.ScanResult);
-      } catch (e instanceof Lang.Exception) {
-        // System.println("EUCError: " + e.getErrorMessage());
-      }
+      pairEUC(EUCSR as Ble.ScanResult);
     }
     //  System.println("connected devices:" + connNb);
     //  System.println("expected devices:" + deviceNb);
@@ -648,27 +632,28 @@ class eucBLEDelegate extends Ble.BleDelegate {
         );
       }
     } else {
-      // If descriptor write occured on something else than an EUC
-      if (eucData.engoPaired == true) {
-        // System.println("EngoPairedIsTrue, descript");
-        // If the smartglasses pairing was successful and notifications are already enabled on the user input (button or gesture), start the smartglasses init procedure -> requesting fw version
-        if (currentChar.equals(engo_userInput) && engoGestureNotif == true) {
-          try {
-            sendRawCmd(engo_rx, [0xff, 0x06, 0x00, 0x05, 0xaa]b);
-            /*
-            engo_rx.requestWrite([0xff, 0x06, 0x00, 0x05, 0xaa]b, {
-              :writeType => Ble.WRITE_TYPE_DEFAULT,
-            });*/
-          } catch (e instanceof Lang.Exception) {
-            // System.println(e.getErrorMessage());
-          }
-        } else {
-          // if notification are not yet activated for gesture that means it was a write on the tx characteristic descriptor -> enabling notification on the user input characteristic
-          enableGesture();
-        }
-      }
+      handleEngoDescriptorWrite(currentChar);
     }
   }
+
+  (:fullMemory)
+  function handleEngoDescriptorWrite(currentChar) {
+    if (eucData.engoPaired != true) {
+      return;
+    }
+    if (currentChar.equals(engo_userInput) && engoGestureNotif == true) {
+      try {
+        sendRawCmd(engo_rx, [0xff, 0x06, 0x00, 0x05, 0xaa]b);
+      } catch (e instanceof Lang.Exception) {}
+    } else {
+      enableGesture();
+    }
+  }
+
+  (:lowMemory)
+  function handleEngoDescriptorWrite(currentChar) {}
+
+  (:fullMemory)
   function cfgUpdateStatus() {
     // means update started
 
@@ -694,6 +679,11 @@ class eucBLEDelegate extends Ble.BleDelegate {
       }
       BLE_RX_startTime = System.getTimer();
     }
+    handleEngoCharacteristicWrite(characteristic, status);
+  }
+
+  (:fullMemory)
+  function handleEngoCharacteristicWrite(characteristic, status) {
     if (characteristic.equals(engo_rx)) {
       if (engo_rx != null && cfgPacketsTotal != null) {
         cfgUpdateStatus();
@@ -715,6 +705,9 @@ class eucBLEDelegate extends Ble.BleDelegate {
       }
     }
   }
+
+  (:lowMemory)
+  function handleEngoCharacteristicWrite(characteristic, status) {}
 
   // onCharacteristicChanged callback is called each time a notification is received (that means data from the EUC or the smartglasses).
   function onCharacteristicChanged(char, value) {
@@ -753,8 +746,54 @@ class eucBLEDelegate extends Ble.BleDelegate {
         eucData.BLEReadProcTime = System.getTimer() - euc_BLE_TX_startTime;
       }
     }
+    handleEngoCharacteristic(char, value);
+  }
+
+  (:fullMemory)
+  function prepareEngoScan() {
+    if (engoSR == null) {
+      engoSR = loadEngoSR();
+    }
+    if (eucData.useEngo == true && eucData.engoPaired == false) {
+      if (engoSR != false) {
+        try {
+          engoDevice = pair(engoSR as Ble.ScanResult);
+        } catch (e instanceof Lang.Exception) {
+          System.println("engoError: " + e.getErrorMessage());
+        }
+      } else {
+        scanEngo = true;
+      }
+    } else if (engoSR != false && eucData.useEngo == false) {
+      resetEngoSR();
+      engoSR = loadEngoSR();
+    }
+  }
+
+  (:lowMemory)
+  function prepareEngoScan() {}
+
+  (:fullMemory)
+  function handleEngoScanResult(result) {
+    if (eucData.useEngo == true && scanEngo == true &&
+        eucData.engoPaired == false &&
+        contains(result.getServiceUuids(), engoPM.BLE_ENGO_MAIN, result)) {
+      try {
+        storeEngoSR(result);
+        engoDevice = pair(result as Ble.ScanResult);
+      } catch (e instanceof Lang.Exception) {
+        System.println("engoError: " + e.getErrorMessage());
+      }
+    }
+  }
+
+  (:lowMemory)
+  function handleEngoScanResult(result) {}
+
+  (:fullMemory)
+  function handleEngoCharacteristic(char, value) {
     // If characteristic matches a the registred characteritic of the engo smartglasses
-    if (char.equals(engo_tx)) {
+    if (BuildFeatures.ENGO_ENABLED && char.equals(engo_tx)) {
       //System.println(value);
       //System.println("EngoCharChanged");
       if (value[0] == 0xff) {
@@ -917,7 +956,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
     }
 
     // If an event is triggered on the proximity sensor or the capacitive button, a notification is sent on the userInput Characteristic -> displaying next page on the smartglasses
-    if (char.equals(engo_userInput)) {
+    if (BuildFeatures.ENGO_ENABLED && char.equals(engo_userInput)) {
       if (value[0] == 0x01) {
         //System.println("gesture detected");
         eucData.engoPage = eucData.engoPage + 1;
@@ -928,20 +967,35 @@ class eucBLEDelegate extends Ble.BleDelegate {
       }
     }
   }
+
+  (:lowMemory)
+  function handleEngoCharacteristic(char, value) {}
+
   // Self explanatory : send clear screen command
+  (:fullMemory)
   function clearScreen() {
     sendRawCmd(engo_rx, [0xff, 0x01, 0x00, 0x05, 0xaa]b);
     // sendRawCmd(engo_rx, [0xff, 0x86, 0x00, 0x06, eucData.engoPage, 0xaa]b);
   }
 
+  (:lowMemory)
+  function clearScreen() {}
+
   // Send battery % request
+  (:fullMemory)
   function getEngoBattery() {
     sendRawCmd(engo_rx, [0xff, 0x05, 0x00, 0x05, 0xaa]b);
   }
+
+  (:lowMemory)
+  function getEngoBattery() {}
+
+  (:fullMemory)
   function getEngoSettings() {
     sendRawCmd(engo_rx, [0xff, 0x0a, 0x00, 0x05, 0xaa]b);
   }
   // Reset the init variables for the Engo smartglasses, required when a disconnection occured with the smartglasses
+  (:fullMemory)
   function resetEngo() {
     cfgReadFlag = false;
     cfgList = new [0]b;
@@ -954,6 +1008,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
     eucData.engoCfgUpdate = null;
   }
   // checkCfgName function parse the received config list packet to check if wheeldash config is present in the config list.
+  (:fullMemory)
   function checkCfgName(value) {
     var configName = "whldsh_app";
     if (eucData.useMiles == true) {
@@ -1009,6 +1064,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
       //System.println("config packet: " + cfgList);
     }
   }
+  (:fullMemory)
   function milesCfg(line) {
     if (
       line.equals(
@@ -1033,6 +1089,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
   }
 
   // enableGesture enables notifications on the user_input characteristic
+  (:fullMemory)
   function enableGesture() {
     if (engoGestureNotif == false) {
       try {
@@ -1060,6 +1117,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
 
   // function sendCommands is only used for commands related to display (it's just a way to ensure the engo are properly initialized to avoid sending unecessary commands while
   // the engo are initialising)
+  (:fullMemory)
   function sendCommands(cmds) {
     // System.println("engoCmd: " + cmds);
     // System.println("engoCmdLength: " + cmds.size());
@@ -1068,6 +1126,9 @@ class eucBLEDelegate extends Ble.BleDelegate {
       // System.println(cmds[i]);
     }
   }
+
+  (:lowMemory)
+  function sendCommands(cmds) {}
 
   // sendRawCmd split commands into packet of 20 bytes and sent a write request on the specified characteristic.
   function sendRawCmd(char, buffer) {
@@ -1097,6 +1158,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
     }
   }
 
+  (:fullMemory)
   function flushCmdStacking() {
     //  _log("flushCmdStacking",[cmdStacking == null ? 0 : cmdStacking.size()]);
     var indexIncompleteCmd = indexIncompleteCmd() as Toybox.Lang.Number;
@@ -1108,6 +1170,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
     //  _log("flushCmdStacking",[cmdStacking == null ? 0 : arrayToHex(cmdStacking)]);
   }
 
+  (:fullMemory)
   function flushCmdStackingIfSup(value as Toybox.Lang.Number) {
     if (cmdStacking != null && engoCfgOK == true && engoDisplayInit == true) {
       //added engoCfgOK & engoDisplayInit to avoid flushing conf
@@ -1119,6 +1182,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
     }
   }
 
+  (:fullMemory)
   function indexIncompleteCmd() {
     if (cmdStacking) {
       //  _log("indexIncompleteCmd",[arrayToHex(cmdStacking)]);
@@ -1134,14 +1198,17 @@ class eucBLEDelegate extends Ble.BleDelegate {
     }
     return 0;
   }
+  (:fullMemory)
   function resetGraphicEngine() {
     //   _log("resetGraphicEngine", []);
     holdAndFlush(0xff);
   }
 
+  (:fullMemory)
   function holdAndFlush(value) {
     sendRawCmd(engo_rx, commandBuffer(0x39, [value]b));
   }
+  (:fullMemory)
   function commandBuffer(id, data) {
     var buffer = new [0]b;
     buffer.addAll([0xff, id, 0x00, 0x05 + data.size()]b);
@@ -1151,6 +1218,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
     return buffer;
   }
 
+  (:fullMemory)
   function incEngoLuma() {
     // System.println(engoLuma);
     if (engoLuma >= 0) {
@@ -1164,6 +1232,9 @@ class eucBLEDelegate extends Ble.BleDelegate {
     }
   }
 
+  (:lowMemory)
+  function incEngoLuma() {}
+
   //contains function is an helper function to check if one registred UUID matches the scanResult UUID. Could be moved to helperFunction.mc but exclusively used in eucBLEDelegate class.
   private function contains(iter, obj, sr) {
     for (var uuid = iter.next(); uuid != null; uuid = iter.next()) {
@@ -1175,6 +1246,9 @@ class eucBLEDelegate extends Ble.BleDelegate {
   }
   function getQueue() {
     return queue;
+  }
+  function getDecoder() {
+    return decoder;
   }
   function getChar() {
     return euc_char;
@@ -1194,8 +1268,10 @@ class eucBLEDelegate extends Ble.BleDelegate {
   }
 
   function manualUnpair() {
+    eucPairing = false;
     if (EUCDevice != null) {
-      Ble.unpairDevice(EUCDevice);
+      unpair(EUCDevice);
+      EUCDevice = null;
       eucData.paired = false;
     }
   }
@@ -1210,6 +1286,7 @@ class eucBLEDelegate extends Ble.BleDelegate {
     }
   }
   // function for padding text for engo smartglasses, should be move to helperFunction.mc
+  (:fullMemory)
   function stringToPadByteArray(str, size, leftPadding) {
     var result = StringUtil.convertEncodedString(str, {
       :fromRepresentation => StringUtil.REPRESENTATION_STRING_PLAIN_TEXT,

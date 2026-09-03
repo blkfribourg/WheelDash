@@ -249,6 +249,13 @@ class ActivityRecordView extends WatchUi.View {
   //! @param dc Device context
   public function onUpdate(dc as Dc) as Void {
     accuracy_msg = accuracy[Position.getInfo().accuracy];
+    var subscreen = null;
+    if (WatchUi has :getSubscreen) {
+      subscreen = WatchUi.getSubscreen();
+    }
+    var mainCenterX = subscreen != null ? 68 : dc.getWidth() / 2;
+    var activeColor = subscreen != null ? Graphics.COLOR_WHITE : Graphics.COLOR_RED;
+    var instructionColor = subscreen != null ? Graphics.COLOR_WHITE : Graphics.COLOR_BLUE;
     // Set background color
     dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_BLACK);
     dc.clear();
@@ -256,7 +263,7 @@ class ActivityRecordView extends WatchUi.View {
     dc.fillRectangle(0, 0, dc.getWidth(), dc.getHeight());
     dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
     dc.drawText(
-      dc.getWidth() / 2,
+      subscreen != null ? subscreen.x + subscreen.width / 2 : mainCenterX,
       0,
       Graphics.FONT_XTINY,
       "GPS:\n" + accuracy_msg,
@@ -266,18 +273,18 @@ class ActivityRecordView extends WatchUi.View {
     if (Toybox has :ActivityRecording) {
       // Draw the instructions
       if (!isSessionRecording()) {
-        dc.setColor(Graphics.COLOR_BLUE, Graphics.COLOR_BLACK);
+        dc.setColor(instructionColor, Graphics.COLOR_BLACK);
         dc.drawText(
-          dc.getWidth() / 2,
+          mainCenterX,
           dc.getHeight() / 2,
           Graphics.FONT_MEDIUM,
           "Press OK to\nStart Recording",
           Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
       } else {
-        var x = dc.getWidth() / 2;
+        var x = mainCenterX;
         var y = dc.getFontHeight(Graphics.FONT_XTINY) * 2;
-        dc.setColor(Graphics.COLOR_RED, Graphics.COLOR_BLACK);
+        dc.setColor(activeColor, Graphics.COLOR_BLACK);
         dc.drawText(
           x,
           y,
@@ -286,7 +293,7 @@ class ActivityRecordView extends WatchUi.View {
           Graphics.TEXT_JUSTIFY_CENTER
         );
         y += dc.getFontHeight(Graphics.FONT_MEDIUM);
-        dc.setColor(Graphics.COLOR_BLUE, Graphics.COLOR_BLACK);
+        dc.setColor(instructionColor, Graphics.COLOR_BLACK);
         dc.drawText(
           x,
           y,
@@ -297,9 +304,9 @@ class ActivityRecordView extends WatchUi.View {
       }
     } else {
       // tell the user this sample doesn't work
-      dc.setColor(Graphics.COLOR_RED, Graphics.COLOR_BLACK);
+      dc.setColor(activeColor, Graphics.COLOR_BLACK);
       dc.drawText(
-        dc.getWidth() / 2,
+        mainCenterX,
         dc.getWidth() / 2,
         Graphics.FONT_MEDIUM,
         "This product doesn't\nhave FIT Support",

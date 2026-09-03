@@ -496,12 +496,12 @@ class KingsongDecoder {
         eucData.hPWM = value[15];
         return false;
       } else if ((value[16] & 255) == 0xf6) {
-        //speed limit (PWM?)
-        eucData.speedLimit = decode2bytes(value[2], value[3]) / 100.0;
+        // KS wheel hard cutoff max speed - not used
         return false;
       } else if ((value[16] & 255) == 0xa4 || (value[16] & 255) == 0xb5) {
         //max speed and alerts
         eucData.KSMaxSpeed = value[10] & 255;
+        eucData.tiltBackSpeed = eucData.KSMaxSpeed;
 
         eucData.KSAlarm3Speed = value[8] & 255;
         eucData.KSAlarm2Speed = value[6] & 255;
@@ -656,11 +656,12 @@ class IMV2Decoder {
         }) + 80.0; //data[12]
     }
     if (bleDelegate.queue.lastPacketType.equals("settings")) {
-      eucData.tiltBackSpeed =
+      eucData.tiltBackSpeed = (
         transmittedFrame.decodeNumber(Lang.NUMBER_FORMAT_UINT16, {
           :offset => 6,
           :endianness => Lang.ENDIAN_LITTLE,
-        }) / 100.0; //data[4]
+        }) / 100.0
+      ).toNumber();
     }
   }
 }

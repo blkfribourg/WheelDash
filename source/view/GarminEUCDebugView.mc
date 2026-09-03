@@ -15,6 +15,10 @@ class GarminEUCDebugView extends WatchUi.View {
   function onShow() {}
 
   function onUpdate(dc) {
+    if (WatchUi has :getSubscreen && WatchUi.getSubscreen() != null) {
+      drawSemiOctagonDebug(dc, WatchUi.getSubscreen());
+      return;
+    }
     if (eucData.wheelBrand == 0 || eucData.wheelBrand == 1) {
       var alignAxe = dc.getWidth() / 5;
       var space = dc.getHeight() / 10;
@@ -528,5 +532,70 @@ class GarminEUCDebugView extends WatchUi.View {
         Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER
       );
     }
+  }
+
+  // Compact diagnostics for the Instinct display. The existing debug screen is
+  // intentionally untouched for every other device; this path avoids both the
+  // round subscreen and long full-width rows on the one-bit main display.
+  private function drawSemiOctagonDebug(dc, subscreen) {
+    dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
+    dc.clear();
+
+    var subX = subscreen.x + subscreen.width / 2;
+    var subY = subscreen.y + subscreen.height / 2;
+    dc.drawText(
+      subX,
+      subY,
+      Graphics.FONT_MEDIUM,
+      valueRound(eucData.speed, "%.1f"),
+      Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+    );
+
+    var x = 5;
+    var font = Graphics.FONT_XTINY;
+    dc.drawText(x, 2, font, "DEBUG B" + eucData.wheelBrand, Graphics.TEXT_JUSTIFY_LEFT);
+    dc.drawText(
+      x,
+      24,
+      font,
+      "BLE " + eucData.BLEReadInterval + "/" + eucData.BLEWriteInterval,
+      Graphics.TEXT_JUSTIFY_LEFT
+    );
+    dc.drawText(
+      x,
+      46,
+      font,
+      "V " + valueRound(eucData.voltage, "%.1f") + "  B " + valueRound(eucData.getBatteryPercentage(), "%.1f"),
+      Graphics.TEXT_JUSTIFY_LEFT
+    );
+    dc.drawText(
+      x,
+      68,
+      font,
+      "A " + valueRound(eucData.getCurrent(), "%.1f") + "  P " + valueRound(eucData.PWM, "%.1f"),
+      Graphics.TEXT_JUSTIFY_LEFT
+    );
+    dc.drawText(
+      x,
+      90,
+      font,
+      "T " + valueRound(eucData.DisplayedTemperature, "%.1f") + "  HW " + valueRound(eucData.hPWM, "%.1f"),
+      Graphics.TEXT_JUSTIFY_LEFT
+    );
+    dc.drawText(
+      x,
+      112,
+      font,
+      "TRIP " + valueRound(eucData.tripDistance, "%.2f"),
+      Graphics.TEXT_JUSTIFY_LEFT
+    );
+    dc.drawText(
+      x,
+      134,
+      font,
+      "TOTAL " + valueRound(eucData.totalDistance, "%.1f"),
+      Graphics.TEXT_JUSTIFY_LEFT
+    );
+    dc.drawText(x, 156, font, eucData.model, Graphics.TEXT_JUSTIFY_LEFT);
   }
 }

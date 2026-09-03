@@ -237,8 +237,7 @@
                     type="boolean"
                 />
         </setting>
-        
-        
+
 
        <!--Profile 1-->
 
@@ -290,7 +289,7 @@
                      <listEntry value="8">@Strings.downButton</listEntry>
                 </settingConfig>
             </setting>
-            <!--
+            
             <setting
                 propertyKey="@Properties.spdLimitButtonMap_p1"
                 title="@Strings.spdLimitButtonMap_p1">
@@ -301,7 +300,7 @@
                      <listEntry value="8">@Strings.downButton</listEntry>
                 </settingConfig>
             </setting>
-            -->
+            
              <setting
                 propertyKey="@Properties.DFViewButtonMap_p1"
                 title="@Strings.DFViewButtonMap_p1">
@@ -513,7 +512,7 @@
                 type="boolean"
             />
         </setting>
-        <!--
+        
         <setting
             propertyKey="@Properties.tiltbackSpeed_p1"
             title="@Strings.tiltbackSpeed_p1">
@@ -532,7 +531,7 @@
                 max="250"
             />
         </setting>
-       -->
+       
         
 
 <!--Profile 2-->
@@ -585,7 +584,7 @@
                      <listEntry value="8">@Strings.downButton</listEntry>
                 </settingConfig>
             </setting>
-            <!--
+        
             <setting
                 propertyKey="@Properties.spdLimitButtonMap_p2"
                 title="@Strings.spdLimitButtonMap_p2">
@@ -596,7 +595,7 @@
                      <listEntry value="8">@Strings.downButton</listEntry>
                 </settingConfig>
             </setting>
-            -->
+            
             <setting
                 propertyKey="@Properties.DFViewButtonMap_p2"
                 title="@Strings.DFViewButtonMap_p2">
@@ -808,7 +807,7 @@
                 type="boolean"
             />
         </setting>
-        <!--
+        
         <setting
             propertyKey="@Properties.tiltbackSpeed_p2"
             title="@Strings.tiltbackSpeed_p2">
@@ -827,7 +826,7 @@
                 max="250"
             />
         </setting>
-        -->
+        
 
 <!--Profile 3-->
 
@@ -879,7 +878,7 @@
                      <listEntry value="8">@Strings.downButton</listEntry>
                 </settingConfig>
             </setting>
-            <!--
+            
             <setting
                 propertyKey="@Properties.spdLimitButtonMap_p3"
                 title="@Strings.spdLimitButtonMap_p3">
@@ -890,7 +889,7 @@
                      <listEntry value="8">@Strings.downButton</listEntry>
                 </settingConfig>
             </setting>
-            -->
+            
             <setting
                 propertyKey="@Properties.DFViewButtonMap_p3"
                 title="@Strings.DFViewButtonMap_p3">
@@ -1102,7 +1101,7 @@
                 type="boolean"
             />
         </setting>
-        <!--
+        
         <setting
             propertyKey="@Properties.tiltbackSpeed_p3"
             title="@Strings.tiltbackSpeed_p3">
@@ -1121,7 +1120,7 @@
                 max="250"
             />
         </setting>
-        -->
+        
         <!-- Datafield like view settings -->
          <setting
             propertyKey="@Properties.dfViewOnly"

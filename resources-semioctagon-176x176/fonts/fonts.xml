@@ -1,0 +1,5 @@
+<fonts>
+    <!-- Monochrome numeric subsets: Instinct displays are 1-bit and do not support antialiasing. -->
+    <font id="GorgaBig" filename="Rajdhani36.fnt" antialias="false" />
+    <font id="Rajdhani" filename="Rajdhani36.fnt" antialias="false" />
+</fonts>
