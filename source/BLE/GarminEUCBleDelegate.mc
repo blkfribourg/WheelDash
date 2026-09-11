@@ -474,11 +474,11 @@ class eucBLEDelegate extends Ble.BleDelegate {
         if (result instanceof Ble.ScanResult) {
           if (eucData.wheelBrand == 0 || eucData.wheelBrand == 1) {
             // Begode/Leaperkim
-            wheelFound = true;/*contains(
+            wheelFound = contains(
               result.getServiceUuids(),
               eucPM.EUC_SERVICE,
               result
-            );*/
+            );
           }
           // For some unknown reason (aka Garmin BLE implementation, advertising packet is truncated, data loss, usual business), another BLE service is shown instead of the expected one (with notify characteristic) for KS.
           // This BLE service is only used for EUC identification.
